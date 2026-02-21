@@ -3,6 +3,8 @@ import { Inter, Playfair_Display, Kurale } from "next/font/google";
 import Link from "next/link";
 import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import PageLoader from "@/components/PageLoader";
+import { Suspense } from "react";
 import "./globals.css";
 
 const inter = Inter({
@@ -38,6 +40,10 @@ export default function RootLayout({
         style={{ backgroundImage: `url('${process.env.NODE_ENV === 'production' ? '/mektup' : ''}/images/home.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}
       >
         <div className="absolute inset-0 bg-[#1c1917]/50 backdrop-blur-[2px] z-[-1] pointer-events-none fixed"></div>
+
+        <Suspense fallback={null}>
+          <PageLoader />
+        </Suspense>
 
         <Navbar />
 
