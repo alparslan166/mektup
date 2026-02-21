@@ -1,129 +1,96 @@
 "use client";
 
-import React, { useState } from "react";
-import { Mail, FileText, ArrowLeft, ArrowRight } from "lucide-react";
-import Stepper from "@/components/Stepper";
-import Editor from "@/components/Editor";
-import ExtrasStep from "@/components/ExtrasStep";
-import InfoStep from "@/components/InfoStep";
-import ReviewStep from "@/components/ReviewStep";
-import PaymentStep from "@/components/PaymentStep";
-import SuccessStep from "@/components/SuccessStep";
+import React from "react";
+import Link from "next/link";
+import { Bird, Hourglass, Plane, Heart, Mail } from "lucide-react";
+import { motion } from "framer-motion";
 
-import { useLetterStore } from "@/store/letterStore";
+export default function CategorySelection() {
+  const categories = [
+    {
+      id: "cezaevi",
+      title: "Cezaevine Mektup",
+      icon: <Bird className="text-cyan-600 mb-2" size={48} />,
+      color: "border-cyan-600/20 hover:border-cyan-600",
+      textColor: "text-cyan-600",
+      bg: "bg-cyan-600/5",
+      href: "/mektup-yaz/akisi"
+    },
+    {
+      id: "gelecek",
+      title: "Geleceğe Mektup",
+      icon: <Hourglass className="text-yellow-600 mb-2" size={48} />,
+      color: "border-yellow-600/20 hover:border-yellow-600",
+      textColor: "text-yellow-600",
+      bg: "bg-yellow-600/5",
+      href: "/mektup-yaz/akisi"
+    },
+    {
+      id: "asker",
+      title: "Askere Mektup",
+      icon: <Plane className="text-green-600 mb-2" size={48} />,
+      color: "border-green-600/20 hover:border-green-600",
+      textColor: "text-green-600",
+      bg: "bg-green-600/5",
+      href: "/mektup-yaz/akisi"
+    },
+    {
+      id: "sevgili",
+      title: "Sevgiliye Mektup",
+      icon: <Heart className="text-red-700 mb-2" size={48} />,
+      color: "border-red-700/20 hover:border-red-700",
+      textColor: "text-red-700",
+      bg: "bg-red-700/5",
+      href: "/mektup-yaz/akisi"
+    },
+    {
+      id: "normal",
+      title: "Normal Mektup",
+      icon: <Mail className="text-stone-600 mb-2" size={48} />,
+      color: "border-stone-600/20 hover:border-stone-600",
+      textColor: "text-stone-600",
+      bg: "bg-stone-600/5",
+      href: "/mektup-yaz/akisi"
+    }
+  ];
 
-export default function Home() {
-  const currentStep = useLetterStore(state => state.currentStep);
-  const nextStep = useLetterStore(state => state.nextStep);
-  const prevStep = useLetterStore(state => state.prevStep);
-  const letter = useLetterStore(state => state.letter);
-  const updateLetter = useLetterStore(state => state.updateLetter);
-
-  // Map color names to actual CSS colors for the editor background
-  const paperColors: Record<string, string> = {
-    "Beyaz": "#ffffff",
-    "Saman": "#f4e4bc",
-    "Pembe": "#fdf1f4",
-    "Açık Mavi": "#eef7fd",
-  };
-
-  const currentBgColor = paperColors[letter.paperColor] || "#ffffff";
-
-  // Step Controllers
-  if (currentStep === 6) {
-    return <SuccessStep />;
-  }
-
-  if (currentStep === 5) {
-    return <PaymentStep goBack={prevStep} onComplete={nextStep} />;
-  }
-
-  if (currentStep === 4) {
-    return <ReviewStep goBack={prevStep} goNext={nextStep} />;
-  }
-
-  if (currentStep === 3) {
-    return <InfoStep goBack={prevStep} goNext={nextStep} />;
-  }
-
-  if (currentStep === 2) {
-    return <ExtrasStep goBack={prevStep} goNext={nextStep} />;
-  }
-
-  // Fallback to Step 1 (Editor)
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl flex-1 flex flex-col animate-in fade-in duration-300">
-      <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-6 sm:p-10 flex-col flex relative overflow-hidden">
-        {/* Subtle decorative background piece */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-seal/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl pointer-events-none"></div>
+    <div className="container mx-auto px-4 py-12 max-w-5xl flex-1 flex flex-col justify-center animate-in fade-in duration-500">
+      <h1 className="font-playfair text-4xl md:text-5xl font-bold text-center text-paper mb-4 drop-shadow-lg">
+        Mektup Yaz, Kolayca Gönder!
+      </h1>
+      <p className="text-paper/80 text-center mb-16 max-w-2xl mx-auto text-lg md:text-xl font-light">
+        Kime mektup göndermek istiyorsunuz? Kategorinizi seçin, biz sizin için her şeyi halledelim.
+      </p>
 
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-2">
-          {/* Step 1 has no previous back step logically unless going back to home page entirely */}
-          <button className="p-2 hover:bg-paper-dark rounded-full transition-colors group opacity-50 cursor-not-allowed">
-            <ArrowLeft className="text-ink-light" size={24} />
-          </button>
-          <h2 className="font-playfair text-3xl font-bold text-wood-dark">Geleceğe Mektup</h2>
-        </div>
-        <p className="text-ink-light ml-12 text-sm sm:text-base">
-          Aşağıdaki boş alana mektubunuzu yazabilirsiniz. Ek olarak zarf ve kağıt rengini buradan seçebilirsiniz.
-        </p>
-
-        {/* Stepper */}
-        <div className="mt-8 mb-6">
-          <Stepper currentStep={1} />
-        </div>
-
-        {/* Options Row */}
-        <div className="flex flex-wrap gap-4 mb-2 mt-4">
-          <div className="flex items-center border border-paper-dark rounded-md bg-paper-light overflow-hidden focus-within:border-wood focus-within:ring-1 focus-within:ring-wood transition-all shadow-sm">
-            <div className="px-3 bg-paper-dark text-ink-light flex items-center gap-2 py-2 border-r border-paper-dark">
-              <Mail size={18} />
-              <span className="text-sm font-medium">Zarf Rengi :</span>
-            </div>
-            <select
-              value={letter.envelopeColor}
-              onChange={(e) => updateLetter({ envelopeColor: e.target.value })}
-              className="bg-transparent text-ink text-sm font-medium px-4 py-2 outline-none cursor-pointer appearance-none min-w-[120px]"
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center justify-center max-w-5xl mx-auto">
+        {categories.map((cat, index) => (
+          <motion.div
+            key={cat.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className={cat.id === "normal" ? "md:col-span-2 flex justify-center" : "w-full"}
+          >
+            <Link
+              href={cat.href}
+              className={`flex items-center gap-6 p-10 bg-paper/10 backdrop-blur-md border border-paper/20 rounded-3xl shadow-2xl transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${cat.id === "normal" ? "w-full md:max-w-2xl" : "w-full"}`}
             >
-              <option value="Beyaz">Beyaz</option>
-              <option value="Saman">Saman</option>
-              <option value="Kırmızı">Kırmızı</option>
-              <option value="Siyah">Siyah</option>
-            </select>
-          </div>
+              <div className={`absolute top-0 right-0 w-48 h-48 ${cat.bg} rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:scale-150 transition-transform duration-500`}></div>
 
-          <div className="flex items-center border border-paper-dark rounded-md bg-paper-light overflow-hidden focus-within:border-wood focus-within:ring-1 focus-within:ring-wood transition-all shadow-sm">
-            <div className="px-3 bg-paper-dark text-ink-light flex items-center gap-2 py-2 border-r border-paper-dark">
-              <FileText size={18} />
-              <span className="text-sm font-medium">Kağıt Rengi :</span>
-            </div>
-            <select
-              value={letter.paperColor}
-              onChange={(e) => updateLetter({ paperColor: e.target.value })}
-              className="bg-transparent text-ink text-sm font-medium px-4 py-2 outline-none cursor-pointer appearance-none min-w-[120px]"
-            >
-              <option value="Beyaz">Beyaz</option>
-              <option value="Saman">Saman</option>
-              <option value="Pembe">Pembe</option>
-              <option value="Açık Mavi">Açık Mavi</option>
-            </select>
-          </div>
-        </div>
+              <div className="relative z-10 p-5 bg-paper/5 backdrop-blur-sm border border-paper/10 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+                {cat.icon}
+              </div>
 
-        {/* Editor */}
-        <Editor paperColor={currentBgColor} />
-
-        {/* Bottom Actions */}
-        <div className="mt-8 flex justify-end">
-          <button
-            onClick={nextStep}
-            className="bg-seal hover:bg-seal-hover text-paper px-8 py-3 rounded-md font-medium shadow-md transition-all hover:shadow-lg flex items-center gap-2 active:scale-[0.98]">
-            Ekstralara Geç
-            <ArrowRight size={18} />
-          </button>
-        </div>
-
+              <div className="relative z-10 flex-1">
+                <h3 className={`font-playfair text-3xl font-bold ${cat.textColor} brightness-150 drop-shadow-md group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all`}>
+                  {cat.title}
+                </h3>
+                <p className="text-paper/90 text-lg mt-2 font-medium">Hemen yazmaya başla</p>
+              </div>
+            </Link>
+          </motion.div>
+        ))}
       </div>
     </div>
   );
