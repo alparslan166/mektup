@@ -10,14 +10,25 @@ const PageLoader = () => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [progress, setProgress] = useState(0);
+    const [startTime, setStartTime] = useState(0);
 
     const assetPath = process.env.NODE_ENV === 'production' ? '/mektup' : '';
     const loaderImage = `${assetPath}/images/loader.png`;
 
-    // Reset loading state when route changes
+    // Reset loading state when route changes, but with a minimum delay
     useEffect(() => {
-        setIsLoading(false);
-    }, [pathname, searchParams, setIsLoading]);
+        if (!isLoading) return;
+
+        const now = Date.now();
+        const elapsed = now - startTime;
+        const remaining = Math.max(0, 1000 - elapsed);
+
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, remaining);
+
+        return () => clearTimeout(timer);
+    }, [pathname, searchParams, setIsLoading, startTime, isLoading]);
 
     // Handle global click events on internal links
     useEffect(() => {
@@ -35,6 +46,7 @@ const PageLoader = () => {
                 const targetPath = new URL(link.href).pathname;
 
                 if (currentPath !== targetPath) {
+                    setStartTime(Date.now());
                     setIsLoading(true);
                 }
             }
@@ -68,7 +80,7 @@ const PageLoader = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1c1917]/80 backdrop-blur-md"
+                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1c1917]/80 backdrop-blur-sm"
                 >
                     <div className="relative w-32 h-32 md:w-48 md:h-48">
                         {/* Background / Empty version (Dimmed/Gray) */}
@@ -78,36 +90,19 @@ const PageLoader = () => {
                             className="w-full h-full object-contain opacity-20 grayscale"
                         />
 
-                        {/* Filling Version (Colored/Full) */}
+                        {/* Filling Version (Colored/Full) using clip-path */}
                         <motion.div
-                            className="absolute bottom-0 left-0 w-full overflow-hidden"
-                            initial={{ height: "0%" }}
-                            animate={{ height: `${progress}%` }}
-                            transition={{ ease: "easeInOut", duration: 0.3 }}
+                            className="absolute inset-0 w-full h-full"
+                            initial={{ clipPath: "inset(100% 0 0 0)" }}
+                            animate={{ clipPath: `inset(${100 - progress}% 0 0 0)` }}
+                            transition={{ ease: "linear", duration: 0.1 }}
                         >
                             <img
                                 src={loaderImage}
                                 alt="Loading..."
-                                className="absolute bottom-0 left-0 w-full h-auto object-contain"
-                                style={{ height: '32px' }} // We need to match the container's logic
+                                className="w-full h-full object-contain"
                             />
                         </motion.div>
-
-                        {/* More precise filling effect using clip-path */}
-                        <div className="absolute inset-0 w-full h-full">
-                            <motion.div
-                                className="w-full h-full"
-                                initial={{ clipPath: "inset(100% 0 0 0)" }}
-                                animate={{ clipPath: `inset(${100 - progress}% 0 0 0)` }}
-                                transition={{ ease: "linear", duration: 0.1 }}
-                            >
-                                <img
-                                    src={loaderImage}
-                                    alt="Loading..."
-                                    className="w-full h-full object-contain"
-                                />
-                            </motion.div>
-                        </div>
                     </div>
                 </motion.div>
             )}
