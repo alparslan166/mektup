@@ -34,7 +34,7 @@ export default function RootLayout({
     <html lang="tr">
       <body
         className={`${inter.variable} ${playfair.variable} ${kurale.variable} font-sans antialiased text-ink min-h-screen flex flex-col relative`}
-        style={{ backgroundImage: "url('/mektup/images/home.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}
+        style={{ backgroundImage: `url('${process.env.NODE_ENV === 'production' ? '/mektup' : ''}/images/home.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}
       >
         <div className="absolute inset-0 bg-[#1c1917]/50 backdrop-blur-[2px] z-[-1] pointer-events-none fixed"></div>
 
