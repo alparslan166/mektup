@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+:root {
+  /* Premium Nostalgic Theme Variables */
+  --paper: #fdfbf7;        /* Main background, soft cream */
+  --paper-light: #ffffff;  /* Lighter areas */
+  --paper-dark: #f0ebe1;   /* Darker paper elements, borders */
+  
+  --ink: #3b2f2f;          /* Main text, dark charcoal/brown */
+  --ink-light: #5c4e4e;    /* Secondary text */
+  
+  --seal: #8b2525;         /* Primary accent, bordeaux red */
+  --seal-hover: #701c1c;   /* Primary hover */
+  
+  --wood: #a67c52;         /* Secondary accent, warm wood/gold */
+  --wood-dark: #2c241b;    /* Very dark brown for footer/strong contrast */
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-light: var(--paper-light);
+  --color-paper-dark: var(--paper-dark);
+  
+  --color-ink: var(--ink);
+  --color-ink-light: var(--ink-light);
+  
+  --color-seal: var(--seal);
+  --color-seal-hover: var(--seal-hover);
+  
+  --color-wood: var(--wood);
+  --color-wood-dark: var(--wood-dark);
+
+  --font-sans: var(--font-inter), sans-serif;
+  --font-playfair: var(--font-playfair), serif;
+  --font-kurale: var(--font-kurale), serif;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+/* Custom Selection */
+::selection {
+  background-color: #d8cbb8;
+  color: var(--ink);
+}
+
+/* Tiptap styles */
+.ProseMirror {
+  outline: none;
+}
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #a3968b;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
