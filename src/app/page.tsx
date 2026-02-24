@@ -11,6 +11,8 @@ import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import DashboardCard from '@/components/DashboardCard';
 import { useLetterStore } from '@/store/letterStore';
+import Image from "next/image";
+
 
 export default function LandingPage() {
   const { data: session, status } = useSession();
@@ -188,10 +190,10 @@ export default function LandingPage() {
           variants={staggerContainer}
         >
           <motion.div variants={fadeIn} className="mb-8 flex justify-center">
-            <div className="bg-paper/10 p-5 rounded-full border border-paper/20 shadow-lg relative backdrop-blur-md">
-              <Feather size={56} className="text-[#e2c19e] drop-shadow-md" />
-              <div className="absolute -bottom-2 -right-2 bg-wood-dark border border-wood/30 rounded-full p-2 shadow-lg">
-                <Mail size={24} className="text-paper" />
+            <div className="bg-paper/10 p-5 rounded-full shadow-lg relative backdrop-blur-md">
+              <Image src="/images/kus-logo.png" alt="Logo" width={80} height={80} />
+              <div className="absolute -bottom-2 -right-2 bg-paper/10 border border-paper/20 rounded-full p-2 shadow-lg">
+                <Feather size={24} className="text-paper" />
               </div>
             </div>
           </motion.div>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut, X, LogIn, UserPlus } from "lucide-react";
 import { useLetterStore } from "@/store/letterStore";
+import Image from "next/image";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -19,13 +20,13 @@ const Navbar = () => {
             <div className="container mx-auto px-6 max-w-7xl flex justify-between items-center gap-4">
                 {/* Logo */}
                 <Link href="/" onClick={closeMenu} className="flex flex-col hover:opacity-90 transition-opacity shrink-0">
-                    <div className="flex items-center gap-2">
-                        <div className="bg-paper/20 backdrop-blur-sm text-paper p-1.5 rounded-sm border border-paper/10">
-                            <Mail size={24} strokeWidth={2.5} />
+                    <div className="flex items-center gap-1">
+                        <div className="text-paper p-1.5 rounded-sm">
+                            <Image src="/images/kus-logo.png" alt="Logo" width={40} height={40} />
                         </div>
                         <h1 className="font-playfair text-2xl lg:text-3xl font-bold tracking-widest text-paper drop-shadow-md">Mektuplaş</h1>
                     </div>
-                    <span className="text-[10px] lg:text-[12px] font-semibold tracking-widest text-paper/70 mt-1 italic drop-shadow-sm">&quot;Söz Uçar, Mektuplaş Kalır.&quot;</span>
+                    <span className="text-[10px] lg:text-[12px] font-semibold tracking-widest text-paper/70 mt-1 italic drop-shadow-sm">&quot;Söz kulağa, yazı uzağa gider...&quot;</span>
                 </Link>
 
                 {/* Desktop Nav */}
