@@ -124,14 +124,14 @@ export default function AdreslerPage() {
         <div className="flex-1 container mx-auto px-6 max-w-5xl py-12 mt-20">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
                 <div>
-                    <h1 className="font-playfair text-4xl font-bold text-wood-dark flex items-center gap-3 mb-2">
-                        <BookOpen size={36} />
-                        Adres Defteri
-                    </h1>
-                    <p className="text-ink italic mb-4">Mektuplarınız için kayıtlı alıcı adreslerini yönetin.</p>
                     <Link href="/" className="inline-flex items-center gap-2 text-sm font-bold text-seal hover:text-seal transition-colors uppercase tracking-widest mt-2 md:mt-0">
                         <ArrowLeft size={16} /> Panoya Dön
                     </Link>
+                    <h1 className="font-playfair text-4xl font-bold text-wood-dark flex items-center gap-3 mb-2">
+                        <BookOpen className="text-seal" size={36} />
+                        Adres Defteri
+                    </h1>
+                    <p className="text-ink text-lg mb-4 italic">Mektuplarınız için kayıtlı alıcı adreslerini yönetin.</p>
                 </div>
                 {!showForm && (
                     <button

@@ -29,7 +29,7 @@ export default async function TaslaklarPage() {
                             <Archive className="text-seal" size={36} />
                             Taslaklarım
                         </h1>
-                        <p className="text-ink mt-2 text-lg">
+                        <p className="text-ink mt-2 text-lg italic">
                             Yarım bıraktığınız mektuplara buradan devam edebilirsiniz.
                         </p>
                     </div>
