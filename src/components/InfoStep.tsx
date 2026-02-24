@@ -1,13 +1,76 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Stepper from "@/components/Stepper";
 import { useLetterStore } from "@/store/letterStore";
-import { ArrowLeft, ArrowRight, User, Phone } from "lucide-react";
+import { ArrowLeft, ArrowRight, User, Phone, BookOpen, X, Home, Briefcase, Map, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+
+interface Address {
+    id: string;
+    title: string;
+    name: string;
+    city: string;
+    addressText: string;
+    phone: string | null;
+}
 
 export default function InfoStep() {
     const address = useLetterStore(state => state.address);
     const updateAddress = useLetterStore(state => state.updateAddress);
+
+    const [addresses, setAddresses] = useState<Address[]>([]);
+    const [isLoadingAddresses, setIsLoadingAddresses] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalType, setModalType] = useState<"sender" | "receiver" | null>(null);
+
+    useEffect(() => {
+        const fetchAddresses = async () => {
+            setIsLoadingAddresses(true);
+            try {
+                const res = await fetch("/api/addresses");
+                if (res.ok) {
+                    const data = await res.json();
+                    setAddresses(data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch addresses:", error);
+            } finally {
+                setIsLoadingAddresses(false);
+            }
+        };
+        fetchAddresses();
+    }, []);
+
+    const handleSelectAddress = (addr: Address) => {
+        if (modalType === "sender") {
+            updateAddress({
+                senderName: addr.name,
+                senderCity: addr.city,
+                senderAddress: addr.addressText,
+            });
+        } else if (modalType === "receiver") {
+            updateAddress({
+                receiverName: addr.name,
+                receiverCity: addr.city,
+                receiverAddress: addr.addressText,
+                receiverPhone: addr.phone || "",
+            });
+        }
+        setIsModalOpen(false);
+    };
+
+    const openModal = (type: "sender" | "receiver") => {
+        setModalType(type);
+        setIsModalOpen(true);
+    };
+
+    const getIcon = (title: string) => {
+        const lowerTitle = title.toLowerCase();
+        if (lowerTitle.includes('ev')) return <Home size={18} />;
+        if (lowerTitle.includes('iş') || lowerTitle.includes('is') || lowerTitle.includes('ofis')) return <Briefcase size={18} />;
+        return <Map size={18} />;
+    };
 
     return (
         <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-6 sm:p-10 flex-col flex relative overflow-hidden">
@@ -26,10 +89,17 @@ export default function InfoStep() {
 
                 {/* SENDER INFO (Left) */}
                 <div className="flex-1 space-y-6">
-                    <div className="text-center mb-6">
+                    <div className="text-center mb-6 flex flex-col items-center justify-center gap-3">
                         <h3 className="font-playfair text-xl font-bold text-wood flex items-center justify-center gap-2">
                             <span className="text-lg">»</span> Gönderen Bilgileri <span className="text-lg">«</span>
                         </h3>
+                        <button
+                            onClick={() => openModal("sender")}
+                            className="flex items-center gap-1.5 text-xs font-semibold text-wood bg-wood/10 hover:bg-wood/20 px-4 py-1.5 rounded-full transition-colors shadow-sm"
+                        >
+                            <BookOpen size={14} />
+                            <span>Kayıtlı Adreslerim</span>
+                        </button>
                     </div>
 
                     <div className="space-y-4">
@@ -81,10 +151,17 @@ export default function InfoStep() {
 
                 {/* RECEIVER INFO (Right) */}
                 <div className="flex-1 space-y-6">
-                    <div className="text-center mb-6">
+                    <div className="text-center mb-6 flex flex-col items-center justify-center gap-3">
                         <h3 className="font-playfair text-xl font-bold text-seal flex items-center justify-center gap-2">
                             <span className="text-lg text-wood">»</span> Alıcı Bilgileri <span className="text-lg text-wood">«</span>
                         </h3>
+                        <button
+                            onClick={() => openModal("receiver")}
+                            className="flex items-center gap-1.5 text-xs font-semibold text-seal bg-seal/10 hover:bg-seal/20 px-4 py-1.5 rounded-full transition-colors shadow-sm"
+                        >
+                            <BookOpen size={14} />
+                            <span>Kayıtlı Adreslerim</span>
+                        </button>
                     </div>
 
                     <div className="space-y-4">
@@ -150,6 +227,80 @@ export default function InfoStep() {
                     </div>
                 </div>
             </div>
+
+            {/* Address Selection Modal */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/60 backdrop-blur-sm"
+                        onClick={() => setIsModalOpen(false)}
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-paper rounded-2xl shadow-xl w-full max-w-md max-h-[85vh] flex flex-col overflow-hidden border border-paper-dark"
+                        >
+                            <div className="p-4 sm:p-6 border-b border-paper-dark flex justify-between items-center bg-paper-light">
+                                <h3 className="font-playfair text-xl font-bold text-wood-dark flex items-center gap-2">
+                                    <BookOpen size={20} className="text-seal" />
+                                    Kayıtlı Adreslerim
+                                </h3>
+                                <button onClick={() => setIsModalOpen(false)} className="text-ink-light hover:text-ink transition-colors p-1 bg-paper border border-paper-dark rounded-full shadow-sm hover:shadow-md">
+                                    <X size={18} />
+                                </button>
+                            </div>
+
+                            <div className="p-4 sm:p-6 overflow-y-auto flex-1">
+                                {isLoadingAddresses ? (
+                                    <div className="flex flex-col items-center justify-center py-10 text-ink-light gap-3">
+                                        <Loader2 size={24} className="animate-spin text-seal" />
+                                        <p className="text-sm font-medium">Adresleriniz yükleniyor...</p>
+                                    </div>
+                                ) : addresses.length === 0 ? (
+                                    <div className="text-center py-8">
+                                        <div className="bg-paper-dark/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border border-paper-dark/50">
+                                            <BookOpen size={24} className="text-ink-light/50" />
+                                        </div>
+                                        <p className="text-ink-light text-sm font-medium">Henüz kayıtlı adresiniz bulunmuyor.</p>
+                                        <p className="text-xs text-ink-light/70 mt-1">Adreslerinizi Profil &gt; Adresler sekmesinden ekleyebilirsiniz.</p>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        {addresses.map(addr => (
+                                            <button
+                                                key={addr.id}
+                                                onClick={() => handleSelectAddress(addr)}
+                                                className="w-full text-left p-4 rounded-xl border border-paper-dark hover:border-seal hover:shadow-md transition-all group bg-white shadow-sm"
+                                            >
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <div className="bg-paper-light text-wood p-2.5 rounded-xl border border-paper-dark group-hover:bg-seal/10 group-hover:text-seal group-hover:border-seal/30 transition-colors">
+                                                        {getIcon(addr.title)}
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <h4 className="font-bold text-wood-dark text-sm sm:text-base capitalize">{addr.title}</h4>
+                                                        <p className="text-xs text-ink-light font-medium">{addr.name}</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-xs text-ink-light/90 line-clamp-2 mt-2 font-medium leading-relaxed bg-paper-light p-2 rounded-lg border border-paper-dark/50">{addr.addressText}</p>
+                                                <div className="flex justify-between items-center mt-2 px-1">
+                                                    <p className="text-[10px] text-ink-light/70 font-semibold uppercase tracking-wider">{addr.city}</p>
+                                                    {addr.phone && <p className="text-[10px] text-ink-light/70 font-semibold tracking-wider flex items-center gap-1"><Phone size={10} /> {addr.phone}</p>}
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
         </div>
     );
 }
