@@ -78,7 +78,7 @@ export default function LandingPage() {
               <span className="text-xs font-bold uppercase tracking-[0.2em]">Hoş Geldiniz</span>
             </div>
             <h1 className="font-playfair text-4xl md:text-5xl font-bold text-wood-dark">
-              Merhaba, <span className="text-seal">{session.user?.name || "Değerli Üyemiz"}</span>
+              Merhaba, <span className="text-seal capitalize">{session.user?.name || "Değerli Üyemiz"}</span>
             </h1>
             <p className="text-black mt-4 text-lg">
               Mektubunuzun hikayesi burada başlar. Bugün kime yazıyoruz?
