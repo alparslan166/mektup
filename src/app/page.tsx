@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
   PenTool, Feather, Mail, Settings, Clock, Send,
   Smile, Star, Archive, ArrowDown, BookOpen,
-  Wallet, Sparkles, PlusCircle
+  Wallet, Sparkles, PlusCircle, Inbox
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
@@ -134,17 +134,25 @@ export default function LandingPage() {
             delay={0.5}
           />
 
-          {/* Quick Tip / Static Card */}
-          <div className="flex flex-col justify-center p-6 sm:p-8 rounded-2xl border-2 border-wood/10 bg-[#f3ead1]/95 backdrop-blur-md shadow-lg relative overflow-hidden group">
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-seal/30" />
-            <h4 className="font-bold text-wood-dark mb-3 flex items-center gap-2">
-              <Star size={18} className="text-seal animate-pulse" />
-              <span className="font-playfair text-xl sm:text-2xl">Günün Sözü</span>
-            </h4>
-            <p className="italic text-sm sm:text-[15px] text-ink-dark font-medium leading-relaxed">
-              "Bir mektup, sadece kağıt ve mürekkep değil; kalpten kalbe uzanan ince bir köprüdür."
-            </p>
-          </div>
+          <DashboardCard
+            title="Gelen Kutusu"
+            description="Size gönderilen mektupları ve dijital mesajları buradan takip edin."
+            href="/gelen-kutusu"
+            icon={Inbox}
+            color="paper"
+            delay={0.6}
+          />
+        </div>
+
+        {/* Quote of the Day - Now as a footer note */}
+        <div className="mt-12 text-center max-w-2xl mx-auto border-t border-wood/10 pt-8">
+          <h4 className="font-bold text-wood-dark mb-2 flex items-center justify-center gap-2">
+            <Star size={16} className="text-seal animate-pulse" />
+            <span className="font-playfair text-xl">Günün Sözü</span>
+          </h4>
+          <p className="italic text-sm sm:text-base text-ink-dark font-medium leading-relaxed">
+            "Bir mektup, sadece kağıt ve mürekkep değil; kalpten kalbe uzanan ince bir köprüdür."
+          </p>
         </div>
 
         {/* Stats Section or Bottom Note */}
