@@ -16,7 +16,6 @@ export default function HakkimizdaPage() {
             </Link>
 
             <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-8 sm:p-12 relative overflow-hidden">
-                {/* Decorative Elements */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-seal/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl pointer-events-none"></div>
                 <div className="absolute opacity-10 top-12 right-12 pointer-events-none">
                     <Feather size={120} />
