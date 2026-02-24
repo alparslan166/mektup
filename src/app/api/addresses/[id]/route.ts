@@ -6,9 +6,10 @@ import prisma from "@/lib/prisma";
 // PUT (update) an address
 export async function PUT(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params;
         const session = await getServerSession(authOptions);
         const userId = (session?.user as any)?.id;
 
@@ -21,7 +22,7 @@ export async function PUT(
 
         // Check if the address belongs to the user
         const existingAddress = await (prisma as any).address.findUnique({
-            where: { id: params.id },
+            where: { id: id },
         });
 
         if (!existingAddress || existingAddress.userId !== userId) {
@@ -29,7 +30,7 @@ export async function PUT(
         }
 
         const updatedAddress = await (prisma as any).address.update({
-            where: { id: params.id },
+            where: { id: id },
             data: {
                 title,
                 name,
@@ -49,9 +50,10 @@ export async function PUT(
 // DELETE an address
 export async function DELETE(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params;
         const session = await getServerSession(authOptions);
         const userId = (session?.user as any)?.id;
 
@@ -61,7 +63,7 @@ export async function DELETE(
 
         // Check if the address belongs to the user
         const existingAddress = await (prisma as any).address.findUnique({
-            where: { id: params.id },
+            where: { id: id },
         });
 
         if (!existingAddress || existingAddress.userId !== userId) {
@@ -69,7 +71,7 @@ export async function DELETE(
         }
 
         await (prisma as any).address.delete({
-            where: { id: params.id },
+            where: { id: id },
         });
 
         return NextResponse.json({ success: true });
