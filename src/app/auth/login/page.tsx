@@ -121,7 +121,7 @@ function LoginForm() {
                         </div>
 
                         <button
-                            onClick={() => signIn("google", { callbackUrl: "/mektup-yaz/akisi" })}
+                            onClick={() => signIn("google", { callbackUrl: "/" })}
                             className="w-full bg-paper border border-wood/20 hover:border-wood/40 text-wood-dark py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-3 hover:bg-paper-light active:scale-[0.98]"
                         >
                             <svg className="w-5 h-5" viewBox="0 0 24 24">
