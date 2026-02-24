@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, MapPin, Phone, User, Trash2, Edit2, Loader2, Home, Briefcase, Map } from "lucide-react";
+import { Plus, MapPin, Phone, User, Trash2, Edit2, Loader2, Home, Briefcase, Map, Link, ArrowLeft } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -122,9 +122,12 @@ export default function AdreslerPage() {
     return (
         <div className="flex-1 container mx-auto px-6 max-w-5xl py-12 mt-20">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+                <Link href="/" className="inline-flex items-center gap-2 text-sm font-bold text-seal hover:text-seal transition-colors mb-4 uppercase tracking-widest">
+                    <ArrowLeft size={16} /> Panoya Dön
+                </Link>
                 <div>
                     <h1 className="font-playfair text-4xl font-bold text-wood-dark mb-2">Adres Defteri</h1>
-                    <p className="text-ink-light italic">Mektuplarınız için kayıtlı alıcı adreslerini yönetin.</p>
+                    <p className="text-ink italic">Mektuplarınız için kayıtlı alıcı adreslerini yönetin.</p>
                 </div>
                 {!showForm && (
                     <button
