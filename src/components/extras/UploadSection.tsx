@@ -3,6 +3,7 @@
 import React, { useState, useRef } from "react";
 import { Image as ImageIcon, FileText, Trash2, Loader2, Plus } from "lucide-react";
 import { useLetterStore } from "@/store/letterStore";
+import { toast } from "react-hot-toast";
 
 export default function UploadSection() {
     const { extras, updateExtras } = useLetterStore();
@@ -16,11 +17,12 @@ export default function UploadSection() {
 
         const file = files[0];
         if (extras.photos.length + extras.documents.length >= 50) {
-            alert("En fazla 50 dosya ekleyebilirsiniz.");
+            toast.error("En fazla 50 dosya ekleyebilirsiniz.");
             return;
         }
 
         setIsUploading(true);
+        const loadingToast = toast.loading("Dosya yükleniyor...");
 
         try {
             // Convert file to base64 for the simplified API endpoint
@@ -29,38 +31,45 @@ export default function UploadSection() {
             reader.onload = async () => {
                 const base64 = reader.result as string;
 
-                const res = await fetch("/api/upload", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        file: base64,
-                        fileName: file.name,
-                        type: type
-                    }),
-                });
+                try {
+                    const res = await fetch("/api/upload", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            file: base64,
+                            fileName: file.name,
+                            type: type
+                        }),
+                    });
 
-                if (res.ok) {
-                    const data = await res.json();
-                    const newFile = {
-                        id: Math.random().toString(36).substr(2, 9),
-                        name: data.name,
-                        url: data.url,
-                        type: data.type
-                    };
+                    if (res.ok) {
+                        const data = await res.json();
+                        const newFile = {
+                            id: Math.random().toString(36).substr(2, 9),
+                            name: data.name,
+                            url: data.url,
+                            type: data.type
+                        };
 
-                    if (type === "photo") {
-                        updateExtras({ photos: [...extras.photos, newFile] });
+                        if (type === "photo") {
+                            updateExtras({ photos: [...extras.photos, newFile] });
+                        } else {
+                            updateExtras({ documents: [...extras.documents, newFile] });
+                        }
+                        toast.success("Dosya başarıyla yüklendi.", { id: loadingToast });
                     } else {
-                        updateExtras({ documents: [...extras.documents, newFile] });
+                        const errorData = await res.json();
+                        toast.error(errorData.error || "Dosya yüklenirken bir hata oluştu.", { id: loadingToast });
                     }
-                } else {
-                    alert("Dosya yüklenirken bir hata oluştu.");
+                } catch (err) {
+                    toast.error("Sunucuya bağlanılamadı.", { id: loadingToast });
+                } finally {
+                    setIsUploading(false);
                 }
-                setIsUploading(false);
             };
         } catch (error) {
             console.error(error);
-            alert("Yükleme işlemi başarısız oldu.");
+            toast.error("Yükleme işlemi başarısız oldu.", { id: loadingToast });
             setIsUploading(false);
         }
 

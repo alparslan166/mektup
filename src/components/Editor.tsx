@@ -55,11 +55,7 @@ export default function Editor({ paperColor }: EditorProps) {
             StarterKit,
             TextStyle,
             Color,
-            Underline.configure({
-                HTMLAttributes: {
-                    class: 'underline',
-                },
-            }),
+            Underline,
             FontFamily,
             Highlight.configure({ multicolor: true })
         ],

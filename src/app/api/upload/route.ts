@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
-import { join } from "path";
-import { v4 as uuidv4 } from "uuid";
+import { put } from "@vercel/blob";
 
 export async function POST(req: Request) {
     try {
@@ -12,26 +10,29 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Dosya bulunamadı." }, { status: 400 });
         }
 
-        // Since we are receiving base64 or similar from the client to simplify the fetch
-        // Real prod apps would use standard Multipart, but for quick implementation with fetch:
+        if (!process.env.BLOB_READ_WRITE_TOKEN) {
+            return NextResponse.json({
+                error: "Vercel Blob token'ı eksik. Lütfen BLOB_READ_WRITE_TOKEN ortam değişkenini ekleyin."
+            }, { status: 500 });
+        }
+
+        // Base64 to Buffer
         const base64Data = file.split(",")[1];
         const buffer = Buffer.from(base64Data, "base64");
 
-        const uniqueFileName = `${uuidv4()}_${fileName}`;
-        const uploadDir = join(process.cwd(), "public/uploads");
-        const filePath = join(uploadDir, uniqueFileName);
-
-        await writeFile(filePath, buffer);
-
-        const publicUrl = `/uploads/${uniqueFileName}`;
+        // Upload to Vercel Blob
+        const blob = await put(fileName, buffer, {
+            access: 'public',
+            contentType: type === 'photo' ? 'image/jpeg' : 'application/pdf', // Simplified, but good enough
+        });
 
         return NextResponse.json({
-            url: publicUrl,
+            url: blob.url,
             name: fileName,
             type: type
         });
     } catch (error) {
         console.error("UPLOAD_ERROR", error);
-        return NextResponse.json({ error: "Yükleme başarısız." }, { status: 500 });
+        return NextResponse.json({ error: "Yükleme başarısız oldu: " + (error as Error).message }, { status: 500 });
     }
 }
