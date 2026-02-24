@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { Plus, MapPin, Phone, User, Trash2, Edit2, Loader2, Home, Briefcase, Map } from "lucide-react";
 import { toast } from "react-hot-toast";
