@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, MapPin, Phone, User, Trash2, Edit2, Loader2, Home, Briefcase, Map, Link, ArrowLeft } from "lucide-react";
+import { Plus, MapPin, Phone, User, Trash2, Edit2, Loader2, Home, Briefcase, Map, Link, ArrowLeft, BookOpen } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -126,7 +126,10 @@ export default function AdreslerPage() {
                     <ArrowLeft size={16} /> Panoya Dön
                 </Link>
                 <div>
-                    <h1 className="font-playfair text-4xl font-bold text-wood-dark mb-2">Adres Defteri</h1>
+                    <h1 className="font-playfair text-4xl font-bold text-wood-dark mb-2">
+                        <BookOpen size={24} />
+                        Adres Defteri
+                    </h1>
                     <p className="text-ink italic">Mektuplarınız için kayıtlı alıcı adreslerini yönetin.</p>
                 </div>
                 {!showForm && (
