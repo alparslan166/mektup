@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display, Kurale } from "next/font/google";
 import Link from "next/link";
-import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import PageLoader from "@/components/PageLoader";
 import { NextAuthProvider } from "@/providers/NextAuthProvider";
