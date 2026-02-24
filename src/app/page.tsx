@@ -144,14 +144,13 @@ export default function LandingPage() {
           />
         </div>
 
-        {/* Quote of the Day - Now as a footer note */}
-        <div className="mt-12 text-center max-w-2xl mx-auto border-t border-wood/10 pt-8">
-          <h4 className="font-bold text-wood-dark mb-2 flex items-center justify-center gap-2">
-            <Star size={16} className="text-seal animate-pulse" />
-            <span className="font-playfair text-xl">Günün Sözü</span>
-          </h4>
-          <p className="italic text-sm sm:text-base text-ink-dark font-medium leading-relaxed">
-            "Bir mektup, sadece kağıt ve mürekkep değil; kalpten kalbe uzanan ince bir köprüdür."
+        {/* Quote of the Day - Signature Style */}
+        <div className="mt-20 text-center max-w-2xl mx-auto flex flex-col items-center justify-center px-4">
+          <div className="text-[#e2c19e]/80 mb-3 drop-shadow-sm">
+            <Feather size={28} />
+          </div>
+          <p className="font-kurale text-2xl md:text-3xl text-paper/90 leading-relaxed drop-shadow-md tracking-wide">
+            "Bir mektup, sadece kağıt ve mürekkep değil;<br className="hidden sm:block" /> kalpten kalbe uzanan ince bir köprüdür."
           </p>
         </div>
 
