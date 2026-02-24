@@ -1,29 +1,83 @@
 "use client";
 
-import React, { useState } from "react";
-import { Image as ImageIcon, FileText, Trash2 } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { Image as ImageIcon, FileText, Trash2, Loader2, Plus } from "lucide-react";
+import { useLetterStore } from "@/store/letterStore";
 
 export default function UploadSection() {
-    const [uploadedFiles, setUploadedFiles] = useState<{ id: string; type: "photo" | "doc"; name: string; url?: string }[]>([]);
+    const { extras, updateExtras } = useLetterStore();
+    const [isUploading, setIsUploading] = useState(false);
+    const photoInputRef = useRef<HTMLInputElement>(null);
+    const docInputRef = useRef<HTMLInputElement>(null);
 
-    const handleUploadPhoto = () => {
-        // Mocking an upload
-        if (uploadedFiles.length >= 50) return;
-        setUploadedFiles([...uploadedFiles, { id: Date.now().toString(), type: "photo", name: `Fotoğraf_${uploadedFiles.length + 1}.jpg` }]);
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, type: "photo" | "doc") => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        const file = files[0];
+        if (extras.photos.length + extras.documents.length >= 50) {
+            alert("En fazla 50 dosya ekleyebilirsiniz.");
+            return;
+        }
+
+        setIsUploading(true);
+
+        try {
+            // Convert file to base64 for the simplified API endpoint
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const base64 = reader.result as string;
+
+                const res = await fetch("/api/upload", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        file: base64,
+                        fileName: file.name,
+                        type: type
+                    }),
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    const newFile = {
+                        id: Math.random().toString(36).substr(2, 9),
+                        name: data.name,
+                        url: data.url,
+                        type: data.type
+                    };
+
+                    if (type === "photo") {
+                        updateExtras({ photos: [...extras.photos, newFile] });
+                    } else {
+                        updateExtras({ documents: [...extras.documents, newFile] });
+                    }
+                } else {
+                    alert("Dosya yüklenirken bir hata oluştu.");
+                }
+                setIsUploading(false);
+            };
+        } catch (error) {
+            console.error(error);
+            alert("Yükleme işlemi başarısız oldu.");
+            setIsUploading(false);
+        }
+
+        // Reset input
+        e.target.value = "";
     };
 
-    const handleUploadDoc = () => {
-        // Mocking an upload
-        if (uploadedFiles.length >= 50) return;
-        setUploadedFiles([...uploadedFiles, { id: Date.now().toString(), type: "doc", name: `Belge_${uploadedFiles.length + 1}.pdf` }]);
+    const removeFile = (id: string, type: "photo" | "doc") => {
+        if (type === "photo") {
+            updateExtras({ photos: extras.photos.filter(f => f.id !== id) });
+        } else {
+            updateExtras({ documents: extras.documents.filter(f => f.id !== id) });
+        }
     };
 
-    const removeFile = (id: string) => {
-        setUploadedFiles(uploadedFiles.filter(f => f.id !== id));
-    };
-
-    const photoCount = uploadedFiles.filter(f => f.type === "photo").length;
-    const docCount = uploadedFiles.filter(f => f.type === "doc").length;
+    const photoCount = extras.photos.length;
+    const docCount = extras.documents.length;
 
     return (
         <div className="space-y-6">
@@ -37,24 +91,44 @@ export default function UploadSection() {
                 </p>
             </div>
 
+            {/* Hidden Inputs */}
+            <input
+                type="file"
+                ref={photoInputRef}
+                onChange={(e) => handleFileChange(e, "photo")}
+                className="hidden"
+                accept="image/*"
+            />
+            <input
+                type="file"
+                ref={docInputRef}
+                onChange={(e) => handleFileChange(e, "doc")}
+                className="hidden"
+                accept=".pdf,.doc,.docx,image/*"
+            />
+
             {/* Upload Buttons */}
             <div className="flex flex-col sm:flex-row justify-center gap-6">
                 <button
-                    onClick={handleUploadPhoto}
-                    className="flex flex-col items-center justify-center p-8 bg-paper-dark/30 hover:bg-paper-dark border-2 border-dashed border-wood/50 rounded-xl transition-all hover:border-wood group w-48 mx-auto sm:mx-0 shadow-sm"
+                    onClick={() => photoInputRef.current?.click()}
+                    disabled={isUploading}
+                    className="flex flex-col items-center justify-center p-8 bg-paper-dark/30 hover:bg-paper-dark border-2 border-dashed border-wood/50 rounded-xl transition-all hover:border-wood group w-48 mx-auto sm:mx-0 shadow-sm relative overflow-hidden disabled:opacity-50"
                 >
-                    <ImageIcon size={40} className="text-wood-dark mb-4 group-hover:scale-110 transition-transform" />
+                    {isUploading ? <Loader2 size={40} className="animate-spin text-wood/30" /> : <ImageIcon size={40} className="text-wood-dark mb-4 group-hover:scale-110 transition-transform" />}
                     <span className="font-bold text-ink tracking-wide">FOTOĞRAF</span>
                     <span className="font-bold text-ink tracking-wide">EKLE</span>
+                    {!isUploading && <Plus size={16} className="absolute top-2 right-2 text-wood/40" />}
                 </button>
 
                 <button
-                    onClick={handleUploadDoc}
-                    className="flex flex-col items-center justify-center p-8 bg-paper-dark/30 hover:bg-paper-dark border-2 border-dashed border-ink-light/40 rounded-xl transition-all hover:border-ink-light group w-48 mx-auto sm:mx-0 shadow-sm"
+                    onClick={() => docInputRef.current?.click()}
+                    disabled={isUploading}
+                    className="flex flex-col items-center justify-center p-8 bg-paper-dark/30 hover:bg-paper-dark border-2 border-dashed border-ink-light/40 rounded-xl transition-all hover:border-ink-light group w-48 mx-auto sm:mx-0 shadow-sm relative overflow-hidden disabled:opacity-50"
                 >
-                    <FileText size={40} className="text-ink mb-4 group-hover:scale-110 transition-transform" />
+                    {isUploading ? <Loader2 size={40} className="animate-spin text-ink-light/30" /> : <FileText size={40} className="text-ink mb-4 group-hover:scale-110 transition-transform" />}
                     <span className="font-bold text-ink tracking-wide">BELGE</span>
                     <span className="font-bold text-ink tracking-wide">EKLE</span>
+                    {!isUploading && <Plus size={16} className="absolute top-2 right-2 text-ink-light/40" />}
                 </button>
             </div>
 
@@ -66,7 +140,7 @@ export default function UploadSection() {
 
             {/* Uploaded Files List */}
             <div className="mt-8 bg-paper-dark/10 border border-paper-dark rounded-lg min-h-[100px] p-4">
-                {uploadedFiles.length === 0 ? (
+                {photoCount + docCount === 0 ? (
                     <div className="flex items-center justify-center h-full text-ink-light text-sm italic">
                         Fotoğraf veya belge eklenmemiştir.
                     </div>
@@ -76,16 +150,16 @@ export default function UploadSection() {
                             <div>
                                 <h4 className="text-sm font-bold text-wood-dark mb-2 px-2 border-b border-paper-dark pb-1">Eklenen Fotoğraflar ({photoCount})</h4>
                                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                                    {uploadedFiles.filter(f => f.type === "photo").map((file) => (
+                                    {extras.photos.map((file) => (
                                         <div key={file.id} className="relative group bg-paper p-2 rounded border border-paper-dark shadow-sm">
-                                            <div className="aspect-[4/3] bg-paper-dark/50 rounded mb-2 flex flex-col justify-center items-center text-xs text-ink-light truncate overflow-hidden">
-                                                <ImageIcon size={20} className="mb-1 text-wood-dark/50" />
-                                                Prev
+                                            <div className="aspect-[4/3] bg-paper-dark/50 rounded mb-2 flex flex-col justify-center items-center text-xs text-ink-light truncate overflow-hidden relative">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img src={file.url} alt={file.name} className="absolute inset-0 w-full h-full object-cover" />
                                             </div>
                                             <p className="text-[10px] text-center truncate px-1 text-ink">{file.name}</p>
                                             <button
-                                                onClick={() => removeFile(file.id)}
-                                                className="absolute -top-2 -right-2 bg-seal text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+                                                onClick={() => removeFile(file.id, "photo")}
+                                                className="absolute -top-2 -right-2 bg-seal text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md z-10"
                                             >
                                                 <Trash2 size={12} />
                                             </button>
@@ -99,7 +173,7 @@ export default function UploadSection() {
                             <div className={photoCount > 0 ? "pt-4" : ""}>
                                 <h4 className="text-sm font-bold text-wood-dark mb-2 px-2 border-b border-paper-dark pb-1">Eklenen Belgeler ({docCount})</h4>
                                 <div className="flex flex-wrap gap-3">
-                                    {uploadedFiles.filter(f => f.type === "doc").map((file) => (
+                                    {extras.documents.map((file) => (
                                         <div key={file.id} className="flex items-center justify-between bg-paper p-2 pr-3 rounded border border-paper-dark shadow-sm min-w-[200px] group">
                                             <div className="flex items-center gap-2">
                                                 <div className="p-1.5 bg-paper-dark rounded">
@@ -108,7 +182,7 @@ export default function UploadSection() {
                                                 <p className="text-xs font-medium truncate max-w-[120px]">{file.name}</p>
                                             </div>
                                             <button
-                                                onClick={() => removeFile(file.id)}
+                                                onClick={() => removeFile(file.id, "doc")}
                                                 className="text-seal hover:text-seal-hover opacity-50 group-hover:opacity-100 transition-opacity"
                                             >
                                                 <Trash2 size={14} />

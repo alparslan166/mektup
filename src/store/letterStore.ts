@@ -9,11 +9,18 @@ export interface LetterData {
     wordCount: number;
 }
 
+export interface UploadedFile {
+    id: string;
+    name: string;
+    url: string;
+    type: "photo" | "doc";
+}
+
 export interface ExtrasData {
     deliveryDate: string; // 'Bugün', '1Hafta', '1Ay', 'Ozel'
     scent: string;        // 'Yok', 'Gul', 'Lavanta', 'Okyanus'
-    photos: string[];     // Array of URLs or IDs
-    documents: string[];  // Array of URLs or IDs
+    photos: UploadedFile[];
+    documents: UploadedFile[];
     postcards: string[];  // Array of postcard IDs
     includeCalendar: boolean;
 }
@@ -32,6 +39,7 @@ export interface AddressData {
 // 2. State & Actions Interface
 interface LetterStore {
     // States
+    draftId: string | null;
     currentStep: number;
     letter: LetterData;
     extras: ExtrasData;
@@ -43,15 +51,20 @@ interface LetterStore {
     prevStep: () => void;
 
     // Actions - Updates
+    setDraftId: (id: string | null) => void;
     updateLetter: (data: Partial<LetterData>) => void;
     updateExtras: (data: Partial<ExtrasData>) => void;
     updateAddress: (data: Partial<AddressData>) => void;
 
     // Actions - Reset
     resetStore: () => void;
+
+    // Actions - Database Sync
+    hydrateStore: (data: any) => void;
 }
 
 const initialState = {
+    draftId: null,
     currentStep: 1,
     letter: {
         paperColor: 'Beyaz',
@@ -89,11 +102,19 @@ export const useLetterStore = create<LetterStore>()(
                 nextStep: () => set((state) => ({ currentStep: Math.min(state.currentStep + 1, 6) })),
                 prevStep: () => set((state) => ({ currentStep: Math.max(state.currentStep - 1, 1) })),
 
+                setDraftId: (id) => set({ draftId: id }),
                 updateLetter: (data) => set((state) => ({ letter: { ...state.letter, ...data } })),
                 updateExtras: (data) => set((state) => ({ extras: { ...state.extras, ...data } })),
                 updateAddress: (data) => set((state) => ({ address: { ...state.address, ...data } })),
 
                 resetStore: () => set(initialState),
+
+                hydrateStore: (data) => set((state) => ({
+                    draftId: data.draftId || state.draftId,
+                    letter: data.letter || state.letter,
+                    extras: data.extras || state.extras,
+                    address: data.address || state.address,
+                })),
             }),
             {
                 name: 'mektup-storage', // saves to localStorage so users don't lose their letter on refresh

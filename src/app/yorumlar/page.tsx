@@ -70,7 +70,7 @@ export default function YorumlarPage() {
                         </div>
 
                         <p className="mt-6 text-sm text-ink-light leading-relaxed">
-                            Bu sayfada kullanıcılarımızın mextup hakkındaki yorumlarını okuyabilir veya yeni yorum yazabilirsiniz.
+                            Bu sayfada kullanıcılarımızın Mektuplaş hakkındaki yorumlarını okuyabilir veya yeni yorum yazabilirsiniz.
                         </p>
                     </div>
 

@@ -2,10 +2,21 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { PenTool, Feather, Mail, Settings, Clock, Send, Smile, Star, Archive, ArrowDown } from 'lucide-react';
+import {
+  PenTool, Feather, Mail, Settings, Clock, Send,
+  Smile, Star, Archive, ArrowDown, BookOpen,
+  Wallet, Sparkles, PlusCircle
+} from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useSession } from 'next-auth/react';
+import DashboardCard from '@/components/DashboardCard';
+import { useLetterStore } from '@/store/letterStore';
 
 export default function LandingPage() {
+  const { data: session, status } = useSession();
+  const resetStore = useLetterStore(state => state.resetStore);
+  const isLoading = status === "loading";
+
   const fadeIn = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
@@ -56,6 +67,105 @@ export default function LandingPage() {
     document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  if (!isLoading && session) {
+    return (
+      <div className="flex-1 container max-w-6xl mx-auto px-6 py-12 sm:py-20 animate-in fade-in duration-700">
+        {/* Welcome Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-10 border-b border-wood/10">
+          <div>
+            <div className="flex items-center gap-3 text-seal mb-3">
+              <Sparkles size={20} className="animate-pulse" />
+              <span className="text-xs font-bold uppercase tracking-[0.2em]">Hoş Geldiniz</span>
+            </div>
+            <h1 className="font-playfair text-4xl md:text-5xl font-bold text-wood-dark">
+              Merhaba, <span className="text-seal">{session.user?.name || "Değerli Üyemiz"}</span>
+            </h1>
+            <p className="text-black mt-4 text-lg">
+              Mektubunuzun hikayesi burada başlar. Bugün kime yazıyoruz?
+            </p>
+          </div>
+          <Link href="/mektup-yaz" onClick={resetStore} className="bg-seal hover:bg-seal-hover text-paper px-8 py-4 rounded-xl font-bold shadow-lg transition-all flex items-center gap-2 group">
+            <PlusCircle size={20} className="group-hover:rotate-90 transition-transform" />
+            Yeni Mektup Oluştur
+          </Link>
+        </div>
+
+        {/* Dashboard Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <DashboardCard
+            title="Yeni Mektup"
+            description="Nostaljik kağıtlar, özel kokular ve mühürlerle fiziksel bir mektup yola çıkarın."
+            href="/mektup-yaz"
+            icon={PenTool}
+            color="seal"
+            delay={0.1}
+            onClick={resetStore}
+          />
+          <DashboardCard
+            title="Taslaklar"
+            description="Yarım bıraktığınız mektuplarınıza buradan ulaşabilir, yazmaya devam edebilirsiniz."
+            href="/taslaklar"
+            icon={Archive}
+            color="paper"
+            delay={0.2}
+          />
+          <DashboardCard
+            title="Gönderilenler"
+            description="Anı kutunuza eklenen, daha önce gönderdiğiniz mektupları inceleyin."
+            href="/gonderilenler"
+            icon={Send}
+            color="ink"
+            delay={0.3}
+          />
+          <DashboardCard
+            title="Adres Defteri"
+            description="Sevdiklerinizin adreslerini kaydedin, bir sonraki mektupta zaman kazanın."
+            href="/adresler"
+            icon={BookOpen}
+            color="wood"
+            delay={0.4}
+          />
+          <DashboardCard
+            title="Cüzdan & Kutu"
+            description="Bakiyenizi yönetin, avantajlı paketlerle sanal mektup kutunuzu doldurun."
+            href="/cuzdan"
+            icon={Wallet}
+            color="gold"
+            delay={0.5}
+          />
+
+          {/* Quick Tip / Static Card */}
+          <div className="flex flex-col justify-center p-6 sm:p-8 rounded-2xl border-2 border-wood/10 bg-[#f3ead1]/95 backdrop-blur-md shadow-lg relative overflow-hidden group">
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-seal/30" />
+            <h4 className="font-bold text-wood-dark mb-3 flex items-center gap-2">
+              <Star size={18} className="text-seal animate-pulse" />
+              <span className="font-playfair text-xl sm:text-2xl">Günün Sözü</span>
+            </h4>
+            <p className="italic text-sm sm:text-[15px] text-ink-dark font-medium leading-relaxed">
+              "Bir mektup, sadece kağıt ve mürekkep değil; kalpten kalbe uzanan ince bir köprüdür."
+            </p>
+          </div>
+        </div>
+
+        {/* Stats Section or Bottom Note */}
+        <div className="mt-20 p-8 rounded-3xl bg-wood text-paper flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
+          <div className="relative z-10 text-center md:text-left">
+            <h3 className="font-playfair text-2xl font-bold mb-2">Hediye Mektup Hazır mı?</h3>
+            <p className="text-paper/70">Toplama her 5 mektup gönderiminde bir adet ücretsiz mektup hakkı kazanırsınız.</p>
+          </div>
+          <div className="relative z-10 flex gap-4">
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className={`w-10 h-10 rounded-full border-2 border-paper/30 flex items-center justify-center ${i === 1 ? 'bg-seal/40 border-seal' : ''}`}>
+                <Mail size={16} className={i === 1 ? 'text-white' : 'text-white/20'} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-0 relative overflow-hidden">
 
@@ -95,7 +205,7 @@ export default function LandingPage() {
               Nasıl Çalışır?
             </button>
             <Link
-              href="/mektup-yaz"
+              href={session ? "/mektup-yaz" : "/auth/login?callbackUrl=/mektup-yaz"}
               className="bg-seal hover:bg-seal-hover text-paper px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center gap-3 group border border-seal-hover"
             >
               <PenTool size={22} className="group-hover:rotate-12 transition-transform" />

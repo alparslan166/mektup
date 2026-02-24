@@ -9,6 +9,7 @@ import InfoStep from "@/components/InfoStep";
 import ReviewStep from "@/components/ReviewStep";
 import PaymentStep from "@/components/PaymentStep";
 import SuccessStep from "@/components/SuccessStep";
+import AutoSave from "@/components/AutoSave";
 
 import { useLetterStore } from "@/store/letterStore";
 
@@ -35,47 +36,36 @@ export default function Home() {
   }
 
   if (currentStep === 5) {
-    return <PaymentStep goBack={prevStep} onComplete={nextStep} />;
+    return <PaymentStep goBack={() => useLetterStore.getState().setCurrentStep(1)} onComplete={nextStep} />;
   }
 
   if (currentStep === 4) {
-    return <ReviewStep goBack={prevStep} goNext={nextStep} />;
-  }
-
-  if (currentStep === 3) {
-    return <InfoStep goBack={prevStep} goNext={nextStep} />;
-  }
-
-  if (currentStep === 2) {
-    return <ExtrasStep goBack={prevStep} goNext={nextStep} />;
+    return <ReviewStep goBack={() => useLetterStore.getState().setCurrentStep(1)} goNext={nextStep} />;
   }
 
   // Fallback to Step 1 (Editor)
+  // Merged Step 1, 2, 3 into a single scrolling view layout
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl flex-1 flex flex-col animate-in fade-in duration-300">
+    <div className="container mx-auto px-4 py-8 max-w-4xl flex-1 flex flex-col gap-8 animate-in fade-in duration-300">
+
+      {/* 1. EDITOR SECTION */}
       <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-6 sm:p-10 flex-col flex relative overflow-hidden">
         {/* Subtle decorative background piece */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-seal/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl pointer-events-none"></div>
 
         {/* Header */}
-        <div className="flex items-center gap-3 mb-2">
-          {/* Step 1 has no previous back step logically unless going back to home page entirely */}
-          <button className="p-2 hover:bg-paper-dark rounded-full transition-colors group opacity-50 cursor-not-allowed">
-            <ArrowLeft className="text-ink-light" size={24} />
-          </button>
+        <div className="flex justify-center mb-2">
           <h2 className="font-playfair text-3xl font-bold text-wood-dark">Geleceğe Mektup</h2>
         </div>
-        <p className="text-ink-light ml-12 text-sm sm:text-base">
+        <p className="text-ink-light text-center text-sm sm:text-base">
           Aşağıdaki boş alana mektubunuzu yazabilirsiniz. Ek olarak zarf ve kağıt rengini buradan seçebilirsiniz.
         </p>
-
-        {/* Stepper */}
-        <div className="mt-8 mb-6">
-          <Stepper currentStep={1} />
-        </div>
+        <p className="text-seal/80 text-center text-xs sm:text-sm mt-2 italic font-medium">
+          * İlhamınız yarım kalır diye korkmayın; yazdıklarınız otomatik kaydedilir ve "Taslaklar" sayfasından her zaman devam edebilirsiniz.
+        </p>
 
         {/* Options Row */}
-        <div className="flex flex-wrap gap-4 mb-2 mt-4">
+        <div className="flex flex-wrap gap-4 mt-8 mb-4">
           <div className="flex items-center border border-paper-dark rounded-md bg-paper-light overflow-hidden focus-within:border-wood focus-within:ring-1 focus-within:ring-wood transition-all shadow-sm">
             <div className="px-3 bg-paper-dark text-ink-light flex items-center gap-2 py-2 border-r border-paper-dark">
               <Mail size={18} />
@@ -113,18 +103,26 @@ export default function Home() {
 
         {/* Editor */}
         <Editor paperColor={currentBgColor} />
-
-        {/* Bottom Actions */}
-        <div className="mt-8 flex justify-end">
-          <button
-            onClick={nextStep}
-            className="bg-seal hover:bg-seal-hover text-paper px-8 py-3 rounded-md font-medium shadow-md transition-all hover:shadow-lg flex items-center gap-2 active:scale-[0.98]">
-            Ekstralara Geç
-            <ArrowRight size={18} />
-          </button>
-        </div>
-
       </div>
+
+      {/* 2. EXTRAS SECTION */}
+      <ExtrasStep />
+
+      {/* 3. INFO SECTION */}
+      <InfoStep />
+
+      {/* FINAL ACTION BUTTON */}
+      <div className="flex justify-center mt-4 mb-12">
+        <button
+          onClick={() => useLetterStore.getState().setCurrentStep(4)}
+          className="bg-seal hover:bg-seal-hover text-paper w-full max-w-md py-4 rounded-xl font-bold text-lg shadow-lg transition-all hover:shadow-xl hover:-translate-y-1 flex items-center justify-center gap-3 active:scale-[0.98]"
+        >
+          Postaya Ver
+          <ArrowRight size={24} />
+        </button>
+      </div>
+
+      <AutoSave />
     </div>
   );
 }

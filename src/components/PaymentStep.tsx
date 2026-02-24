@@ -5,6 +5,7 @@ import Stepper from "@/components/Stepper";
 import { ArrowLeft, CreditCard, Lock, ShieldCheck, CheckCircle2 } from "lucide-react";
 
 import { useLetterStore } from "@/store/letterStore";
+import { createLetter } from "@/app/actions/letterActions";
 
 export default function PaymentStep({ goBack, onComplete }: { goBack: () => void, onComplete: () => void }) {
     const [isProcessing, setIsProcessing] = useState(false);
@@ -21,15 +22,24 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
 
     const totalAmount = baseLetterPrice + scentPrice + photoPrice + docPrice + postcardPrice + calendarPrice + shippingPrice;
 
-    const handlePayment = (e: React.FormEvent) => {
+    const handlePayment = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsProcessing(true);
 
-        // Simulate API call for payment processing
-        setTimeout(() => {
-            setIsProcessing(false);
+        const { letter, extras, address, resetStore } = useLetterStore.getState();
+
+        // Simulate payment provider delay
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        const result = await createLetter({ letter, extras, address });
+
+        setIsProcessing(false);
+        if (result.success) {
+            resetStore(); // Clear local state after successful submission
             onComplete();
-        }, 2000);
+        } else {
+            alert(result.error || "Bir hata oluştu.");
+        }
     };
 
     return (

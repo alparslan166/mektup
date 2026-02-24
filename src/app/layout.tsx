@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import PageLoader from "@/components/PageLoader";
+import { NextAuthProvider } from "@/providers/NextAuthProvider";
 import { Suspense } from "react";
 import "./globals.css";
 
@@ -39,23 +40,24 @@ export default function RootLayout({
         className={`${inter.variable} ${playfair.variable} ${kurale.variable} font-sans antialiased text-ink min-h-screen flex flex-col relative`}
         style={{ backgroundImage: `url('${process.env.NODE_ENV === 'production' ? '/mektup' : ''}/images/home.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}
       >
-        <div className="absolute inset-0 bg-[#1c1917]/50 backdrop-blur-[2px] z-[-1] pointer-events-none fixed"></div>
+        <div className="absolute inset-0 backdrop-blur-[0px] z-[-1] pointer-events-none fixed"></div>
 
         <Suspense fallback={null}>
           <PageLoader />
         </Suspense>
 
-        <Navbar />
-
-        <main className="flex-1 flex flex-col items-stretch relative z-10">
-          {children}
-        </main>
+        <NextAuthProvider>
+          <Navbar />
+          <main className="flex-1 flex flex-col items-stretch relative z-10">
+            {children}
+          </main>
+        </NextAuthProvider>
 
         <footer className="bg-[#1c1917] text-paper/70 py-10 mt-auto border-t border-wood/10 relative z-10">
           <div className="container mx-auto px-6 max-w-6xl flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="text-center md:text-left">
               <p className="font-playfair text-xl text-paper mb-2">Söz uçar, mektup kalır.</p>
-              <p className="text-sm">© {new Date().getFullYear()} Mextup. Tüm hakları saklıdır.</p>
+              <p className="text-sm">© {new Date().getFullYear()} Mektuplaş. Tüm hakları saklıdır.</p>
             </div>
 
             <div className="flex flex-wrap justify-center gap-5 text-sm font-medium">

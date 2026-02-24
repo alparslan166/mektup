@@ -2,10 +2,14 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut, X } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
+import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut, X, LogIn, UserPlus } from "lucide-react";
+import { useLetterStore } from "@/store/letterStore";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const { data: session, status } = useSession();
+    const resetStore = useLetterStore(state => state.resetStore);
 
     const toggleMenu = () => setIsOpen(!isOpen);
     const closeMenu = () => setIsOpen(false);
@@ -19,9 +23,9 @@ const Navbar = () => {
                         <div className="bg-paper/20 backdrop-blur-sm text-paper p-1.5 rounded-sm border border-paper/10">
                             <Mail size={24} strokeWidth={2.5} />
                         </div>
-                        <h1 className="font-playfair text-2xl lg:text-3xl font-bold tracking-widest text-paper drop-shadow-md">MEXTUP</h1>
+                        <h1 className="font-playfair text-2xl lg:text-3xl font-bold tracking-widest text-paper drop-shadow-md">Mektuplaş</h1>
                     </div>
-                    <span className="text-[10px] lg:text-[12px] font-semibold tracking-widest text-paper/70 mt-1 italic drop-shadow-sm">&quot;Söz Uçar, Mextup Kalır.&quot;</span>
+                    <span className="text-[10px] lg:text-[12px] font-semibold tracking-widest text-paper/70 mt-1 italic drop-shadow-sm">&quot;Söz Uçar, Mektuplaş Kalır.&quot;</span>
                 </Link>
 
                 {/* Desktop Nav */}
@@ -30,7 +34,7 @@ const Navbar = () => {
                         <Home size={18} />
                         <span>ANASAYFA</span>
                     </Link>
-                    <Link href="/mektup-yaz" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
+                    <Link href="/mektup-yaz" onClick={resetStore} className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
                         <PenLine size={18} />
                         <span>MEKTUP YAZ</span>
                     </Link>
@@ -46,14 +50,32 @@ const Navbar = () => {
 
                 {/* Desktop User Actions */}
                 <div className="hidden md:flex items-center gap-3 shrink-0">
-                    <Link href="#" className="flex items-center gap-2 bg-paper/10 backdrop-blur-md text-paper border border-paper/20 hover:border-paper/40 hover:bg-paper/20 px-4 py-2 rounded-md font-bold text-[13px] transition-all shadow-sm">
-                        <User size={16} />
-                        <span>Hesabım</span>
-                    </Link>
-                    <button className="flex items-center gap-2 bg-paper/10 backdrop-blur-md text-paper border border-paper/20 hover:border-paper/40 hover:bg-paper/20 px-4 py-2 rounded-md font-bold text-[13px] transition-all shadow-sm">
-                        <LogOut size={16} />
-                        <span>Çıkış</span>
-                    </button>
+                    {status === "authenticated" ? (
+                        <>
+                            <Link href="/profil" className="flex items-center gap-2 bg-paper/10 backdrop-blur-md text-paper border border-paper/20 hover:border-paper/40 hover:bg-paper/20 px-4 py-2 rounded-md font-bold text-[13px] transition-all shadow-sm">
+                                <User size={16} />
+                                <span>{session.user?.name || "Profilim"}</span>
+                            </Link>
+                            <button
+                                onClick={() => signOut()}
+                                className="flex items-center gap-2 bg-paper/10 backdrop-blur-md text-paper border border-paper/20 hover:border-paper/40 hover:bg-paper/20 px-4 py-2 rounded-md font-bold text-[13px] transition-all shadow-sm"
+                            >
+                                <LogOut size={16} />
+                                <span>Çıkış</span>
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <Link href="/auth/login" className="flex items-center gap-2 bg-paper text-wood-dark border border-paper hover:bg-paper/90 px-4 py-2 rounded-md font-bold text-[13px] transition-all shadow-md">
+                                <LogIn size={16} />
+                                <span>Giriş Yap</span>
+                            </Link>
+                            <Link href="/auth/register" className="flex items-center gap-2 bg-seal text-paper border border-seal hover:bg-seal-hover px-4 py-2 rounded-md font-bold text-[13px] transition-all shadow-md">
+                                <UserPlus size={16} />
+                                <span>Kayıt Ol</span>
+                            </Link>
+                        </>
+                    )}
                 </div>
 
                 {/* Mobile Menu Button */}
@@ -73,7 +95,7 @@ const Navbar = () => {
                             <Home size={22} />
                             <span>ANASAYFA</span>
                         </Link>
-                        <Link href="/mektup-yaz" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
+                        <Link href="/mektup-yaz" onClick={() => { resetStore(); closeMenu(); }} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                             <PenLine size={22} />
                             <span>MEKTUP YAZ</span>
                         </Link>
@@ -87,19 +109,37 @@ const Navbar = () => {
                         </Link>
 
                         <div className="mt-4 flex flex-col gap-4">
-                            <Link href="#" onClick={closeMenu} className="flex items-center justify-center gap-2 bg-paper/10 text-paper border border-paper/20 px-6 py-4 rounded-xl font-bold transition-all shadow-sm">
-                                <User size={20} />
-                                <span>Hesabım</span>
-                            </Link>
-                            <button onClick={closeMenu} className="flex items-center justify-center gap-2 bg-paper/10 text-paper border border-paper/20 px-6 py-4 rounded-xl font-bold transition-all shadow-sm">
-                                <LogOut size={20} />
-                                <span>Çıkış</span>
-                            </button>
+                            {status === "authenticated" ? (
+                                <>
+                                    <Link href="/profil" onClick={closeMenu} className="flex items-center justify-center gap-2 bg-paper/10 text-paper border border-paper/20 px-6 py-4 rounded-xl font-bold transition-all shadow-sm">
+                                        <User size={20} />
+                                        <span>{session.user?.name || "Profilim"}</span>
+                                    </Link>
+                                    <button
+                                        onClick={() => { signOut(); closeMenu(); }}
+                                        className="flex items-center justify-center gap-2 bg-paper/10 text-paper border border-paper/20 px-6 py-4 rounded-xl font-bold transition-all shadow-sm"
+                                    >
+                                        <LogOut size={20} />
+                                        <span>Çıkış</span>
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <Link href="/auth/login" onClick={closeMenu} className="flex items-center justify-center gap-2 bg-paper text-wood-dark border border-paper px-6 py-4 rounded-xl font-bold transition-all shadow-md">
+                                        <LogIn size={20} />
+                                        <span>Giriş Yap</span>
+                                    </Link>
+                                    <Link href="/auth/register" onClick={closeMenu} className="flex items-center justify-center gap-2 bg-seal text-paper border border-seal px-6 py-4 rounded-xl font-bold transition-all shadow-md">
+                                        <UserPlus size={20} />
+                                        <span>Kayıt Ol</span>
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     </nav>
 
                     <div className="mt-auto mb-12 text-center">
-                        <p className="font-playfair text-paper/40 text-sm italic">&quot;Söz Uçar, Mextup Kalır.&quot;</p>
+                        <p className="font-playfair text-paper/40 text-sm italic">&quot;Söz Uçar, Mektuplaş Kalır.&quot;</p>
                     </div>
                 </div>
             )}
