@@ -12,7 +12,7 @@ const PageLoader = () => {
     const [progress, setProgress] = useState(0);
     const [startTime, setStartTime] = useState(0);
 
-    const loaderImage = `/images/loader.png`;
+    const loaderImage = `/images/kus-logo.png`;
 
     // Reset loading state when route changes, but with a minimum delay
     useEffect(() => {
