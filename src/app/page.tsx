@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
   PenTool, Feather, Mail, Settings, Clock, Send,
   Smile, Star, Archive, ArrowDown, BookOpen,
-  Wallet, Sparkles, PlusCircle, Inbox
+  Wallet, Sparkles, PlusCircle, Inbox, HelpCircle, Gift
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
@@ -143,6 +143,22 @@ export default function LandingPage() {
             icon={Inbox}
             color="paper"
             delay={0.6}
+          />
+          <DashboardCard
+            title="Sıkça Sorulan Sorular"
+            description="Mektup gönderimi, kargo süreleri ve aklınıza takılan tüm detaylar."
+            href="/sss"
+            icon={HelpCircle}
+            color="ink"
+            delay={0.7}
+          />
+          <DashboardCard
+            title="Hediye Gönder"
+            description="Sevdiklerinize mektubun yanında sürpriz hediyeler ekleyerek onları şaşırtın."
+            href="/hediye-gonder"
+            icon={Gift}
+            color="seal"
+            delay={0.8}
           />
         </div>
 
