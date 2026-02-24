@@ -35,7 +35,7 @@ const Navbar = () => {
                         <Home size={18} />
                         <span>ANASAYFA</span>
                     </Link>
-                    <Link href="/mektup-yaz" onClick={resetStore} className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
+                    <Link href={status === "unauthenticated" ? "/auth/login" : "/mektup-yaz"} onClick={resetStore} className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
                         <PenLine size={18} />
                         <span>MEKTUP YAZ</span>
                     </Link>
@@ -96,7 +96,7 @@ const Navbar = () => {
                             <Home size={22} />
                             <span>ANASAYFA</span>
                         </Link>
-                        <Link href="/mektup-yaz" onClick={() => { resetStore(); closeMenu(); }} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
+                        <Link href={status === "unauthenticated" ? "/auth/login" : "/mektup-yaz"} onClick={() => { resetStore(); closeMenu(); }} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                             <PenLine size={22} />
                             <span>MEKTUP YAZ</span>
                         </Link>
