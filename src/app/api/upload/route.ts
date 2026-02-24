@@ -3,8 +3,9 @@ import { put } from "@vercel/blob";
 
 export async function POST(req: Request) {
     try {
-        const formData = await req.json();
-        const { file, fileName, type } = formData;
+        const formData = await req.formData();
+        const file = formData.get("file") as File;
+        const type = formData.get("type") as string;
 
         if (!file) {
             return NextResponse.json({ error: "Dosya bulunamadı." }, { status: 400 });
@@ -12,23 +13,18 @@ export async function POST(req: Request) {
 
         if (!process.env.BLOB_READ_WRITE_TOKEN) {
             return NextResponse.json({
-                error: "Vercel Blob token'ı eksik. Lütfen BLOB_READ_WRITE_TOKEN ortam değişkenini ekleyin."
+                error: "Vercel Blob token'ı eksik. Lütfen Vercel Dashboard'dan Storage > Blob kurulumunu yapın."
             }, { status: 500 });
         }
 
-        // Base64 to Buffer
-        const base64Data = file.split(",")[1];
-        const buffer = Buffer.from(base64Data, "base64");
-
         // Upload to Vercel Blob
-        const blob = await put(fileName, buffer, {
+        const blob = await put(file.name, file, {
             access: 'public',
-            contentType: type === 'photo' ? 'image/jpeg' : 'application/pdf', // Simplified, but good enough
         });
 
         return NextResponse.json({
             url: blob.url,
-            name: fileName,
+            name: file.name,
             type: type
         });
     } catch (error) {

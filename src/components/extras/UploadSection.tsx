@@ -25,56 +25,42 @@ export default function UploadSection() {
         const loadingToast = toast.loading("Dosya yükleniyor...");
 
         try {
-            // Convert file to base64 for the simplified API endpoint
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async () => {
-                const base64 = reader.result as string;
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("type", type);
 
-                try {
-                    const res = await fetch("/api/upload", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            file: base64,
-                            fileName: file.name,
-                            type: type
-                        }),
-                    });
+            const res = await fetch("/api/upload", {
+                method: "POST",
+                body: formData,
+            });
 
-                    if (res.ok) {
-                        const data = await res.json();
-                        const newFile = {
-                            id: Math.random().toString(36).substr(2, 9),
-                            name: data.name,
-                            url: data.url,
-                            type: data.type
-                        };
+            if (res.ok) {
+                const data = await res.json();
+                const newFile = {
+                    id: Math.random().toString(36).substr(2, 9),
+                    name: data.name,
+                    url: data.url,
+                    type: data.type
+                };
 
-                        if (type === "photo") {
-                            updateExtras({ photos: [...extras.photos, newFile] });
-                        } else {
-                            updateExtras({ documents: [...extras.documents, newFile] });
-                        }
-                        toast.success("Dosya başarıyla yüklendi.", { id: loadingToast });
-                    } else {
-                        const errorData = await res.json();
-                        toast.error(errorData.error || "Dosya yüklenirken bir hata oluştu.", { id: loadingToast });
-                    }
-                } catch (err) {
-                    toast.error("Sunucuya bağlanılamadı.", { id: loadingToast });
-                } finally {
-                    setIsUploading(false);
+                if (type === "photo") {
+                    updateExtras({ photos: [...extras.photos, newFile] });
+                } else {
+                    updateExtras({ documents: [...extras.documents, newFile] });
                 }
-            };
-        } catch (error) {
-            console.error(error);
-            toast.error("Yükleme işlemi başarısız oldu.", { id: loadingToast });
+                toast.success("Dosya başarıyla yüklendi.", { id: loadingToast });
+            } else {
+                const errorData = await res.json().catch(() => ({ error: "Sunucu hatası oluştu." }));
+                toast.error(errorData.error || "Dosya yüklenirken bir hata oluştu.", { id: loadingToast });
+            }
+        } catch (err) {
+            console.error("Fetch error:", err);
+            toast.error("Sunucuya bağlanılamadı: " + (err as Error).message, { id: loadingToast });
+        } finally {
             setIsUploading(false);
+            // Reset input
+            e.target.value = "";
         }
-
-        // Reset input
-        e.target.value = "";
     };
 
     const removeFile = (id: string, type: "photo" | "doc") => {
