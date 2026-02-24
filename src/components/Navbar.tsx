@@ -138,10 +138,6 @@ const Navbar = () => {
                             )}
                         </div>
                     </nav>
-
-                    <div className="mt-auto mb-12 text-center">
-                        <p className="font-playfair text-paper/40 text-sm italic">&quot;Söz Uçar, Mektuplaş Kalır.&quot;</p>
-                    </div>
                 </div>
             )}
         </header>

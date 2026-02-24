@@ -7,6 +7,8 @@ import { NextAuthProvider } from "@/providers/NextAuthProvider";
 import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import Image from "next/image";
+
 
 const inter = Inter({
   variable: "--font-inter",
@@ -57,7 +59,10 @@ export default function RootLayout({
         <footer className="bg-[#1c1917] text-paper/70 py-10 mt-auto border-t border-wood/10 relative z-10">
           <div className="container mx-auto px-6 max-w-6xl flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="text-center md:text-left">
-              <p className="font-playfair text-xl text-paper mb-2">Söz uçar, mektup kalır.</p>
+              <div className="text-paper rounded-sm mb-2 flex items-center gap-2">
+                <Image src="/images/kus-logo.png" alt="Logo" width={40} height={40} />
+                <p className="font-playfair text-xl text-paper">Söz kulağa, yazı uzağa gider...</p>
+              </div>
               <p className="text-sm">© {new Date().getFullYear()} Mektuplaş. Tüm hakları saklıdır.</p>
             </div>
 
