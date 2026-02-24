@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import PageLoader from "@/components/PageLoader";
 import { NextAuthProvider } from "@/providers/NextAuthProvider";
 import { Suspense } from "react";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
 const inter = Inter({
@@ -46,6 +47,7 @@ export default function RootLayout({
         </Suspense>
 
         <NextAuthProvider>
+          <Toaster position="top-center" />
           <Navbar />
           <main className="flex-1 flex flex-col items-stretch relative z-10">
             {children}
