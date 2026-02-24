@@ -15,6 +15,7 @@ function LoginForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const isRegistered = searchParams.get("registered") === "true";
+    const authError = searchParams.get("error");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -64,6 +65,13 @@ function LoginForm() {
                             <div className="bg-red-50 border border-red-100 text-red-600 text-sm p-4 rounded-xl mb-6 flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span>
                                 {error}
+                            </div>
+                        )}
+
+                        {authError && (
+                            <div className="bg-red-50 border border-red-100 text-red-600 text-sm p-4 rounded-xl mb-6 flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+                                {authError === "OAuthCallback" ? "Google girişi sırasında bir sorun oluştu. Lütfen tekrar deneyin." : "Giriş yapılamadı: " + authError}
                             </div>
                         )}
 
