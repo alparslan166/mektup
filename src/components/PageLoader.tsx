@@ -12,8 +12,7 @@ const PageLoader = () => {
     const [progress, setProgress] = useState(0);
     const [startTime, setStartTime] = useState(0);
 
-    const assetPath = process.env.NODE_ENV === 'production' ? '/mektup' : '';
-    const loaderImage = `${assetPath}/images/loader.png`;
+    const loaderImage = `/images/loader.png`;
 
     // Reset loading state when route changes, but with a minimum delay
     useEffect(() => {
