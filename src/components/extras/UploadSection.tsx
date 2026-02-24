@@ -151,7 +151,7 @@ export default function UploadSection() {
                                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                                 <img src={file.url} alt={file.name} className="absolute inset-0 w-full h-full object-cover" />
                                             </div>
-                                            <p className="text-[10px] text-center truncate px-1 text-ink">{file.name}</p>
+                                            {/* <p className="text-[10px] text-center truncate px-1 text-ink">{file.name}</p> */}
                                             <button
                                                 onClick={() => removeFile(file.id, "photo")}
                                                 className="absolute -top-2 -right-2 bg-seal text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md z-10"
