@@ -312,10 +312,10 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                         </button>
 
                                                         {editingCategoryId === category.id ? (
-                                                            <div className="flex items-center gap-2">
+                                                            <div className="flex items-center gap-1 sm:gap-2 flex-1 min-w-0 mr-2">
                                                                 <input
                                                                     onClick={(e) => e.stopPropagation()}
-                                                                    className="border border-slate-300 rounded-md px-2 py-1 text-sm outline-none bg-white font-medium"
+                                                                    className="border border-slate-300 rounded-md px-2 py-1 text-sm outline-none bg-white font-medium flex-1 min-w-0"
                                                                     value={editCategoryName}
                                                                     onChange={(e) => setEditCategoryName(e.target.value)}
                                                                     autoFocus
@@ -326,7 +326,7 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                                         e.stopPropagation();
                                                                         handleUpdateCategory(category.id);
                                                                     }}
-                                                                    className="p-1 text-green-600 hover:bg-green-50 rounded-md transition-colors"
+                                                                    className="p-1 text-green-600 hover:bg-green-50 rounded-md transition-colors shrink-0"
                                                                     title="Kaydet"
                                                                 >
                                                                     <Save size={16} />
@@ -336,14 +336,14 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                                         e.stopPropagation();
                                                                         setEditingCategoryId(null);
                                                                     }}
-                                                                    className="p-1 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                                                                    className="p-1 text-red-600 hover:bg-red-50 rounded-md transition-colors shrink-0"
                                                                     title="İptal"
                                                                 >
                                                                     <X size={16} />
                                                                 </button>
                                                             </div>
                                                         ) : (
-                                                            <h4 className="font-bold text-slate-800 uppercase tracking-wider text-sm">{category.name}</h4>
+                                                            <h4 className="font-bold text-slate-800 uppercase tracking-wider text-sm truncate mr-2 flex-1">{category.name}</h4>
                                                         )}
 
                                                         <span className="bg-slate-200 text-slate-600 text-[10px] font-black px-2 py-0.5 rounded-full">
