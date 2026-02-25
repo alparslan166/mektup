@@ -16,7 +16,8 @@ import {
     CheckCircle2,
     Clock,
     X,
-    MessageSquare
+    MessageSquare,
+    Filter
 } from "lucide-react";
 import { updateLetterStatus, updateTrackingCode } from "@/app/actions/adminActions";
 import { toast } from "react-hot-toast";
@@ -40,15 +41,21 @@ interface Letter {
 export default function LettersList({ initialLetters }: { initialLetters: Letter[] }) {
     const [letters, setLetters] = useState(initialLetters);
     const [searchQuery, setSearchQuery] = useState("");
+    const [statusFilter, setStatusFilter] = useState<string | null>(null);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [selectedLetter, setSelectedLetter] = useState<Letter | null>(null);
     const [trackingCode, setTrackingCode] = useState("");
     const [isUpdating, setIsUpdating] = useState(false);
 
-    const filteredLetters = letters.filter(l =>
-        l.senderName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        l.receiverName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        l.receiverCity?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredLetters = letters.filter(l => {
+        const matchesSearch = l.senderName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            l.receiverName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            l.receiverCity?.toLowerCase().includes(searchQuery.toLowerCase());
+
+        const matchesStatus = statusFilter ? l.status === statusFilter : true;
+
+        return matchesSearch && matchesStatus;
+    });
 
     const getStatusIcon = (status: string) => {
         switch (status) {
@@ -206,15 +213,63 @@ Tarih: ${new Date(letter.createdAt).toLocaleDateString('tr-TR')}
         <div className="space-y-6">
             {/* SEARCH AND FILTERS */}
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <div className="relative w-full sm:w-80">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                    <input
-                        type="text"
-                        placeholder="Gönderen, alıcı veya şehir ara..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition-all text-sm"
-                    />
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <div className="relative w-full sm:w-80">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                        <input
+                            type="text"
+                            placeholder="Gönderen, alıcı veya şehir ara..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition-all text-sm"
+                        />
+                    </div>
+
+                    <div className="relative">
+                        <button
+                            onClick={() => setIsFilterOpen(!isFilterOpen)}
+                            className={`p-2.5 rounded-lg border transition-all flex items-center justify-center shrink-0 ${statusFilter ? 'bg-orange-50 border-orange-200 text-orange-500' : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100'}`}
+                        >
+                            <Filter size={18} />
+                        </button>
+
+                        {isFilterOpen && (
+                            <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-9999 animate-in fade-in slide-in-from-top-2">
+                                <div className="p-2 space-y-1">
+                                    <button
+                                        onClick={() => { setStatusFilter(null); setIsFilterOpen(false); }}
+                                        className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${statusFilter === null ? 'bg-slate-100 font-bold text-slate-900' : 'text-slate-700 hover:bg-slate-50'}`}
+                                    >
+                                        Tümü
+                                    </button>
+                                    <button
+                                        onClick={() => { setStatusFilter("PAID"); setIsFilterOpen(false); }}
+                                        className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors flex items-center justify-between ${statusFilter === "PAID" ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-700 hover:bg-slate-50'}`}
+                                    >
+                                        Ödendi
+                                    </button>
+                                    <button
+                                        onClick={() => { setStatusFilter("PREPARING"); setIsFilterOpen(false); }}
+                                        className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors flex items-center justify-between ${statusFilter === "PREPARING" ? 'bg-orange-50 text-orange-700 font-bold' : 'text-slate-700 hover:bg-slate-50'}`}
+                                    >
+                                        Hazırlanıyor
+                                    </button>
+                                    <button
+                                        onClick={() => { setStatusFilter("SHIPPED"); setIsFilterOpen(false); }}
+                                        className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors flex items-center justify-between ${statusFilter === "SHIPPED" ? 'bg-purple-50 text-purple-700 font-bold' : 'text-slate-700 hover:bg-slate-50'}`}
+                                    >
+                                        Kargoya Verildi
+                                    </button>
+                                    <button
+                                        onClick={() => { setStatusFilter("COMPLETED"); setIsFilterOpen(false); }}
+                                        className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors flex items-center justify-between ${statusFilter === "COMPLETED" ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50'}`}
+                                    >
+                                        Teslim Edildi
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-slate-500 font-medium whitespace-nowrap">
                     Toplam {filteredLetters.length} Mektup
@@ -250,7 +305,6 @@ Tarih: ${new Date(letter.createdAt).toLocaleDateString('tr-TR')}
                                 <h4 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors uppercase truncate max-w-[150px]">
                                     {l.receiverName}
                                 </h4>
-                                <p className="text-[11px] text-slate-500 font-medium">#{l.id.slice(-6).toUpperCase()}</p>
                             </div>
                         </div>
 

@@ -43,7 +43,7 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
         }
     };
 
-    if (isSuccess) {
+    if (!isSuccess) {
         return (
             <div className="container mx-auto px-4 py-8 max-w-4xl flex-1 flex flex-col justify-center animate-in fade-in duration-300">
                 <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-8 sm:p-12 flex-col flex items-center text-center relative overflow-hidden">

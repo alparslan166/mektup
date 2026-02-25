@@ -106,7 +106,7 @@ const Navbar = () => {
                                 <span>{session.user?.name || "Profilim"}</span>
                             </Link>
                             {(session.user as any)?.role === "ADMIN" ? (
-                                <Link href="/admin" className="flex items-center gap-2 bg-seal/10 backdrop-blur-md text-seal border border-seal/20 hover:border-seal/40 hover:bg-seal/20 px-4 py-2 rounded-md font-bold text-[13px] transition-all shadow-sm">
+                                <Link href="/admin/mektuplar" className="flex items-center gap-2 bg-seal/10 backdrop-blur-md text-seal border border-seal/20 hover:border-seal/40 hover:bg-seal/20 px-4 py-2 rounded-md font-bold text-[13px] transition-all shadow-sm">
                                     <ShieldCheck size={16} />
                                     <span>Admin Paneli</span>
                                 </Link>
@@ -202,7 +202,7 @@ const Navbar = () => {
                             {status === "authenticated" ? (
                                 <>
                                     {(session.user as any)?.role === "ADMIN" && (
-                                        <Link href="/admin" onClick={closeMenu} className="flex items-center justify-center gap-2 bg-seal/10 text-seal border border-seal/20 px-6 py-4 rounded-xl font-bold transition-all shadow-sm">
+                                        <Link href="/admin/mektuplar" onClick={closeMenu} className="flex items-center justify-center gap-2 bg-seal/10 text-seal border border-seal/20 px-6 py-4 rounded-xl font-bold transition-all shadow-sm">
                                             <ShieldCheck size={20} />
                                             <span>Admin Paneli</span>
                                         </Link>

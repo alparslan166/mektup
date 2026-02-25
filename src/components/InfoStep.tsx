@@ -370,6 +370,7 @@ export default function InfoStep() {
                                         <div className="space-y-1">
                                             <label className="text-sm font-semibold text-ink-light block">Koğuş No</label>
                                             <input
+                                                required
                                                 type="text"
                                                 placeholder="Örn: B10"
                                                 value={address.wardNumber}
@@ -378,7 +379,7 @@ export default function InfoStep() {
                                             />
                                         </div>
                                     </div>
-                                    <p className="text-[10px] text-seal/60 italic px-1 leading-tight">Baba adı ve koğuş numarası, alıcının daha kolay bulunmasına yardımcı olur.</p>
+                                    <p className="text-[10px] text-seal/60 italic px-1 leading-tight">Baba adı opsiyoneldir, alıcının daha kolay bulunmasına yardımcı olur.</p>
                                 </motion.div>
                             )}
                         </AnimatePresence>

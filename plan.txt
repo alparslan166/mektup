@@ -1,2 +1,3 @@
 adres eklerken kayıtlı adreslerime ekle butonu
-özel tarih seçme çalışmıyor
+sipariş no'lu ürününüz alınımştır diye espot
+ptt eposta
