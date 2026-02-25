@@ -7,7 +7,7 @@ export default async function GiftsPage() {
     const categories = await getCategories();
 
     return (
-        <main className="min-h-screen pt-24 pb-20 px-6">
+        <main className="min-h-screen pt-10 pb-20 px-6">
             <div className="container mx-auto max-w-5xl">
                 {/* Header Section */}
                 <div className="text-center mb-16 space-y-4">
@@ -43,7 +43,7 @@ export default async function GiftsPage() {
                                 {category.gifts.map((gift) => (
                                     <div
                                         key={gift.id}
-                                        className="group bg-paper-light border border-paper-dark p-4 rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between"
+                                        className="group bg-amber-100/95 border border-paper-dark p-4 rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between"
                                     >
                                         <div className="space-y-4">
                                             <div className="w-full aspect-square bg-paper-dark/50 rounded-xl flex items-center justify-center text-wood group-hover:bg-seal group-hover:text-paper transition-all duration-500 overflow-hidden relative">
