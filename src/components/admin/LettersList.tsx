@@ -161,31 +161,36 @@ Tarih: ${new Date(letter.createdAt).toLocaleDateString('tr-TR')}
             const docs = letter.data.extras.documents || [];
             const postcardIds = letter.data.extras.postcards || [];
 
-            const allMediaUrls: string[] = [];
+            const mediaItems: { url: string, name: string }[] = [];
 
             // Extract URLs
-            photos.forEach((p: any) => { if (p.url) allMediaUrls.push(p.url); });
-            docs.forEach((d: any) => { if (d.url) allMediaUrls.push(d.url); });
+            let photoCount = 1;
+            photos.forEach((p: any) => { if (p.url) mediaItems.push({ url: p.url, name: `resim_${photoCount++}` }); });
+
+            let docCount = 1;
+            docs.forEach((d: any) => { if (d.url) mediaItems.push({ url: d.url, name: `belge_${docCount++}` }); });
 
             // Resolve Postcard IDs
+            let postcardCount = 1;
             postcardIds.forEach((id: string) => {
                 for (const cat of postcardCategories) {
                     const found = cat.items.find((item: any) => item.id === id);
                     if (found) {
-                        allMediaUrls.push(found.image);
+                        mediaItems.push({ url: found.image, name: `kartpostal_${postcardCount++}` });
                         break;
                     }
                 }
             });
 
-            for (let i = 0; i < allMediaUrls.length; i++) {
+            for (let i = 0; i < mediaItems.length; i++) {
                 try {
-                    const response = await fetch(allMediaUrls[i]);
+                    const { url, name } = mediaItems[i];
+                    const response = await fetch(url);
                     const blob = await response.blob();
 
                     let ext = "jpg";
                     try {
-                        const urlObj = new URL(allMediaUrls[i]);
+                        const urlObj = new URL(url);
                         const pathExt = urlObj.pathname.split('.').pop()?.toLowerCase();
                         if (pathExt && ['jpg', 'jpeg', 'png', 'pdf', 'heic'].includes(pathExt)) {
                             ext = pathExt;
@@ -194,7 +199,7 @@ Tarih: ${new Date(letter.createdAt).toLocaleDateString('tr-TR')}
                         // ignore url parse error
                     }
 
-                    mediaFolder?.file(`medya_${i + 1}.${ext}`, blob);
+                    mediaFolder?.file(`${name}.${ext}`, blob);
                 } catch (e) {
                     console.error("Media fetch error", e);
                 }
@@ -350,7 +355,7 @@ Tarih: ${new Date(letter.createdAt).toLocaleDateString('tr-TR')}
 
             {/* DETAIL MODAL */}
             {selectedLetter && typeof document !== "undefined" && createPortal(
-                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div
                         className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
                         onClick={() => setSelectedLetter(null)}
@@ -469,8 +474,17 @@ Tarih: ${new Date(letter.createdAt).toLocaleDateString('tr-TR')}
                                                     <span className="absolute top-2 right-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Cezaevi</span>
                                                 )}
                                                 <p className="font-bold text-slate-900 mb-1">{selectedLetter.data.address.receiverName}</p>
-                                                <p className="text-sm text-slate-600 leading-relaxed">{selectedLetter.data.address.receiverAddress}</p>
                                                 <p className="text-sm text-slate-900 font-bold mt-2">{selectedLetter.data.address.receiverCity}</p>
+                                                {selectedLetter.data.address.isPrison ? (
+                                                    <>
+                                                        <p className="text-sm font-bold text-slate-800">{selectedLetter.data.address.prisonName}</p>
+                                                        {selectedLetter.data.address.fatherName && <p className="text-xs text-slate-600">Baba Adı: {selectedLetter.data.address.fatherName}</p>}
+                                                        {selectedLetter.data.address.wardNumber && <p className="text-xs text-slate-600">Koğuş: {selectedLetter.data.address.wardNumber}</p>}
+                                                        <p className="text-sm text-slate-600 leading-relaxed mt-1">{selectedLetter.data.address.receiverAddress}</p>
+                                                    </>
+                                                ) : (
+                                                    <p className="text-sm text-slate-600 leading-relaxed">{selectedLetter.data.address.receiverAddress}</p>
+                                                )}
                                                 {selectedLetter.data.address.receiverPhone && (
                                                     <p className="text-xs text-slate-500 mt-1">{selectedLetter.data.address.receiverPhone}</p>
                                                 )}
