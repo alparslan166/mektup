@@ -7,12 +7,13 @@ import { revalidatePath } from "next/cache";
 
 export async function getAllLetters() {
     const session = await getServerSession(authOptions);
+    console.log("getAllLetters called... Session role:", (session?.user as any)?.role);
 
     if (!session || (session.user as any).role !== "ADMIN") {
         throw new Error("Unauthorized");
     }
 
-    const letters = await prisma.letter.findMany({
+    return await prisma.letter.findMany({
         include: {
             user: {
                 select: {
@@ -25,9 +26,8 @@ export async function getAllLetters() {
             createdAt: "desc",
         },
     });
-
-    return letters;
 }
+
 
 export async function updateLetterStatus(letterId: string, status: string) {
     const session = await getServerSession(authOptions);
