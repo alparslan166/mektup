@@ -299,18 +299,22 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                 {...provided.draggableProps}
                                                 className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm"
                                             >
-                                                <div className="flex items-center justify-between p-4 bg-slate-50 border-b border-slate-100">
+                                                <div
+                                                    onClick={() => toggleCategory(category.id)}
+                                                    className="flex items-center justify-between p-4 bg-slate-50 border-b border-slate-100 cursor-pointer hover:bg-slate-100 transition-colors"
+                                                >
                                                     <div className="flex items-center gap-3 flex-1">
                                                         <div {...provided.dragHandleProps} className="text-slate-400 hover:text-slate-600 cursor-grab active:cursor-grabbing p-1">
                                                             <GripVertical size={18} />
                                                         </div>
-                                                        <button onClick={() => toggleCategory(category.id)}>
+                                                        <button>
                                                             {expandedCategories.includes(category.id) ? <ChevronDown size={20} className="text-slate-400" /> : <ChevronRight size={20} className="text-slate-400" />}
                                                         </button>
 
                                                         {editingCategoryId === category.id ? (
                                                             <div className="flex items-center gap-2">
                                                                 <input
+                                                                    onClick={(e) => e.stopPropagation()}
                                                                     className="border border-slate-300 rounded-md px-2 py-1 text-sm outline-none bg-white font-medium"
                                                                     value={editCategoryName}
                                                                     onChange={(e) => setEditCategoryName(e.target.value)}
@@ -318,14 +322,20 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                                     onKeyDown={(e) => e.key === "Enter" && handleUpdateCategory(category.id)}
                                                                 />
                                                                 <button
-                                                                    onClick={() => handleUpdateCategory(category.id)}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handleUpdateCategory(category.id);
+                                                                    }}
                                                                     className="p-1 text-green-600 hover:bg-green-50 rounded-md transition-colors"
                                                                     title="Kaydet"
                                                                 >
                                                                     <Save size={16} />
                                                                 </button>
                                                                 <button
-                                                                    onClick={() => setEditingCategoryId(null)}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setEditingCategoryId(null);
+                                                                    }}
                                                                     className="p-1 text-red-600 hover:bg-red-50 rounded-md transition-colors"
                                                                     title="İptal"
                                                                 >
