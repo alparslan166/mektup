@@ -4,13 +4,15 @@ import React from "react";
 import Link from "next/link";
 import { Bird, Hourglass, Plane, Heart, Mail } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
+
 
 export default function CategorySelection() {
   const categories = [
     {
       id: "cezaevi",
       title: "Cezaevine Mektup",
-      icon: <Bird className="text-cyan-600 mb-2" size={48} />,
+      icon: <Image src="/images/kus-logo.png" alt="Logo" width={60} height={60} />,
       color: "border-cyan-600/20 hover:border-cyan-600",
       textColor: "text-cyan-600",
       bg: "bg-cyan-600/5",
