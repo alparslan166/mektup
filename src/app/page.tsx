@@ -71,9 +71,9 @@ export default function LandingPage() {
 
   if (!isLoading && session) {
     return (
-      <div className="flex-1 container max-w-6xl mx-auto px-6 py-12 sm:py-20 animate-in fade-in duration-700">
+      <div className="flex-1 container max-w-6xl mx-auto px-6 py-6 sm:py-10 animate-in fade-in duration-700">
         {/* Welcome Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-10 border-b border-wood/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-4 pb-4 border-b border-wood/10">
           <div>
             <div className="flex items-center gap-3 text-seal mb-3">
               <Sparkles size={20} className="animate-pulse" />
@@ -87,22 +87,13 @@ export default function LandingPage() {
             </p>
           </div>
           <Link href="/mektup-yaz" onClick={resetStore} className="bg-seal hover:bg-seal-hover text-paper px-8 py-4 rounded-xl font-bold shadow-lg transition-all flex items-center gap-2 group">
-            <PlusCircle size={20} className="group-hover:rotate-90 transition-transform" />
+            <PenTool size={20} className="group-hover:rotate-90 transition-transform" />
             Yeni Mektup Oluştur
           </Link>
         </div>
 
         {/* Dashboard Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-          <DashboardCard
-            title="Yeni Mektup"
-            description="Nostaljik kağıtlar, özel kokular ve mühürlerle fiziksel bir mektup yola çıkarın."
-            href="/mektup-yaz"
-            icon={PenTool}
-            color="seal"
-            delay={0.1}
-            onClick={resetStore}
-          />
           <DashboardCard
             title="Taslaklar"
             description="Yarım bıraktığınız mektuplarınıza buradan ulaşabilir, yazmaya devam edebilirsiniz."
@@ -120,12 +111,20 @@ export default function LandingPage() {
             delay={0.3}
           />
           <DashboardCard
+            title="Hediye Gönder"
+            description="Sevdiklerinize mektubun yanında sürpriz hediyeler ekleyerek onları şaşırtın."
+            href="/hediyeler"
+            icon={Gift}
+            color="seal"
+            delay={0.4}
+          />
+          <DashboardCard
             title="Adres Defteri"
             description="Sevdiklerinizin adreslerini kaydedin, bir sonraki mektupta zaman kazanın."
             href="/adresler"
             icon={BookOpen}
             color="wood"
-            delay={0.4}
+            delay={0.5}
           />
           <DashboardCard
             title="Cüzdan & Kutu"
@@ -133,32 +132,15 @@ export default function LandingPage() {
             href="/cuzdan"
             icon={Wallet}
             color="gold"
-            delay={0.5}
+            delay={0.6}
           />
-
           <DashboardCard
             title="Gelen Kutusu"
             description="Size gönderilen mektupları ve dijital mesajları buradan takip edin."
             href="/gelen-kutusu"
             icon={Inbox}
             color="paper"
-            delay={0.6}
-          />
-          <DashboardCard
-            title="Sıkça Sorulan Sorular"
-            description="Mektup gönderimi, kargo süreleri ve aklınıza takılan tüm detaylar."
-            href="/sss"
-            icon={HelpCircle}
-            color="ink"
             delay={0.7}
-          />
-          <DashboardCard
-            title="Hediye Gönder"
-            description="Sevdiklerinize mektubun yanında sürpriz hediyeler ekleyerek onları şaşırtın."
-            href="/hediyeler"
-            icon={Gift}
-            color="seal"
-            delay={0.8}
           />
         </div>
 

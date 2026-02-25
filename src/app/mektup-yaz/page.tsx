@@ -24,6 +24,15 @@ export default function CategorySelection() {
       href: "/mektup-yaz/akisi"
     },
     {
+      id: "normal",
+      title: "Normal Mektup",
+      icon: <Mail className="text-amber-200 mb-2" size={48} />,
+      color: "border-stone-600/20 hover:border-stone-600",
+      textColor: "text-amber-200",
+      bg: "bg-stone-600/5",
+      href: "/mektup-yaz/akisi"
+    },
+    {
       id: "gelecek",
       title: "Geleceğe Mektup",
       icon: <Hourglass className="text-yellow-600 mb-2" size={48} />,
@@ -35,7 +44,7 @@ export default function CategorySelection() {
     {
       id: "asker",
       title: "Askere Mektup",
-      icon: <Plane className="text-green-600 mb-2" size={48} />,
+      icon: <Plane className="text-green-400 mb-2" size={48} />,
       color: "border-green-600/20 hover:border-green-600",
       textColor: "text-green-600",
       bg: "bg-green-600/5",
@@ -50,15 +59,6 @@ export default function CategorySelection() {
       bg: "bg-red-700/5",
       href: "/mektup-yaz/akisi"
     },
-    {
-      id: "normal",
-      title: "Normal Mektup",
-      icon: <Mail className="text-stone-600 mb-2" size={48} />,
-      color: "border-stone-600/20 hover:border-stone-600",
-      textColor: "text-stone-600",
-      bg: "bg-stone-600/5",
-      href: "/mektup-yaz/akisi"
-    }
   ];
 
   const handleCategorySelect = (id: string, href: string) => {
@@ -68,12 +68,18 @@ export default function CategorySelection() {
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-5xl flex-1 flex flex-col justify-center animate-in fade-in duration-500">
-      <h1 className="font-playfair text-4xl md:text-5xl font-bold text-center text-paper mb-4 drop-shadow-lg">
-        Mektup Yaz, Kolayca Gönder!
+      <h1 className="font-playfair italic text-4xl md:text-5xl font-bold text-center text-paper mb-4 drop-shadow-lg">
+        Mektup yaz, iz bırak...
       </h1>
-      <p className="text-paper/80 text-center mb-16 max-w-2xl mx-auto text-lg md:text-xl font-light">
-        Kime mektup göndermek istiyorsunuz? Kategorinizi seçin, biz sizin için her şeyi halledelim.
-      </p>
+      <div className="flex flex-col gap-1 font-kurale text-seal mb-10 max-w-2xl mx-auto text-lg md:text-xl font-bold">
+        <div className="flex flex-col items-center">
+          <div className="flex flex-col">
+            <p className="text-left">Siz yazın;</p>
+            <div className="h-px bg-seal w-80 ml-4"></div>
+            <p className="text-right pl-12 sm:pl-20">kağıda döküp ulaştırması bizden.</p>
+          </div>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center justify-center max-w-5xl mx-auto">
         {categories.map((cat, index) => (
@@ -82,11 +88,11 @@ export default function CategorySelection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className={cat.id === "normal" ? "md:col-span-2 flex justify-center" : "w-full"}
+            className={cat.id === "sevgili" ? "md:col-span-2 flex justify-center" : "w-full"}
           >
             <button
               onClick={() => handleCategorySelect(cat.id, cat.href)}
-              className={`flex items-center gap-6 p-10 bg-paper/10 backdrop-blur-md border border-paper/20 rounded-3xl shadow-2xl transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden text-left ${cat.id === "normal" ? "w-full md:max-w-2xl" : "w-full"}`}
+              className={`flex items-center gap-6 px-6 py-4 bg-paper/10 backdrop-blur-md border border-paper/20 rounded-3xl shadow-2xl transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden text-left ${cat.id === "sevgili" ? "w-full md:max-w-xl" : "w-full"}`}
             >
               <div className={`absolute top-0 right-0 w-48 h-48 ${cat.bg} rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:scale-150 transition-transform duration-500`}></div>
 
