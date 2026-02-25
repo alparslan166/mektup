@@ -9,6 +9,7 @@ import { createLetter } from "@/app/actions/letterActions";
 
 export default function PaymentStep({ goBack, onComplete }: { goBack: () => void, onComplete: () => void }) {
     const [isProcessing, setIsProcessing] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
     const extras = useLetterStore(state => state.extras);
 
     // Calculate dynamic pricing based on selections
@@ -36,11 +37,48 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
         setIsProcessing(false);
         if (result.success) {
             resetStore(); // Clear local state after successful submission
-            onComplete();
+            setIsSuccess(true);
         } else {
             alert(result.error || "Bir hata oluştu.");
         }
     };
+
+    if (isSuccess) {
+        return (
+            <div className="container mx-auto px-4 py-8 max-w-4xl flex-1 flex flex-col justify-center animate-in fade-in duration-300">
+                <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-8 sm:p-12 flex-col flex items-center text-center relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-64 h-64 bg-seal/5 rounded-full -translate-y-1/2 -translate-x-1/3 blur-3xl pointer-events-none"></div>
+                    <div className="w-24 h-24 bg-seal/10 rounded-full flex items-center justify-center mb-6 relative">
+                        <div className="absolute inset-0 border-4 border-seal rounded-full animate-ping opacity-20"></div>
+                        <CheckCircle2 size={48} className="text-seal" />
+                    </div>
+
+                    <h2 className="font-playfair text-3xl font-bold text-wood-dark mb-4">
+                        Mektubunuz İletilmiştir!
+                    </h2>
+
+                    <p className="text-ink-light mb-8 max-w-md mx-auto leading-relaxed">
+                        Ödemeniz başarıyla alındı ve mektubunuz onaylandı. Mektubunuz özenle hazırlanıp, postaya teslim edilecektir.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row w-full max-w-md gap-4">
+                        <button
+                            onClick={() => window.location.href = '/'}
+                            className="flex-1 bg-paper-light border border-paper-dark hover:bg-paper text-ink font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+                        >
+                            Ana Sayfa
+                        </button>
+                        <button
+                            onClick={() => { }}
+                            className="flex-1 bg-seal hover:bg-seal-hover text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-md flex items-center justify-center gap-2"
+                        >
+                            Mektubu Gör
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-4xl flex-1 flex flex-col animate-in fade-in duration-300">
@@ -79,7 +117,6 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
                                     <label className="text-sm font-semibold text-ink-light block">Kart Üzerindeki İsim</label>
                                     <input
                                         type="text"
-                                        required
                                         placeholder="AD SOYAD"
                                         className="w-full bg-paper text-ink text-sm px-4 py-3 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all uppercase"
                                     />
@@ -91,7 +128,6 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
                                     <div className="relative">
                                         <input
                                             type="text"
-                                            required
                                             maxLength={19}
                                             placeholder="0000 0000 0000 0000"
                                             className="w-full bg-paper text-ink space-x-2 text-sm px-4 py-3 pl-12 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all tracking-widest font-mono"
@@ -107,7 +143,6 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
                                         <div className="flex gap-2">
                                             <input
                                                 type="text"
-                                                required
                                                 maxLength={2}
                                                 placeholder="AA"
                                                 className="w-full bg-paper text-ink text-sm px-4 py-3 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all text-center font-mono"
@@ -115,7 +150,6 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
                                             <span className="text-2xl text-ink-light/50 flex items-center">/</span>
                                             <input
                                                 type="text"
-                                                required
                                                 maxLength={2}
                                                 placeholder="YY"
                                                 className="w-full bg-paper text-ink text-sm px-4 py-3 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all text-center font-mono"
@@ -128,7 +162,6 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
                                         <div className="relative">
                                             <input
                                                 type="text"
-                                                required
                                                 maxLength={3}
                                                 placeholder="000"
                                                 className="w-full bg-paper text-ink text-sm px-4 py-3 pl-10 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all font-mono"

@@ -57,7 +57,7 @@ const Navbar = () => {
                     )}
                     {adminMenus ? (
                         <>
-                            <Link href={status === "unauthenticated" ? "/auth/login" : "/mektup-yaz"} onClick={resetStore} className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
+                            <Link href="/admin/mektuplar" onClick={resetStore} className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
                                 <PenLine size={18} />
                                 <span>Mektuplar</span>
                             </Link>

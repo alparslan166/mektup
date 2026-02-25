@@ -141,41 +141,44 @@ export default function GiftSection() {
 
                                                 <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between">
                                                     <div>
-                                                        <h5 className="font-bold text-ink text-lg sm:text-xl mb-2 group-hover:text-seal transition-colors line-clamp-1">{gift.name}</h5>
+                                                        <h5 className="font-bold text-ink text-base sm:text-lg mb-1.5 sm:mb-2 group-hover:text-seal transition-colors leading-tight">{gift.name}</h5>
                                                         {gift.description && (
-                                                            <p className="text-ink-light text-sm line-clamp-2 mb-4 leading-relaxed italic">
+                                                            <p className="text-ink-light text-[11px] sm:text-sm mb-3 sm:mb-4 leading-relaxed italic">
                                                                 {gift.description}
                                                             </p>
                                                         )}
                                                     </div>
 
-                                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-auto pt-4 border-t border-paper-dark/50">
-                                                        <span className="font-playfair font-black text-seal text-xl">
+                                                    <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-3 mt-auto pt-3 sm:pt-4 border-t border-paper-dark/50 w-full">
+                                                        <span className="font-playfair font-black text-seal text-lg sm:text-xl text-center sm:text-left w-full sm:w-auto">
                                                             {gift.price ? `${gift.price} TL` : "Fiyat Sorunuz"}
                                                         </span>
 
                                                         {isSelected ? (
-                                                            <div className="flex items-center bg-paper-dark/40 rounded-full px-2 py-1.5 gap-4">
+                                                            <div className="flex items-center justify-between w-full sm:w-auto bg-paper-dark/40 rounded-full px-1.5 py-1.5 sm:px-2 gap-1 sm:gap-3">
                                                                 <button
                                                                     onClick={(e) => { e.stopPropagation(); updateQuantity(gift.id, -1); }}
-                                                                    className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-seal hover:bg-seal hover:text-white transition-all shadow-sm active:scale-95"
+                                                                    className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full bg-white text-seal hover:bg-seal hover:text-white transition-all shadow-sm active:scale-95 shrink-0"
                                                                 >
-                                                                    <Minus size={16} />
+                                                                    <Minus size={14} className="sm:hidden" />
+                                                                    <Minus size={16} className="hidden sm:block" />
                                                                 </button>
-                                                                <span className="w-5 text-center font-black text-ink text-base">{selection.quantity}</span>
+                                                                <span className="w-5 text-center font-black text-ink text-sm sm:text-base">{selection.quantity}</span>
                                                                 <button
                                                                     onClick={(e) => { e.stopPropagation(); updateQuantity(gift.id, 1); }}
-                                                                    className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-seal hover:bg-seal hover:text-white transition-all shadow-sm active:scale-95"
+                                                                    className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full bg-white text-seal hover:bg-seal hover:text-white transition-all shadow-sm active:scale-95 shrink-0"
                                                                 >
-                                                                    <Plus size={16} />
+                                                                    <Plus size={14} className="sm:hidden" />
+                                                                    <Plus size={16} className="hidden sm:block" />
                                                                 </button>
                                                             </div>
                                                         ) : (
                                                             <button
                                                                 onClick={() => toggleGiftSelection(gift)}
-                                                                className="w-full sm:w-auto bg-seal text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-seal-dark transition-all flex items-center justify-center gap-2 shadow-md active:scale-95"
+                                                                className="w-full sm:w-auto bg-seal text-white px-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold hover:bg-seal-dark transition-all flex items-center justify-center gap-1.5 shadow-md active:scale-95 shrink-0"
                                                             >
-                                                                <Plus size={18} /> Ekle
+                                                                <Plus size={16} className="sm:hidden" />
+                                                                <Plus size={18} className="hidden sm:block" /> <span className="sm:inline">Ekle</span>
                                                             </button>
                                                         )}
                                                     </div>
@@ -184,7 +187,7 @@ export default function GiftSection() {
                                                 {isSelected && (
                                                     <button
                                                         onClick={() => toggleGiftSelection(gift)}
-                                                        className="text-[10px] text-red-500 font-bold uppercase tracking-widest text-center py-2 hover:bg-red-50 transition-colors border-t border-paper-dark bg-white"
+                                                        className="text-[10px] sm:text-xs text-red-500 font-bold uppercase tracking-wider text-center py-2 sm:py-2.5 hover:bg-red-50 transition-colors border-t border-paper-dark bg-white w-full"
                                                     >
                                                         Seçimi Kaldır
                                                     </button>

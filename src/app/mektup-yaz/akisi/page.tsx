@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, FileText, ArrowLeft, ArrowRight } from "lucide-react";
+import { Mail, FileText, ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import Stepper from "@/components/Stepper";
 import Editor from "@/components/Editor";
 import ExtrasStep from "@/components/ExtrasStep";
@@ -12,6 +12,8 @@ import SuccessStep from "@/components/SuccessStep";
 import AutoSave from "@/components/AutoSave";
 
 import { useLetterStore } from "@/store/letterStore";
+import { useSession } from "next-auth/react";
+import { saveDraft } from "@/app/actions/draftActions";
 
 export default function Home() {
   const currentStep = useLetterStore(state => state.currentStep);
@@ -19,6 +21,33 @@ export default function Home() {
   const prevStep = useLetterStore(state => state.prevStep);
   const letter = useLetterStore(state => state.letter);
   const updateLetter = useLetterStore(state => state.updateLetter);
+
+  const { data: session } = useSession();
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleProceed = async () => {
+    const state = useLetterStore.getState();
+    if (session?.user) {
+      setIsSaving(true);
+      try {
+        const result = await saveDraft({
+          letter: state.letter,
+          extras: state.extras,
+          address: state.address
+        }, state.draftId);
+
+        if (result.success && result.draftId && result.draftId !== state.draftId) {
+          state.setDraftId(result.draftId);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsSaving(false);
+      }
+    }
+
+    state.setCurrentStep(4);
+  };
 
   // Map color names to actual CSS colors for the editor background
   const paperColors: Record<string, string> = {
@@ -116,11 +145,12 @@ export default function Home() {
       {/* FINAL ACTION BUTTON */}
       <div className="flex justify-center mt-4 mb-12">
         <button
-          onClick={() => useLetterStore.getState().setCurrentStep(4)}
-          className="bg-seal hover:bg-seal-hover text-paper w-full max-w-md py-4 rounded-xl font-bold text-lg shadow-lg transition-all hover:shadow-xl hover:-translate-y-1 flex items-center justify-center gap-3 active:scale-[0.98]"
+          onClick={handleProceed}
+          disabled={isSaving}
+          className="bg-seal hover:bg-seal-hover text-paper w-full max-w-md py-4 rounded-xl font-bold text-lg shadow-lg transition-all hover:shadow-xl hover:-translate-y-1 flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-70"
         >
-          Postaya Ver
-          <ArrowRight size={24} />
+          {isSaving ? "Kaydediliyor..." : "Postaya Ver"}
+          {isSaving ? <Loader2 className="animate-spin" size={24} /> : <ArrowRight size={24} />}
         </button>
       </div>
 

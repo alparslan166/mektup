@@ -7,7 +7,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { motion, AnimatePresence } from "framer-motion";
 
 // Mock Data for Postcards
-const categories = [
+export const postcardCategories = [
     {
         id: "tr",
         name: "Türkiye Kartpostalları",
@@ -65,7 +65,7 @@ export default function PostcardSection() {
 
             {/* Categories */}
             <div className="space-y-6">
-                {categories.map((category) => (
+                {postcardCategories.map((category) => (
                     <div key={category.id} className="border border-paper-dark rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-all duration-300">
                         {/* Accordion Header */}
                         <button
