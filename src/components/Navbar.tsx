@@ -101,7 +101,7 @@ const Navbar = () => {
                 <div className="hidden md:flex items-center gap-3 shrink-0">
                     {status === "authenticated" ? (
                         <>
-                            <Link href="/profil" className="flex items-center gap-2 bg-paper/10 backdrop-blur-md text-paper border border-paper/20 hover:border-paper/40 hover:bg-paper/20 px-4 py-2 rounded-md font-bold text-[13px] transition-all shadow-sm">
+                            <Link href="/" className="flex items-center gap-2 bg-paper/10 backdrop-blur-md text-paper border border-paper/20 hover:border-paper/40 hover:bg-paper/20 px-4 py-2 rounded-md font-bold text-[13px] transition-all shadow-sm">
                                 <User size={16} />
                                 <span>{session.user?.name || "Profilim"}</span>
                             </Link>
@@ -203,7 +203,7 @@ const Navbar = () => {
                                             <span>Admin Paneli</span>
                                         </Link>
                                     )}
-                                    <Link href="/profil" onClick={closeMenu} className="flex items-center justify-center gap-2 bg-paper/10 text-paper border border-paper/20 px-6 py-4 rounded-xl font-bold transition-all shadow-sm">
+                                    <Link href="/" onClick={closeMenu} className="flex items-center justify-center gap-2 bg-paper/10 text-paper border border-paper/20 px-6 py-4 rounded-xl font-bold transition-all shadow-sm">
                                         <User size={20} />
                                         <span>{session.user?.name || "Profilim"}</span>
                                     </Link>
