@@ -55,7 +55,9 @@ export default function Home() {
 
         {/* Header */}
         <div className="flex justify-center mb-2">
-          <h2 className="font-playfair text-3xl font-bold text-wood-dark">Geleceğe Mektup</h2>
+          <h2 className="font-playfair text-3xl font-bold text-wood-dark">
+            {useLetterStore.getState().address.isPrison ? "Cezaevine Mektup" : "Mektup Yazın"}
+          </h2>
         </div>
         <p className="text-ink-light text-center text-sm sm:text-base">
           Aşağıdaki boş alana mektubunuzu yazabilirsiniz. Ek olarak zarf ve kağıt rengini buradan seçebilirsiniz.

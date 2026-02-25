@@ -20,12 +20,29 @@ export async function createLetter(letterData: any) {
             return { error: "Kullanıcı bulunamadı." };
         }
 
+        const { letter, extras, address } = letterData;
+
+        // server-side price calculation for security
+        const baseLetterPrice = 120;
+        const scentPrice = extras.scent === "Yok" ? 0 : 20;
+        const photoPrice = (extras.photos?.length || 0) * 10;
+        const docPrice = (extras.documents?.length || 0) * 5;
+        const postcardPrice = (extras.postcards?.length || 0) * 15;
+        const calendarPrice = extras.includeCalendar ? ((extras.photos?.length || 0) >= 3 ? 0 : 30) : 0;
+        const shippingPrice = 45;
+
+        const totalAmount = baseLetterPrice + scentPrice + photoPrice + docPrice + postcardPrice + calendarPrice + shippingPrice;
+
         // 1. Create the permanent letter
-        const letter = await prisma.letter.create({
+        const createdLetter = await prisma.letter.create({
             data: {
                 userId: user.id,
                 data: letterData,
-                status: "PAID"
+                status: "PAID",
+                senderName: address.senderName,
+                receiverName: address.receiverName,
+                receiverCity: address.receiverCity,
+                totalAmount: totalAmount
             }
         });
 
@@ -34,7 +51,7 @@ export async function createLetter(letterData: any) {
             where: { userId: user.id }
         });
 
-        return { success: true, letterId: letter.id };
+        return { success: true, letterId: createdLetter.id };
     } catch (error) {
         console.error("CREATE_LETTER_ERROR", error);
         return { error: "Mektup kaydedilemedi." };

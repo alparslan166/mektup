@@ -2,12 +2,14 @@
 
 import React from "react";
 import Stepper from "@/components/Stepper";
-import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Mail, ImageIcon, Calendar } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Mail, ImageIcon, Calendar, Eye, X as CloseIcon } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { useLetterStore } from "@/store/letterStore";
 
 export default function ReviewStep({ goBack, goNext }: { goBack: () => void, goNext: () => void }) {
-    const { letter, extras, address } = useLetterStore();
+    const { letter, extras, address, setCurrentStep } = useLetterStore();
+    const [showPreview, setShowPreview] = React.useState(false);
 
     // Calculate dynamic pricing based on selections
     const baseLetterPrice = 120;
@@ -88,7 +90,16 @@ export default function ReviewStep({ goBack, goNext }: { goBack: () => void, goN
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
                                 <div className="space-y-1">
-                                    <span className="text-xs text-ink-light uppercase tracking-wider font-semibold">Zarf / Kağıt</span>
+                                    <div className="flex justify-between items-start">
+                                        <span className="text-xs text-ink-light uppercase tracking-wider font-semibold">Zarf / Kağıt</span>
+                                        <button
+                                            onClick={() => setShowPreview(true)}
+                                            className="text-xs font-bold text-seal hover:text-seal-hover flex items-center gap-1 transition-colors"
+                                        >
+                                            <Eye size={12} />
+                                            Mektup Önizlemesi
+                                        </button>
+                                    </div>
                                     <p className="text-ink font-medium">{orderDetails.letter.envelopeColor} Zarf, {orderDetails.letter.paperColor} Kağıt</p>
                                 </div>
                                 <div className="space-y-1">
@@ -258,6 +269,69 @@ export default function ReviewStep({ goBack, goNext }: { goBack: () => void, goN
                 </div>
 
             </div>
+
+            {/* Letter Preview Modal */}
+            <AnimatePresence>
+                {showPreview && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setShowPreview(false)}
+                            className="absolute inset-0 bg-ink/60 backdrop-blur-sm"
+                        ></motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-2xl bg-paper rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+                        >
+                            {/* Modal Header */}
+                            <div className="px-6 py-4 border-b border-paper-dark flex items-center justify-between bg-paper-light">
+                                <h3 className="font-playfair text-xl font-bold text-wood-dark flex items-center gap-2">
+                                    <Mail className="text-seal" size={20} />
+                                    Mektup Önizlemesi
+                                </h3>
+                                <button
+                                    onClick={() => setShowPreview(false)}
+                                    className="p-2 hover:bg-paper-dark rounded-full transition-colors text-ink-light"
+                                >
+                                    <CloseIcon size={20} />
+                                </button>
+                            </div>
+
+                            {/* Modal Content - The Letter */}
+                            <div className="flex-1 overflow-y-auto p-8 sm:p-12">
+                                <div
+                                    className="prose prose-stone max-w-none font-serif text-ink leading-relaxed"
+                                    dangerouslySetInnerHTML={{ __html: letter.content }}
+                                />
+                            </div>
+
+                            {/* Modal Footer */}
+                            <div className="px-6 py-4 bg-paper-light border-t border-paper-dark flex items-center justify-end gap-3">
+                                <button
+                                    onClick={() => {
+                                        setShowPreview(false);
+                                        setCurrentStep(1);
+                                    }}
+                                    className="px-6 py-2.5 rounded-lg font-bold text-ink-light hover:text-ink hover:bg-paper-dark transition-all flex items-center gap-2"
+                                >
+                                    Düzenle
+                                </button>
+                                <button
+                                    onClick={() => setShowPreview(false)}
+                                    className="px-8 py-2.5 bg-seal hover:bg-seal-hover text-white rounded-lg font-bold shadow-md transition-all active:scale-[0.98]"
+                                >
+                                    Tamam
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

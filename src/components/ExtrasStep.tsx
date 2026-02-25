@@ -5,6 +5,7 @@ import Stepper from "@/components/Stepper";
 import { ArrowLeft, ArrowRight, Calendar, Droplet } from "lucide-react";
 import PostcardSection from "./extras/PostcardSection";
 import UploadSection from "./extras/UploadSection";
+import GiftSection from "./extras/GiftSection";
 import { useLetterStore } from "@/store/letterStore";
 
 export default function ExtrasStep() {
@@ -44,6 +45,18 @@ export default function ExtrasStep() {
                             <option value="Özel Tarih">Özel Tarih Seç</option>
                         </select>
                     </div>
+                    {extras.deliveryDate === "Özel Tarih" && (
+                        <div className="mt-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                            <input
+                                type="date"
+                                min={new Date(Date.now() + 86400000).toISOString().split('T')[0]}
+                                value={extras.customDate || ""}
+                                onChange={(e) => updateExtras({ customDate: e.target.value })}
+                                className="w-full bg-paper border border-wood text-ink px-4 py-3 rounded-md outline-none focus:ring-1 focus:ring-wood transition-all cursor-pointer shadow-sm"
+                            />
+                            <p className="text-[10px] text-wood-dark mt-1 ml-1 font-medium">Lütfen gönderilmesini istediğiniz gelecekteki bir tarihi seçiniz.</p>
+                        </div>
+                    )}
                     <p className="text-xs text-ink-light/70 ml-1 italic">Saat 16:30&apos;a kadar verilen siparişler aynı gün yola çıkar.</p>
                 </div>
 
@@ -76,6 +89,11 @@ export default function ExtrasStep() {
 
             {/* Postcards Section */}
             <PostcardSection />
+
+            <div className="my-10 w-full h-[1px] bg-paper-dark/50 shadow-sm"></div>
+
+            {/* Gifts Section */}
+            <GiftSection />
 
         </div>
     );

@@ -1,0 +1,3300 @@
+[
+  {
+    "kategori": "A1 Tipi Ceza İnfaz Kurumları",
+    "count": 2,
+    "kurumlar": [
+      {
+        "il": "ERZURUM",
+        "kurum": "Hınıs A1 Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://hinisa1cik.adalet.gov.tr/"
+      },
+      {
+        "il": "MUĞLA",
+        "kurum": "Bodrum A1 Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "kategori": "A2 Tipi Ceza İnfaz Kurumları",
+    "count": 1,
+    "kurumlar": [
+      {
+        "il": "ZONGULDAK",
+        "kurum": "KDZ.Ereğli A2 Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kdzereglicik.adalet.gov.tr/"
+      }
+    ]
+  },
+  {
+    "kategori": "A3 Tipi Ceza İnfaz Kurumları",
+    "count": 4,
+    "kurumlar": [
+      {
+        "il": "AYDIN",
+        "kurum": "Çine A3 Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "ŞANLIURFA",
+        "kurum": "Viranşehir A3 Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://viransehira3cik.adalet.gov.tr/"
+      },
+      {
+        "il": "TUNCELİ",
+        "kurum": "Tunceli A3 Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://tuncelia3cik.adalet.gov.tr/"
+      },
+      {
+        "il": "YALOVA",
+        "kurum": "Yalova A3 Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://yalovaa3cik.adalet.gov.tr/"
+      }
+    ]
+  },
+  {
+    "kategori": "Açık Ceza İnfaz Kurumları",
+    "count": 100,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Adana 1 Nolu Açık Ceza İnfaz Kurumu",
+        "url": "https://adanaacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ADANA",
+        "kurum": "Ceyhan Açık Ceza İnfaz Kurumu",
+        "url": "https://ceyhanacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ADANA",
+        "kurum": "Adana 2 Nolu Açık Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "ADANA",
+        "kurum": "Adana/Suluca Açık Ceza İnfaz Kurumu",
+        "url": "https://adanasulucaacik.adalet.gov.tr/"
+      },
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Afyonkarahisar Kampüs Açık Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Afyonkarahisar Açık Ceza İnfaz Kurumu",
+        "url": "https://afyonacik.adalet.gov.tr/"
+      },
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Sandıklı Açık Ceza İnfaz Kurumu",
+        "url": "https://sandikliacik.adalet.gov.tr"
+      },
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Emirdağ Açık Ceza İnfaz Kurumu",
+        "url": "https://emirdagacik.adalet.gov.tr"
+      },
+      {
+        "il": "AĞRI",
+        "kurum": "Patnos Açık Ceza İnfaz Kurumu",
+        "url": "https://patnosacik.adalet.gov.tr"
+      },
+      {
+        "il": "AKSARAY",
+        "kurum": "Aksaray Kampüs Açık Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://aksaraykampusacik.adalet.gov.tr/"
+      },
+      {
+        "il": "AMASYA",
+        "kurum": "Gümüşhacıköy Açık Ceza İnfaz Kurumu",
+        "url": "https://gumushacikoyacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Ayaş Açık Ceza İnfaz Kurumu",
+        "url": "https://ayasacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Ankara Açık Ceza İnfaz Kurumu",
+        "url": "https://ankaraacik.adalet.gov.tr"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Kalecik Açık Ceza İnfaz Kurumu",
+        "url": "https://kalecikacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Sincan Açık Ceza İnfaz Kurumu",
+        "url": "https://sincanacik.adalet.gov.tr"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Antalya Açık Ceza İnfaz Kurumu",
+        "url": "https://antalyaacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ARTVİN",
+        "kurum": "Ardanuç Açık Ceza İnfaz Kurumu",
+        "url": "https://ardanucacik.adalet.gov.tr"
+      },
+      {
+        "il": "AYDIN",
+        "kurum": "Aydın Açık Ceza İnfaz Kurumu",
+        "url": "https://aydinacik.adalet.gov.tr/"
+      },
+      {
+        "il": "BALIKESİR",
+        "kurum": "Bandırma Açık Ceza İnfaz Kurumu",
+        "url": "https://bandirmaacik.adalet.gov.tr"
+      },
+      {
+        "il": "BALIKESİR",
+        "kurum": "Balıkesir Açık Ceza İnfaz Kurumu",
+        "url": "https://balikesiracik.adalet.gov.tr/"
+      },
+      {
+        "il": "BATMAN",
+        "kurum": "Batman Açık Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "BİLECİK",
+        "kurum": "Gölpazarı Açık Ceza İnfaz Kurumu",
+        "url": "https://golpazariacik.adalet.gov.tr"
+      },
+      {
+        "il": "BİLECİK",
+        "kurum": "Bozüyük Açık Ceza İnfaz Kurumu",
+        "url": "https://bozuyukacik.adalet.gov.tr/"
+      },
+      {
+        "il": "BİNGÖL",
+        "kurum": "Bingöl Açık Ceza İnfaz Kurumu",
+        "url": "https://bingolmcik.adalet.gov.tr/"
+      },
+      {
+        "il": "BİTLİS",
+        "kurum": "Tatvan Açık Ceza İnfaz Kurumu",
+        "url": "https://tatvanacik.adalet.gov.tr/"
+      },
+      {
+        "il": "BOLU",
+        "kurum": "Bolu Açık Ceza İnfaz Kurumu",
+        "url": "https://boluacik.adalet.gov.tr/"
+      },
+      {
+        "il": "BURDUR",
+        "kurum": "Burdur Açık Ceza İnfaz Kurumu",
+        "url": "https://burduracik.adalet.gov.tr"
+      },
+      {
+        "il": "BURDUR",
+        "kurum": "Burdur Kampüs Açık Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "burdurkampusacik.adalet.gov.tr"
+      },
+      {
+        "il": "BURSA",
+        "kurum": "Gemlik Açık Ceza İnfaz Kurumu",
+        "url": "https://gemlikacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ÇANAKKALE",
+        "kurum": "Ayvacık Açık Ceza İnfaz Kurumu",
+        "url": "https://ayvacikacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ÇANAKKALE",
+        "kurum": "Çanakkale Açık Ceza İnfaz Kurumu",
+        "url": "https://canakkaleacik.adalet.gov.tr "
+      },
+      {
+        "il": "ÇANKIRI",
+        "kurum": "Orta Açık Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://ortacik.adalet.gov.tr"
+      },
+      {
+        "il": "ÇORUM",
+        "kurum": "İskilip Açık Ceza İnfaz Kurumu",
+        "url": "https://iskilipacik.adalet.gov.tr"
+      },
+      {
+        "il": "DENİZLİ",
+        "kurum": "Denizli Açık Ceza İnfaz Kurumu",
+        "url": "https://denizliacik.adalet.gov.tr"
+      },
+      {
+        "il": "DENİZLİ",
+        "kurum": "Sarayköy Açık Ceza İnfaz Kurumu",
+        "url": "https://saraykoyacik.adalet.gov.tr/"
+      },
+      {
+        "il": "DİYARBAKIR",
+        "kurum": "Diyarbakır Açık Ceza İnfaz Kurumu",
+        "url": "https://diyarbakiracik.adalet.gov.tr"
+      },
+      {
+        "il": "EDİRNE",
+        "kurum": "Edirne Açık Ceza İnfaz Kurumu",
+        "url": "https://edirneacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ELAZIĞ",
+        "kurum": "Elazığ Kampüs Açık Ceza İnfaz Kurumu",
+        "url": "https://elazigkacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZİNCAN",
+        "kurum": "Erzincan Açık Ceza İnfaz Kurumu",
+        "url": "https://erzincancik.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Dumlu Açık Ceza İnfaz Kurumu",
+        "url": "https://dumluacik.adalet.gov.tr"
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Erzurum Açık Ceza İnfaz Kurumu",
+        "url": "https://erzurumacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Aziziye Açık Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://aziziyeacik.adalet.gov.tr"
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Narman Açık Ceza İnfaz Kurumu",
+        "url": "https://narmancik.adalet.gov.tr/"
+      },
+      {
+        "il": "ESKİŞEHİR",
+        "kurum": "Eskişehir 2 Nolu Açık Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "ESKİŞEHİR",
+        "kurum": "Eskişehir 1 Nolu Açık Ceza İnfaz Kurumu",
+        "url": " https://eskisehir1acik.adalet.gov.tr/"
+      },
+      {
+        "il": "GAZİANTEP",
+        "kurum": "Gaziantep Şehitkamil Açık Ceza İnfaz Kurumu",
+        "url": "https://sehitkamilacik.adalet.gov.tr/"
+      },
+      {
+        "il": "GAZİANTEP",
+        "kurum": "Gaziantep Açık Ceza İnfaz Kurumu",
+        "url": "https://gaziantepacik.adalet.gov.tr/"
+      },
+      {
+        "il": "HATAY",
+        "kurum": "Antakya Açık Ceza İnfaz Kurumu",
+        "url": "https://antakyaacik.adalet.gov.tr/"
+      },
+      {
+        "il": "HATAY",
+        "kurum": "Kırıkhan Açık Ceza İnfaz Kurumu",
+        "url": "https://kirikhanacik.adalet.gov.tr"
+      },
+      {
+        "il": "HATAY",
+        "kurum": "İskenderun Açık Ceza İnfaz Kurumu",
+        "url": "https://iskenderunacik.adalet.gov.tr/"
+      },
+      {
+        "il": "IĞDIR",
+        "kurum": "Iğdır Açık Ceza İnfaz Kurumu",
+        "url": "https://igdirscik.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Maltepe Açık Ceza İnfaz Kurumu",
+        "url": "https://maltepeacik.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Marmara Açık Ceza İnfaz Kurumu",
+        "url": " https://marmaraacik.adalet.gov.tr"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "İzmir Buca Açık Ceza İnfaz Kurumu",
+        "url": "https://izmirbucacik.adalet.gov.tr"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Torbalı Açık Ceza İnfaz Kurumu",
+        "url": "https://torbaliacik.adalet.gov.tr"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Foça Açık Ceza İnfaz Kurumu",
+        "url": "https://focaacik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "İzmir Açık Ceza İnfaz Kurumu",
+        "url": "https://izmiracik.adalet.gov.tr/"
+      },
+      {
+        "il": "KAHRAMANMARAŞ",
+        "kurum": "Kahramanmaraş Açık Ceza İnfaz Kurumu",
+        "url": "https://kahramanmarasecik.adalet.gov.tr"
+      },
+      {
+        "il": "KAHRAMANMARAŞ",
+        "kurum": "Türkoğlu Açık Ceza İnfaz Kurumu",
+        "url": "https://turkoglu.acik.adalet.gov.tr"
+      },
+      {
+        "il": "KARABÜK",
+        "kurum": "Eskipazar Açık Ceza İnfaz Kurumu",
+        "url": "https://eskipazaracik.adalet.gov.tr"
+      },
+      {
+        "il": "KARS",
+        "kurum": "Kars Açık Ceza İnfaz Kurumu",
+        "url": "https://karsacik.adalet.gov.tr/"
+      },
+      {
+        "il": "KASTAMONU",
+        "kurum": "Araç Açık Ceza İnfaz Kurumu",
+        "url": "https://aracacik.adalet.gov.tr/"
+      },
+      {
+        "il": "KAYSERİ",
+        "kurum": "Kayseri Açık Ceza İnfaz Kurumu",
+        "url": "https://kayseriacik.adalet.gov.tr/"
+      },
+      {
+        "il": "KIRIKKALE",
+        "kurum": "Keskin Açık Ceza İnfaz Kurumu",
+        "url": "https://keskinacik.adalet.gov.tr/"
+      },
+      {
+        "il": "KIRKLARELİ",
+        "kurum": "Kırklareli Açık Ceza İnfaz Kurumu",
+        "url": "https://kirklareliacik.adalet.gov.tr/"
+      },
+      {
+        "il": "KIRŞEHİR",
+        "kurum": "Kırşehir 2 Nolu Açık Ceza İnfaz Kurumu",
+        "url": "https://kirsehir2acik.adalet.gov.tr/"
+      },
+      {
+        "il": "KIRŞEHİR",
+        "kurum": "Kırşehir 1 Nolu Açık Ceza İnfaz Kurumu",
+        "url": "https://kirsehiracik.adalet.gov.tr/"
+      },
+      {
+        "il": "KOCAELİ",
+        "kurum": "Kocaeli Açık Ceza İnfaz Kurumu",
+        "url": "https://kocaeliacik.adalet.gov.tr/"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Ereğli (Konya) Kampüs Açık Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://ereglikampusacik.adalet.gov.tr/"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Konya Açık Ceza İnfaz Kurumu",
+        "url": "https://konyaacik.adalet.gov.tr/"
+      },
+      {
+        "il": "MALATYA",
+        "kurum": "Akçadağ Açık Ceza İnfaz Kurumu",
+        "url": "https://akcadagtcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MALATYA",
+        "kurum": "Doğanşehir Açık Ceza İnfaz Kurumu",
+        "url": "https://dogansehiracik.adalet.gov.tr"
+      },
+      {
+        "il": "MALATYA",
+        "kurum": "Malatya Açık Ceza İnfaz Kurumu",
+        "url": "https://malatyaacik.adalet.gov.tr"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Manisa Açık Ceza İnfaz Kurumu",
+        "url": "https://manisaacik.adalet.gov.tr/"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Akhisar Açık Ceza İnfaz Kurumu",
+        "url": "akhisaracik.adalet.gov.tr"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Demirci Açık Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://demirciacik.adalet.gov.tr/"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Tarsus Açık Ceza İnfaz Kurumu",
+        "url": "https://tarsusacik.adalet.gov.tr"
+      },
+      {
+        "il": "MUĞLA",
+        "kurum": "Bodrum Açık Ceza İnfaz Kurumu ( S Tipi )",
+        "url": "https://bodrumscik.adalet.gov.tr/"
+      },
+      {
+        "il": "MUĞLA",
+        "kurum": "Muğla Açık Ceza İnfaz Kurumu",
+        "url": "https://muglaacik.adalet.gov.tr/"
+      },
+      {
+        "il": "MUĞLA",
+        "kurum": "Dalaman Açık Ceza İnfaz Kurumu",
+        "url": "https://dalamanacik.adalet.gov.tr/"
+      },
+      {
+        "il": "NEVŞEHİR",
+        "kurum": "Nevşehir Açık Ceza İnfaz Kurumu",
+        "url": "https://nevsehiracik.adalet.gov.tr"
+      },
+      {
+        "il": "NİĞDE",
+        "kurum": "Niğde Açık Ceza İnfaz Kurumu",
+        "url": "https://nigdeacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ORDU",
+        "kurum": "Akkuş Açık Ceza İnfaz Kurumu",
+        "url": "https://akkusacik.adalet.gov.tr/"
+      },
+      {
+        "il": "OSMANİYE",
+        "kurum": "Toprakkale Açık Ceza İnfaz Kurumu",
+        "url": "https://toprakkaleacik.adalet.gov.tr"
+      },
+      {
+        "il": "RİZE",
+        "kurum": "Kalkandere Açık Ceza İnfaz Kurumu",
+        "url": "https://kalkandereacik.adalet.gov.tr"
+      },
+      {
+        "il": "SAKARYA",
+        "kurum": "Geyve Açık Ceza İnfaz Kurumu",
+        "url": "https://geyveacik.adalet.gov.tr"
+      },
+      {
+        "il": "SAKARYA",
+        "kurum": "Sakarya Açık Ceza İnfaz Kurumu",
+        "url": "https://sakarya.acik@adalet.gov.tr"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Kavak Açık Ceza İnfaz Kurumu",
+        "url": "https://kavakacik.adalet.gov.tr/"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Çarşamba Açık Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://carsambaacik.adalet.gov.tr/"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Bafra Açık Ceza İnfaz Kurumu",
+        "url": "https://bafracik.adalet.gov.tr"
+      },
+      {
+        "il": "ŞANLIURFA",
+        "kurum": "Şanlıurfa Açık Ceza İnfaz Kurumu",
+        "url": "https://sanliurfaacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ŞANLIURFA",
+        "kurum": "Akçakale 2 Nolu Açık Ceza İnfaz Kurumu",
+        "url": "https://akcakaleacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ŞANLIURFA",
+        "kurum": "Siverek Açık Ceza İnfaz Kurumu",
+        "url": "https://siverekacik.adalet.gov.tr"
+      },
+      {
+        "il": "SİNOP",
+        "kurum": "Durağan Açık Ceza İnfaz Kurumu",
+        "url": "https://duraganacik.adalet.gov.tr/"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Karatepe Açık Ceza İnfaz Kurumu",
+        "url": "https://karatepeacik.adalet.gov.tr/"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Tekirdağ Açık Ceza İnfaz Kurumu",
+        "url": "https://tekirdagacik.adalet.gov.tr/"
+      },
+      {
+        "il": "VAN",
+        "kurum": "Van Açık Ceza İnfaz Kurumu",
+        "url": "https://vanacik.adalet.gov.tr/"
+      },
+      {
+        "il": "YOZGAT",
+        "kurum": "Akdağmadeni Açık Ceza İnfaz Kurumu",
+        "url": "https://akdagmadeniacik.adalet.gov.tr/"
+      },
+      {
+        "il": "YOZGAT",
+        "kurum": "Yozgat Açık Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://yozgatacik.adalet.gov.tr/"
+      },
+      {
+        "il": "ZONGULDAK",
+        "kurum": "Devrek Açık Ceza İnfaz Kurumu",
+        "url": "https://devrekacik.adalet.gov.tr"
+      }
+    ]
+  },
+  {
+    "kategori": "B Tipi Ceza İnfaz Kurumları",
+    "count": 2,
+    "kurumlar": [
+      {
+        "il": "AKSARAY",
+        "kurum": "Şereflikoçhisar B Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "KAYSERİ",
+        "kurum": "Develi B Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://develibcik.adalet.gov.tr/"
+      }
+    ]
+  },
+  {
+    "kategori": "Çocuk Eğitimevi",
+    "count": 5,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Ceyhan Çocuk Eğitimevi Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Ankara Çocuk Eğitimevi",
+        "url": "https://ankarace.adalet.gov.tr"
+      },
+      {
+        "il": "ELAZIĞ",
+        "kurum": "Elazığ Çocuk Eğitimevi",
+        "url": "https://elazigce.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "İstanbul Çocuk Eğitimevi",
+        "url": "https://istanbulce.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Urla Çocuk Eğitimevi",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "kategori": "Çocuk ve Gençlik Tipi Ceza İnfaz Kurumları",
+    "count": 9,
+    "kurumlar": [
+      {
+        "il": "ANKARA",
+        "kurum": "Sincan Çocuk ve Gençlik Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sincancocukcik.adalet.gov.tr"
+      },
+      {
+        "il": "DİYARBAKIR",
+        "kurum": "Diyarbakır Çocuk ve Gençlik Kapalı Ceza İnfaz Kurumu",
+        "url": "https://diyarbakircocukcik.adalet.gov.tr/"
+      },
+      {
+        "il": "HATAY",
+        "kurum": "Hatay Çocuk ve Gençlik Kapalı Ceza İnfaz Kurumu",
+        "url": "https://hataycocukcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Maltepe Çocuk ve Gençlik Kapalı Ceza İnfaz Kurumu",
+        "url": "https://maltepecocik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "İzmir Çocuk ve Gençlik Kapalı Ceza İnfaz Kurumu",
+        "url": "https://izmircocukvegenclik.adalet.gov.tr/"
+      },
+      {
+        "il": "KAYSERİ",
+        "kurum": "Kayseri Çocuk ve Gençlik Kapalı Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Tarsus Çocuk ve Gençlik Kapalı Ceza İnfaz Kurumu",
+        "url": "https://tarsuscocukcik.adalet.gov.tr"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Kavak Çocuk ve Gençlik Kapalı Ceza İnfaz Kurumu",
+        "url": "http://kavakcocik.adalet.gov.tr"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Karatepe Çocuk ve Gençlik Kapalı Ceza İnfaz Kurumu",
+        "url": "https://karatepecocukcik.adalet.gov.tr"
+      }
+    ]
+  },
+  {
+    "kategori": "D Tipi Ceza İnfaz Kurumları",
+    "count": 1,
+    "kurumlar": [
+      {
+        "il": "DENİZLİ",
+        "kurum": "Denizli D Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://denizlidcik.adalet.gov.tr/"
+      }
+    ]
+  },
+  {
+    "kategori": "E Tipi Ceza İnfaz Kurumları",
+    "count": 33,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Adana E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://adanaecik.adalet.gov.tr/"
+      },
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Afyonkarahisar E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://afyonecik.adalet.gov.tr/"
+      },
+      {
+        "il": "AMASYA",
+        "kurum": "Amasya E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://amasyaecik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Antalya E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://antalyaecik.adalet.gov.tr/"
+      },
+      {
+        "il": "AYDIN",
+        "kurum": "Aydın E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://aydinecik.adalet.gov.tr/"
+      },
+      {
+        "il": "AYDIN",
+        "kurum": "Nazilli E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://nazillicik.adalet.gov.tr/"
+      },
+      {
+        "il": "BİTLİS",
+        "kurum": "Bitlis E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bitlisecik.adalet.gov.tr/"
+      },
+      {
+        "il": "BURDUR",
+        "kurum": "Burdur E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://burdurecik.adalet.gov.tr/"
+      },
+      {
+        "il": "BURSA",
+        "kurum": "Bursa E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bursaecik.adalet.gov.tr/"
+      },
+      {
+        "il": "ÇANAKKALE",
+        "kurum": "Çanakkale E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://canakkalecik.adalet.gov.tr"
+      },
+      {
+        "il": "ELAZIĞ",
+        "kurum": "Elazığ E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://elazigecik.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Erzurum E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "erzurumecik.adalet.gov.tr"
+      },
+      {
+        "il": "GAZİANTEP",
+        "kurum": "Gaziantep E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://gaziantepecik.adalet.gov.tr"
+      },
+      {
+        "il": "GÜMÜŞHANE",
+        "kurum": "Gümüşhane E Tipi Kapalı / Açık Ceza İnfaz Kurumu",
+        "url": "https://gumushaneecik.adalet.gov.tr/"
+      },
+      {
+        "il": "ISPARTA",
+        "kurum": "Isparta E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://ispartaecik.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Ümraniye E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://umraniyeecik.adalet.gov.tr"
+      },
+      {
+        "il": "KASTAMONU",
+        "kurum": "Kastamonu E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kastamonuecik.adalet.gov.tr/"
+      },
+      {
+        "il": "KIRKLARELİ",
+        "kurum": "Kırklareli E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kirklareliecik.adalet.gov.tr/"
+      },
+      {
+        "il": "KIRŞEHİR",
+        "kurum": "Kırşehir E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kirsehirecik.adalet.gov.tr"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Konya E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://konyaecik.adalet.gov.tr/"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Manisa E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://manisaecik.adalet.gov.tr/"
+      },
+      {
+        "il": "MARDİN",
+        "kurum": "Mardin E Tipi Kapalı / Açık Ceza İnfaz Kurumu",
+        "url": "https://mardinecik.adalet.gov.tr"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Mersin E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://mersinecik.adalet.gov.tr/"
+      },
+      {
+        "il": "MUĞLA",
+        "kurum": "Muğla E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://muglaecik.adalet.gov.tr/"
+      },
+      {
+        "il": "MUŞ",
+        "kurum": "Muş E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://musecik.adalet.gov.tr/"
+      },
+      {
+        "il": "NEVŞEHİR",
+        "kurum": "Nevşehir E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://nevsehirecik.adalet.gov.tr"
+      },
+      {
+        "il": "NİĞDE",
+        "kurum": "Niğde E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://nigdeecik.adalet.gov.tr/"
+      },
+      {
+        "il": "ORDU",
+        "kurum": "Ordu E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://orduecik.adalet.gov.tr/"
+      },
+      {
+        "il": "SİNOP",
+        "kurum": "Sinop E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sinopecik.adalet.gov.tr"
+      },
+      {
+        "il": "SİVAS",
+        "kurum": "Sivas E Tipi Kapalı / Açık Ceza İnfaz Kurumu",
+        "url": "https://sivasecik@adalet.gov.tr"
+      },
+      {
+        "il": "TRABZON",
+        "kurum": "Trabzon E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://trabzonecik.adalet.gov.tr/"
+      },
+      {
+        "il": "UŞAK",
+        "kurum": "Uşak E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://usakecik.adalet.gov.tr"
+      },
+      {
+        "il": "YOZGAT",
+        "kurum": "Yozgat E Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://yozgatecik.adalet.gov.tr/"
+      }
+    ]
+  },
+  {
+    "kategori": "F Tipi Ceza İnfaz Kurumları",
+    "count": 13,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Adana F Tipi Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://adanafcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Sincan 1 Nolu F Tipi Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://ankaraf1.adalet.gov.tr"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Sincan 2 Nolu F Tipi Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://ankaraf2.adalet.gov.tr"
+      },
+      {
+        "il": "BOLU",
+        "kurum": "Bolu F Tipi Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bolufcik.adalet.gov.tr/"
+      },
+      {
+        "il": "EDİRNE",
+        "kurum": "Edirne F Tipi Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://edirnefcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "İzmir 1 Nolu F Tipi Yüksek Güvenlikli Ceza İnfaz Kurumu",
+        "url": "https://izmirf1.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "İzmir 2 Nolu F Tipi Yüksek Güvenlikli Ceza İnfaz Kurumu",
+        "url": "https://izmirf2.adalet.gov.tr/"
+      },
+      {
+        "il": "KIRIKKALE",
+        "kurum": "Kırıkkale F Tipi Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kirikkalefcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KOCAELİ",
+        "kurum": "Kocaeli 1 Nolu F Tipi Yüksek Güvenlikli Ceza İnfaz Kurumu",
+        "url": "https://kocaelif1.adalet.gov.tr/"
+      },
+      {
+        "il": "KOCAELİ",
+        "kurum": "Kocaeli 2 Nolu F Tipi Yüksek Güvenlikli Ceza İnfaz Kurumu",
+        "url": "https://kocaeli2fcik.adalet.gov.tr"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Tekirdağ 1 Nolu F Tipi Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://tekirdag1fcik.adalet.gov.tr/"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Tekirdağ 2 Nolu F Tipi Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://tekirdag2fcik.adalet.gov.tr/"
+      },
+      {
+        "il": "VAN",
+        "kurum": "Van F Tipi Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://vanfcik.adalet.gov.tr"
+      }
+    ]
+  },
+  {
+    "kategori": "H Tipi Ceza İnfaz Kurumları",
+    "count": 5,
+    "kurumlar": [
+      {
+        "il": "BURSA",
+        "kurum": "Bursa H Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bursahcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Erzurum H Tipi Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://erzurumhcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ESKİŞEHİR",
+        "kurum": "Eskişehir H Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://eskisehirhcik.adalet.gov.tr/"
+      },
+      {
+        "il": "GAZİANTEP",
+        "kurum": "Gaziantep H Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://gaziantephcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Kartal H Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kartalhcik.adalet.gov.tr/"
+      }
+    ]
+  },
+  {
+    "kategori": "K1 Tipi Ceza İnfaz Kurumları",
+    "count": 4,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Karaisalı K1 Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Kumluca K1 Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "ELAZIĞ",
+        "kurum": "Karakoçan K1 Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "YOZGAT",
+        "kurum": "Akdağmadeni K1 Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "kategori": "K2 Tipi Ceza İnfaz Kurumları",
+    "count": 3,
+    "kurumlar": [
+      {
+        "il": "GİRESUN",
+        "kurum": "Şebinkarahisar K2 Tipi Kapalı ve Açık Ceza İnfaz Kurumu",
+        "url": " https://sebinkarahisar.adalet.gov.tr/"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Erdemli K2 Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://erdemlik2cik.adalet.gov.tr/"
+      },
+      {
+        "il": "TOKAT",
+        "kurum": "Niksar K2 Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://tokat.adalet.gov.tr/niksar.html"
+      }
+    ]
+  },
+  {
+    "kategori": "Kadın Açık Ceza İnfaz Kurumları",
+    "count": 8,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Karataş Kadın Açık Ceza İnfaz Kurumu",
+        "url": "https://karataskkcik.adalet.gov.tr"
+      },
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Afyonkarahisar Kadın Açık Ceza İnfaz Kurumu",
+        "url": "https://afyonkcik.adalet.gov.tr"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Elmadağ Kadın Açık Ceza İnfaz Kurumu",
+        "url": "https://elmadagkacik.adalet.gov.tr/"
+      },
+      {
+        "il": "BALIKESİR",
+        "kurum": "Ayvalık Kadın Açık Ceza İnfaz Kurumu",
+        "url": "https://ayvalikkcik.adalet.gov.tr/"
+      },
+      {
+        "il": "DENİZLİ",
+        "kurum": "Bozkurt Kadın Açık Ceza İnfaz Kurumu",
+        "url": "https://denizlikcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ELAZIĞ",
+        "kurum": "Sivrice Kadın Açık Ceza İnfaz Kurumu",
+        "url": "https://sivricekacik.adalet.gov.tr "
+      },
+      {
+        "il": "SAKARYA",
+        "kurum": "Hendek Kadın Açık Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "SİVAS",
+        "kurum": "Sivas Kadın Açık Ceza İnfaz Kurumu",
+        "url": "https://sivaskacik.adalet.gov.tr"
+      }
+    ]
+  },
+  {
+    "kategori": "Kadın Kapalı Ceza İnfaz Kurumları",
+    "count": 13,
+    "kurumlar": [
+      {
+        "il": "AKSARAY",
+        "kurum": "Aksaray Kadın Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Sincan Kadın Kapalı Ceza İnfaz Kurumu",
+        "url": "https://ankarakkcik.adalet.gov.tr"
+      },
+      {
+        "il": "BURSA",
+        "kurum": "Yenişehir Kadın Kapalı Ceza İnfaz Kurumu",
+        "url": "https://yenisehirkkcik.adalet.gov.tr"
+      },
+      {
+        "il": "DİYARBAKIR",
+        "kurum": "Diyarbakır Kadın Kapalı Ceza İnfaz Kurumu",
+        "url": "https://diyarbakirkkcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZİNCAN",
+        "kurum": "Erzincan Kadın Kapalı Ceza İnfaz Kurumu",
+        "url": "https://erzincankcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Bakırköy Kadın Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bakirkoykkcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Marmara Kadın Kapalı Ceza İnfaz Kurumu",
+        "url": "https://marmarakkcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "İzmir Kadın Kapalı Ceza İnfaz Kurumu",
+        "url": "https://izmirkkcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KAYSERİ",
+        "kurum": "Kayseri Kadın Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kayserikkcik.adalet.gov.tr"
+      },
+      {
+        "il": "KOCAELİ",
+        "kurum": "Gebze Kadın Kapalı Ceza İnfaz Kurumu",
+        "url": "https://gebzekkcik.adalet.gov.tr"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Tarsus Kadın Kapalı Ceza İnfaz Kurumu",
+        "url": "http://tarsuskkcik.adalet.gov.tr/"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Çarşamba Kadın Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://carsamba.kkcik.adalet.gov.tr/"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Karatepe Kadın Kapalı Ceza İnfaz Kurumu",
+        "url": "https://karatepekkcik.adalet.gov.tr"
+      }
+    ]
+  },
+  {
+    "kategori": "Kapalı Ceza İnfaz Kurumları",
+    "count": 16,
+    "kurumlar": [
+      {
+        "il": "AĞRI",
+        "kurum": "Ağrı Kapalı Ceza İnfaz Kurumu",
+        "url": "https://agricik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Kızılcahamam Kapalı ve Açık Ceza İnfaz Kurumu",
+        "url": "https://kizilcahamamcik.adalet.gov.tr"
+      },
+      {
+        "il": "ARTVİN",
+        "kurum": "Artvin Kapalı Ceza İnfaz Kurumu",
+        "url": "https://artvincik.adalet.gov.tr/"
+      },
+      {
+        "il": "BARTIN",
+        "kurum": "Bartın Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bartinkcik.adalet.gov.tr/"
+      },
+      {
+        "il": "BATMAN",
+        "kurum": "Batman Kapalı Ceza İnfaz Kurumu",
+        "url": "https://batmancik.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZİNCAN",
+        "kurum": "Erzincan Kapalı Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "HAKKARİ",
+        "kurum": "Hakkari Kapalı Ceza İnfaz Kurumu",
+        "url": "https://hakkaricik.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Üsküdar/Paşakapısı Kapalı Ceza İnfaz Kurumu",
+        "url": "https://pasakapisicik.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Marmara Kapalı Ceza İnfaz Kurumu",
+        "url": "https://marmarakapalicik.adalet.gov.tr"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "İzmir / Aliağa Kapalı Ceza İnfaz Kurumu",
+        "url": "https://aliagacik.adalet.gov.tr"
+      },
+      {
+        "il": "KAYSERİ",
+        "kurum": "Kayseri Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kaysericik.adalet.gov.tr/"
+      },
+      {
+        "il": "KIRIKKALE",
+        "kurum": "Delice Kapalı ve Açık Ceza İnfaz Kurumu",
+        "url": "https://delicecik.adalet.gov.tr/"
+      },
+      {
+        "il": "KIRIKKALE",
+        "kurum": "Sulakyurt Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sulakyurtcik.adalet.gov.tr"
+      },
+      {
+        "il": "KIRKLARELİ",
+        "kurum": "Vize Kapalı Ceza İnfaz Kurumu",
+        "url": "https://vizecik.adalet.gov.tr"
+      },
+      {
+        "il": "KIRKLARELİ",
+        "kurum": "Pınarhisar Kapalı Ceza İnfaz Kurumu",
+        "url": "https://pinarhisarcik.adalet.gov.tr/"
+      },
+      {
+        "il": "VAN",
+        "kurum": "Erciş T Tipi Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://ercistcik.adalet.gov.tr/"
+      }
+    ]
+  },
+  {
+    "kategori": "L Tipi Ceza İnfaz Kurumları",
+    "count": 35,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Adana/Suluca L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sulucaltcik.adalet.gov.tr/"
+      },
+      {
+        "il": "AĞRI",
+        "kurum": "Patnos L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://patnoslcik.adalet.gov.tr"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Sincan 4 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sincan4lcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Sincan 1 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://ankara1lcik.adalet.gov.tr"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Sincan 2 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://ankara2lcik.adalet.gov.tr"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Sincan 3 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sincan3lcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Alanya L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://alanyalcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Antalya L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://antalyalcik.adalet.gov.tr/"
+      },
+      {
+        "il": "AYDIN",
+        "kurum": "Çine 1 Nolu L Tipi Kapalı ve Açık Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "BALIKESİR",
+        "kurum": "Balıkesir L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://balikesirlcik.adalet.gov.tr/"
+      },
+      {
+        "il": "BOLU",
+        "kurum": "Gerede L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://geredelcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ÇORUM",
+        "kurum": "Çorum L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://corumlcik.adalet.gov.tr/"
+      },
+      {
+        "il": "EDİRNE",
+        "kurum": "Edirne L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://edirnelcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZİNCAN",
+        "kurum": "Erzincan L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://erzincanlcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ESKİŞEHİR",
+        "kurum": "Eskişehir L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://eskisehirlcik.adalet.gov.tr/"
+      },
+      {
+        "il": "GAZİANTEP",
+        "kurum": "Gaziantep L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://gazianteplcik.adalet.gov.tr/"
+      },
+      {
+        "il": "GİRESUN",
+        "kurum": "Espiye L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://espiyelcik.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Maltepe 1 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://maltepe1lcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Maltepe 2 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://maltepe2lcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Maltepe 3 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://maltepe3lcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Marmara 1 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://marmara1lcik.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Marmara 2 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://marmara2lcik.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Marmara 3 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://marmara3lcik.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Marmara 4 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://marmara4lcik.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Marmara 5 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://marmara5lcik.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Marmara 6 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://marmara6lcik.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Marmara 7 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://marmara7lcik.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Marmara 8 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://marmara8lcik.adalet.gov.tr"
+      },
+      {
+        "il": "KAHRAMANMARAŞ",
+        "kurum": "Türkoğlu 2 Nolu L Kapalı Ceza İnfaz Kurumu",
+        "url": "https://turkoglu2lcik.adalet.gov.tr"
+      },
+      {
+        "il": "KAHRAMANMARAŞ",
+        "kurum": "Türkoğlu 1 Nolu L Kapalı Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Manisa L Tipi Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "RİZE",
+        "kurum": "Rize L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://rizelcik.adalet.gov.tr/"
+      },
+      {
+        "il": "SAKARYA",
+        "kurum": "Sakarya 1 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sakaryalcik.adalet.gov.tr/"
+      },
+      {
+        "il": "SAKARYA",
+        "kurum": "Sakarya 2 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sakarya2lcik.adalet.gov.tr/"
+      },
+      {
+        "il": "SAKARYA",
+        "kurum": "Sakarya 3 Nolu L Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sakarya3lcik.adalet.gov.tr/"
+      }
+    ]
+  },
+  {
+    "kategori": "M Tipi Ceza İnfaz Kurumları",
+    "count": 18,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Kozan M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kozanmcik.adalet.gov.tr/"
+      },
+      {
+        "il": "BALIKESİR",
+        "kurum": "Bandırma M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bandirmamtipicik.adalet.gov.tr/"
+      },
+      {
+        "il": "BATMAN",
+        "kurum": "Batman M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://batmanmcik.adalet.gov.tr"
+      },
+      {
+        "il": "BAYBURT",
+        "kurum": "Bayburt M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "htttp://www.bayburtmcik.adalet.gov.tr"
+      },
+      {
+        "il": "BİLECİK",
+        "kurum": "Bilecik M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bilecikcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Bergama M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bergamamcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Ödemiş M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://odemismcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KARAMAN",
+        "kurum": "Karaman M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://karamanmcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KARAMAN",
+        "kurum": "Ermenek M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://ermenekmcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Alaşehir M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://alasehirmcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MARDİN",
+        "kurum": "Midyat M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://midyatmcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Silifke M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://silifkemcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Pozantı M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://pozantimcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ORDU",
+        "kurum": "Ünye M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://unyemtcik.adalet.gov.tr/"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Vezirköprü M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://vezirkoprumtcik.adalet.gov.tr"
+      },
+      {
+        "il": "TOKAT",
+        "kurum": "Zile M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://zilemcik.adalet.gov.tr/"
+      },
+      {
+        "il": "VAN",
+        "kurum": "Van M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://vanmtipi.adalet.gov.tr"
+      },
+      {
+        "il": "ZONGULDAK",
+        "kurum": "Zonguldak M Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://zonguldakmcik.adalet.gov.tr"
+      }
+    ]
+  },
+  {
+    "kategori": "R Tipi Ceza İnfaz Kurumları (Rehabilitasyon Merkezi)",
+    "count": 4,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Adana Rehberlik ve Rehabilitasyon Kapalı İnfaz Kurumu",
+        "url": "https://adanarrik.adalet.gov.tr"
+      },
+      {
+        "il": "ADANA",
+        "kurum": "Adana Rehberlik ve Rehabilitasyon Açık İnfaz Kurumu",
+        "url": "adanaraik.adalet.gov.tr/"
+      },
+      {
+        "il": "ELAZIĞ",
+        "kurum": "Elazığ R Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://elazigrcik.adalet.gov.tr"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Menemen R Tipi Kapalı ve Açık Ceza İnfaz Kurumu",
+        "url": "https://menemenrcik.adalet.gov.tr/"
+      }
+    ]
+  },
+  {
+    "kategori": "S Tipi Ceza İnfaz Kurumları",
+    "count": 7,
+    "kurumlar": [
+      {
+        "il": "ANTALYA",
+        "kurum": "Antalya S Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://antalyascik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Manavgat S Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://manavgatscik.adalet.gov.tr/"
+      },
+      {
+        "il": "IĞDIR",
+        "kurum": "Iğdır S Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://igdirscik.adalet.gov.tr/"
+      },
+      {
+        "il": "KIRŞEHİR",
+        "kurum": "Kırşehir S Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kirsehirscik.adalet.gov.tr/"
+      },
+      {
+        "il": "MUĞLA",
+        "kurum": "Bodrum S Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bodrumscik.adalet.gov.tr/"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Kavak S Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kavakscik.adalet.gov.tr/"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Çarşamba S Tipi Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://carsambascik.adalet.gov.tr/"
+      }
+    ]
+  },
+  {
+    "kategori": "T Tipi Ceza İnfaz Kurumları",
+    "count": 79,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Adana 2 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://adana2tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ADANA",
+        "kurum": "Adana 1 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://adana1tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Afyonkarahisar 1 Nolu T Kapalı Ceza İnfaz Kurumu",
+        "url": "https://afyon1tcik.adalet.gov.tr"
+      },
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Afyonkarahisar 2 Nolu T Kapalı Ceza İnfaz Kurumu",
+        "url": "https://afyon2tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Dinar T Tipi Kapalı / Açık Ceza İnfaz Kurumu",
+        "url": "https://dinartcik.adalet.gov.tr/"
+      },
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Bolvadin T Tipi Kapalı / Açık Ceza İnfaz Kurumu",
+        "url": "https://bolvadintcik.adalet.gov.tr/"
+      },
+      {
+        "il": "AĞRI",
+        "kurum": "Doğubayazıt T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://dogubayazittcik.adalet.gov.tr/"
+      },
+      {
+        "il": "AKSARAY",
+        "kurum": "Aksaray T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://aksaraycik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Sincan T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sincantcik.adalet.gov.tr"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Elmalı T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://elmalitcik.adalet.gov.tr"
+      },
+      {
+        "il": "ARDAHAN",
+        "kurum": "Ardahan T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://ardahantcik.adalet.gov.tr/"
+      },
+      {
+        "il": "AYDIN",
+        "kurum": "Söke T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://soketcik.adalet.gov.tr/"
+      },
+      {
+        "il": "BALIKESİR",
+        "kurum": "Burhaniye T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://burhaniyettkacik.adalet.gov.tr/"
+      },
+      {
+        "il": "BALIKESİR",
+        "kurum": "Bandırma 1 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bandirma1tcik.adalet.gov.tr"
+      },
+      {
+        "il": "BALIKESİR",
+        "kurum": "Bandırma 2 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bandirma2tcik.adalet.gov.tr"
+      },
+      {
+        "il": "BATMAN",
+        "kurum": "Batman T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://batmantcik.adalet.gov.tr/"
+      },
+      {
+        "il": "BİTLİS",
+        "kurum": "Ahlat T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://ahlattcik.adalet.gov.tr/"
+      },
+      {
+        "il": "BOLU",
+        "kurum": "Bolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bolutcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ÇORUM",
+        "kurum": "Sungurlu T Tipi Kapalı ve Açık Ceza İnfaz Kurumu",
+        "url": "https://sungurlutcik.adalet.gov.tr"
+      },
+      {
+        "il": "DENİZLİ",
+        "kurum": "Denizli T Kapalı Ceza İnfaz Kurumu",
+        "url": "https://denizlitcik.adalet.gov.tr"
+      },
+      {
+        "il": "DİYARBAKIR",
+        "kurum": "Diyarbakır 1 Nolu T Kapalı Ceza İnfaz Kurumu",
+        "url": "www.diyarbakir1tcik.adalet.gov.tr"
+      },
+      {
+        "il": "DİYARBAKIR",
+        "kurum": "Diyarbakır 2 Nolu T Kapalı Ceza İnfaz Kurumu",
+        "url": "www.diyarbakir2tcik.adalet.gov.tr"
+      },
+      {
+        "il": "DİYARBAKIR",
+        "kurum": "Diyarbakır 3 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://diyarbakir3tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "DİYARBAKIR",
+        "kurum": "Diyarbakır 4 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://diyarbakir4tcik.adalet.gov.tr"
+      },
+      {
+        "il": "ELAZIĞ",
+        "kurum": "Elazığ T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://elazigtcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZİNCAN",
+        "kurum": "Erzincan T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://erzincancik.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Oltu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://oltutcik.adalet.gov.tr/"
+      },
+      {
+        "il": "GAZİANTEP",
+        "kurum": "İslahiye T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://islahiyetcik.adalet.gov.tr"
+      },
+      {
+        "il": "GAZİANTEP",
+        "kurum": "Nizip T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "niziptcik@adalet.gov.tr"
+      },
+      {
+        "il": "HATAY",
+        "kurum": "Hatay T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://hataytcik.adalet.gov.tr/"
+      },
+      {
+        "il": "HATAY",
+        "kurum": "İskenderun T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://iskenderuntcik.adalet.gov.tr"
+      },
+      {
+        "il": "ISPARTA",
+        "kurum": "Yalvaç T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://yalvactcik.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Ümraniye T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://umraniyetcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Metris 1 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://metristcik.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Metris 2 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://metris2tcik.adalet.gov.tr"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Menemen T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://menementcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "İzmir 1 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://izmir1tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "İzmir 2 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://izmir2tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "İzmir 3 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://izmir3tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "İzmir 4 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://izmir4tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Ödemiş T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://odemistcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KARABÜK",
+        "kurum": "Karabük T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://karabuktcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KARS",
+        "kurum": "Kars T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://karstcik.adalet.gov.tr"
+      },
+      {
+        "il": "KAYSERİ",
+        "kurum": "Kayseri 1 Nolu T Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kayserit1cik.adalet.gov.tr"
+      },
+      {
+        "il": "KAYSERİ",
+        "kurum": "Kayseri 2 Nolu T Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kayserit2cik.adalet.gov.tr"
+      },
+      {
+        "il": "KIRIKKALE",
+        "kurum": "Keskin T Tipi Ceza İnfaz Kurumu",
+        "url": "https://keskintcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KOCAELİ",
+        "kurum": "Kocaeli 1 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kocaeli1tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KOCAELİ",
+        "kurum": "Kocaeli 2 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kocaeli2tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Akşehir T Tipi Kapalı ve Açık Ceza İnfaz Kurumu",
+        "url": "https://aksehirtcik.adalet.gov.tr"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Ereğli (Konya) T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://ereglitcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Seydişehir T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://seydisehirtcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KÜTAHYA",
+        "kurum": "Tavşanlı T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://tavsanlitcik.adalet.gov.tr"
+      },
+      {
+        "il": "KÜTAHYA",
+        "kurum": "Kütahya T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kutahyatcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MALATYA",
+        "kurum": "Akçadağ T Tipi Kapalı ve Açık Ceza İnfaz Kurumu",
+        "url": "https://akcadagtcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Manisa 1 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://manisatcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Salihli T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://salihlitcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Manisa 2 Nolu T Tipi Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Akhisar T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://akhisarcik.adalet.gov.tr"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Anamur T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://anamurtcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Tarsus 3 Nolu T Kapalı Ceza İnfaz Kurumu",
+        "url": "https://tarsus3tcik.adalet.gov.tr"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Tarsus 1 Nolu T Kapalı Ceza İnfaz Kurumu",
+        "url": "https://tarsus1tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Tarsus 2 Nolu T Kapalı Ceza İnfaz Kurumu",
+        "url": "https://tarsus2tcik.adalet.gov.tr"
+      },
+      {
+        "il": "MUĞLA",
+        "kurum": "Seydikemer-Eşen T Tipi Kapalı ve Açık Ceza İnfaz Kurumu",
+        "url": "https://seydikemertcik.adalet.gov.tr"
+      },
+      {
+        "il": "OSMANİYE",
+        "kurum": "Osmaniye 1 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://osmaniyetcik.adalet.gov.tr/"
+      },
+      {
+        "il": "OSMANİYE",
+        "kurum": "Osmaniye 2 Nolu T Tipi Kapalı / Açık Ceza İnfaz Kurumu",
+        "url": "https://osmaniye2tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Bafra T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bafratcik.adalet.gov.tr"
+      },
+      {
+        "il": "ŞANLIURFA",
+        "kurum": "Şanlıurfa 2 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sanliurfa2tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ŞANLIURFA",
+        "kurum": "Şanlıurfa 1 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sanliurfa1tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ŞANLIURFA",
+        "kurum": "Siverek 1 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://siverekcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ŞANLIURFA",
+        "kurum": "Siverek 2 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://siverek2tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ŞIRNAK",
+        "kurum": "Şırnak T Tipi Kapalı ve Açık Ceza İnfaz Kurumu",
+        "url": "https://sirnaktcik.adalet.gov.tr"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Tekirdağ 1 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://tekirdagcik.adalet.gov.tr/"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Tekirdağ 2 Nolu T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://tekirdag2tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "TOKAT",
+        "kurum": "Tokat T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://tokattcik.adalet.gov.tr/"
+      },
+      {
+        "il": "TRABZON",
+        "kurum": "Beşikdüzü T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "VAN",
+        "kurum": "Van T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://vantcik.adalet.gov.tr"
+      },
+      {
+        "il": "YOZGAT",
+        "kurum": "Yozgat 1 Nolu T Tipi Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://yozgat1tcik.adalet.gov.tr"
+      },
+      {
+        "il": "YOZGAT",
+        "kurum": "Yozgat 2 Nolu T Tipi Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://yozgat2tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "YOZGAT",
+        "kurum": "Boğazlıyan T Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bogazliyancik.adalet.gov.tr/"
+      }
+    ]
+  },
+  {
+    "kategori": "Yüksek Güvenlikli Ceza İnfaz Kurumları",
+    "count": 22,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Adana/Suluca 1 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://suluca1ygcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ADANA",
+        "kurum": "Adana/Suluca 2 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://suluca2cik.adalet.gov.tr"
+      },
+      {
+        "il": "AKSARAY",
+        "kurum": "Aksaray 3 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "AKSARAY",
+        "kurum": "Aksaray 1 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "AKSARAY",
+        "kurum": "Aksaray 2 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "AKSARAY",
+        "kurum": "Aksaray 4 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Sincan 2 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sincan2cik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Sincan 1 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://sincan1cik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Antalya Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://antalya1cik.adalet.gov.tr/"
+      },
+      {
+        "il": "BURDUR",
+        "kurum": "Burdur Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://burdurygcik.adalet.gov.tr/"
+      },
+      {
+        "il": "DİYARBAKIR",
+        "kurum": "Diyarbakır 1 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://diyarbakir1cik.adalet.gov.tr/"
+      },
+      {
+        "il": "DİYARBAKIR",
+        "kurum": "Diyarbakır 2 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://diyarbakir2cik.adalet.gov.tr/"
+      },
+      {
+        "il": "ELAZIĞ",
+        "kurum": "Elazığ 1 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://elazig1ycik.adalet.gov.tr/"
+      },
+      {
+        "il": "ELAZIĞ",
+        "kurum": "Elazığ 2 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://elazig2ycik.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZİNCAN",
+        "kurum": "Erzincan Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://erzincanygcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Dumlu 2 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Dumlu 1 Nolu Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://dumlu1cik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "İzmir Buca Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://bucaygkcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KIRŞEHİR",
+        "kurum": "Kırşehir Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kirsehirycik.adalet.gov.tr/"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Ereğli Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://eregliygcik.adalet.gov.tr/"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Karatepe Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://karatepeygkcik.adalet.gov.tr"
+      },
+      {
+        "il": "VAN",
+        "kurum": "Van Yüksek Güvenlikli Kapalı Ceza İnfaz Kurumu",
+        "url": "https://vanygcik.adalet.gov.tr"
+      }
+    ]
+  },
+  {
+    "kategori": "Kapalıya Bağlı Ceza İnfaz Kurumları",
+    "count": 65,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Kozan Açık Ceza İnfaz Kurumu (M Tipi)",
+        "url": "https://kozanmcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ADIYAMAN",
+        "kurum": "Adıyaman L Tipi Kapalı / Açık Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://adiyamanlcik.adalet.gov.tr"
+      },
+      {
+        "il": "AĞRI",
+        "kurum": "Doğubayazıt Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://dogubayazittcik.adalet.gov.tr/"
+      },
+      {
+        "il": "AKSARAY",
+        "kurum": "Aksaray Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://aksaraycik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Akseki T Tipi Kapalı ve Açık Ceza İnfaz kurumu",
+        "url": "https://aksekitcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Akseki Açık Ceza İnfaz Kurumu Müdürlüğü (T Tipi)",
+        "url": ""
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Manavgat Açık Ceza İnfaz Kurumu (S Tipi)",
+        "url": "https://manavgatscik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Elmalı Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://elmalitcik.adalet.gov.tr"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Alanya Açık Ceza İnfaz Kurumu (L Tipi)",
+        "url": "https://alanyalcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Antalya Açık Ceza İnfaz Kurumu (E Tipi)",
+        "url": "https://antalyaecik.adalet.gov.tr/"
+      },
+      {
+        "il": "ARDAHAN",
+        "kurum": "Ardahan Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://ardahantcik.adalet.gov.tr/"
+      },
+      {
+        "il": "AYDIN",
+        "kurum": "Söke Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://sokeacik.adalet.gov.tr/"
+      },
+      {
+        "il": "AYDIN",
+        "kurum": "Nazilli Açık Ceza İnfaz Kurumu (E Tipi)",
+        "url": "https://nazillicik.adalet.gov.tr/"
+      },
+      {
+        "il": "BALIKESİR",
+        "kurum": "Burhaniye Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://burhaniyettkacik.adalet.gov.tr/"
+      },
+      {
+        "il": "BARTIN",
+        "kurum": "Bartın Açık Ceza İnfaz Kurumu",
+        "url": "https://bartinkcik.adalet.gov.tr"
+      },
+      {
+        "il": "BAYBURT",
+        "kurum": "Bayburt Açık Ceza İnfaz Kurumu (M Tipi)",
+        "url": ""
+      },
+      {
+        "il": "BİTLİS",
+        "kurum": "Ahlat Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://ahlattcik.adalet.gov.tr/"
+      },
+      {
+        "il": "BOLU",
+        "kurum": "Gerede Açık Ceza İnfaz Kurumu (L Tipi)",
+        "url": "https://geredeacik.adalet.gov.tr/"
+      },
+      {
+        "il": "BURDUR",
+        "kurum": "Burdur Açık Ceza İnfaz Kurumu (E Tipi)",
+        "url": "https://burdurecik.adalet.gov.tr/"
+      },
+      {
+        "il": "BURSA",
+        "kurum": "Bursa Açık Ceza İnfaz Kurumu (E Tipi)",
+        "url": "https://bursaecik.adalet.gov.tr/"
+      },
+      {
+        "il": "ÇORUM",
+        "kurum": "Çorum Açık Ceza İnfaz Kurumu (L Tipi)",
+        "url": "https://corumlcik.adalet.gov.tr/"
+      },
+      {
+        "il": "DÜZCE",
+        "kurum": "Düzce T Tipi Kapalı / Açık Ceza İnfaz Kurumu",
+        "url": "https://duzcetcik.adalet.gov.tr"
+      },
+      {
+        "il": "GAZİANTEP",
+        "kurum": "İslahiye Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://islahiyetcik.adalet.gov.tr"
+      },
+      {
+        "il": "GAZİANTEP",
+        "kurum": "Nizip Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://nizipacik.adalet.gov.tr"
+      },
+      {
+        "il": "GİRESUN",
+        "kurum": "Espiye Açık Ceza İnfaz Kurumu (L Tipi)",
+        "url": ""
+      },
+      {
+        "il": "HATAY",
+        "kurum": "Hatay Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://hataytcik.adalet.gov.tr/"
+      },
+      {
+        "il": "ISPARTA",
+        "kurum": "Isparta Açık Ceza İnfaz Kurumu (E Tipi)",
+        "url": "https://ispartaecik.adalet.gov.tr/"
+      },
+      {
+        "il": "ISPARTA",
+        "kurum": "Yalvaç Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://yalvactcik.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Kartal Açık Ceza İnfaz Kurumu (H Tipi)",
+        "url": "https://kartalhcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Bergama Açık Ceza İnfaz Kurumu (M Tipi)",
+        "url": "https://bergamamcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Ödemiş Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://odemistcik.adalet.gov.tr/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Ödemiş Açık Ceza İnfaz Kurumu (M Tipi)",
+        "url": "https://odemismcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KARABÜK",
+        "kurum": "Ovacık Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": ""
+      },
+      {
+        "il": "KARABÜK",
+        "kurum": "Karabük Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://karabuktcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KARAMAN",
+        "kurum": "Karaman Açık Ceza İnfaz Kurumu (M Tipi)",
+        "url": "https://karamanmcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KARS",
+        "kurum": "Kars Açık Ceza İnfaz Kurumu ( T Tipi)",
+        "url": "https://karstcik.adalet.gov.tr"
+      },
+      {
+        "il": "KASTAMONU",
+        "kurum": "Kastamonu Açık Ceza İnfaz Kurumu (E Tipi)",
+        "url": "https://kastamonuecik.adalet.gov.tr/"
+      },
+      {
+        "il": "KİLİS",
+        "kurum": "Kilis Açık Ceza İnfaz Kurumu (L Tipi)",
+        "url": "https://kilislcik.adalet.gov.tr "
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Ereğli (Konya) Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://ereglitcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Akşehir Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://aksehirtcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Seydişehir Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://seydisehirtcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KÜTAHYA",
+        "kurum": "Tavşanlı Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://tavsanlitcik.adalet.gov.tr"
+      },
+      {
+        "il": "KÜTAHYA",
+        "kurum": "Kütahya Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://kutahyatcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Manisa Açık Ceza İnfaz Kurumu (E Tipi)",
+        "url": "https://manisaecik.adalet.gov.tr/"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Salihli Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://salihlitcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MARDİN",
+        "kurum": "Midyat Açık Ceza İnfaz Kurumu (M Tipi)",
+        "url": "https://midyatmcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Mersin Açık Ceza İnfaz Kurumu (E Tipi)",
+        "url": "https://mersinecik.adalet.gov.tr/"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Anamur Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": ""
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Silifke Açık Ceza İnfaz Kurumu (M Tipi)",
+        "url": "https://silifkemcik.adalet.gov.tr/"
+      },
+      {
+        "il": "MUĞLA",
+        "kurum": "Seydikemer-Eşen Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://seydikemertcik.adalet.gov.tr"
+      },
+      {
+        "il": "ORDU",
+        "kurum": "Ordu Açık Ceza İnfaz Kurumu (E Tipi)",
+        "url": "https://orduecik.adalet.gov.tr/"
+      },
+      {
+        "il": "ORDU",
+        "kurum": "Ünye Açık Ceza İnfaz Kurumu (M Tipi)",
+        "url": "https://unyemtcik.adalet.gov.tr"
+      },
+      {
+        "il": "OSMANİYE",
+        "kurum": "Osmaniye Açık Ceza İnfaz Kurumu(2T Tipi)",
+        "url": "https://osmaniye2tcik.adalet.gov.tr/"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Samsun T Kapalı / Açık Ceza İnfaz Kurumu",
+        "url": "https://samsuntcik.adalet.gov.tr/"
+      },
+      {
+        "il": "SİNOP",
+        "kurum": "Sinop Açık Ceza İnfaz Kurumu (E Tipi)",
+        "url": "https://sinopecik.adalet.gov.tr"
+      },
+      {
+        "il": "ŞIRNAK",
+        "kurum": "Şırnak Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://sirnaktcik.adalet.gov.tr"
+      },
+      {
+        "il": "TOKAT",
+        "kurum": "Tokat Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://tokattcik.adalet.gov.tr"
+      },
+      {
+        "il": "TOKAT",
+        "kurum": "Zile Açık Ceza İnfaz Kurumu (M Tipi)",
+        "url": "https://zilemcik.adalet.gov.tr/"
+      },
+      {
+        "il": "TRABZON",
+        "kurum": "Beşikdüzü Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://besikduzutcik.adalet.gov.tr/"
+      },
+      {
+        "il": "TRABZON",
+        "kurum": "Araklı Açık Ceza İnfaz Kurumu (E Tipi)",
+        "url": ""
+      },
+      {
+        "il": "UŞAK",
+        "kurum": "Uşak Açık Ceza İnfaz Kurumu (E Tipi)",
+        "url": "https://usakecik.adalet.gov.tr"
+      },
+      {
+        "il": "VAN",
+        "kurum": "Erciş Açık Ceza İnfaz Kurumu Müdürlüğü (T Tipi)",
+        "url": ""
+      },
+      {
+        "il": "YOZGAT",
+        "kurum": "Boğazlıyan Açık Ceza İnfaz Kurumu (T Tipi)",
+        "url": "https://bogazliyancik.adalet.gov.tr/"
+      },
+      {
+        "il": "YOZGAT",
+        "kurum": "Yozgat Açık Ceza İnfaz Kurumu (E Tipi)",
+        "url": "https://yozgatecik.adalet.gov.tr/"
+      },
+      {
+        "il": "ZONGULDAK",
+        "kurum": "Zonguldak Açık Ceza İnfaz Kurumu (M Tipi)",
+        "url": "https://zonguldakmcik.adalet.gov.tr"
+      }
+    ]
+  },
+  {
+    "kategori": "Açığa Bağlı Ceza İnfaz Kurumları",
+    "count": 1,
+    "kurumlar": [
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Afyonkarahisar Açık Ceza İnfaz Kurumu (Kampüs)",
+        "url": "https://afyonkacik.adalet.gov.tr/"
+      }
+    ]
+  },
+  {
+    "kategori": "Kapalıya Bağlı (Rehabilitasyon Merkezi)",
+    "count": 1,
+    "kurumlar": [
+      {
+        "il": "İSTANBUL",
+        "kurum": "Metris R Tipi Kapalı Ceza İnfaz Kurumu (Rehabilitasyon Merkezi)",
+        "url": "https://metris2tcik.adalet.gov.tr"
+      }
+    ]
+  },
+  {
+    "kategori": "Personel Eğitim Merkezleri",
+    "count": 5,
+    "kurumlar": [
+      {
+        "il": "ANKARA",
+        "kurum": "Ceza İnfaz Kurumları ve Tutukevleri Personeli Ankara Eğitim Merkezi",
+        "url": "https://cte-aem.adalet.gov.tr/"
+      },
+      {
+        "il": "DENİZLİ",
+        "kurum": "Ceza İnfaz Kurumları ve Tutukevleri Personeli Hasan Erbil Eğitim Merkezi",
+        "url": "https://cte-dem.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Ceza İnfaz Kurumları ve Tutukevleri Personeli Hüseyin Turgut Eğitim Merkezi",
+        "url": "https://cte-epem.adalet.gov.tr/"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Ceza İnfaz Kurumları ve Tutukevleri Personeli Ord.Prof.Dr.Sulhi Dönmezer Eğitim Merkezi",
+        "url": "https://cikpemist.adalet.gov.tr/"
+      },
+      {
+        "il": "KAHRAMANMARAŞ",
+        "kurum": "Ceza İnfaz Kurumları ve Tutukevleri Personeli Kahramanmaraş Eğitim Merkezi",
+        "url": "https://cte-kahem.adalet.gov.tr"
+      }
+    ]
+  },
+  {
+    "kategori": "Denetimli Serbestlik Müdürlükleri",
+    "count": 158,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Adana Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ADANA",
+        "kurum": "Ceyhan Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ADANA",
+        "kurum": "Kozan Denetimli Serbestlik Müdürlüğü",
+        "url": "https://cte-ds.adalet.gov.tr"
+      },
+      {
+        "il": "ADIYAMAN",
+        "kurum": "Adıyaman Denetimli Serbestlik Müdürlüğü",
+        "url": "https://adiyaman.adalet.gov.tr"
+      },
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Afyonkarahisar Denetimli Serbestlik Müdürlüğü",
+        "url": " https://afyonkarahisardsm.adalet.gov.tr"
+      },
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Bolvadin Denetimli Serbestlik Müdürlüğü",
+        "url": "https://bolvadindsm.adalet.gov.tr"
+      },
+      {
+        "il": "AFYONKARAHİSAR",
+        "kurum": "Dinar Denetimli Serbestlik Müdürlüğü",
+        "url": "https://dinar.adalet.gov.tr/dntsrbst/dsym.html"
+      },
+      {
+        "il": "AĞRI",
+        "kurum": "Ağrı Denetimli Serbestlik Müdürlüğü",
+        "url": "https://agridsm.adalet.gov.tr/"
+      },
+      {
+        "il": "AĞRI",
+        "kurum": "Patnos Denetimli Serbestlik Müdürlüğü",
+        "url": "https://patnosdsm.adalet.gov.tr"
+      },
+      {
+        "il": "AĞRI",
+        "kurum": "Doğubayazıt Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "AKSARAY",
+        "kurum": "Aksaray Denetimli Serbestlik Müdürlüğü",
+        "url": "https://aksaray.adalet.gov.tr/dsm/index.html"
+      },
+      {
+        "il": "AMASYA",
+        "kurum": "Amasya Denetimli Serbestlik Müdürlüğü",
+        "url": "https://amasyadsm@adalet.gov.tr"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Ankara Batı Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Ankara Denetimli Serbestlik Müdürlüğü",
+        "url": "https://ankaradsm.adalet.gov.tr/"
+      },
+      {
+        "il": "ANKARA",
+        "kurum": "Polatlı Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Manavgat Denetimli Serbestlik Müdürlüğü",
+        "url": "https://manavgat.adalet.gov.tr/denetimli-serbestlik"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Antalya Denetimli Serbestlik Müdürlüğü",
+        "url": "https://antalyadsm.adalet.gov.tr/"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Alanya Denetimli Serbestlik Müdürlüğü",
+        "url": "https://alanya.adalet.gov.tr"
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Elmalı Denetimli Serbestlik Müdürlüğü",
+        "url": "https://elmalidsm.adalet.gov.tr"
+      },
+      {
+        "il": "ARDAHAN",
+        "kurum": "Ardahan Denetimli Serbestlik Müdürlüğü",
+        "url": "https://ardahandsm.adalet.gov.tr"
+      },
+      {
+        "il": "ARTVİN",
+        "kurum": "Artvin Denetimli Serbestlik Müdürlüğü",
+        "url": "https://artvindsm.adalet.gov.tr "
+      },
+      {
+        "il": "AYDIN",
+        "kurum": "Nazilli Denetimli Serbestlik Müdürlüğü",
+        "url": "https://nazillidsm.adalet.gov.tr"
+      },
+      {
+        "il": "AYDIN",
+        "kurum": "Aydın Denetimli Serbestlik Müdürlüğü",
+        "url": "https://aydindsm.adalet.gov.tr"
+      },
+      {
+        "il": "AYDIN",
+        "kurum": "Söke Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "BALIKESİR",
+        "kurum": "Balıkesir Denetimli Serbestlik Müdürlüğü",
+        "url": "https://balikesirdsm.adalet.gov.tr/"
+      },
+      {
+        "il": "BALIKESİR",
+        "kurum": "Bandırma Denetimli Serbestlik Müdürlüğü",
+        "url": "https://bandirmadsm.adalet.gov.tr/"
+      },
+      {
+        "il": "BALIKESİR",
+        "kurum": "Burhaniye Denetimli Serbestlik Müdürlüğü",
+        "url": "https://burhaniyedsm.adalet.gov.tr"
+      },
+      {
+        "il": "BARTIN",
+        "kurum": "Bartın Denetimli Serbestlik Müdürlüğü",
+        "url": "https://bartindsm.adalet.gov.tr"
+      },
+      {
+        "il": "BATMAN",
+        "kurum": "Batman Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "BAYBURT",
+        "kurum": "Bayburt Denetimli Serbestlik Müdürlüğü",
+        "url": "https://bayburt.adalet.gov.tr/bayburt/index.html"
+      },
+      {
+        "il": "BİLECİK",
+        "kurum": "Bilecik Denetimli Serbestlik Müdürlüğü",
+        "url": "https://bilecikdsm.adalet.gov.tr"
+      },
+      {
+        "il": "BİNGÖL",
+        "kurum": "Bingöl Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "BİTLİS",
+        "kurum": "Bitlis Denetimli Serbestlik Müdürlüğü",
+        "url": "https://bitlisdsm.adalet.gov.tr/"
+      },
+      {
+        "il": "BOLU",
+        "kurum": "Bolu Denetimli Serbestlik Müdürlüğü",
+        "url": "https://bolu.adalet.gov.tr/dsm.html"
+      },
+      {
+        "il": "BURDUR",
+        "kurum": "Burdur Denetimli Serbestlik Müdürlüğü",
+        "url": "https://www.burdurdsm.adalet.gov.tr"
+      },
+      {
+        "il": "BURSA",
+        "kurum": "İnegöl Denetimli Serbestlik Müdürlüğü",
+        "url": "https://inegol.adalet.gov.tr/"
+      },
+      {
+        "il": "BURSA",
+        "kurum": "Bursa Denetimli Serbestlik Müdürlüğü",
+        "url": "https://bursadsm.adalet.gov.tr/"
+      },
+      {
+        "il": "ÇANAKKALE",
+        "kurum": "Çanakkale Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ÇANKIRI",
+        "kurum": "Çankırı Denetimli Serbestlik Müdürlüğü",
+        "url": "https://cankiridsm.adalet.gov.tr"
+      },
+      {
+        "il": "ÇORUM",
+        "kurum": "Çorum Denetimli Serbestlik Müdürlüğü",
+        "url": "https://corumdsm.adalet.gov.tr"
+      },
+      {
+        "il": "ÇORUM",
+        "kurum": "Sungurlu Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "DENİZLİ",
+        "kurum": "Denizli Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "DİYARBAKIR",
+        "kurum": "Diyarbakır Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "DİYARBAKIR",
+        "kurum": "Ergani Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "DÜZCE",
+        "kurum": "Düzce Denetimli Serbestlik Müdürlüğü",
+        "url": "https://duzcedsm.adalet.gov.tr"
+      },
+      {
+        "il": "EDİRNE",
+        "kurum": "Keşan Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "EDİRNE",
+        "kurum": "Edirne Denetimli Serbestlik Müdürlüğü",
+        "url": "https://edirne.adalet.gov.tr/denetimliserbestlik/index.html"
+      },
+      {
+        "il": "ELAZIĞ",
+        "kurum": "Elazığ Denetimli Serbestlik Müdürlüğü",
+        "url": "https://elazigdsm.adalet.gov.tr/"
+      },
+      {
+        "il": "ERZİNCAN",
+        "kurum": "Erzincan Denetimli Serbestlik Müdürlüğü",
+        "url": "https://erzincan.adalet.gov.tr/denetimli-serbestlik-nedir"
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Oltu Denetimli Serbestlik Müdürlüğü",
+        "url": "https://www.oltudsm.adalet.gov.tr"
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Erzurum Denetimli Serbestlik Müdürlüğü",
+        "url": "https://erzurum.adalet.gov.tr/dserbestlik"
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Hınıs Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ESKİŞEHİR",
+        "kurum": "Eskişehir Denetimli Serbestlik Müdürlüğü",
+        "url": "https://eskisehirdsm.adalet.gov.tr"
+      },
+      {
+        "il": "GAZİANTEP",
+        "kurum": "Gaziantep Denetimli Serbestlik Müdürlüğü",
+        "url": "https:/gaziantepdsm.adalet.gov.tr"
+      },
+      {
+        "il": "GAZİANTEP",
+        "kurum": "İslahiye Denetimli Serbestlik Müdürlüğü",
+        "url": "https://islahiyedsm.adalet.gov.tr"
+      },
+      {
+        "il": "GAZİANTEP",
+        "kurum": "Nizip Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "GİRESUN",
+        "kurum": "Giresun Denetimli Serbestlik Müdürlüğü",
+        "url": "https://giresun.dsm.adalet.gov.tr"
+      },
+      {
+        "il": "GİRESUN",
+        "kurum": "Şebinkarahisar Denetimli Serbestlik Müdürlüğü",
+        "url": "https://sebinkarahisar.adalet.gov.tr/ds/index1.html"
+      },
+      {
+        "il": "GÜMÜŞHANE",
+        "kurum": "Gümüşhane Denetimli Serbestlik Müdürlüğü",
+        "url": "https://gumushanedsm.adalet.gov.tr/"
+      },
+      {
+        "il": "HAKKARİ",
+        "kurum": "Hakkari Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "HAKKARİ",
+        "kurum": "Yüksekova Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "HATAY",
+        "kurum": "Kırıkhan Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "HATAY",
+        "kurum": "Hatay Denetimli Serbestlik Müdürlüğü",
+        "url": "https://hataydsm.adalet.gov.tr"
+      },
+      {
+        "il": "HATAY",
+        "kurum": "İskenderun Denetimli Serbestlik Müdürlüğü",
+        "url": "https://iskenderundsm.adalet.gov.tr"
+      },
+      {
+        "il": "HATAY",
+        "kurum": "Dörtyol Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "HATAY",
+        "kurum": "Reyhanlı Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "IĞDIR",
+        "kurum": "Iğdır Denetimli Serbestlik Müdürlüğü",
+        "url": "https://igdirdsm.adalet.gov.tr"
+      },
+      {
+        "il": "ISPARTA",
+        "kurum": "Isparta Denetimli Serbestlik Müdürlüğü",
+        "url": "https://isparta.adalet.gov.tr/dsm_yeni/dsm_index.html"
+      },
+      {
+        "il": "ISPARTA",
+        "kurum": "Yalvaç Denetimli Serbestlik Müdürlüğü",
+        "url": "https://yalvac.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Silivri Denetimli Serbestlik Müdürlüğü",
+        "url": "https://silivri.adalet.gov.tr/dsm/index.htm"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Küçükçekmeçe Denetimli Serbestlik Müdürlüğü",
+        "url": "https://kucukcekmecedsm.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "Bakırköy Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "İstanbul Anadolu Denetimli Serbestlik Müdürlüğü",
+        "url": "https://istanbulanadoludsm.adalet.gov.tr"
+      },
+      {
+        "il": "İSTANBUL",
+        "kurum": "İstanbul Denetimli Serbestlik Müdürlüğü",
+        "url": "https://istanbul.adalet.gov.tr/ds/"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "İzmir Denetimli Serbestlik Müdürlüğü",
+        "url": "https://izmirdsm.adalet.gov.tr "
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Karşıyaka Denetimli Serbestlik Müdürlüğü",
+        "url": "https://karsiyaka.adalet.gov.tr/denetimli.html"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Çeşme Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Torbalı Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Ödemiş Denetimli Serbestlik Müdürlüğü",
+        "url": "https://odemis.adalet.gov.tr/index.html"
+      },
+      {
+        "il": "İZMİR",
+        "kurum": "Bergama Denetimli Serbestlik Müdürlüğü",
+        "url": "https://bergama.adalet.gov.tr/denserb.html"
+      },
+      {
+        "il": "KAHRAMANMARAŞ",
+        "kurum": "Elbistan Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "KAHRAMANMARAŞ",
+        "kurum": "Kahramanmaraş Denetimli Serbestlik Müdürlüğü",
+        "url": "https://kahramanmaras.adalet.gov.tr/denserbestlik.html"
+      },
+      {
+        "il": "KARABÜK",
+        "kurum": "Karabük Denetimli Serbestlik Müdürlüğü",
+        "url": "https://karabukdsm@adalet.gov.tr"
+      },
+      {
+        "il": "KARAMAN",
+        "kurum": "Karaman Denetimli Serbestlik Müdürlüğü",
+        "url": "https://karamandsm.adalet.gov.tr "
+      },
+      {
+        "il": "KARAMAN",
+        "kurum": "Ermenek Denetimli Serbestlik Müdürlüğü",
+        "url": "https://ermenekdsm.adalet.gov.tr/"
+      },
+      {
+        "il": "KARS",
+        "kurum": "Kars Denetimli Serbestlik Müdürlüğü",
+        "url": "https://karstcik.adalet.gov.tr"
+      },
+      {
+        "il": "KASTAMONU",
+        "kurum": "Kastamonu Denetimli Serbestlik Müdürlüğü",
+        "url": "https://kastamonudsm.adalet.gov.tr"
+      },
+      {
+        "il": "KASTAMONU",
+        "kurum": "İnebolu Denetimli Serbestlik Müdürlüğü",
+        "url": "https://inebolu.adalet.gov.tr"
+      },
+      {
+        "il": "KAYSERİ",
+        "kurum": "Kayseri Denetimli Serbestlik Müdürlüğü",
+        "url": "https://kayseridsm.adalet.gov.tr"
+      },
+      {
+        "il": "KAYSERİ",
+        "kurum": "Develi Denetimli Serbestlik Müdürlüğü",
+        "url": "https://www.develidsm.adalet.gov.tr"
+      },
+      {
+        "il": "KİLİS",
+        "kurum": "Kilis Denetimli Serbestlik Müdürlüğü",
+        "url": "https://kilis.adalet.gov.tr"
+      },
+      {
+        "il": "KIRIKKALE",
+        "kurum": "Kırıkkale Denetimli Serbestlik Müdürlüğü",
+        "url": "https://kirikkaledsm.adalet.gov.tr"
+      },
+      {
+        "il": "KIRKLARELİ",
+        "kurum": "Kırklareli Denetimli Serbestlik Müdürlüğü",
+        "url": "https://kirklareli.adalet.gov.tr/dsm/index_dsm.html"
+      },
+      {
+        "il": "KIRŞEHİR",
+        "kurum": "Kırşehir Denetimli Serbestlik Müdürlüğü",
+        "url": "https://kirsehir.adalet.gov.tr/"
+      },
+      {
+        "il": "KOCAELİ",
+        "kurum": "Gebze Denetimli Serbestlik Müdürlüğü",
+        "url": "https://gebze.adalet.gov.tr/dsm/index.htm"
+      },
+      {
+        "il": "KOCAELİ",
+        "kurum": "Kocaeli Denetimli Serbestlik Müdürlüğü",
+        "url": "https://kocaeli.adalet.gov.tr/"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Konya Denetimli Serbestlik Müdürlüğü",
+        "url": "https://konya.adalet.gov.tr/"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Ereğli Denetimli Serbestlik Müdürlüğü",
+        "url": "konyaereglidsm.adalet.gov.tr"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Akşehir Denetimli Serbestlik Müdürlüğü",
+        "url": "https//aksehirdsm.adalet.gov.tr"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Seydişehir Denetimli Serbestlik Müdürlüğü",
+        "url": "https://seydisehirdsm.adalet.gov.tr/ "
+      },
+      {
+        "il": "KÜTAHYA",
+        "kurum": "Tavşanlı Denetimli Serbestlik Müdürlüğü",
+        "url": "https://tavsanlidsm.adalet.gov.tr"
+      },
+      {
+        "il": "KÜTAHYA",
+        "kurum": "Kütahya Denetimli Serbestlik Müdürlüğü",
+        "url": "https://kutahyadsm.adalet.gov.tr"
+      },
+      {
+        "il": "MALATYA",
+        "kurum": "Malatya Denetimli Serbestlik Müdürlüğü",
+        "url": "https://malatyadsm.adalet.gov.tr/"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Soma Denetimli Serbestlik Müdürlüğü",
+        "url": "www.soma.adalet.gov.tr"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Akhisar Denetimli Serbestlik Müdürlüğü",
+        "url": "https://akhisardsm.adalet.gov.tr"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Alaşehir Denetimli Serbestlik Müdürlüğü",
+        "url": "https://alasehirdsm.adalet.gov.tr "
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Salihli Denetimli Serbestlik Müdürlüğü",
+        "url": "https://salihlidsm.adalet.gov.tr"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Manisa Denetimli Serbestlik Müdürlüğü",
+        "url": "https://manisa.adalet.gov.tr/"
+      },
+      {
+        "il": "MANİSA",
+        "kurum": "Turgutlu Denetimli Serbestlik Müdürlüğü",
+        "url": "https://turgutludsm.adalet.gov.tr"
+      },
+      {
+        "il": "MARDİN",
+        "kurum": "Mardin Denetimli Serbestlik Müdürlüğü",
+        "url": "https://mardin.adalet.gov.tr/denetimli_serbestlik/"
+      },
+      {
+        "il": "MARDİN",
+        "kurum": "Midyat Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Mersin Denetimli Serbestlik Müdürlüğü",
+        "url": "https://cte-ds.adalet.gov.tr"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Anamur Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Silifke Denetimli Serbestlik Müdürlüğü",
+        "url": "https://silifke.adalet.gov.tr/dsm/ds.html"
+      },
+      {
+        "il": "MERSİN",
+        "kurum": "Tarsus Denetimli Serbestlik Müdürlüğü",
+        "url": "https://tarsusdsm.adalet.gov.tr"
+      },
+      {
+        "il": "MUĞLA",
+        "kurum": "Milas Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "MUĞLA",
+        "kurum": "Bodrum Denetimli Serbestlik Müdürlüğü",
+        "url": "https://bodrum.adalet.gov.tr/denetimli_serbestlik.html"
+      },
+      {
+        "il": "MUĞLA",
+        "kurum": "Fethiye Denetimli Serbestlik Müdürlüğü",
+        "url": "https://fethiyedsm.adalet.gov.tr"
+      },
+      {
+        "il": "MUĞLA",
+        "kurum": "Muğla Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "MUŞ",
+        "kurum": "Muş Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "NEVŞEHİR",
+        "kurum": "Nevşehir Denetimli Serbestlik Müdürlüğü",
+        "url": "https://nevsehirdsm.adalet.gov.tr/amp"
+      },
+      {
+        "il": "NİĞDE",
+        "kurum": "Niğde Denetimli Serbestlik Müdürlüğü",
+        "url": "https://nigdedsm.adalet.gov.tr"
+      },
+      {
+        "il": "ORDU",
+        "kurum": "Ordu Denetimli Serbestlik Müdürlüğü",
+        "url": "https://ordu.adalet.gov.tr/"
+      },
+      {
+        "il": "ORDU",
+        "kurum": "Ünye Denetimli Serbestlik Müdürlüğü",
+        "url": "https://unyedsm.adalet.gov.tr"
+      },
+      {
+        "il": "ORDU",
+        "kurum": "Fatsa Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "OSMANİYE",
+        "kurum": "Osmaniye Denetimli Serbestlik Müdürlüğü",
+        "url": "https://osmaniyedsm.adalet.gov.tr"
+      },
+      {
+        "il": "OSMANİYE",
+        "kurum": "Kadirli Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "RİZE",
+        "kurum": "Rize Denetimli Serbestlik Müdürlüğü",
+        "url": " https://rizedsm.adalet.gov.tr/"
+      },
+      {
+        "il": "SAKARYA",
+        "kurum": "Sakarya Denetimli Serbestlik Müdürlüğü",
+        "url": "https//sakaryadsm.adalet.gov.tr"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Vezirköprü Denetimli Serbestlik Müdürlüğü",
+        "url": "https://cte-ds.adalet.gov.tr"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Samsun Denetimli Serbestlik Müdürlüğü",
+        "url": "https://samsundsm.adalet.gov.tr"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Çarşamba Denetimli Serbestlik Müdürlüğü",
+        "url": "https://carsambadsm.adalet.gov.tr/"
+      },
+      {
+        "il": "SAMSUN",
+        "kurum": "Bafra Denetimli Serbestlik Müdürlüğü",
+        "url": "https://bafra.adalet.gov.tr/denetim/denetim.html"
+      },
+      {
+        "il": "ŞANLIURFA",
+        "kurum": "Birecik Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ŞANLIURFA",
+        "kurum": "Viranşehir Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ŞANLIURFA",
+        "kurum": "Siverek Denetimli Serbestlik Müdürlüğü",
+        "url": "https://siverek.adalet.gov.tr/ds/denetim.htm"
+      },
+      {
+        "il": "ŞANLIURFA",
+        "kurum": "Şanlıurfa Denetimli Serbestlik Müdürlüğü",
+        "url": "https://sanliurfadsm.adalet.gov.tr"
+      },
+      {
+        "il": "SİİRT",
+        "kurum": "Siirt Denetimli Serbestlik Müdürlüğü",
+        "url": "https://siirtdsm.adalet.gov.tr "
+      },
+      {
+        "il": "SİNOP",
+        "kurum": "Boyabat Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "SİNOP",
+        "kurum": "Sinop Denetimli Serbestlik Müdürlüğü",
+        "url": "https://sinop.adalet.gov.tr/dsm/"
+      },
+      {
+        "il": "ŞIRNAK",
+        "kurum": "Şırnak Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ŞIRNAK",
+        "kurum": "Cizre Denetimli Serbestlik Müdürlüğü",
+        "url": "https://cizre.adliyesi.adalet.gov.tr"
+      },
+      {
+        "il": "SİVAS",
+        "kurum": "Sivas Denetimli Serbestlik Müdürlüğü",
+        "url": "https://sivasdsm.adalet.gov.tr"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Tekirdağ Denetimli Serbestlik Müdürlüğü",
+        "url": "https://tekirdagdsm.adalet.gov.tr/"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Çorlu Denetimli Serbestlik Müdürlüğü",
+        "url": "https://corlu.adalet.gov.tr/densermud.html"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Çerkezköy Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "TOKAT",
+        "kurum": "Tokat Denetimli Serbestlik Müdürlüğü",
+        "url": "https://tokatdsm.adalet.gov.tr"
+      },
+      {
+        "il": "TOKAT",
+        "kurum": "Zile Denetimli Serbestlik Müdürlüğü",
+        "url": "https://ziledsm.adalet.gov.tr"
+      },
+      {
+        "il": "TRABZON",
+        "kurum": "Trabzon Denetimli Serbestlik Müdürlüğü",
+        "url": "https://trabzon.adalet.gov.tr/dsm.htm"
+      },
+      {
+        "il": "TUNCELİ",
+        "kurum": "Tunceli Denetimli Serbestlik Müdürlüğü",
+        "url": "https://tuncelidsm.adalet.gov.tr"
+      },
+      {
+        "il": "UŞAK",
+        "kurum": "Uşak Denetimli Serbestlik Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "VAN",
+        "kurum": "Van Denetimli Serbestlik Müdürlüğü",
+        "url": "https://vandsm.adalet.gov.tr"
+      },
+      {
+        "il": "VAN",
+        "kurum": "Erciş Denetimli Serbestlik Müdürlüğü",
+        "url": "https://ercis.adalet.gov.tr/M%C3%BClhakatveBirimler/ds/index.html"
+      },
+      {
+        "il": "YALOVA",
+        "kurum": "Yalova Denetimli Serbestlik Müdürlüğü",
+        "url": "https://yalova.adalet.gov.tr/ds"
+      },
+      {
+        "il": "YOZGAT",
+        "kurum": "Yozgat Denetimli Serbestlik Müdürlüğü",
+        "url": "https://yozgatdsm.adalet.gov.tr/"
+      },
+      {
+        "il": "YOZGAT",
+        "kurum": "Boğazlıyan Denetimli Serbestlik Müdürlüğü",
+        "url": "http://bogazliyandsm.adalet.gov.tr"
+      },
+      {
+        "il": "ZONGULDAK",
+        "kurum": "Karadeniz Ereğli (Zonguldak) Denetimli Serbestlik Müdürlüğü",
+        "url": "https://karadenizeregli.adalet.gov.tr"
+      },
+      {
+        "il": "ZONGULDAK",
+        "kurum": "Zonguldak Denetimli Serbestlik Müdürlüğü",
+        "url": "https://zonguldakdsm.adalet.gov.tr"
+      }
+    ]
+  },
+  {
+    "kategori": "Y Tipi Ceza İnfaz Kurumları",
+    "count": 12,
+    "kurumlar": [
+      {
+        "il": "ADANA",
+        "kurum": "Adana/Suluca Y Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": ""
+      },
+      {
+        "il": "AKSARAY",
+        "kurum": "Aksaray Y Tipi Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ANTALYA",
+        "kurum": "Antalya Y Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://antalyaycik.adalet.gov.tr/"
+      },
+      {
+        "il": "BURDUR",
+        "kurum": "Burdur 1 Nolu Y Tipi Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "BURDUR",
+        "kurum": "Burdur 2 Nolu Y Tipi Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": ""
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Aziziye 1 Nolu Y Tipi Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://aziziye1ycik.adalet.gov.tr"
+      },
+      {
+        "il": "ERZURUM",
+        "kurum": "Aziziye 2 Nolu Y Tipi Kapalı Ceza İnfaz Kurumu Müdürlüğü",
+        "url": "https://aziziye2ycik.adalet.gov.tr/"
+      },
+      {
+        "il": "KIRŞEHİR",
+        "kurum": "Kırşehir Y Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://kirsehirytcik.adalet.gov.tr/"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Ereğli (Konya) 2 Nolu Y Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://eregli2ycik.adalet.gov.tr/"
+      },
+      {
+        "il": "KONYA",
+        "kurum": "Ereğli 1 Nolu Y Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://eregli1ycik.adalet.gov.tr/"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Karatepe 1 Nolu Y Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://karatepeycik.adalet.gov.tr/"
+      },
+      {
+        "il": "TEKİRDAĞ",
+        "kurum": "Tekirdağ Y Tipi Kapalı Ceza İnfaz Kurumu",
+        "url": "https://tekirdagycik.adalet.gov.tr/"
+      }
+    ]
+  }
+]

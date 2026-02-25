@@ -17,6 +17,14 @@ export interface UploadedFile {
     type: "photo" | "doc";
 }
 
+export interface SelectedGift {
+    id: string;
+    name: string;
+    price: number;
+    image?: string;
+    quantity: number;
+}
+
 export interface ExtrasData {
     deliveryDate: string; // 'Bugün', '1Hafta', '1Ay', 'Ozel'
     scent: string;        // 'Yok', 'Gul', 'Lavanta', 'Okyanus'
@@ -24,6 +32,8 @@ export interface ExtrasData {
     documents: UploadedFile[];
     postcards: string[];  // Array of postcard IDs
     includeCalendar: boolean;
+    gifts: SelectedGift[];
+    customDate?: string;
 }
 
 export interface AddressData {
@@ -35,6 +45,13 @@ export interface AddressData {
     receiverCity: string;
     receiverAddress: string;
     receiverPhone: string;
+
+    // Prison specific
+    isPrison: boolean;
+    prisonName?: string;
+    fatherName?: string;
+    wardNumber?: string;
+    prisonNote?: string;
 }
 
 // 2. State & Actions Interface
@@ -80,6 +97,8 @@ const initialState = {
         documents: [],
         postcards: [],
         includeCalendar: false,
+        gifts: [],
+        customDate: "",
     },
     address: {
         senderName: '',
@@ -89,8 +108,13 @@ const initialState = {
         receiverCity: '',
         receiverAddress: '',
         receiverPhone: '',
+        isPrison: false,
+        prisonName: '',
+        fatherName: '',
+        wardNumber: '',
+        prisonNote: '',
     }
-};
+}
 
 // 3. Store Implementation
 export const useLetterStore = create<LetterStore>()(

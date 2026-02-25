@@ -17,7 +17,11 @@ export async function getCategories() {
     try {
         return await prisma.giftCategory.findMany({
             include: {
-                gifts: true
+                gifts: {
+                    orderBy: {
+                        order: "asc"
+                    }
+                }
             },
             orderBy: {
                 order: "asc"
@@ -95,4 +99,43 @@ export async function deleteGift(id: string) {
     });
     revalidatePath("/admin/gifts");
     revalidatePath("/hediyeler");
+}
+
+export async function reorderCategories(ids: string[]) {
+    await ensureAdmin();
+    try {
+        // Use a transaction to update all orders
+        await prisma.$transaction(
+            ids.map((id, index) =>
+                prisma.giftCategory.update({
+                    where: { id },
+                    data: { order: index }
+                })
+            )
+        );
+        revalidatePath("/admin/gifts");
+        revalidatePath("/hediyeler");
+    } catch (error) {
+        console.error("Error reordering categories:", error);
+        throw error;
+    }
+}
+
+export async function reorderGifts(ids: string[]) {
+    await ensureAdmin();
+    try {
+        await prisma.$transaction(
+            ids.map((id, index) =>
+                prisma.gift.update({
+                    where: { id },
+                    data: { order: index }
+                })
+            )
+        );
+        revalidatePath("/admin/gifts");
+        revalidatePath("/hediyeler");
+    } catch (error) {
+        console.error("Error reordering gifts:", error);
+        throw error;
+    }
 }

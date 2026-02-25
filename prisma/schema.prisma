@@ -80,13 +80,18 @@ model Draft {
 }
 
 model Letter {
-  id         String   @id @default(cuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  data       Json
-  status     String   @default("PENDING") // PENDING, PAID, SENT, COMPLETED
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  data         Json
+  status       String   @default("PAID") // PENDING, PAID, PREPARING, SHIPPED, COMPLETED
+  senderName   String?
+  receiverName String?
+  receiverCity String?
+  totalAmount  Float?
+  trackingCode String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model GiftCategory {
@@ -104,9 +109,12 @@ model Gift {
   description String?      @db.Text
   price       Float?
   image       String?
+  order       Int          @default(0)
   categoryId  String
   category    GiftCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
+
+
 

@@ -5,9 +5,14 @@ import Link from "next/link";
 import { Bird, Hourglass, Plane, Heart, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useLetterStore } from "@/store/letterStore";
 
 
 export default function CategorySelection() {
+  const router = useRouter();
+  const updateAddress = useLetterStore(state => state.updateAddress);
+
   const categories = [
     {
       id: "cezaevi",
@@ -56,6 +61,11 @@ export default function CategorySelection() {
     }
   ];
 
+  const handleCategorySelect = (id: string, href: string) => {
+    updateAddress({ isPrison: id === "cezaevi" });
+    router.push(href);
+  };
+
   return (
     <div className="container mx-auto px-4 py-12 max-w-5xl flex-1 flex flex-col justify-center animate-in fade-in duration-500">
       <h1 className="font-playfair text-4xl md:text-5xl font-bold text-center text-paper mb-4 drop-shadow-lg">
@@ -74,9 +84,9 @@ export default function CategorySelection() {
             transition={{ delay: index * 0.1 }}
             className={cat.id === "normal" ? "md:col-span-2 flex justify-center" : "w-full"}
           >
-            <Link
-              href={cat.href}
-              className={`flex items-center gap-6 p-10 bg-paper/10 backdrop-blur-md border border-paper/20 rounded-3xl shadow-2xl transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${cat.id === "normal" ? "w-full md:max-w-2xl" : "w-full"}`}
+            <button
+              onClick={() => handleCategorySelect(cat.id, cat.href)}
+              className={`flex items-center gap-6 p-10 bg-paper/10 backdrop-blur-md border border-paper/20 rounded-3xl shadow-2xl transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden text-left ${cat.id === "normal" ? "w-full md:max-w-2xl" : "w-full"}`}
             >
               <div className={`absolute top-0 right-0 w-48 h-48 ${cat.bg} rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:scale-150 transition-transform duration-500`}></div>
 
@@ -90,7 +100,7 @@ export default function CategorySelection() {
                 </h3>
                 <p className="text-paper/90 text-lg mt-2 font-medium">Hemen yazmaya başla</p>
               </div>
-            </Link>
+            </button>
           </motion.div>
         ))}
       </div>

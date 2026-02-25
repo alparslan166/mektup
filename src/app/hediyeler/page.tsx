@@ -17,7 +17,7 @@ export default async function GiftsPage() {
                         </div>
                     </div>
                     <h1 className="text-4xl md:text-5xl font-playfair font-bold text-ink tracking-tight">Hediye Seçenekleri</h1>
-                    <div className="flex items-center justify-center gap-2 text-wood font-medium tracking-widest text-sm italic">
+                    <div className="flex items-center justify-center gap-2 text-white font-medium tracking-widest text-sm italic">
                         <Star size={14} />
                         <span>Mektubunuzun Yanına Küçük Bir Tebessüm</span>
                         <Star size={14} />
@@ -33,7 +33,7 @@ export default async function GiftsPage() {
                     {categories.map((category) => (
                         <section key={category.id} className="space-y-8">
                             <div className="flex items-center gap-4">
-                                <h2 className="text-2xl font-playfair font-black text-wood-dark tracking-wider uppercase border-b-2 border-seal/20 pb-2">
+                                <h2 className="text-2xl font-playfair font-black text-seal tracking-wider uppercase border-b-2 border-seal pb-2">
                                     {category.name}
                                 </h2>
                                 <div className="flex-1 h-px bg-paper-dark" />
@@ -57,7 +57,7 @@ export default async function GiftsPage() {
                                             <div>
                                                 <h3 className="text-xl font-bold text-ink mb-2">{gift.name}</h3>
                                                 <p className="text-ink-light text-sm line-clamp-3 leading-relaxed">
-                                                    {gift.description || "Bu ürün için henüz bir açıklama girilmemiş."}
+                                                    {gift.description || ""}
                                                 </p>
                                             </div>
                                         </div>
