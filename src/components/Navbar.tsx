@@ -152,13 +152,9 @@ const Navbar = () => {
                     <nav className="flex flex-col gap-6 text-paper text-lg font-bold tracking-widest">
                         {adminMenus ? (
                             <>
-                                <Link href={status === "unauthenticated" ? "/auth/login" : "/mektup-yaz"} onClick={() => { resetStore(); closeMenu(); }} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
+                                <Link href="/admin/mektuplar" onClick={() => { resetStore(); closeMenu(); }} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                                     <PenLine size={22} />
                                     <span>Mektuplar</span>
-                                </Link>
-                                <Link href="/" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
-                                    <Gift size={22} />
-                                    <span>Anasayfa</span>
                                 </Link>
                                 <Link href="/admin/gifts" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                                     <Gift size={22} />
