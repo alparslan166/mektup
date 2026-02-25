@@ -155,7 +155,7 @@ export default function LandingPage() {
           <DashboardCard
             title="Hediye Gönder"
             description="Sevdiklerinize mektubun yanında sürpriz hediyeler ekleyerek onları şaşırtın."
-            href="/hediye-gonder"
+            href="/hediyeler"
             icon={Gift}
             color="seal"
             delay={0.8}

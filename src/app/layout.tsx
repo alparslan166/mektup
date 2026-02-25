@@ -40,9 +40,9 @@ export default function RootLayout({
     <html lang="tr">
       <body
         className={`${inter.variable} ${playfair.variable} ${kurale.variable} font-sans antialiased text-ink min-h-screen flex flex-col relative`}
-        style={{ backgroundImage: `url('/images/home.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}
+        style={{ backgroundImage: `url('/images/home.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
-        <div className="absolute inset-0 backdrop-blur-[0px] z-[-1] pointer-events-none fixed"></div>
+        <div className="absolute inset-0 bg-paper/5 z-[-1] pointer-events-none"></div>
 
         <Suspense fallback={null}>
           <PageLoader />

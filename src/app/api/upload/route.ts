@@ -1,34 +1,51 @@
 import { NextResponse } from "next/server";
-import { put } from "@vercel/blob";
+import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { v4 as uuidv4 } from "uuid";
+
+const s3Client = new S3Client({
+    region: process.env.AWS_REGION!,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+    },
+});
 
 export async function POST(req: Request) {
     try {
-        const formData = await req.formData();
-        const file = formData.get("file") as File;
-        const type = formData.get("type") as string;
+        const { fileName, fileType } = await req.json();
 
-        if (!file) {
-            return NextResponse.json({ error: "Dosya bulunamadı." }, { status: 400 });
+        if (!fileName || !fileType) {
+            return NextResponse.json({ error: "fileName ve fileType gerekli." }, { status: 400 });
         }
 
-        if (!process.env.BLOB_READ_WRITE_TOKEN) {
-            return NextResponse.json({
-                error: "Vercel Blob token'ı eksik. Lütfen Vercel Dashboard'dan Storage > Blob kurulumunu yapın."
-            }, { status: 500 });
-        }
+        const fileExtension = fileName.split('.').pop();
+        const key = `${uuidv4()}.${fileExtension}`;
 
-        // Upload to Vercel Blob
-        const blob = await put(file.name, file, {
-            access: 'public',
+        const command = new PutObjectCommand({
+            Bucket: process.env.AWS_BUCKET_NAME!,
+            Key: key,
+            ContentType: fileType,
         });
+
+        const uploadUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+        const publicUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+
+        // Generate a read-only presigned URL for immediate preview (valid for 1 hour)
+        const getCommand = new GetObjectCommand({
+            Bucket: process.env.AWS_BUCKET_NAME!,
+            Key: key,
+        });
+        const previewUrl = await getSignedUrl(s3Client, getCommand, { expiresIn: 3600 });
 
         return NextResponse.json({
-            url: blob.url,
-            name: file.name,
-            type: type
+            uploadUrl,
+            publicUrl,
+            previewUrl,
+            key
         });
     } catch (error) {
-        console.error("UPLOAD_ERROR", error);
-        return NextResponse.json({ error: "Yükleme başarısız oldu: " + (error as Error).message }, { status: 500 });
+        console.error("S3_PRESIGNED_URL_ERROR", error);
+        return NextResponse.json({ error: "S3 bağlantısı oluşturulamadı: " + (error as Error).message }, { status: 500 });
     }
 }

@@ -1,15 +1,26 @@
 import { getAllLetters } from "@/lib/actions/admin";
 import LetterStatusBadge from "@/components/LetterStatusBadge";
 import StatusUpdater from "@/components/admin/StatusUpdater";
+import Link from "next/link";
+import { Gift } from "lucide-react";
 
 export default async function AdminDashboard() {
     const letters = await getAllLetters();
 
     return (
         <div className="space-y-6">
-            <header>
-                <h2 className="text-2xl font-bold text-slate-900">Tüm Mektuplar</h2>
-                <p className="text-slate-500">Sistemdeki tüm mektupları buradan yönetebilirsiniz.</p>
+            <header className="flex justify-between items-end">
+                <div>
+                    <h2 className="text-2xl font-bold text-slate-900">Tüm Mektuplar</h2>
+                    <p className="text-slate-500">Sistemdeki tüm mektupları buradan yönetebilirsiniz.</p>
+                </div>
+                <Link
+                    href="/admin/gifts"
+                    className="flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-slate-800 transition-all text-sm"
+                >
+                    <Gift size={18} />
+                    <span>Hediye Yönetimi</span>
+                </Link>
             </header>
 
             <div className="bg-white shadow-sm border border-slate-200 rounded-xl overflow-hidden">

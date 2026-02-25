@@ -15,8 +15,14 @@ const PageLoader = () => {
     const loaderImage = `/images/kus-logo.png`;
 
     // Reset loading state when route changes, but with a minimum delay
+    // Only auto-hide if the loader was triggered by a route change (which sets startTime)
     useEffect(() => {
-        if (!isLoading) return;
+        if (!isLoading) {
+            setStartTime(0);
+            return;
+        }
+
+        if (startTime === 0) return; // Manual loading, don't auto-hide
 
         const now = Date.now();
         const elapsed = now - startTime;
@@ -24,35 +30,41 @@ const PageLoader = () => {
 
         const timer = setTimeout(() => {
             setIsLoading(false);
+            setStartTime(0);
         }, remaining);
 
         return () => clearTimeout(timer);
     }, [pathname, searchParams, setIsLoading, startTime, isLoading]);
 
-    // Handle global click events on internal links
+    // Handle global click events on internal links with optimization
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {
+            // Optimized: only check if clicking an element or its parent is an anchor
             const target = e.target as HTMLElement;
             const link = target.closest("a");
 
-            if (link &&
-                link.href &&
-                link.href.startsWith(window.location.origin) &&
-                !link.hasAttribute("download") &&
-                link.target !== "_blank") {
+            if (!link || !link.href) return;
 
+            // Only intercept internal links that aren't downloads or external targets
+            const isInternal = link.href.startsWith(window.location.origin);
+            const isDownload = link.hasAttribute("download");
+            const isNewTab = link.target === "_blank";
+
+            if (isInternal && !isDownload && !isNewTab) {
                 const currentPath = window.location.pathname;
-                const targetPath = new URL(link.href).pathname;
+                const url = new URL(link.href);
+                const targetPath = url.pathname;
 
                 if (currentPath !== targetPath) {
+                    // Start loader for navigation
                     setStartTime(Date.now());
                     setIsLoading(true);
                 }
             }
         };
 
-        document.addEventListener("click", handleClick);
-        return () => document.removeEventListener("click", handleClick);
+        document.addEventListener("click", handleClick, { capture: true });
+        return () => document.removeEventListener("click", handleClick, { capture: true });
     }, [setIsLoading]);
 
     // Simple progress animation simulation when loading
@@ -81,12 +93,15 @@ const PageLoader = () => {
                     exit={{ opacity: 0 }}
                     className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1c1917]/80 backdrop-blur-sm"
                 >
-                    <div className="relative w-32 h-32 md:w-48 md:h-48">
+                    <div className="relative w-32 h-32 md:w-48 md:h-48 flex items-center justify-center">
                         {/* Background / Empty version (Dimmed/Gray) */}
                         <img
                             src={loaderImage}
                             alt="Loading Background"
                             className="w-full h-full object-contain opacity-20 grayscale"
+                            onError={(e) => {
+                                (e.target as HTMLImageElement).style.opacity = '0';
+                            }}
                         />
 
                         {/* Filling Version (Colored/Full) using clip-path */}
@@ -100,6 +115,9 @@ const PageLoader = () => {
                                 src={loaderImage}
                                 alt="Loading..."
                                 className="w-full h-full object-contain"
+                                onError={(e) => {
+                                    (e.target as HTMLImageElement).style.opacity = '0';
+                                }}
                             />
                         </motion.div>
                     </div>

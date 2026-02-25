@@ -13,6 +13,7 @@ export interface UploadedFile {
     id: string;
     name: string;
     url: string;
+    previewUrl?: string; // Short-lived presigned URL for immediate preview
     type: "photo" | "doc";
 }
 

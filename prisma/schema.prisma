@@ -88,3 +88,25 @@ model Letter {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
+
+model GiftCategory {
+  id        String   @id @default(cuid())
+  name      String
+  order     Int      @default(0)
+  gifts     Gift[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Gift {
+  id          String       @id @default(cuid())
+  name        String
+  description String?      @db.Text
+  price       Float?
+  image       String?
+  categoryId  String
+  category    GiftCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+

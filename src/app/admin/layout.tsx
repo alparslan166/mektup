@@ -7,7 +7,6 @@ export default async function AdminLayout({
 }: {
     children: React.ReactNode;
 }) {
-    console.log("AdminLayout rendering...");
     const session = await getServerSession(authOptions);
 
     if (!session || (session.user as any).role !== "ADMIN") {

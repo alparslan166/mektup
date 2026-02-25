@@ -25,22 +25,33 @@ export default function UploadSection() {
         const loadingToast = toast.loading("Dosya yükleniyor...");
 
         try {
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("type", type);
-
+            // 1. Get Presigned URL
             const res = await fetch("/api/upload", {
                 method: "POST",
-                body: formData,
+                body: JSON.stringify({
+                    fileName: file.name,
+                    fileType: file.type
+                }),
+                headers: { "Content-Type": "application/json" }
             });
 
-            if (res.ok) {
-                const data = await res.json();
+            if (!res.ok) throw new Error("Presigned URL alınamadı");
+            const { uploadUrl, publicUrl, previewUrl } = await res.json();
+
+            // 2. Upload directly to S3
+            const uploadRes = await fetch(uploadUrl, {
+                method: "PUT",
+                body: file,
+                headers: { "Content-Type": file.type }
+            });
+
+            if (uploadRes.ok) {
                 const newFile = {
                     id: Math.random().toString(36).substr(2, 9),
-                    name: data.name,
-                    url: data.url,
-                    type: data.type
+                    name: file.name,
+                    url: publicUrl,
+                    previewUrl: previewUrl,
+                    type: type
                 };
 
                 if (type === "photo") {
@@ -50,12 +61,11 @@ export default function UploadSection() {
                 }
                 toast.success("Dosya başarıyla yüklendi.", { id: loadingToast });
             } else {
-                const errorData = await res.json().catch(() => ({ error: "Sunucu hatası oluştu." }));
-                toast.error(errorData.error || "Dosya yüklenirken bir hata oluştu.", { id: loadingToast });
+                throw new Error("S3 yükleme başarısız");
             }
         } catch (err) {
-            console.error("Fetch error:", err);
-            toast.error("Sunucuya bağlanılamadı: " + (err as Error).message, { id: loadingToast });
+            console.error("Upload error:", err);
+            toast.error("Dosya yüklenirken bir hata oluştu: " + (err as Error).message, { id: loadingToast });
         } finally {
             setIsUploading(false);
             // Reset input
@@ -149,7 +159,7 @@ export default function UploadSection() {
                                         <div key={file.id} className="relative group bg-paper p-2 rounded border border-paper-dark shadow-sm">
                                             <div className="aspect-[4/3] bg-paper-dark/50 rounded mb-2 flex flex-col justify-center items-center text-xs text-ink-light truncate overflow-hidden relative">
                                                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                <img src={file.url} alt={file.name} className="absolute inset-0 w-full h-full object-cover" />
+                                                <img src={file.previewUrl || file.url} alt={file.name} className="absolute inset-0 w-full h-full object-cover" />
                                             </div>
                                             {/* <p className="text-[10px] text-center truncate px-1 text-ink">{file.name}</p> */}
                                             <button
