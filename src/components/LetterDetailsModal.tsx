@@ -30,9 +30,10 @@ interface LetterDetailsModalProps {
     letter: any;
     isOpen: boolean;
     onClose: () => void;
+    onReply?: (recipientId: string, recipientName: string) => void;
 }
 
-export default function LetterDetailsModal({ letter, isOpen, onClose }: LetterDetailsModalProps) {
+export default function LetterDetailsModal({ letter, isOpen, onClose, onReply }: LetterDetailsModalProps) {
     if (!isOpen || !letter || typeof document === "undefined") return null;
 
     const getStatusConfig = (status: string) => {
@@ -73,14 +74,21 @@ export default function LetterDetailsModal({ letter, isOpen, onClose }: LetterDe
     const [isDownloading, setIsDownloading] = React.useState(false);
 
     const handleReply = () => {
-        resetStore();
-        updateAddress({
-            receiverName: letter.senderName || letter.data?.address?.senderName || "Mektup Arkadaşı",
-            receiverId: letter.userId,
-            isPrison: false
-        });
-        onClose();
-        router.push("/mektup-yaz/akisi");
+        const recipientId = letter.userId;
+        const recipientName = letter.senderName || letter.data?.address?.senderName || "Mektup Arkadaşı";
+
+        if (onReply) {
+            onReply(recipientId, recipientName);
+        } else {
+            resetStore();
+            updateAddress({
+                receiverName: recipientName,
+                receiverId: recipientId,
+                isPrison: false
+            });
+            onClose();
+            router.push("/mektup-yaz/akisi");
+        }
     };
 
     const handleDownloadPDF = async () => {

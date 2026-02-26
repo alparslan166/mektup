@@ -8,6 +8,7 @@ import { Underline } from "@tiptap/extension-underline";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { FontFamily } from "@tiptap/extension-font-family";
 import { Highlight } from "@tiptap/extension-highlight";
+import Placeholder from "@tiptap/extension-placeholder";
 import {
     Bold,
     Italic,
@@ -57,9 +58,13 @@ export default function Editor({ paperColor }: EditorProps) {
             Color,
             Underline,
             FontFamily,
-            Highlight.configure({ multicolor: true })
+            Highlight.configure({ multicolor: true }),
+            Placeholder.configure({
+                placeholder: "Sevgili Gelecek, ...",
+                emptyEditorClass: 'is-editor-empty',
+            }),
         ],
-        content: initialContent || `<p>Sevgili Gelecek, ...</p>`,
+        content: initialContent || "",
         immediatelyRender: false,
         onUpdate: ({ editor }) => {
             const html = editor.getHTML();

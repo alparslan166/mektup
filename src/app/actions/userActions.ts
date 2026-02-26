@@ -78,3 +78,31 @@ export async function updatePassword(data: { currentPassword: string; newPasswor
         return { error: "Şifre güncellenemedi." };
     }
 }
+
+export async function getUserProfile() {
+    try {
+        const session = await getServerSession(authOptions);
+        if (!session || !(session.user as any).id) {
+            return { error: "Oturum açmanız gerekiyor." };
+        }
+
+        const user = await prisma.user.findUnique({
+            where: { id: (session.user as any).id },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                image: true
+            }
+        });
+
+        if (!user) {
+            return { error: "Kullanıcı bulunamadı." };
+        }
+
+        return { success: true, user };
+    } catch (error) {
+        console.error("GET_USER_PROFILE_ERROR", error);
+        return { error: "Profil bilgileri alınamadı." };
+    }
+}

@@ -88,8 +88,8 @@ const initialState = {
     letter: {
         paperColor: 'Beyaz',
         envelopeColor: 'Beyaz',
-        content: '<p>Sevgili Gelecek, ...</p>',
-        wordCount: 3,
+        content: '',
+        wordCount: 0,
     },
     extras: {
         deliveryDate: 'Bugün',

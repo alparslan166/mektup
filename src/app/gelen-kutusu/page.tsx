@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Mail, Calendar, MapPin, Search, Filter, ArrowRight, Loader2, Inbox, Bell, BellOff, Plus, User as UserIcon, X } from "lucide-react";
 import { getReceivedLetters, getNotificationPreference, toggleInboxNotifications, searchUsers } from "@/app/actions/messageActions";
 import LetterDetailsModal from "@/components/LetterDetailsModal";
+import DMWritingModal from "@/components/DMWritingModal";
 import { useLetterStore } from "@/store/letterStore";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -22,6 +23,10 @@ export default function InboxPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const [isSearching, setIsSearching] = useState(false);
+
+    // DM Writing Modal States
+    const [isDMModalOpen, setIsDMModalOpen] = useState(false);
+    const [writingRecipient, setWritingRecipient] = useState<{ id: string; name: string } | null>(null);
 
     const router = useRouter();
     const updateAddress = useLetterStore(state => state.updateAddress);
@@ -74,14 +79,15 @@ export default function InboxPage() {
     };
 
     const handleSelectRecipient = (user: any) => {
-        resetStore();
-        updateAddress({
-            receiverName: user.name || "Mektup Arkadaşı",
-            receiverId: user.id,
-            isPrison: false
-        });
+        setWritingRecipient({ id: user.id, name: user.name || "Mektup Arkadaşı" });
         setIsSearchModalOpen(false);
-        router.push("/mektup-yaz/akisi");
+        setIsDMModalOpen(true);
+    };
+
+    const handleReplyFromModal = (recipientId: string, recipientName: string) => {
+        setIsModalOpen(false);
+        setWritingRecipient({ id: recipientId, name: recipientName });
+        setIsDMModalOpen(true);
     };
 
     const fetchLetters = async () => {
@@ -236,8 +242,18 @@ export default function InboxPage() {
                     letter={selectedLetter}
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
+                    onReply={handleReplyFromModal}
                 />
             )}
+
+            {/* DM Writing Modal */}
+            <DMWritingModal
+                isOpen={isDMModalOpen}
+                onClose={() => setIsDMModalOpen(false)}
+                recipientId={writingRecipient?.id || ""}
+                recipientName={writingRecipient?.name || ""}
+                onSuccess={fetchLetters}
+            />
 
             {/* Recipient Search Modal */}
             <AnimatePresence>
