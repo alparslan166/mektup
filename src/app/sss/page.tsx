@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function SSSPage() {
     const defaultFaqs = [
@@ -72,14 +73,24 @@ export default function SSSPage() {
                                 )}
                             </button>
 
-                            <div
-                                className={`px-6 pb-6 text-ink-light leading-relaxed transition-all duration-300 ease-in-out ${openIndex === index ? 'block opacity-100' : 'hidden opacity-0'
-                                    }`}
-                            >
-                                <div className="pt-2 border-t border-paper-dark">
-                                    {faq.answer}
-                                </div>
-                            </div>
+                            <AnimatePresence initial={false}>
+                                {openIndex === index && (
+                                    <motion.div
+                                        key="content"
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: "auto", opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                                        className="overflow-hidden"
+                                    >
+                                        <div className="px-6 pb-6 text-ink-light leading-relaxed">
+                                            <div className="pt-2 border-t border-paper-dark">
+                                                {faq.answer}
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
                     ))}
                 </div>
