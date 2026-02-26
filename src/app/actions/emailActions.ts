@@ -27,7 +27,7 @@ export async function sendEmail({
 
     try {
         const { data, error } = await resend.emails.send({
-            from: "Mektup <onboarding@resend.dev>", // Replace with your verified domain
+            from: "Mektuplas <onboarding@resend.dev>", // Replace with your verified domain
             to: [to],
             subject: subject,
             text: text,
@@ -49,7 +49,7 @@ export async function sendEmail({
 export async function sendOrderReceivedEmail(email: string, orderId: string) {
     return await sendEmail({
         to: email,
-        subject: "Mektubunuz Alındı! - Mektup.com",
+        subject: "Mektubunuz Alındı! - Mektuplas.com",
         text: `Mektubunuz başarıyla sistemimize ulaştı. Sipariş No: ${orderId}. Mektubunuzu hazırlamaya başladık.`,
         html: `
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
@@ -59,7 +59,7 @@ export async function sendOrderReceivedEmail(email: string, orderId: string) {
                     <p style="margin: 0;"><strong>Sipariş No:</strong> <span style="color: #c48a5c;">#${orderId.toUpperCase()}</span></p>
                 </div>
                 <p>Mektubunuzu en kısa sürede özenle hazırlamaya başlayacağız. Süreci "Gönderilenler" sekmesinden takip edebilirsiniz.</p>
-                <a href="https://mektup.com/gonderilenler" style="display: inline-block; background: #c48a5c; color: white; padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 10px;">Mektubumu Takip Et</a>
+                <a href="https://mektuplas.com/gonderilenler" style="display: inline-block; background: #c48a5c; color: white; padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 10px;">Mektubumu Takip Et</a>
             </div>
         `
     });
@@ -68,7 +68,7 @@ export async function sendOrderReceivedEmail(email: string, orderId: string) {
 export async function sendPreparingEmail(email: string, orderId: string) {
     return await sendEmail({
         to: email,
-        subject: "Mektubunuz Hazırlanıyor! - Mektup.com",
+        subject: "Mektubunuz Hazırlanıyor! - Mektuplas.com",
         text: `Mektubunuz özenle hazırlanmaya başlandı. Sipariş No: ${orderId}.`,
         html: `
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
@@ -90,7 +90,7 @@ export async function sendTrackingCodeEmail(email: string, orderId: string, trac
 
     return await sendEmail({
         to: email,
-        subject: "Mektubunuz Kargoya Verildi! - Mektup.com",
+        subject: "Mektubunuz Kargoya Verildi! - Mektuplas.com",
         text: `Siparişiniz kargoya verildi. Sipariş No: ${orderId}, Takip Kodu: ${trackingCode}. PTT Kargo üzerinden takip edebilirsiniz.`,
         html: `
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
@@ -103,6 +103,25 @@ export async function sendTrackingCodeEmail(email: string, orderId: string, trac
                 <p>PTT Kargo üzerinden gönderinizi anlık olarak takip edebilirsiniz:</p>
                 <a href="${trackingUrl}" style="display: inline-block; background: #8b5cf6; color: white; padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 10px;">Kargomu Takip Et</a>
                 <p style="font-size: 12px; color: #666; margin-top: 20px;">Not: Takip kodunun kargo sisteminde aktifleşmesi birkaç saat sürebilir.</p>
+            </div>
+        `
+    });
+} export async function sendCompletedEmail(email: string, orderId: string) {
+    return await sendEmail({
+        to: email,
+        subject: "Mektubunuz Teslim Edildi! - Mektuplas.com",
+        text: `Harika haber! Siparişinizdeki mektup alıcısına başarıyla teslim edildi. Sipariş No: ${orderId}.`,
+        html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+                <h1 style="color: #4a3728;">Mektubunuz Teslim Edildi! 📮</h1>
+                <p>Beklenen an geldi! Mektubunuz alıcısına başarıyla ulaştı ve teslim edildi.</p>
+                <div style="background: #fdfaf6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                    <p style="margin: 0;"><strong>Sipariş No:</strong> #${orderId.toUpperCase()}</p>
+                    <p style="margin: 5px 0 0 0;"><strong>Durum:</strong> <span style="color: #10b981;">Teslim Edildi</span></p>
+                </div>
+                <p>Nostaljik bir dokunuşla duygularınızı iletmemize aracı olduğunuz için teşekkür ederiz.</p>
+                <p>Yeni bir mektup yazmak isterseniz sizi her zaman bekleriz.</p>
+                <a href="https://mektuplas.com/mektup-yaz" style="display: inline-block; background: #10b981; color: white; padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 10px;">Yeni Mektup Yaz</a>
             </div>
         `
     });

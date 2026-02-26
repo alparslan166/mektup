@@ -6,11 +6,13 @@ import { Bird, Hourglass, Plane, Heart, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useLetterStore } from "@/store/letterStore";
 
 
 export default function CategorySelection() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const updateAddress = useLetterStore(state => state.updateAddress);
 
   const categories = [
@@ -62,6 +64,10 @@ export default function CategorySelection() {
   ];
 
   const handleCategorySelect = (id: string, href: string) => {
+    if (status === "unauthenticated") {
+      router.push("/auth/login?callbackUrl=/mektup-yaz");
+      return;
+    }
     updateAddress({ isPrison: id === "cezaevi" });
     router.push(href);
   };

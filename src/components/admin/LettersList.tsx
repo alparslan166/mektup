@@ -505,7 +505,11 @@ Tarih: ${new Date(letter.createdAt).toLocaleDateString('tr-TR')}
                                         <div className="space-y-4">
                                             {selectedLetter.status === "PAID" && (
                                                 <button
-                                                    onClick={() => handleUpdateStatus(selectedLetter.id, "PREPARING")}
+                                                    onClick={() => {
+                                                        if (window.confirm("Bu mektubu hazırlamaya başlamak istediğinize emin misiniz? (Kullanıcıya bildirim e-postası gönderilecektir)")) {
+                                                            handleUpdateStatus(selectedLetter.id, "PREPARING");
+                                                        }
+                                                    }}
                                                     disabled={isUpdating}
                                                     className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-all disabled:opacity-50"
                                                 >

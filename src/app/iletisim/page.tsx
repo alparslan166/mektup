@@ -38,7 +38,7 @@ export default function IletisimPage() {
                             <div>
                                 <h3 className="font-bold text-ink mb-1">E-Posta</h3>
                                 <p className="text-ink-light text-sm mb-2">Her türlü sorunuz için bize yazabilirsiniz.</p>
-                                <a href="mailto:info@gelecegemektup.com.tr" className="text-seal font-medium hover:underline">info@gelecegemektup.com.tr</a>
+                                <a href="mailto:[EMAIL_ADDRESS]" className="text-seal font-medium hover:underline">[EMAIL_ADDRESS]</a>
                             </div>
                         </div>
 

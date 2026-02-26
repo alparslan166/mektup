@@ -34,7 +34,7 @@ export default function MesafeliSatisPage() {
                     <p>
                         <strong>1.1. SATICI:</strong> Unvanı: Geleceğe Mektup Hizmetleri A.Ş.<br />
                         Adres: Nostalji Mah. Kalem Sk. No: 1 Kadıköy / İstanbul<br />
-                        E-posta: info@gelecegemektup.com.tr
+                        E-posta: info@mektuplas.com.tr
                     </p>
                     <p>
                         <strong>1.2. ALICI:</strong> Tüketici kimliğiyle siteyi kullanan veya hizmeti satın alan tüzel/gerçek kişi. Alıcının iletişim ve fatura bilgileri, sipariş sistemine girilen veriler esas alınarak dikkate alınır.

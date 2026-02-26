@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
-import { sendTrackingCodeEmail, sendPreparingEmail } from "./emailActions";
+import { sendTrackingCodeEmail, sendPreparingEmail, sendCompletedEmail } from "./emailActions";
 
 export async function getAllLetters() {
     try {
@@ -43,6 +43,8 @@ export async function updateLetterStatus(letterId: string, status: string) {
         // Trigger emails based on status
         if (status === "PREPARING" && letter.user?.email) {
             await sendPreparingEmail(letter.user.email, letter.id);
+        } else if (status === "COMPLETED" && letter.user?.email) {
+            await sendCompletedEmail(letter.user.email, letter.id);
         }
 
         revalidatePath("/admin/mektuplar");
