@@ -2,7 +2,7 @@
 
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 /**
  * Sends emails using Resend.
@@ -20,7 +20,7 @@ export async function sendEmail({
     html?: string;
 }) {
     // Falls back to logging if API key is missing
-    if (!process.env.RESEND_API_KEY) {
+    if (!resend) {
         console.log(`[EMAIL_DRY_RUN] To: ${to} | Subject: ${subject}`);
         return { success: true, dryRun: true };
     }
