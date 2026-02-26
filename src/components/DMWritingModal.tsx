@@ -39,7 +39,7 @@ export default function DMWritingModal({ isOpen, onClose, recipientId, recipient
                 receiverName: recipientName,
                 isPrison: false,
                 receiverCity: "Dijital",
-                receiverAddress: "Sistem Tarafından İletilecek"
+                receiverAddress: ""
             });
             fetchUserInfo();
         }

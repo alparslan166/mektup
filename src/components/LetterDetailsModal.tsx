@@ -101,11 +101,31 @@ export default function LetterDetailsModal({ letter, isOpen, onClose, onReply }:
         }
 
         try {
+            // Tailwind v4 uses oklab() for box-shadows which html2canvas doesn't support yet.
+            // Temporarily disable box-shadow inline to bypass this.
+            const originalBoxShadow = element.style.boxShadow;
+            element.style.boxShadow = "none";
+
+            // Also need to find all children with shadow and disable them
+            const shadowElements = element.querySelectorAll('[class*="shadow"]');
+            const originalShadows: string[] = [];
+
+            shadowElements.forEach((el: any) => {
+                originalShadows.push(el.style.boxShadow);
+                el.style.boxShadow = 'none';
+            });
+
             const canvas = await html2canvas(element, {
                 scale: 2,
                 useCORS: true,
                 logging: false,
-                backgroundColor: "#ffffff"
+                backgroundColor: "#ffffff",
+            });
+
+            // Restore original styles
+            element.style.boxShadow = originalBoxShadow;
+            shadowElements.forEach((el: any, index) => {
+                el.style.boxShadow = originalShadows[index];
             });
 
             const imgData = canvas.toDataURL("image/png");

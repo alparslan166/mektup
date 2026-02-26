@@ -135,7 +135,7 @@ export async function sendInboxNotificationEmail(email: string, senderName: stri
         html: `
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
                 <h1 style="color: #4a3728; font-family: serif;">Yeni Bir Mektubunuz Var! 📮</h1>
-                <p>Heyecan verici bir haber! <strong>\${senderName}</strong> size mektuplas.com üzerinden yeni bir dijital mektup gönderdi.</p>
+                <p>Heyecan verici bir haber! <strong>${senderName}</strong> size mektuplas.com üzerinden yeni bir dijital mektup gönderdi.</p>
                 <div style="background: #fdfaf6; padding: 20px; border-radius: 12px; margin: 25px 0; text-align: center; border: 1px dashed #c48a5c;">
                     <p style="margin: 0; font-size: 16px; color: #4a3728;">Duyguların kağıda dökülmüş hali dijital kapınızda bekliyor.</p>
                 </div>
