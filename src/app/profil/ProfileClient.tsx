@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { User, Settings, Package, Heart, MapPin, Save, Key, Loader2, Edit2, ShieldCheck } from "lucide-react";
+import { User, Settings, Package, Heart, MapPin, Save, Key, Loader2, Edit2, ShieldCheck, LogOut } from "lucide-react";
 import { updateProfile, updatePassword } from "@/app/actions/userActions";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { signOut } from "next-auth/react";
 
 interface ProfileClientProps {
     session: any;
@@ -94,12 +95,19 @@ export default function ProfileClient({ session, stats }: ProfileClientProps) {
                         <button
                             onClick={() => setActiveTab(activeTab === "overview" ? "settings" : "overview")}
                             className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold transition-all duration-300 shadow-sm ${activeTab === "settings"
-                                    ? "bg-seal text-white"
-                                    : "bg-paper-dark text-wood hover:bg-paper border border-wood/10"
+                                ? "bg-seal text-white"
+                                : "bg-paper-dark text-wood hover:bg-paper border border-wood/10"
                                 }`}
                         >
                             <Settings size={18} className={activeTab === "settings" ? "animate-spin-slow" : ""} />
-                            <span>{activeTab === "settings" ? "Profilim" : "Ayarlar"}</span>
+                            <span className="hidden sm:inline">{activeTab === "settings" ? "Profilim" : "Ayarlar"}</span>
+                        </button>
+                        <button
+                            onClick={() => signOut({ callbackUrl: "/auth/login" })}
+                            className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold bg-ink/5 text-ink hover:bg-seal hover:text-white transition-all duration-300 shadow-sm border border-transparent hover:border-seal"
+                        >
+                            <LogOut size={18} />
+                            <span className="hidden sm:inline">Çıkış Yap</span>
                         </button>
                     </div>
                 </div>
