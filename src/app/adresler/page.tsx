@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, MapPin, Phone, User, Trash2, Edit2, Loader2, Home, Briefcase, Map, ArrowLeft, BookOpen } from "lucide-react";
+import { Plus, MapPin, Phone, User, Trash2, Edit2, Loader2, Home, Briefcase, Map, ArrowLeft, BookOpen, Package } from "lucide-react";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
+
+import citiesData from "../../../sehirler.json";
 
 interface Address {
     id: string;
@@ -13,6 +15,11 @@ interface Address {
     city: string;
     addressText: string;
     phone: string | null;
+    isPrison: boolean;
+    prisonName: string | null;
+    fatherName: string | null;
+    wardNumber: string | null;
+    prisonNote: string | null;
 }
 
 export default function AdreslerPage() {
@@ -28,8 +35,42 @@ export default function AdreslerPage() {
         name: "",
         city: "",
         addressText: "",
-        phone: ""
+        phone: "",
+        isPrison: false,
+        prisonName: "",
+        fatherName: "",
+        wardNumber: "",
+        prisonNote: ""
     });
+
+    // Prison selection states
+    const [availableCities] = useState<string[]>(Object.values(citiesData).sort((a: any, b: any) => a.localeCompare(b, 'tr-TR')) as string[]);
+    const [selectedCity, setSelectedCity] = useState("");
+    const [filteredPrisons, setFilteredPrisons] = useState<any[]>([]);
+    const [isLoadingPrisons, setIsLoadingPrisons] = useState(false);
+
+    // Prison data fetching
+    useEffect(() => {
+        if (formData.isPrison && selectedCity) {
+            const fetchPrisons = async () => {
+                setIsLoadingPrisons(true);
+                try {
+                    const res = await fetch(`/api/prisons?city=${encodeURIComponent(selectedCity)}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        setFilteredPrisons(data);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch filtered prisons:", error);
+                } finally {
+                    setIsLoadingPrisons(false);
+                }
+            };
+            fetchPrisons();
+        } else {
+            setFilteredPrisons([]);
+        }
+    }, [selectedCity, formData.isPrison]);
 
     useEffect(() => {
         fetchAddresses();
@@ -67,7 +108,11 @@ export default function AdreslerPage() {
 
             if (res.ok) {
                 toast.success(editingId ? "Adres güncellendi." : "Adres başarıyla eklendi.", { id: loadingToast });
-                setFormData({ title: "", name: "", city: "", addressText: "", phone: "" });
+                setFormData({
+                    title: "", name: "", city: "", addressText: "", phone: "",
+                    isPrison: false, prisonName: "", fatherName: "", wardNumber: "", prisonNote: ""
+                });
+                setSelectedCity("");
                 setShowForm(false);
                 setEditingId(null);
                 fetchAddresses();
@@ -106,8 +151,14 @@ export default function AdreslerPage() {
             name: address.name,
             city: address.city,
             addressText: address.addressText,
-            phone: address.phone || ""
+            phone: address.phone || "",
+            isPrison: address.isPrison || false,
+            prisonName: address.prisonName || "",
+            fatherName: address.fatherName || "",
+            wardNumber: address.wardNumber || "",
+            prisonNote: address.prisonNote || ""
         });
+        setSelectedCity(address.city);
         setEditingId(address.id);
         setShowForm(true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -153,10 +204,23 @@ export default function AdreslerPage() {
                         className="bg-paper p-8 rounded-2xl shadow-xl border border-wood/10 mb-12 relative overflow-hidden"
                     >
                         <div className="absolute top-0 left-0 w-2 h-full bg-seal"></div>
-                        <h2 className="font-playfair text-2xl font-bold text-wood-dark mb-6 flex items-center gap-2">
-                            {editingId ? <Edit2 size={24} className="text-seal" /> : <Plus size={24} className="text-seal" />}
-                            {editingId ? "Adresi Düzenle" : "Yeni Alıcı Adresi"}
-                        </h2>
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="font-playfair text-2xl font-bold text-wood-dark flex items-center gap-2">
+                                {editingId ? <Edit2 size={24} className="text-seal" /> : <Plus size={24} className="text-seal" />}
+                                {editingId ? "Adresi Düzenle" : "Yeni Alıcı Adresi"}
+                            </h2>
+                            <button
+                                type="button"
+                                onClick={() => setFormData({ ...formData, isPrison: !formData.isPrison })}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black transition-all border ${formData.isPrison
+                                    ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-500/20"
+                                    : "bg-white text-slate-400 border-slate-200 hover:border-blue-400 hover:text-blue-500"
+                                    }`}
+                            >
+                                <Package size={14} />
+                                CEZAEVİ {formData.isPrison ? "AÇIK" : "KAPALI"}
+                            </button>
+                        </div>
 
                         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-1">
@@ -179,36 +243,119 @@ export default function AdreslerPage() {
                                     placeholder="Ahmet Yılmaz"
                                 />
                             </div>
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-ink-light uppercase ml-1">Şehir</label>
-                                <input
-                                    required
-                                    value={formData.city}
-                                    onChange={e => setFormData({ ...formData, city: e.target.value })}
-                                    className="w-full bg-paper-dark/30 border border-wood/20 rounded-xl px-4 py-3 focus:ring-2 focus:ring-seal/30 focus:border-seal outline-none transition-all"
-                                    placeholder="İstanbul"
-                                />
-                            </div>
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-ink-light uppercase ml-1">Telefon (Opsiyonel)</label>
-                                <input
-                                    value={formData.phone}
-                                    onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                                    className="w-full bg-paper-dark/30 border border-wood/20 rounded-xl px-4 py-3 focus:ring-2 focus:ring-seal/30 focus:border-seal outline-none transition-all"
-                                    placeholder="05..."
-                                />
-                            </div>
-                            <div className="space-y-1 md:col-span-2">
-                                <label className="text-xs font-bold text-ink-light uppercase ml-1">Detaylı Adres</label>
-                                <textarea
-                                    required
-                                    rows={3}
-                                    value={formData.addressText}
-                                    onChange={e => setFormData({ ...formData, addressText: e.target.value })}
-                                    className="w-full bg-paper-dark/30 border border-wood/20 rounded-xl px-4 py-3 focus:ring-2 focus:ring-seal/30 focus:border-seal outline-none transition-all"
-                                    placeholder="Mahalle, Sokak, No, Daire..."
-                                />
-                            </div>
+                            <AnimatePresence mode="wait">
+                                {formData.isPrison ? (
+                                    <motion.div
+                                        key="prison-fields"
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: "auto" }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6"
+                                    >
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-ink-light uppercase ml-1">Şehir Seçin</label>
+                                            <select
+                                                value={selectedCity}
+                                                onChange={(e) => {
+                                                    setSelectedCity(e.target.value);
+                                                    setFormData({ ...formData, city: e.target.value, prisonName: "", addressText: "" });
+                                                }}
+                                                className="w-full bg-paper-dark/30 border border-wood/20 rounded-xl px-4 py-3 focus:ring-2 focus:ring-seal/30 focus:border-seal outline-none transition-all"
+                                            >
+                                                <option value="">Şehir Seçiniz...</option>
+                                                {availableCities.map(city => (
+                                                    <option key={city} value={city}>{city}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-ink-light uppercase ml-1">Cezaevi Seçin</label>
+                                            <select
+                                                disabled={!selectedCity || isLoadingPrisons}
+                                                value={formData.prisonName}
+                                                onChange={(e) => {
+                                                    const prison = filteredPrisons.find(p => p.name === e.target.value);
+                                                    setFormData({ ...formData, prisonName: e.target.value, addressText: prison?.address || "" });
+                                                }}
+                                                className="w-full bg-paper-dark/30 border border-wood/20 rounded-xl px-4 py-3 focus:ring-2 focus:ring-seal/30 focus:border-seal outline-none transition-all disabled:opacity-50"
+                                            >
+                                                <option value="">{selectedCity ? "Cezaevi Seçiniz..." : "Önce Şehir Seçiniz"}</option>
+                                                {filteredPrisons.map(p => (
+                                                    <option key={p.id} value={p.name}>{p.name}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-ink-light uppercase ml-1">Baba Adı (Opsiyonel)</label>
+                                            <input
+                                                value={formData.fatherName}
+                                                onChange={e => setFormData({ ...formData, fatherName: e.target.value })}
+                                                className="w-full bg-paper-dark/30 border border-wood/20 rounded-xl px-4 py-3 focus:ring-2 focus:ring-seal/30 focus:border-seal outline-none transition-all"
+                                                placeholder="Mehmet"
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-ink-light uppercase ml-1">Koğuş No</label>
+                                            <input
+                                                required={formData.isPrison}
+                                                value={formData.wardNumber}
+                                                onChange={e => setFormData({ ...formData, wardNumber: e.target.value })}
+                                                className="w-full bg-paper-dark/30 border border-wood/20 rounded-xl px-4 py-3 focus:ring-2 focus:ring-seal/30 focus:border-seal outline-none transition-all"
+                                                placeholder="B-12"
+                                            />
+                                        </div>
+                                        <div className="space-y-1 md:col-span-2">
+                                            <label className="text-xs font-bold text-ink-light uppercase ml-1">Alıcıya Not (Opsiyonel)</label>
+                                            <textarea
+                                                rows={2}
+                                                value={formData.prisonNote}
+                                                onChange={e => setFormData({ ...formData, prisonNote: e.target.value })}
+                                                className="w-full bg-paper-dark/30 border border-wood/20 rounded-xl px-4 py-3 focus:ring-2 focus:ring-seal/30 focus:border-seal outline-none transition-all"
+                                                placeholder="Mektubun üzerine eklenecek not..."
+                                            />
+                                        </div>
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        key="standard-fields"
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: "auto" }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6"
+                                    >
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-ink-light uppercase ml-1">Şehir</label>
+                                            <input
+                                                required={!formData.isPrison}
+                                                value={formData.city}
+                                                onChange={e => setFormData({ ...formData, city: e.target.value })}
+                                                className="w-full bg-paper-dark/30 border border-wood/20 rounded-xl px-4 py-3 focus:ring-2 focus:ring-seal/30 focus:border-seal outline-none transition-all"
+                                                placeholder="İstanbul"
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-ink-light uppercase ml-1">Telefon (Opsiyonel)</label>
+                                            <input
+                                                value={formData.phone}
+                                                onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                                                className="w-full bg-paper-dark/30 border border-wood/20 rounded-xl px-4 py-3 focus:ring-2 focus:ring-seal/30 focus:border-seal outline-none transition-all"
+                                                placeholder="05..."
+                                            />
+                                        </div>
+                                        <div className="space-y-1 md:col-span-2">
+                                            <label className="text-xs font-bold text-ink-light uppercase ml-1">Detaylı Adres</label>
+                                            <textarea
+                                                required={!formData.isPrison}
+                                                rows={3}
+                                                value={formData.addressText}
+                                                onChange={e => setFormData({ ...formData, addressText: e.target.value })}
+                                                className="w-full bg-paper-dark/30 border border-wood/20 rounded-xl px-4 py-3 focus:ring-2 focus:ring-seal/30 focus:border-seal outline-none transition-all"
+                                                placeholder="Mahalle, Sokak, No, Daire..."
+                                            />
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
 
                             <div className="md:col-span-2 flex justify-end gap-3 pt-2">
                                 <button
@@ -216,7 +363,11 @@ export default function AdreslerPage() {
                                     onClick={() => {
                                         setShowForm(false);
                                         setEditingId(null);
-                                        setFormData({ title: "", name: "", city: "", addressText: "", phone: "" });
+                                        setFormData({
+                                            title: "", name: "", city: "", addressText: "", phone: "",
+                                            isPrison: false, prisonName: "", fatherName: "", wardNumber: "", prisonNote: ""
+                                        });
+                                        setSelectedCity("");
                                     }}
                                     className="px-6 py-3 rounded-xl font-bold text-ink hover:bg-paper-dark transition-all"
                                 >
@@ -299,7 +450,20 @@ export default function AdreslerPage() {
                                 </div>
                                 <div className="flex items-start gap-2 text-ink-light text-sm leading-relaxed">
                                     <MapPin size={14} className="text-wood-dark/50 mt-1 flex-shrink-0" />
-                                    <p>{addr.addressText} <br /> <span className="font-bold text-ink uppercase">{addr.city}</span></p>
+                                    <div>
+                                        {addr.isPrison && (
+                                            <p className="font-bold text-blue-600 text-xs mb-1 flex items-center gap-1">
+                                                <Package size={12} /> {addr.prisonName}
+                                            </p>
+                                        )}
+                                        <p className={`${addr.isPrison ? 'text-xs' : ''}`}>{addr.addressText} <br /> <span className="font-bold text-ink uppercase">{addr.city}</span></p>
+                                        {addr.isPrison && (
+                                            <div className="mt-1 flex gap-2 text-[10px] font-black uppercase text-blue-800/60">
+                                                {addr.wardNumber && <span>Koğuş: {addr.wardNumber}</span>}
+                                                {addr.fatherName && <span>Baba: {addr.fatherName}</span>}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                                 {addr.phone && (
                                     <div className="flex items-center gap-2 text-ink-light text-sm">

@@ -18,7 +18,17 @@ export async function PUT(
         }
 
         const body = await req.json();
-        const { title, name, city, addressText, phone } = body;
+        const { title, name, city, addressText, phone, isPrison, prisonName, fatherName, wardNumber, prisonNote } = body;
+
+        // Validation: For standard addresses, title, name, city, and addressText are required.
+        // For prison addresses, title, name, city, prisonName, and wardNumber are required.
+        const isValid = isPrison
+            ? (title && name && city && prisonName && wardNumber)
+            : (title && name && city && addressText);
+
+        if (!isValid) {
+            return NextResponse.json({ error: "Lütfen tüm zorunlu alanları doldurun." }, { status: 400 });
+        }
 
         // Check if the address belongs to the user
         const existingAddress = await (prisma as any).address.findUnique({
@@ -37,6 +47,11 @@ export async function PUT(
                 city,
                 addressText,
                 phone,
+                isPrison: !!isPrison,
+                prisonName,
+                fatherName,
+                wardNumber,
+                prisonNote,
             },
         });
 

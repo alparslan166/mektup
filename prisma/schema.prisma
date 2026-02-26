@@ -58,6 +58,14 @@ model Address {
   city        String   // Şehir
   addressText String   // Detaylı Adres
   phone       String?  // Telefon (opsiyonel)
+  
+  // Prison specific fields
+  isPrison    Boolean  @default(false)
+  prisonName  String?
+  fatherName  String?
+  wardNumber  String?
+  prisonNote  String?
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

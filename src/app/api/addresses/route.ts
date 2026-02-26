@@ -36,9 +36,15 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { title, name, city, addressText, phone } = body;
+        const { title, name, city, addressText, phone, isPrison, prisonName, fatherName, wardNumber, prisonNote } = body;
 
-        if (!title || !name || !city || !addressText) {
+        // Validation: For standard addresses, title, name, city, and addressText are required.
+        // For prison addresses, title, name, city, prisonName, and wardNumber are required.
+        const isValid = isPrison
+            ? (title && name && city && prisonName && wardNumber)
+            : (title && name && city && addressText);
+
+        if (!isValid) {
             return NextResponse.json({ error: "Lütfen tüm zorunlu alanları doldurun." }, { status: 400 });
         }
 
@@ -50,6 +56,11 @@ export async function POST(req: Request) {
                 city,
                 addressText,
                 phone,
+                isPrison: !!isPrison,
+                prisonName,
+                fatherName,
+                wardNumber,
+                prisonNote,
             },
         });
 

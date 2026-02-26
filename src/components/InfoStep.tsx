@@ -15,6 +15,11 @@ interface Address {
     city: string;
     addressText: string;
     phone: string | null;
+    isPrison: boolean;
+    prisonName: string | null;
+    fatherName: string | null;
+    wardNumber: string | null;
+    prisonNote: string | null;
 }
 
 
@@ -89,13 +94,17 @@ export default function InfoStep() {
                 senderAddress: addr.addressText,
             });
         } else if (modalType === "receiver") {
-            const isPrisonAddr = !!addr.title.toLowerCase().includes("cezaevi");
+            const isPrisonAddr = !!addr.isPrison || !!addr.title.toLowerCase().includes("cezaevi");
             updateAddress({
                 receiverName: addr.name,
                 receiverCity: addr.city,
                 receiverAddress: addr.addressText,
                 receiverPhone: addr.phone || "",
-                isPrison: isPrisonAddr
+                isPrison: isPrisonAddr,
+                prisonName: addr.prisonName || "",
+                fatherName: addr.fatherName || "",
+                wardNumber: addr.wardNumber || "",
+                prisonNote: addr.prisonNote || ""
             });
             if (isPrisonAddr) setSelectedCity(addr.city);
         }
@@ -126,7 +135,12 @@ export default function InfoStep() {
                 name: address.receiverName,
                 city: address.receiverCity,
                 addressText: address.receiverAddress,
-                phone: address.receiverPhone
+                phone: address.receiverPhone,
+                isPrison: address.isPrison,
+                prisonName: address.prisonName,
+                fatherName: address.fatherName,
+                wardNumber: address.wardNumber,
+                prisonNote: address.prisonNote
             };
 
             const res = await fetch("/api/addresses", {
@@ -269,15 +283,15 @@ export default function InfoStep() {
                         </h3>
 
                         <div className="flex items-center gap-2 mt-1">
-                            {!useLetterStore.getState().address.isPrison && (
-                                <button
-                                    onClick={() => openModal("receiver")}
-                                    className="flex items-center gap-1.5 text-xs font-semibold text-seal bg-seal/5 hover:bg-seal/10 border border-seal/20 px-4 py-1.5 rounded-full transition-colors shadow-sm"
-                                >
-                                    <BookOpen size={14} />
-                                    <span>Adres Defteri</span>
-                                </button>
-                            )}
+
+                            <button
+                                onClick={() => openModal("receiver")}
+                                className="flex items-center gap-1.5 text-xs font-semibold text-seal bg-seal/5 hover:bg-seal/10 border border-seal/20 px-4 py-1.5 rounded-full transition-colors shadow-sm"
+                            >
+                                <BookOpen size={14} />
+                                <span>Adres Defteri</span>
+                            </button>
+
                         </div>
                     </div>
 
@@ -525,28 +539,36 @@ export default function InfoStep() {
                                     </div>
                                 ) : (
                                     <div className="space-y-3">
-                                        {addresses.map(addr => (
-                                            <button
-                                                key={addr.id}
-                                                onClick={() => handleSelectAddress(addr)}
-                                                className="w-full text-left p-4 rounded-xl border border-paper-dark hover:border-seal hover:shadow-md transition-all group bg-white shadow-sm"
-                                            >
-                                                <div className="flex items-center gap-3 mb-2">
-                                                    <div className="bg-paper-light text-wood p-2.5 rounded-xl border border-paper-dark group-hover:bg-seal/10 group-hover:text-seal group-hover:border-seal/30 transition-colors">
-                                                        {getIcon(addr.title)}
+                                        {addresses
+                                            .filter(addr => {
+                                                if (modalType === "sender") return !addr.isPrison;
+                                                if (modalType === "receiver") {
+                                                    return address.isPrison ? !!addr.isPrison : !addr.isPrison;
+                                                }
+                                                return true;
+                                            })
+                                            .map(addr => (
+                                                <button
+                                                    key={addr.id}
+                                                    onClick={() => handleSelectAddress(addr)}
+                                                    className="w-full text-left p-4 rounded-xl border border-paper-dark hover:border-seal hover:shadow-md transition-all group bg-white shadow-sm"
+                                                >
+                                                    <div className="flex items-center gap-3 mb-2">
+                                                        <div className="bg-paper-light text-wood p-2.5 rounded-xl border border-paper-dark group-hover:bg-seal/10 group-hover:text-seal group-hover:border-seal/30 transition-colors">
+                                                            {getIcon(addr.title)}
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <h4 className="font-bold text-wood-dark text-sm sm:text-base capitalize">{addr.title}</h4>
+                                                            <p className="text-xs text-ink-light font-medium">{addr.name}</p>
+                                                        </div>
                                                     </div>
-                                                    <div className="flex-1">
-                                                        <h4 className="font-bold text-wood-dark text-sm sm:text-base capitalize">{addr.title}</h4>
-                                                        <p className="text-xs text-ink-light font-medium">{addr.name}</p>
+                                                    <p className="text-xs text-ink-light/90 line-clamp-2 mt-2 font-medium leading-relaxed bg-paper-light p-2 rounded-lg border border-paper-dark/50">{addr.addressText}</p>
+                                                    <div className="flex justify-between items-center mt-2 px-1">
+                                                        <p className="text-[10px] text-ink-light/70 font-semibold uppercase tracking-wider">{addr.city}</p>
+                                                        {addr.phone && <p className="text-[10px] text-ink-light/70 font-semibold tracking-wider flex items-center gap-1"><Phone size={10} /> {addr.phone}</p>}
                                                     </div>
-                                                </div>
-                                                <p className="text-xs text-ink-light/90 line-clamp-2 mt-2 font-medium leading-relaxed bg-paper-light p-2 rounded-lg border border-paper-dark/50">{addr.addressText}</p>
-                                                <div className="flex justify-between items-center mt-2 px-1">
-                                                    <p className="text-[10px] text-ink-light/70 font-semibold uppercase tracking-wider">{addr.city}</p>
-                                                    {addr.phone && <p className="text-[10px] text-ink-light/70 font-semibold tracking-wider flex items-center gap-1"><Phone size={10} /> {addr.phone}</p>}
-                                                </div>
-                                            </button>
-                                        ))}
+                                                </button>
+                                            ))}
                                     </div>
                                 )}
                             </div>
