@@ -119,12 +119,20 @@ export default function LandingPage() {
             delay={0.4}
           />
           <DashboardCard
+            title="Gelen Kutusu"
+            description="Size gönderilen mektupları ve dijital mesajları buradan takip edin."
+            href="/gelen-kutusu"
+            icon={Inbox}
+            color="paper"
+            delay={0.5}
+          />
+          <DashboardCard
             title="Adres Defteri"
             description="Sevdiklerinizin adreslerini kaydedin, bir sonraki mektupta zaman kazanın."
             href="/adresler"
             icon={BookOpen}
             color="wood"
-            delay={0.5}
+            delay={0.6}
           />
           <DashboardCard
             title="Cüzdan & Kutu"
@@ -132,14 +140,6 @@ export default function LandingPage() {
             href="/cuzdan"
             icon={Wallet}
             color="gold"
-            delay={0.6}
-          />
-          <DashboardCard
-            title="Gelen Kutusu"
-            description="Size gönderilen mektupları ve dijital mesajları buradan takip edin."
-            href="/gelen-kutusu"
-            icon={Inbox}
-            color="paper"
             delay={0.7}
           />
         </div>

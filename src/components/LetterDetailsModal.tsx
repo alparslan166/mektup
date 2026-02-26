@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
+import { useLetterStore } from "@/store/letterStore";
 import { createPortal } from "react-dom";
 import {
     X,
@@ -16,8 +18,13 @@ import {
     Image as ImageIcon,
     FileText,
     Flower2,
-    CalendarDays
+    CalendarDays,
+    Download,
+    Loader2
 } from "lucide-react";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import toast from "react-hot-toast";
 
 interface LetterDetailsModalProps {
     letter: any;
@@ -59,6 +66,61 @@ export default function LetterDetailsModal({ letter, isOpen, onClose }: LetterDe
     };
 
     const status = getStatusConfig(letter.status);
+    const router = useRouter();
+    const updateAddress = useLetterStore(state => state.updateAddress);
+    const resetStore = useLetterStore(state => state.resetStore);
+
+    const [isDownloading, setIsDownloading] = React.useState(false);
+
+    const handleReply = () => {
+        resetStore();
+        updateAddress({
+            receiverName: letter.senderName || letter.data?.address?.senderName || "Mektup Arkadaşı",
+            receiverId: letter.userId,
+            isPrison: false
+        });
+        onClose();
+        router.push("/mektup-yaz/akisi");
+    };
+
+    const handleDownloadPDF = async () => {
+        setIsDownloading(true);
+        const element = document.getElementById("letter-content-for-pdf");
+        if (!element) {
+            toast.error("İçerik bulunamadı.");
+            setIsDownloading(false);
+            return;
+        }
+
+        try {
+            const canvas = await html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                backgroundColor: "#ffffff"
+            });
+
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4"
+            });
+
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+            pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`mektup-${letter.id.slice(-8).toUpperCase()}.pdf`);
+            toast.success("PDF başarıyla indirildi.");
+        } catch (error) {
+            console.error("PDF generation error:", error);
+            toast.error("PDF oluşturulurken bir hata oluştu.");
+        } finally {
+            setIsDownloading(false);
+        }
+    };
 
     return createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -300,7 +362,10 @@ export default function LetterDetailsModal({ letter, isOpen, onClose }: LetterDe
                         <h3 className="text-[10px] font-black text-ink-light uppercase tracking-widest flex items-center gap-2">
                             <FileText size={14} className="text-seal" /> Mektup Metni Önizleme
                         </h3>
-                        <div className="bg-white/80 backdrop-blur-sm p-10 rounded-[2.5rem] border border-paper-dark shadow-inner min-h-[300px] relative">
+                        <div
+                            id="letter-content-for-pdf"
+                            className="bg-white/80 backdrop-blur-sm p-10 rounded-[2.5rem] border border-paper-dark shadow-inner min-h-[300px] relative"
+                        >
                             {/* Decorative seal/paper effect */}
                             <div className="absolute top-0 right-0 p-8 opacity-5">
                                 <Mail size={120} />
@@ -315,10 +380,25 @@ export default function LetterDetailsModal({ letter, isOpen, onClose }: LetterDe
                 </div>
 
                 {/* Footer / CTA if needed */}
-                <div className="p-6 bg-paper-dark/20 border-t border-paper-dark/30 flex justify-center">
+                <div className="p-6 bg-paper-dark/20 border-t border-paper-dark/30 flex justify-center gap-4">
+                    <button
+                        onClick={handleReply}
+                        className="bg-ink text-white px-8 py-3 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg flex items-center gap-2"
+                    >
+                        <Mail size={20} />
+                        <span>Cevapla</span>
+                    </button>
+                    <button
+                        onClick={handleDownloadPDF}
+                        disabled={isDownloading}
+                        className="bg-seal text-white px-8 py-3 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg flex items-center gap-2 disabled:opacity-50"
+                    >
+                        {isDownloading ? <Loader2 size={20} className="animate-spin" /> : <Download size={20} />}
+                        <span>PDF</span>
+                    </button>
                     <button
                         onClick={onClose}
-                        className="bg-wood-dark text-paper-light px-10 py-3 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg"
+                        className="bg-wood-dark text-paper-light px-8 py-3 rounded-2xl font-black transition-all hover:scale-105 active:scale-95 shadow-lg"
                     >
                         Kapat
                     </button>

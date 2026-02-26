@@ -45,6 +45,7 @@ export interface AddressData {
     receiverCity: string;
     receiverAddress: string;
     receiverPhone: string;
+    receiverId?: string; // For DM/Inbox letters
 
     // Prison specific
     isPrison: boolean;

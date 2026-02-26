@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { sendOrderReceivedEmail } from "./emailActions";
+import { sendOrderReceivedEmail, sendInboxNotificationEmail } from "./emailActions";
 
 export async function createLetter(letterData: any) {
     try {
@@ -38,6 +38,7 @@ export async function createLetter(letterData: any) {
         const createdLetter = await prisma.letter.create({
             data: {
                 userId: user.id,
+                receiverId: address.receiverId || null,
                 data: letterData,
                 status: "PAID",
                 senderName: address.senderName,
@@ -52,9 +53,21 @@ export async function createLetter(letterData: any) {
             where: { userId: user.id }
         });
 
-        // 3. Send email notification
+        // 3. Send email notifications
         if (user.email) {
             await sendOrderReceivedEmail(user.email, createdLetter.id);
+        }
+
+        // 4. Send DM notification to receiver if applicable
+        if (address.receiverId) {
+            const receiver = await prisma.user.findUnique({
+                where: { id: address.receiverId },
+                select: { email: true, inboxNotifications: true }
+            });
+
+            if (receiver && receiver.email && receiver.inboxNotifications) {
+                await sendInboxNotificationEmail(receiver.email, address.senderName);
+            }
         }
 
         return { success: true, letterId: createdLetter.id };

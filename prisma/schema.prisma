@@ -42,10 +42,12 @@ model User {
   image         String?
   password      String?
   role          String    @default("USER")
+  inboxNotifications Boolean @default(true)
   accounts      Account[]
   sessions      Session[]
   drafts        Draft[]
-  letters       Letter[]
+  letters       Letter[]  @relation("SentLetters")
+  receivedLetters Letter[] @relation("ReceivedLetters")
   addresses     Address[]
 }
 
@@ -90,7 +92,9 @@ model Draft {
 model Letter {
   id           String   @id @default(cuid())
   userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation("SentLetters", fields: [userId], references: [id], onDelete: Cascade)
+  receiverId   String?
+  receiver     User?    @relation("ReceivedLetters", fields: [receiverId], references: [id], onDelete: SetNull)
   data         Json
   status       String   @default("PAID") // PENDING, PAID, PREPARING, SHIPPED, COMPLETED
   senderName   String?
