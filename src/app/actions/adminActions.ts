@@ -15,6 +15,7 @@ export async function getAllLetters() {
         }
 
         const letters = await prisma.letter.findMany({
+            where: { receiverId: null }, // Only show physical letters in admin panel
             orderBy: { createdAt: "asc" }, // Newest at the bottom as requested ("en son gelen en altta")
             include: { user: true }
         });
