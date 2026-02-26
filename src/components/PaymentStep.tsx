@@ -36,14 +36,13 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
 
         setIsProcessing(false);
         if (result.success) {
-            resetStore(); // Clear local state after successful submission
             setIsSuccess(true);
         } else {
             alert(result.error || "Bir hata oluştu.");
         }
     };
 
-    if (!isSuccess) {
+    if (isSuccess) {
         return (
             <div className="container mx-auto px-4 py-8 max-w-4xl flex-1 flex flex-col justify-center animate-in fade-in duration-300">
                 <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-8 sm:p-12 flex-col flex items-center text-center relative overflow-hidden">
@@ -63,16 +62,22 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
 
                     <div className="flex flex-col sm:flex-row w-full max-w-md gap-4">
                         <button
-                            onClick={() => window.location.href = '/'}
+                            onClick={() => {
+                                useLetterStore.getState().resetStore();
+                                window.location.href = '/';
+                            }}
                             className="flex-1 bg-paper-light border border-paper-dark hover:bg-paper text-ink font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
                         >
                             Ana Sayfa
                         </button>
                         <button
-                            onClick={() => { }}
+                            onClick={() => {
+                                useLetterStore.getState().resetStore();
+                                window.location.href = '/gonderilenler';
+                            }}
                             className="flex-1 bg-seal hover:bg-seal-hover text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-md flex items-center justify-center gap-2"
                         >
-                            Mektubu Gör
+                            Mektuplarımı Gör
                         </button>
                     </div>
                 </div>

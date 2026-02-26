@@ -30,6 +30,9 @@ export default function InfoStep() {
     const [isLoadingAddresses, setIsLoadingAddresses] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState<"sender" | "receiver" | null>(null);
+    const [saveSenderToAddressBook, setSaveSenderToAddressBook] = useState(false);
+    const [saveReceiverToAddressBook, setSaveReceiverToAddressBook] = useState(false);
+    const [isSavingAddress, setIsSavingAddress] = useState(false);
 
     // Prison selection states
     const [availableCities, setAvailableCities] = useState<string[]>(Object.values(citiesData).sort((a, b) => a.localeCompare(b, 'tr-TR')) as string[]);
@@ -107,6 +110,42 @@ export default function InfoStep() {
                 receiverAddress: prison.address || "", // Fallback if address empty
                 receiverCity: selectedCity
             });
+        }
+    };
+
+    const handleSaveAddress = async (type: "sender" | "receiver") => {
+        setIsSavingAddress(true);
+        try {
+            const data = type === "sender" ? {
+                title: "Gönderen Adresim",
+                name: address.senderName,
+                city: address.senderCity,
+                addressText: address.senderAddress,
+            } : {
+                title: address.isPrison ? `${address.prisonName} (Cezaevi)` : "Alıcı Adresim",
+                name: address.receiverName,
+                city: address.receiverCity,
+                addressText: address.receiverAddress,
+                phone: address.receiverPhone
+            };
+
+            const res = await fetch("/api/addresses", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            if (res.ok) {
+                const newAddr = await res.json();
+                setAddresses(prev => [newAddr, ...prev]);
+                if (type === "sender") setSaveSenderToAddressBook(false);
+                else setSaveReceiverToAddressBook(false);
+                // Optionally show a toast message here if you have a toast system
+            }
+        } catch (error) {
+            console.error("Failed to save address:", error);
+        } finally {
+            setIsSavingAddress(false);
         }
     };
 
@@ -194,6 +233,29 @@ export default function InfoStep() {
                                 onChange={(e) => updateAddress({ senderAddress: e.target.value })}
                             ></textarea>
                             <p className="text-[10px] text-ink-light/60 mt-1 ml-1 text-right">↑ Lütfen bu alana kendi adresinizi doğru şekilde giriniz.</p>
+                        </div>
+
+                        {/* Save to address book sender */}
+                        <div className="flex items-center gap-2 px-1">
+                            <input
+                                type="checkbox"
+                                id="saveSender"
+                                checked={saveSenderToAddressBook}
+                                onChange={(e) => setSaveSenderToAddressBook(e.target.checked)}
+                                className="w-4 h-4 rounded border-paper-dark text-wood focus:ring-wood cursor-pointer"
+                            />
+                            <label htmlFor="saveSender" className="text-xs font-semibold text-ink-light cursor-pointer select-none">
+                                Bu adresi rehberime kaydet
+                            </label>
+                            {saveSenderToAddressBook && (
+                                <button
+                                    onClick={() => handleSaveAddress("sender")}
+                                    disabled={isSavingAddress || !address.senderName || !address.senderAddress}
+                                    className="ml-auto text-[10px] font-bold text-wood bg-paper-dark/50 hover:bg-paper-dark px-2 py-1 rounded transition-colors disabled:opacity-50"
+                                >
+                                    {isSavingAddress ? "Kaydediliyor..." : "Hemen Kaydet"}
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -383,6 +445,29 @@ export default function InfoStep() {
                                 </motion.div>
                             )}
                         </AnimatePresence>
+
+                        {/* Save to address book receiver */}
+                        <div className="flex items-center gap-2 px-1 pt-2">
+                            <input
+                                type="checkbox"
+                                id="saveReceiver"
+                                checked={saveReceiverToAddressBook}
+                                onChange={(e) => setSaveReceiverToAddressBook(e.target.checked)}
+                                className="w-4 h-4 rounded border-seal/40 text-seal focus:ring-seal cursor-pointer"
+                            />
+                            <label htmlFor="saveReceiver" className="text-xs font-semibold text-ink-light cursor-pointer select-none">
+                                Bu adresi rehberime kaydet
+                            </label>
+                            {saveReceiverToAddressBook && (
+                                <button
+                                    onClick={() => handleSaveAddress("receiver")}
+                                    disabled={isSavingAddress || !address.receiverName || (!address.receiverAddress && !address.prisonName)}
+                                    className="ml-auto text-[10px] font-bold text-seal bg-seal/5 hover:bg-seal/10 px-2 py-1 rounded transition-colors disabled:opacity-50"
+                                >
+                                    {isSavingAddress ? "Kaydediliyor..." : "Hemen Kaydet"}
+                                </button>
+                            )}
+                        </div>
 
                         {/* Delivery Date Info (Dynamic) */}
                         <div className="pt-1 border-t border-paper-dark border-dashed space-y-3">

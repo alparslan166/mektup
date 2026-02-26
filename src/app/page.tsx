@@ -159,7 +159,7 @@ export default function LandingPage() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
           <div className="relative z-10 text-center md:text-left">
             <h3 className="font-playfair text-2xl font-bold mb-2">Hediye Mektup Hazır mı?</h3>
-            <p className="text-paper/70">Toplama her 5 mektup gönderiminde bir adet ücretsiz mektup hakkı kazanırsınız.</p>
+            <p className="text-paper/70">Toplam her 5 mektup gönderiminde bir adet ücretsiz mektup hakkı kazanırsınız.</p>
           </div>
           <div className="relative z-10 flex gap-4">
             {[1, 2, 3, 4, 5].map(i => (

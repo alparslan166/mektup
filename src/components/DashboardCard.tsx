@@ -65,10 +65,6 @@ export default function DashboardCard({ title, description, icon: Icon, href, co
                     <p className="text-[11px] sm:text-[15px] text-ink font-medium leading-tight sm:leading-relaxed opacity-90 px-1">
                         {description}
                     </p>
-
-                    <div className={`mt-3 sm:mt-auto pt-2 sm:pt-6 opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 text-[10px] sm:text-xs font-bold uppercase tracking-widest flex items-center gap-1 ${iconBgClasses[color].split(' ')[1]}`}>
-                        <span className="hidden sm:inline">Devam Et</span> <span className="text-lg">→</span>
-                    </div>
                 </div>
             </Link>
         </motion.div>

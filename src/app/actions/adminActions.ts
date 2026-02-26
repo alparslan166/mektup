@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { sendTrackingCodeEmail, sendPreparingEmail } from "./emailActions";
 
 export async function getAllLetters() {
     try {
@@ -33,12 +34,19 @@ export async function updateLetterStatus(letterId: string, status: string) {
             return { error: "Yetkiniz yok." };
         }
 
-        await prisma.letter.update({
+        const letter = await prisma.letter.update({
             where: { id: letterId },
-            data: { status }
+            data: { status },
+            include: { user: true }
         });
 
+        // Trigger emails based on status
+        if (status === "PREPARING" && letter.user?.email) {
+            await sendPreparingEmail(letter.user.email, letter.id);
+        }
+
         revalidatePath("/admin/mektuplar");
+        revalidatePath("/gonderilenler");
         return { success: true };
     } catch (error) {
         console.error("UPDATE_LETTER_STATUS_ERROR", error);
@@ -54,18 +62,21 @@ export async function updateTrackingCode(letterId: string, trackingCode: string)
             return { error: "Yetkiniz yok." };
         }
 
-        await prisma.letter.update({
+        const updatedLetter = await prisma.letter.update({
             where: { id: letterId },
             data: {
                 trackingCode,
                 status: "SHIPPED"
-            }
+            },
+            include: { user: true }
         });
 
-        // Here we would normally send an email to the user
-        // console.log(`Sending email to customer with tracking code: ${trackingCode}`);
+        if (updatedLetter.user?.email) {
+            await sendTrackingCodeEmail(updatedLetter.user.email, updatedLetter.id, trackingCode);
+        }
 
         revalidatePath("/admin/mektuplar");
+        revalidatePath("/gonderilenler");
         return { success: true };
     } catch (error) {
         console.error("UPDATE_TRACKING_CODE_ERROR", error);

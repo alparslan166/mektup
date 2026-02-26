@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { sendOrderReceivedEmail } from "./emailActions";
 
 export async function createLetter(letterData: any) {
     try {
@@ -50,6 +51,11 @@ export async function createLetter(letterData: any) {
         await prisma.draft.deleteMany({
             where: { userId: user.id }
         });
+
+        // 3. Send email notification
+        if (user.email) {
+            await sendOrderReceivedEmail(user.email, createdLetter.id);
+        }
 
         return { success: true, letterId: createdLetter.id };
     } catch (error) {

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut, X, LogIn, UserPlus, ShieldCheck, Gift, GitGraphIcon } from "lucide-react";
+import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut, X, LogIn, UserPlus, ShieldCheck, Gift, GitGraphIcon, Truck } from "lucide-react";
 import { useLetterStore } from "@/store/letterStore";
 import Image from "next/image";
 import SignOutModal from "./SignOutModal";
@@ -85,6 +85,12 @@ const Navbar = () => {
                                     <PenLine size={18} />
                                     <span>MEKTUP YAZ</span>
                                 </Link>
+                                {/* {status === "authenticated" && (
+                                    <Link href="/gonderilenler" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
+                                        <Truck size={18} />
+                                        <span>GÖNDERİLENLER</span>
+                                    </Link>
+                                )} */}
                                 <Link href="/yorumlar" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
                                     <MessageSquare size={18} />
                                     <span>YORUMLAR</span>
@@ -175,6 +181,12 @@ const Navbar = () => {
                                     <PenLine size={22} />
                                     <span>MEKTUP YAZ</span>
                                 </Link>
+                                {status === "authenticated" && (
+                                    <Link href="/gonderilenler" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
+                                        <Truck size={22} />
+                                        <span>GÖNDERİLENLER</span>
+                                    </Link>
+                                )}
                                 <Link href="/yorumlar" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                                     <MessageSquare size={22} />
                                     <span>YORUMLAR</span>
