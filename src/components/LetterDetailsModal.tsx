@@ -25,6 +25,7 @@ import {
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 interface LetterDetailsModalProps {
     letter: any;
@@ -341,10 +342,12 @@ export default function LetterDetailsModal({ letter, isOpen, onClose, onReply }:
                                 {/* Photos */}
                                 {letter.data?.extras?.photos?.map((photo: any, i: number) => (
                                     <div key={`photo-${i}`} className="group relative aspect-square rounded-2xl overflow-hidden border border-white/50 shadow-sm hover:shadow-md transition-all">
-                                        <img
+                                        <Image
                                             src={photo.url}
                                             alt={`Fotoğraf ${i + 1}`}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                            fill
+                                            sizes="(max-width: 768px) 50vw, 25vw"
+                                            className="object-cover group-hover:scale-110 transition-transform duration-500"
                                         />
                                         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                                             <span className="bg-white/90 px-2 py-1 rounded text-[10px] font-black text-ink uppercase">Fotoğraf</span>
@@ -370,10 +373,12 @@ export default function LetterDetailsModal({ letter, isOpen, onClose, onReply }:
 
                                     return (
                                         <div key={`postcard-${i}`} className="group relative aspect-square rounded-2xl overflow-hidden border border-white/50 shadow-sm hover:shadow-md transition-all bg-paper-light">
-                                            <img
+                                            <Image
                                                 src={card.image}
                                                 alt={`Kartpostal ${i + 1}`}
-                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                fill
+                                                sizes="(max-width: 768px) 50vw, 25vw"
+                                                className="object-cover group-hover:scale-110 transition-transform duration-500"
                                             />
                                             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                                                 <span className="bg-white/90 px-2 py-1 rounded text-[10px] font-black text-ink uppercase">Kartpostal</span>

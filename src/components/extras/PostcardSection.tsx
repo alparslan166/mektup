@@ -5,6 +5,7 @@ import { ChevronDown, Plus, Check, X, Maximize2 } from "lucide-react";
 import { useLetterStore } from "@/store/letterStore";
 import { useShallow } from 'zustand/react/shallow';
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 // Mock Data for Postcards
 export const postcardCategories = [
@@ -98,10 +99,12 @@ export default function PostcardSection() {
                                                     className={"relative aspect-square w-full rounded-3xl overflow-hidden shadow-sm cursor-pointer group transition-all duration-500 hover:shadow-xl hover:-translate-y-1 bg-white border-2 " + (isSelected ? "border-seal ring-4 ring-seal/10" : "border-paper-dark")}
                                                     onClick={() => setPreviewCard(card)}
                                                 >
-                                                    <img
+                                                    <Image
                                                         src={card.image}
                                                         alt={card.title}
-                                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                        fill
+                                                        sizes="(max-width: 768px) 100vw, 33vw"
+                                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
                                                     />
 
                                                     {/* Selection Status Overlay */}
@@ -184,11 +187,13 @@ export default function PostcardSection() {
                                 <X size={24} />
                             </button>
 
-                            <div className="aspect-[3/2] sm:aspect-video w-full overflow-hidden bg-paper-dark/20">
-                                <img
+                            <div className="aspect-[3/2] sm:aspect-video w-full overflow-hidden bg-paper-dark/20 relative">
+                                <Image
                                     src={previewCard.image}
                                     alt={previewCard.title}
-                                    className="w-full h-full object-cover"
+                                    fill
+                                    sizes="100vw"
+                                    className="object-cover"
                                 />
                             </div>
 

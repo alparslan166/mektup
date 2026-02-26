@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { Image as ImageIcon, FileText, Trash2, Loader2, Plus } from "lucide-react";
+import { Upload, X, File, Image as ImageIcon, Camera, FileText, Link as LinkIcon, Info, Trash2, Edit3, Plus, Loader2 } from "lucide-react";
+import Image from "next/image";
 import { useLetterStore } from "@/store/letterStore";
 import { toast } from "react-hot-toast";
 
@@ -158,8 +159,7 @@ export default function UploadSection() {
                                     {extras.photos.map((file) => (
                                         <div key={file.id} className="relative group bg-paper p-2 rounded border border-paper-dark shadow-sm">
                                             <div className="aspect-[4/3] bg-paper-dark/50 rounded mb-2 flex flex-col justify-center items-center text-xs text-ink-light truncate overflow-hidden relative">
-                                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                <img src={file.previewUrl || file.url} alt={file.name} className="absolute inset-0 w-full h-full object-cover" />
+                                                <Image src={file.previewUrl || file.url} alt={file.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 20vw" />
                                             </div>
                                             {/* <p className="text-[10px] text-center truncate px-1 text-ink">{file.name}</p> */}
                                             <button

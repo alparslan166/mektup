@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useLetterStore } from "@/store/letterStore";
 import { useRouter } from "next/navigation";
-import { Clock, Trash2, Edit3, ArrowRight, AlertTriangle, Loader2 } from "lucide-react";
+import { Clock, Trash2, Edit3, ArrowRight, AlertTriangle, Loader2, AtSign, Mail } from "lucide-react";
 import { deleteDraft } from "@/app/actions/draftActions";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -81,6 +81,8 @@ export default function DraftListClient({ drafts }: DraftClientProps) {
                     };
                     const formattedDate = new Date(draft.updatedAt).toLocaleDateString('tr-TR', dateOptions);
 
+                    const isDM = draft.data?.address?.receiverCity === "Dijital";
+
                     return (
                         <div
                             key={draft.id}
@@ -107,9 +109,16 @@ export default function DraftListClient({ drafts }: DraftClientProps) {
                                 </button>
                             </div>
 
-                            <h4 className="font-playfair text-xl font-bold text-wood-dark mb-2">
-                                {draft.data?.address?.receiverName ? `Alıcı: ${draft.data.address.receiverName}` : "İsimsiz Mektup"}
-                            </h4>
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className={`p-2 rounded-xl border ${isDM ? 'bg-seal/10 text-seal border-seal/20' : 'bg-paper text-wood border-wood/20'}`}>
+                                    {isDM ? <AtSign size={20} /> : <Mail size={20} />}
+                                </div>
+                                <h4 className="font-playfair text-xl font-bold text-wood-dark">
+                                    {draft.data?.address?.receiverName ?
+                                        (isDM ? `Dijital Mektup: ${draft.data.address.receiverName}` : `Alıcı: ${draft.data.address.receiverName}`)
+                                        : "İsimsiz Mektup"}
+                                </h4>
+                            </div>
 
                             <p className="text-sm text-ink leading-relaxed italic line-clamp-2 mb-4 flex-1">
                                 "{previewText}"

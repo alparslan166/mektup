@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import { createCategory, updateCategory, deleteCategory, createGift, updateGift, deleteGift, reorderCategories, reorderGifts } from "@/lib/actions/gifts";
 import { useUIStore } from "@/store/uiStore";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
+import Image from "next/image";
 
 interface Gift {
     id: string;
@@ -392,9 +393,9 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                                                             <div {...provided.dragHandleProps} className="text-slate-300 hover:text-slate-500 cursor-grab active:cursor-grabbing">
                                                                                                 <GripVertical size={16} />
                                                                                             </div>
-                                                                                            <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 overflow-hidden shrink-0">
+                                                                                            <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 overflow-hidden shrink-0 relative">
                                                                                                 {gift.image ? (
-                                                                                                    <img src={gift.image} alt={gift.name} className="w-full h-full object-cover" />
+                                                                                                    <Image src={gift.image} alt={gift.name} fill sizes="40px" className="object-cover" />
                                                                                                 ) : (
                                                                                                     <Package size={20} />
                                                                                                 )}
@@ -478,8 +479,8 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                                                                 </div>
                                                                                                 {editGiftData.previewImage && (
                                                                                                     <div className="flex items-center gap-2">
-                                                                                                        <div className="w-10 h-10 rounded border border-slate-200 overflow-hidden bg-white">
-                                                                                                            <img src={editGiftData.previewImage} alt="Önizleme" className="w-full h-full object-cover" />
+                                                                                                        <div className="w-10 h-10 rounded border border-slate-200 overflow-hidden bg-white relative">
+                                                                                                            <Image src={editGiftData.previewImage} alt="Önizleme" fill sizes="40px" className="object-cover" />
                                                                                                         </div>
                                                                                                         <button
                                                                                                             onClick={() => setEditGiftData(prev => ({ ...prev, image: "", previewImage: "" }))}
@@ -554,8 +555,8 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                                                 </div>
                                                                                 {newGiftData.previewImage && (
                                                                                     <div className="flex items-center gap-2">
-                                                                                        <div className="w-10 h-10 rounded border border-slate-200 overflow-hidden">
-                                                                                            <img src={newGiftData.previewImage} alt="Önizleme" className="w-full h-full object-cover" />
+                                                                                        <div className="w-10 h-10 rounded border border-slate-200 overflow-hidden relative">
+                                                                                            <Image src={newGiftData.previewImage} alt="Önizleme" fill sizes="40px" className="object-cover" />
                                                                                         </div>
                                                                                         <button
                                                                                             onClick={() => setNewGiftData(prev => ({ ...prev, image: "", previewImage: "" }))}

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, Send, Loader2, Info, ArrowRight, User, MapPin, Image as ImageIcon, Trash2, Plus } from "lucide-react";
+import Image from "next/image";
 import Editor from "@/components/Editor";
 import { useLetterStore } from "@/store/letterStore";
 import { createLetter } from "@/app/actions/letterActions";
@@ -325,8 +326,7 @@ export default function DMWritingModal({ isOpen, onClose, recipientId, recipient
                                                 {extras.photos.map((file: any) => (
                                                     <div key={file.id} className="relative group bg-paper p-1 rounded border border-paper-dark shadow-sm">
                                                         <div className="aspect-[4/3] bg-paper-dark/50 rounded flex flex-col justify-center items-center overflow-hidden relative">
-                                                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                            <img src={file.previewUrl || file.url} alt={file.name} className="absolute inset-0 w-full h-full object-cover" />
+                                                            <Image src={file.previewUrl || file.url} alt={file.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
                                                         </div>
                                                         <button
                                                             onClick={() => removePhoto(file.id)}
