@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Tag, MailPlus, Gift, Sparkles, ArrowRight, UserPlus } from 'lucide-react';
+import { Tag, MailPlus, Gift, Sparkles, ArrowRight, UserPlus, MessageCircleHeart } from 'lucide-react';
 
 export const metadata = {
     title: "Kampanyalar & İndirimler | Mektuplaş",
@@ -103,18 +103,48 @@ export default function CampaignsPage() {
                                 <UserPlus size={24} className="md:w-8 md:h-8" />
                             </div>
                             <div>
-                                <h3 className="text-lg md:text-2xl font-playfair font-bold text-ink leading-tight">Arkadaşını Davet Et, <br /><span className="text-wood-dark text-xl md:text-3xl">İkiniz de %40 İndirim Kazanın!</span></h3>
+                                <h3 className="text-lg md:text-2xl font-playfair font-bold text-ink leading-tight">Arkadaşını Davet Et, <br /><span className="text-wood-dark text-xl md:text-3xl">İkiniz de %15 İndirim Kazanın!</span></h3>
                             </div>
                         </div>
 
                         <p className="text-ink-light leading-snug md:leading-relaxed mb-6 md:mb-8 text-xs md:text-base flex-1 md:w-[80%]">
-                            Hemen Profil sayfandan sana özel davet linkini al ve arkadaşına gönder. Arkadaşın senin linkinle <strong>Mektuplaş</strong> ailesine katıldığında, hem ona hoş geldin hediyesi olarak hem de sana teşekkür olarak <strong>bir mektup ücretinin tam %40&apos;ı</strong> kadar kredi anında cüzdanlarınıza eklensin!
+                            Hemen Profil sayfandan sana özel davet linkini al ve arkadaşına gönder. Arkadaşın senin linkinle <strong>Mektuplaş</strong> ailesine katıldığında, hem ona hoş geldin hediyesi olarak hem de sana teşekkür olarak <strong>bir mektup ücretinin tam %15&apos;i</strong> kadar kredi anında cüzdanlarınıza eklensin!
                         </p>
 
                         <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between mt-auto gap-3 w-full">
                             <span className="text-[10px] md:text-xs font-bold text-wood-dark uppercase tracking-wider">Hemen Davet Et</span>
                             <Link href="/profil" className="bg-wood-dark hover:bg-wood-800 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-lg md:rounded-xl font-bold transition-all shadow-md active:scale-95 flex items-center justify-center w-full xl:w-auto gap-1.5 md:gap-2 text-[11px] md:text-sm">
                                 Profiline Git <ArrowRight size={14} className="md:w-4 md:h-4" />
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* Kampanya 4: Yorum Yap */}
+                    <div className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 border border-paper-dark shadow-xl shadow-amber-900/5 relative overflow-hidden group hover:border-amber-400/40 transition-colors flex flex-col xl:col-span-2">
+                        <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-amber-50 rounded-bl-full -z-10 group-hover:bg-amber-100 transition-colors"></div>
+
+                        <div className="bg-white border md:border-2 border-amber-200 text-amber-600 w-fit px-2 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-wider mb-4 md:mb-6 flex items-center gap-1 md:gap-2 shadow-sm">
+                            <Sparkles size={12} className="md:w-3.5 md:h-3.5" />
+                            FİKİRLERİN DEĞERLİ
+                        </div>
+
+                        <div className="flex flex-col xl:flex-row items-start gap-2 md:gap-4 mb-4 md:mb-6">
+                            <div className="bg-amber-100 p-2.5 md:p-4 rounded-xl md:rounded-2xl text-amber-600 shrink-0">
+                                <MessageCircleHeart size={24} className="md:w-8 md:h-8" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg md:text-2xl font-playfair font-bold text-ink leading-tight">Mektubunu Değerlendir, <br /><span className="text-amber-600 text-xl md:text-3xl">%25 İndirim Kazan!</span></h3>
+                            </div>
+                        </div>
+
+                        <p className="text-ink-light leading-snug md:leading-relaxed mb-6 md:mb-8 text-xs md:text-base flex-1 md:w-[80%]">
+                            Sevdiklerinize gönderdiğiniz mektupların teslimatından sonra, <strong>Yorumlar</strong> sayfamızdan bir değerlendirme bıraktığınızda ve sipariş deneyiminizi paylaştığınızda, teşekkür olarak bir sonraki siparişinizde kullanabilmeniz için hesabınıza anında <strong>%25 indirim kredisi</strong> tanımlanır!
+                        </p>
+
+                        <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between mt-auto gap-3 w-full">
+                            <span className="text-[10px] md:text-xs font-bold text-amber-600 uppercase tracking-wider">Otomatik Yüklenir</span>
+                            <Link href="/yorumlar" className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-lg md:rounded-xl font-bold transition-all shadow-md active:scale-95 flex items-center justify-center w-full xl:w-auto gap-1.5 md:gap-2 text-[11px] md:text-sm">
+                                Yorum Cüzdanına Git <ArrowRight size={14} className="md:w-4 md:h-4" />
                             </Link>
                         </div>
                     </div>
