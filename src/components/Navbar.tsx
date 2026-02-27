@@ -87,6 +87,10 @@ const Navbar = () => {
                                 <Gift size={18} />
                                 <span>Hediyeler</span>
                             </Link>
+                            <Link href="/admin/kredi-yukle" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
+                                <Wallet size={18} />
+                                <span>Kredi Yükle</span>
+                            </Link>
                             <Link href="/yorumlar" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
                                 <GitGraphIcon size={18} />
                                 <span>Analizler</span>
@@ -195,6 +199,10 @@ const Navbar = () => {
                                 <Link href="/admin/gifts" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                                     <Gift size={22} />
                                     <span>Hediyeler</span>
+                                </Link>
+                                <Link href="/admin/kredi-yukle" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
+                                    <Wallet size={22} />
+                                    <span>Kredi Yükle</span>
                                 </Link>
                                 <Link href="/yorumlar" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                                     <GitGraphIcon size={22} />
