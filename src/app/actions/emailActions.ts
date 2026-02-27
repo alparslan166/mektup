@@ -148,3 +148,52 @@ export async function sendInboxNotificationEmail(email: string, senderName: stri
         `
     });
 }
+
+export async function sendIncomingLetterNotificationEmail(email: string, userName: string) {
+    return await sendEmail({
+        to: email,
+        subject: "Adınıza Gelen Mektup Var! 📬 - Mektuplas.com",
+        text: `Merhaba ${userName}, adınıza gelen bir fiziksel mektup firmamıza ulaştı. Fotoğraflarını çekip hesabınıza yükledik. Gelen Kutunuzdan okuyabilirsiniz.`,
+        html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+                <h1 style="color: #4a3728; font-family: serif;">Adınıza Gelen Mektup Var! 📬</h1>
+                <p>Merhaba <strong>${userName}</strong>,</p>
+                <p>Adınıza gelen bir fiziksel mektup firmamıza ulaştı. Mektubun fotoğraflarını özenle çekip hesabınıza yükledik.</p>
+                <div style="background: #fdfaf6; padding: 20px; border-radius: 12px; margin: 25px 0; text-align: center; border: 1px dashed #c48a5c;">
+                    <p style="margin: 0; font-size: 16px; color: #4a3728;">Sevdiklerinizden gelen mektup sizi bekliyor!</p>
+                </div>
+                <p>Mektubunuzu hemen okumak için gelen kutunuzu ziyaret edin:</p>
+                <a href="https://mektuplas.com/gelen-kutusu" style="display: inline-block; background: #c48a5c; color: white; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px;">Gelen Kutuma Git</a>
+                <p style="font-size: 12px; color: #666; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px;">
+                    Nerede olursanız olun, mektuplarınızı dijital olarak okuyabilirsiniz.
+                </p>
+            </div>
+        `
+    });
+}
+
+export async function sendContactEmail({
+    name,
+    email,
+    message
+}: {
+    name: string;
+    email: string;
+    message: string;
+}) {
+    return await sendEmail({
+        to: "mektuplass@gmail.com",
+        subject: `Yeni İletişim Formu Mesajı: ${name}`,
+        text: `İsim: ${name}\nE-posta: ${email}\n\nMesaj:\n${message}`,
+        html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+                <h1 style="color: #4a3728;">Yeni İletişim Formu Mesajı</h1>
+                <p><strong>Gönderen:</strong> ${name}</p>
+                <p><strong>E-posta:</strong> ${email}</p>
+                <div style="background: #fdfaf6; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #c48a5c;">
+                    <p style="margin: 0; white-space: pre-wrap;">${message}</p>
+                </div>
+            </div>
+        `
+    });
+}

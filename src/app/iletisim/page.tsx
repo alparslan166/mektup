@@ -1,13 +1,45 @@
-import React from "react";
-import Link from "next/link";
-import { ArrowLeft, Mail, MapPin, Phone, Clock } from "lucide-react";
+"use client";
 
-export const metadata = {
-    title: "İletişim | Geleceğe Mektup",
-    description: "Bizimle iletişime geçin. Soru, görüş ve önerilerinizi dinlemeye hazırız.",
-};
+import React, { useState } from "react";
+import Link from "next/link";
+import { ArrowLeft, Mail, MapPin, Phone, Clock, Send, CheckCircle2 } from "lucide-react";
+import { sendContactEmail } from "@/app/actions/emailActions";
+import { toast } from "react-hot-toast";
 
 export default function IletisimPage() {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        message: ""
+    });
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!formData.name || !formData.email || !formData.message) {
+            toast.error("Lütfen tüm alanları doldurun.");
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const result = await sendContactEmail(formData);
+            if (result.success) {
+                setIsSuccess(true);
+                setFormData({ name: "", email: "", message: "" });
+            } else {
+                toast.error("Mesajınız gönderilemedi. Lütfen daha sonra tekrar deneyin.");
+            }
+        } catch (error) {
+            console.error("Form submission error:", error);
+            toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <div className="container mx-auto px-4 py-12 max-w-5xl flex-1 flex flex-col animate-in fade-in duration-300">
             <Link href="/" className="inline-flex items-center gap-2 text-ink-light hover:text-ink transition-colors mb-6 w-fit bg-paper/60 px-4 py-2 rounded-full backdrop-blur-sm border border-wood/10 shadow-sm">
@@ -38,7 +70,7 @@ export default function IletisimPage() {
                             <div>
                                 <h3 className="font-bold text-ink mb-1">E-Posta</h3>
                                 <p className="text-ink-light text-sm mb-2">Her türlü sorunuz için bize yazabilirsiniz.</p>
-                                <a href="mailto:[EMAIL_ADDRESS]" className="text-seal font-medium hover:underline">[EMAIL_ADDRESS]</a>
+                                <a href="mailto:mektuplass@gmail.com" className="text-seal font-medium hover:underline">mektuplass@gmail.com</a>
                             </div>
                         </div>
 
@@ -49,7 +81,10 @@ export default function IletisimPage() {
                             <div>
                                 <h3 className="font-bold text-ink mb-1">Telefon / WhatsApp</h3>
                                 <p className="text-ink-light text-sm mb-2">Hızlı iletişim için çalışma saatlerimiz içinde arayabilirsiniz.</p>
-                                <a href="tel:+905550000000" className="text-seal font-medium hover:underline">0 (555) 000 00 00</a>
+                                <div className="flex flex-col">
+                                    <span className="text-ink-light text-xs mb-1 italic">Numaramız henüz aktif değildir.</span>
+                                    {/* <a href="tel:+905550000000" className="text-seal font-medium hover:underline opacity-50 cursor-not-allowed">0 (555) 000 00 00</a> */}
+                                </div>
                             </div>
                         </div>
 
@@ -72,40 +107,78 @@ export default function IletisimPage() {
                     </div>
 
                     {/* Contact Form */}
-                    <div className="bg-paper-dark/20 border border-wood/20 p-8 rounded-xl shadow-sm">
-                        <h3 className="font-playfair text-2xl font-bold text-wood-dark mb-6">Bize Mesaj Gönderin</h3>
-                        <form className="space-y-4">
-                            <div>
-                                <label className="text-sm font-semibold text-ink-light block mb-1">Adınız Soyadınız</label>
-                                <input
-                                    type="text"
-                                    placeholder="Ad Soyad"
-                                    className="w-full bg-paper text-ink text-sm px-4 py-3 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all"
-                                />
+                    <div className="bg-paper-dark/20 border border-wood/20 p-8 rounded-xl shadow-sm h-full flex flex-col justify-center">
+                        {isSuccess ? (
+                            <div className="text-center py-8 animate-in zoom-in duration-300">
+                                <div className="bg-green-100 text-green-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <CheckCircle2 size={32} />
+                                </div>
+                                <h3 className="font-playfair text-2xl font-bold text-wood-dark mb-2">Mesajınız Alındı!</h3>
+                                <p className="text-ink-light mb-6">En kısa sürede size geri dönüş yapacağız. Teşekkür ederiz.</p>
+                                <button
+                                    onClick={() => setIsSuccess(false)}
+                                    className="text-seal font-semibold hover:underline"
+                                >
+                                    Yeni bir mesaj gönder
+                                </button>
                             </div>
-                            <div>
-                                <label className="text-sm font-semibold text-ink-light block mb-1">E-Posta Adresiniz</label>
-                                <input
-                                    type="email"
-                                    placeholder="mail@ornek.com"
-                                    className="w-full bg-paper text-ink text-sm px-4 py-3 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all"
-                                />
-                            </div>
-                            <div>
-                                <label className="text-sm font-semibold text-ink-light block mb-1">Mesajınız</label>
-                                <textarea
-                                    rows={5}
-                                    placeholder="Size nasıl yardımcı olabiliriz?"
-                                    className="w-full bg-paper text-ink text-sm px-4 py-3 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all resize-none"
-                                ></textarea>
-                            </div>
-                            <button
-                                type="button"
-                                className="w-full bg-seal hover:bg-seal-hover text-paper py-3 rounded-md font-bold shadow-md transition-all mt-4"
-                            >
-                                Mesajı Gönder
-                            </button>
-                        </form>
+                        ) : (
+                            <>
+                                <h3 className="font-playfair text-2xl font-bold text-wood-dark mb-6">Bize Mesaj Gönderin</h3>
+                                <form className="space-y-4" onSubmit={handleSubmit}>
+                                    <div>
+                                        <label className="text-sm font-semibold text-ink-light block mb-1">Adınız Soyadınız</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={formData.name}
+                                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                            placeholder="Ad Soyad"
+                                            className="w-full bg-paper text-ink text-sm px-4 py-3 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-sm font-semibold text-ink-light block mb-1">E-Posta Adresiniz</label>
+                                        <input
+                                            type="email"
+                                            required
+                                            value={formData.email}
+                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                            placeholder="mail@ornek.com"
+                                            className="w-full bg-paper text-ink text-sm px-4 py-3 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-sm font-semibold text-ink-light block mb-1">Mesajınız</label>
+                                        <textarea
+                                            rows={5}
+                                            required
+                                            value={formData.message}
+                                            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                            placeholder="Size nasıl yardımcı olabiliriz?"
+                                            className="w-full bg-paper text-ink text-sm px-4 py-3 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all resize-none"
+                                        ></textarea>
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="w-full bg-seal hover:bg-seal-hover disabled:bg-seal/50 text-paper py-3 rounded-md font-bold shadow-md transition-all mt-4 flex items-center justify-center gap-2"
+                                    >
+                                        {isSubmitting ? (
+                                            <>
+                                                <div className="w-4 h-4 border-2 border-paper border-t-transparent rounded-full animate-spin"></div>
+                                                Gönderiliyor...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Send size={18} />
+                                                Mesajı Gönder
+                                            </>
+                                        )}
+                                    </button>
+                                </form>
+                            </>
+                        )}
                     </div>
                 </div>
 

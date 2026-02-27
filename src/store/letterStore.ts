@@ -34,6 +34,7 @@ export interface ExtrasData {
     includeCalendar: boolean;
     gifts: SelectedGift[];
     customDate?: string;
+    wantReplyInInbox: boolean;
 }
 
 export interface AddressData {
@@ -100,6 +101,7 @@ const initialState = {
         includeCalendar: false,
         gifts: [],
         customDate: "",
+        wantReplyInInbox: false,
     },
     address: {
         senderName: '',

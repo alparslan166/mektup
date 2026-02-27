@@ -48,6 +48,7 @@ model User {
   drafts        Draft[]
   letters       Letter[]  @relation("SentLetters")
   receivedLetters Letter[] @relation("ReceivedLetters")
+  incomingLetters IncomingLetter[]
   addresses     Address[]
 }
 
@@ -128,5 +129,13 @@ model Gift {
   updatedAt   DateTime     @updatedAt
 }
 
-
-
+model IncomingLetter {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  images      String[] // Artık tek resim yerine birden fazla resim URL'si tutacak
+  description String?  @db.Text
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

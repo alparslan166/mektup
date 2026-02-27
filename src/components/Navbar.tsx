@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut, X, LogIn, UserPlus, ShieldCheck, Gift, GitGraphIcon, Truck } from "lucide-react";
+import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut, X, LogIn, UserPlus, ShieldCheck, Gift, GitGraphIcon, Truck, Inbox } from "lucide-react";
 import { useLetterStore } from "@/store/letterStore";
 import Image from "next/image";
 import SignOutModal from "./SignOutModal";
@@ -61,6 +61,10 @@ const Navbar = () => {
                                 <PenLine size={18} />
                                 <span>Mektuplar</span>
                             </Link>
+                            <Link href="/admin/gelen-mektuplar" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
+                                <Inbox size={18} />
+                                <span>Müşteriye Mektup Gönder</span>
+                            </Link>
                             <Link href="/admin/gifts" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
                                 <Gift size={18} />
                                 <span>Hediyeler</span>
@@ -69,10 +73,6 @@ const Navbar = () => {
                                 <GitGraphIcon size={18} />
                                 <span>Analizler</span>
                             </Link>
-                            {/* <Link href="/sss" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
-                                <HelpCircle size={18} />
-                                <span>SIKÇA SORULAN SORULAR</span>
-                            </Link> */}
                         </>
                     ) :
                         (
@@ -161,6 +161,10 @@ const Navbar = () => {
                                 <Link href="/admin/mektuplar" onClick={() => { resetStore(); closeMenu(); }} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                                     <PenLine size={22} />
                                     <span>Mektuplar</span>
+                                </Link>
+                                <Link href="/admin/gelen-mektuplar" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
+                                    <Inbox size={22} />
+                                    <span>Müşteriye Mektup Gönder</span>
                                 </Link>
                                 <Link href="/admin/gifts" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                                     <Gift size={22} />
