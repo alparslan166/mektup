@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import citiesData from "../../sehirler.json";
 import { useShallow } from 'zustand/react/shallow';
 import { getCompanyAddress } from "@/app/actions/settingsActions";
+import Link from "next/link";
 
 interface Address {
     id: string;
@@ -534,7 +535,7 @@ export default function InfoStep() {
                         </div>
                         <div className="flex-1 text-left">
                             <span className="text-sm font-bold text-ink block mb-1">
-                                Mektubuma cevabı gelen kutusunda görmek istiyorum
+                                Mektubumun cevabının <Link href="/gelen-kutusu" onClick={(e) => e.stopPropagation()} className="text-red-600 hover:text-red-700 underline underline-offset-2 transition-colors">GELEN MEKTUP</Link> kutusuna gelmesini istiyorum.
                             </span>
                             <span className="text-xs text-ink-light leading-relaxed block">
                                 Bu seçeneği işaretlerseniz, yakınınız cevap mektuplarını bizim adresimize gönderir. Biz de mektubun fotoğraflarını çekip hesabınıza yükleriz.

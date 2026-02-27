@@ -406,7 +406,7 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                                                             </div>
                                                                                         </div>
                                                                                         <div className="flex items-center gap-2">
-                                                                                            <div className="text-sm font-bold text-slate-900 mr-2">{gift.price ? `${gift.price} TL` : "-"}</div>
+                                                                                            <div className="text-sm font-bold text-slate-900 mr-2">{gift.price ? `${gift.price} 🪙` : "-"}</div>
                                                                                             <button
                                                                                                 onClick={() => {
                                                                                                     setEditingGiftId(gift.id);
@@ -448,8 +448,9 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                                                                 />
                                                                                                 <input
                                                                                                     className="border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none bg-white font-medium"
-                                                                                                    placeholder="Fiyat (opsiyonel)"
+                                                                                                    placeholder="Fiyat (Kredi)"
                                                                                                     type="number"
+                                                                                                    min="0"
                                                                                                     value={editGiftData.price}
                                                                                                     onChange={(e) => setEditGiftData({ ...editGiftData, price: e.target.value })}
                                                                                                 />
@@ -524,8 +525,9 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                                                 />
                                                                                 <input
                                                                                     className="border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none"
-                                                                                    placeholder="Fiyat (opsiyonel)"
+                                                                                    placeholder="Fiyat (Kredi)"
                                                                                     type="number"
+                                                                                    min="0"
                                                                                     value={newGiftData.price}
                                                                                     onChange={(e) => setNewGiftData({ ...newGiftData, price: e.target.value })}
                                                                                 />

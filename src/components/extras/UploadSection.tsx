@@ -5,12 +5,24 @@ import { Upload, X, File, Image as ImageIcon, Camera, FileText, Link as LinkIcon
 import Image from "next/image";
 import { useLetterStore } from "@/store/letterStore";
 import { toast } from "react-hot-toast";
+import { getPricingSettings } from "@/app/actions/settingsActions";
 
 export default function UploadSection() {
     const { extras, updateExtras } = useLetterStore();
     const [isUploading, setIsUploading] = useState(false);
+    const [photoCreditPrice, setPhotoCreditPrice] = useState(10);
+    const [docCreditPrice, setDocCreditPrice] = useState(5);
     const photoInputRef = useRef<HTMLInputElement>(null);
     const docInputRef = useRef<HTMLInputElement>(null);
+
+    React.useEffect(() => {
+        getPricingSettings().then(res => {
+            if (res.success && res.data) {
+                setPhotoCreditPrice(res.data.photoCreditPrice || 10);
+                setDocCreditPrice(res.data.docCreditPrice || 5);
+            }
+        });
+    }, []);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, type: "photo" | "doc") => {
         const files = e.target.files;
@@ -138,10 +150,22 @@ export default function UploadSection() {
                 </button>
             </div>
 
-            <div className="text-center pt-2">
+            <div className="text-center pt-2 space-y-3">
                 <p className="text-sm font-medium text-wood-dark">
-                    Toplamda en fazla <span className="font-bold text-seal">50</span> adet fotoğraf/belge ekleyebilirsiniz.
+                    Toplamda en fazla <span className="font-bold text-seal">10</span> adet fotoğraf/belge ekleyebilirsiniz.
                 </p>
+
+                <div className="bg-seal/5 border border-seal/20 rounded-xl p-4 max-w-lg mx-auto shadow-sm">
+                    <h4 className="font-bold text-seal flex items-center justify-center gap-2 mb-2">
+                        <Info size={16} /> Fırsatları Kaçırmayın!
+                    </h4>
+                    <p className="text-xs text-ink-light space-y-1">
+                        <span className="block">• Her fotoğraf <strong className="text-wood-dark">{photoCreditPrice} 🪙</strong>, belge <strong className="text-wood-dark">{docCreditPrice} 🪙</strong> değerindedir.</span>
+                        <span className="block">• <strong>3. Fotoğrafta:</strong> %20 İndirim fırsatı!</span>
+                        <span className="block">• <strong>5 Fotoğraf yüklerseniz:</strong> 1 Tanesi Bizden Hediye!</span>
+                        <span className="block">• <strong>10 Fotoğraf yüklerseniz:</strong> Tam 2 Tanesi Hediye!</span>
+                    </p>
+                </div>
             </div>
 
             {/* Uploaded Files List */}

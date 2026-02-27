@@ -12,6 +12,9 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
 import NextImage from "next/image";
+import { getPricingSettings } from "@/app/actions/settingsActions";
+import { markIncomingLetterAsRead } from "@/app/actions/incomingLetterActions";
+import InsufficientCreditModal from "@/components/InsufficientCreditModal";
 
 export default function InboxPage() {
     const [letters, setLetters] = useState<any[]>([]);
@@ -30,6 +33,14 @@ export default function InboxPage() {
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const [isSearching, setIsSearching] = useState(false);
 
+    // Unlock Letter States
+    const [isUnlockModalOpen, setIsUnlockModalOpen] = useState(false);
+    const [unlockingLetter, setUnlockingLetter] = useState<any>(null);
+    const [isUnlocking, setIsUnlocking] = useState(false);
+    const [unlockPrice, setUnlockPrice] = useState(50);
+    const [isCreditModalOpen, setIsCreditModalOpen] = useState(false);
+    const [requiredCreditAmount, setRequiredCreditAmount] = useState(0);
+
     // DM Writing Modal States
     const [isDMModalOpen, setIsDMModalOpen] = useState(false);
     const [writingRecipient, setWritingRecipient] = useState<{ id: string; name: string } | null>(null);
@@ -41,7 +52,15 @@ export default function InboxPage() {
     useEffect(() => {
         fetchAllLetters();
         fetchNotificationPreference();
+        fetchUnlockPrice();
     }, []);
+
+    const fetchUnlockPrice = async () => {
+        const pricingRes = await getPricingSettings();
+        if (pricingRes.success && pricingRes.data) {
+            setUnlockPrice(pricingRes.data.incomingLetterOpenPrice || 50);
+        }
+    };
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
@@ -117,8 +136,42 @@ export default function InboxPage() {
     };
 
     const handleOpenIncomingModal = (letter: any) => {
-        setSelectedIncomingLetter(letter);
-        setIsIncomingModalOpen(true);
+        if (!letter.isRead) {
+            setUnlockingLetter(letter);
+            setIsUnlockModalOpen(true);
+        } else {
+            setSelectedIncomingLetter(letter);
+            setIsIncomingModalOpen(true);
+        }
+    };
+
+    const handleUnlockLetter = async () => {
+        if (!unlockingLetter) return;
+        setIsUnlocking(true);
+        const res = await markIncomingLetterAsRead(unlockingLetter.id);
+
+        if (res.success && res.letter) {
+            toast.success("Mektubunuz başarıyla açıldı! İstediğiniz zaman ücretsiz olarak görüntüleyebilirsiniz.");
+            // Mektubu güncelleyelim (isRead=true ve images dolacak)
+            const updatedIncomingLetters = incomingLetters.map(l =>
+                l.id === unlockingLetter.id ? { ...l, isRead: true, images: res.letter.images } : l
+            );
+            setIncomingLetters(updatedIncomingLetters);
+            setIsUnlockModalOpen(false);
+
+            // Hemen arkasına mektubu açalım
+            setSelectedIncomingLetter({ ...unlockingLetter, isRead: true, images: res.letter.images });
+            setIsIncomingModalOpen(true);
+        } else {
+            if (res.isCreditError) {
+                setRequiredCreditAmount(res.requiredCredit || unlockPrice);
+                setIsCreditModalOpen(true);
+                setIsUnlockModalOpen(false); // Bunu kapatıp kredi uyarısını açalım
+            } else {
+                toast.error(res.error || "Mektup açılırken bir hata oluştu.");
+            }
+        }
+        setIsUnlocking(false);
     };
 
     // Merge and sort all letters by date
@@ -316,22 +369,108 @@ export default function InboxPage() {
                 )}
             </div>
 
-            {selectedLetter && (
-                <LetterDetailsModal
-                    letter={selectedLetter}
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    onReply={handleReplyFromModal}
-                />
-            )}
+            {/* Modals */}
+            <AnimatePresence>
+                {isModalOpen && selectedLetter && (
+                    <LetterDetailsModal
+                        letter={selectedLetter}
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        onReply={handleReplyFromModal}
+                    />
+                )}
 
-            {selectedIncomingLetter && (
-                <IncomingLetterModal
-                    letter={selectedIncomingLetter}
-                    isOpen={isIncomingModalOpen}
-                    onClose={() => setIsIncomingModalOpen(false)}
-                />
-            )}
+                {isIncomingModalOpen && selectedIncomingLetter && (
+                    <IncomingLetterModal
+                        letter={selectedIncomingLetter}
+                        isOpen={isIncomingModalOpen}
+                        onClose={() => setIsIncomingModalOpen(false)}
+                    />
+                )}
+
+                {isUnlockModalOpen && unlockingLetter && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/60 backdrop-blur-sm"
+                        onClick={() => !isUnlocking && setIsUnlockModalOpen(false)}
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-paper rounded-2xl shadow-xl w-full max-w-md overflow-hidden border border-paper-dark"
+                        >
+                            <div className="p-6 border-b border-paper-dark flex justify-between items-center bg-paper-light">
+                                <h3 className="font-playfair text-xl font-bold text-wood-dark flex items-center gap-2">
+                                    <Inbox size={22} className="text-seal" />
+                                    Mektubu Aç
+                                </h3>
+                                <button disabled={isUnlocking} onClick={() => setIsUnlockModalOpen(false)} className="text-ink-light hover:text-ink transition-colors p-1 bg-paper border border-paper-dark rounded-full shadow-sm hover:shadow-md disabled:opacity-50">
+                                    <X size={18} />
+                                </button>
+                            </div>
+
+                            <div className="p-6 space-y-5 text-center">
+                                <div className="w-16 h-16 bg-seal/10 rounded-full flex items-center justify-center mx-auto mb-2 relative">
+                                    <Mail size={32} className="text-seal" />
+                                    <span className="absolute -top-1 -right-1 bg-white text-seal text-xs font-bold px-1.5 py-0.5 rounded shadow-sm border border-seal/20">+{unlockingLetter.imageCount || 1}</span>
+                                </div>
+                                <p className="text-sm text-ink-light leading-relaxed">
+                                    Adınıza gelen fiziksel mektubu dijital olarak okumak ve kalıcı olarak kilit açmak üzeresiniz.
+                                </p>
+
+                                <div className="bg-paper-light border border-paper-dark/50 py-4 px-6 rounded-xl flex items-center justify-between mx-4 shadow-inner">
+                                    <span className="text-sm font-semibold text-ink">Açılış Ücreti:</span>
+                                    <span className="text-lg font-black text-wood tracking-wide flex items-center gap-1">
+                                        {unlockPrice} 🪙
+                                    </span>
+                                </div>
+
+                                <p className="text-xs text-seal font-medium bg-seal/5 p-3 rounded-lg border border-seal/10">
+                                    Kredi harcandıktan sonra bu mektuba <strong>ne zaman isterseniz ücretsiz ve sınırsız</strong> erişebilirsiniz.
+                                </p>
+                            </div>
+
+                            <div className="p-4 border-t border-paper-dark bg-paper-light flex items-center justify-end gap-3">
+                                <button
+                                    onClick={() => setIsUnlockModalOpen(false)}
+                                    disabled={isUnlocking}
+                                    className="px-5 py-2.5 rounded-xl font-bold text-sm text-ink-light hover:text-ink hover:bg-paper-dark transition-colors disabled:opacity-50"
+                                >
+                                    Vazgeç
+                                </button>
+                                <button
+                                    onClick={handleUnlockLetter}
+                                    disabled={isUnlocking}
+                                    className="px-6 py-2.5 rounded-xl font-bold text-sm bg-seal hover:bg-seal-hover text-white shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:-translate-y-0 disabled:hover:shadow-md flex items-center gap-2"
+                                >
+                                    {isUnlocking ? (
+                                        <>
+                                            <Loader2 size={16} className="animate-spin" />
+                                            İşleniyor...
+                                        </>
+                                    ) : (
+                                        "Kredi ile Aç"
+                                    )}
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+
+                {isCreditModalOpen && (
+                    <InsufficientCreditModal
+                        isOpen={true}
+                        onClose={() => setIsCreditModalOpen(false)}
+                        requiredCredit={requiredCreditAmount}
+                        currentBalance={0}
+                        actionName="Gelen mektubu açmak"
+                    />
+                )}
+            </AnimatePresence>
 
             {/* DM Writing Modal */}
             <DMWritingModal

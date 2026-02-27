@@ -3,8 +3,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut, X, LogIn, UserPlus, ShieldCheck, Gift, GitGraphIcon, Truck, Inbox } from "lucide-react";
+import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut, X, LogIn, UserPlus, ShieldCheck, Gift, GitGraphIcon, Truck, Inbox, CircleDollarSign, Wallet } from "lucide-react";
 import { useLetterStore } from "@/store/letterStore";
+import { useUIStore } from "@/store/uiStore";
+import { getCreditBalanceAction } from "@/app/actions/creditActions";
 import Image from "next/image";
 import SignOutModal from "./SignOutModal";
 
@@ -14,6 +16,18 @@ const Navbar = () => {
     const [adminMenus, setAdminMenus] = useState(false);
     const { data: session, status } = useSession();
     const resetStore = useLetterStore(state => state.resetStore);
+    const creditBalance = useUIStore(state => state.creditBalance);
+    const setCreditBalance = useUIStore(state => state.setCreditBalance);
+
+    React.useEffect(() => {
+        if (status === "authenticated" && session) {
+            getCreditBalanceAction().then(res => {
+                if (res.success && res.balance !== undefined) {
+                    setCreditBalance(res.balance);
+                }
+            });
+        }
+    }, [status, session, setCreditBalance]);
 
     const toggleMenu = () => setIsOpen(!isOpen);
     const closeMenu = () => setIsOpen(false);
@@ -65,6 +79,10 @@ const Navbar = () => {
                                 <Inbox size={18} />
                                 <span>Müşteriye Mektup Gönder</span>
                             </Link>
+                            <Link href="/admin/fiyatlar" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
+                                <CircleDollarSign size={18} />
+                                <span>Fiyatlar</span>
+                            </Link>
                             <Link href="/admin/gifts" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
                                 <Gift size={18} />
                                 <span>Hediyeler</span>
@@ -107,6 +125,10 @@ const Navbar = () => {
                 <div className="hidden md:flex items-center gap-3 shrink-0">
                     {status === "authenticated" ? (
                         <>
+                            <Link href="/cuzdan" className="flex items-center gap-1.5 bg-wood/10 backdrop-blur-md text-black border border-wood/30 hover:border-wood/50 hover:bg-wood/20 px-3 py-1.5 rounded-md font-bold text-[14px] transition-all shadow-sm">
+                                <span>{creditBalance}</span>
+                                <span className="text-lg leading-none">🪙</span>
+                            </Link>
                             <Link href="/profil" className="flex items-center gap-2 bg-paper/10 backdrop-blur-md text-paper border border-paper/20 hover:border-paper/40 hover:bg-paper/20 px-4 py-2 rounded-md font-bold text-[13px] transition-all shadow-sm">
                                 <User size={16} />
                                 <span>{session.user?.name || "Profilim"}</span>
@@ -166,6 +188,10 @@ const Navbar = () => {
                                     <Inbox size={22} />
                                     <span>Müşteriye Mektup Gönder</span>
                                 </Link>
+                                <Link href="/admin/fiyatlar" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
+                                    <CircleDollarSign size={22} />
+                                    <span>Fiyatlar</span>
+                                </Link>
                                 <Link href="/admin/gifts" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                                     <Gift size={22} />
                                     <span>Hediyeler</span>
@@ -213,13 +239,17 @@ const Navbar = () => {
                         <div className="mt-4 flex flex-col gap-4">
                             {status === "authenticated" ? (
                                 <>
+                                    <Link href="/cuzdan" onClick={closeMenu} className="flex items-center justify-center gap-2 bg-wood/10 text-wood border border-wood/30 px-6 py-4 rounded-xl font-bold transition-all shadow-sm">
+                                        <Wallet size={20} />
+                                        <span>Bakiyem: {creditBalance} 🪙</span>
+                                    </Link>
                                     {(session.user as any)?.role === "ADMIN" && (
                                         <Link href="/admin/mektuplar" onClick={closeMenu} className="flex items-center justify-center gap-2 bg-seal/10 text-seal border border-seal/20 px-6 py-4 rounded-xl font-bold transition-all shadow-sm">
                                             <ShieldCheck size={20} />
                                             <span>Admin Paneli</span>
                                         </Link>
                                     )}
-                                    <Link href="/" onClick={closeMenu} className="flex items-center justify-center gap-2 bg-paper/10 text-paper border border-paper/20 px-6 py-4 rounded-xl font-bold transition-all shadow-sm">
+                                    <Link href="/profil" onClick={closeMenu} className="flex items-center justify-center gap-2 bg-paper/10 text-paper border border-paper/20 px-6 py-4 rounded-xl font-bold transition-all shadow-sm">
                                         <User size={20} />
                                         <span>{session.user?.name || "Profilim"}</span>
                                     </Link>

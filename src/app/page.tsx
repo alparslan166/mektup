@@ -12,12 +12,25 @@ import { useSession } from 'next-auth/react';
 import DashboardCard from '@/components/DashboardCard';
 import { useLetterStore } from '@/store/letterStore';
 import Image from "next/image";
+import { getCreditBalanceAction } from '@/app/actions/creditActions';
 
 
 export default function LandingPage() {
   const { data: session, status } = useSession();
   const resetStore = useLetterStore(state => state.resetStore);
   const isLoading = status === "loading";
+  const [balance, setBalance] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    const userId = (session?.user as any)?.id;
+    if (userId) {
+      getCreditBalanceAction().then(res => {
+        if (res.success && res.balance !== undefined) {
+          setBalance(res.balance);
+        }
+      });
+    }
+  }, [session]);
 
   const fadeIn = {
     hidden: { opacity: 0, y: 30 },
@@ -136,7 +149,7 @@ export default function LandingPage() {
           />
           <DashboardCard
             title="Cüzdan & Kutu"
-            description="Bakiyenizi yönetin, avantajlı paketlerle sanal mektup kutunuzu doldurun."
+            description={balance !== null ? `Bakiyeniz: ${balance} 🪙 • İşlemlerinizi yönetin.` : "Kredinizi yönetin ve avantajlı paketleri inceleyin."}
             href="/cuzdan"
             icon={Wallet}
             color="gold"

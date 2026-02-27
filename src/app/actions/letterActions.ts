@@ -4,6 +4,8 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { sendOrderReceivedEmail, sendInboxNotificationEmail } from "./emailActions";
+import { getPricingSettings } from "./settingsActions";
+import { CreditService } from "@/services/creditService";
 
 export async function createLetter(letterData: any) {
     try {
@@ -23,16 +25,71 @@ export async function createLetter(letterData: any) {
 
         const { letter, extras, address } = letterData;
 
-        // server-side price calculation for security
-        const baseLetterPrice = 120;
-        const scentPrice = extras.scent === "Yok" ? 0 : 20;
-        const photoPrice = (extras.photos?.length || 0) * 10;
-        const docPrice = (extras.documents?.length || 0) * 5;
-        const postcardPrice = (extras.postcards?.length || 0) * 15;
-        const calendarPrice = extras.includeCalendar ? ((extras.photos?.length || 0) >= 3 ? 0 : 30) : 0;
-        const shippingPrice = 45;
+        // Fiyatlandırma ayarlarını çek
+        const pricingRes = await getPricingSettings();
 
-        const totalAmount = baseLetterPrice + scentPrice + photoPrice + docPrice + postcardPrice + calendarPrice + shippingPrice;
+        // Zarf ve Kağıt Renk Farkı
+        const envelopePriceDelta = letter.envelopeColor !== "Beyaz" ? (pricingRes.data?.envelopeColorPrice || 10) : 0;
+        const paperPriceDelta = letter.paperColor !== "Beyaz" ? (pricingRes.data?.paperColorPrice || 10) : 0;
+
+        const baseLetterPrice = (pricingRes.data?.letterSendPrice || 100) + envelopePriceDelta + paperPriceDelta;
+
+        const scentPrice = extras.scent === "Yok" ? 0 : (pricingRes.data?.scentCreditPrice || 20);
+
+        // Fotoğraf Fiyat Algoritması (Review ve PaymentStep ile Aynı)
+        const photoCreditPrice = pricingRes.data?.photoCreditPrice || 10;
+        const rawPhotoCount = extras.photos?.length || 0;
+        let actualPhotoCount = rawPhotoCount;
+        let photoPrice = 0;
+
+        if (actualPhotoCount >= 10) {
+            actualPhotoCount = actualPhotoCount - 2;
+        } else if (actualPhotoCount >= 5) {
+            actualPhotoCount = actualPhotoCount - 1;
+        }
+
+        photoPrice = actualPhotoCount * photoCreditPrice;
+
+        if (rawPhotoCount === 3 || rawPhotoCount === 4) {
+            let discountedPhotoIndex = 8;
+            photoPrice = (rawPhotoCount - 1) * photoCreditPrice + discountedPhotoIndex;
+        }
+
+        const docPrice = (extras.documents?.length || 0) * (pricingRes.data?.docCreditPrice || 5);
+
+        // Kartpostal Fiyat Algoritması
+        const postcardCreditPrice = pricingRes.data?.postcardCreditPrice || 15;
+        const rawPostcardCount = extras.postcards?.length || 0;
+        let actualPostcardCount = rawPostcardCount;
+        let postcardPrice = 0;
+
+        if (actualPostcardCount >= 10) {
+            actualPostcardCount = actualPostcardCount - 2;
+        } else if (actualPostcardCount >= 5) {
+            actualPostcardCount = actualPostcardCount - 1;
+        }
+
+        postcardPrice = actualPostcardCount * postcardCreditPrice;
+
+        if (rawPostcardCount === 3 || rawPostcardCount === 4) {
+            let discountedPostcardIndex = Math.round(postcardCreditPrice * 0.8);
+            postcardPrice = (rawPostcardCount - 1) * postcardCreditPrice + discountedPostcardIndex;
+        }
+        const calendarPrice = extras.includeCalendar ? ((extras.photos?.length || 0) >= 3 ? 0 : (pricingRes.data?.calendarCreditPrice || 30)) : 0;
+        // const shippingPrice = 0; // Krediye Dahil
+
+        const totalAmount = baseLetterPrice + scentPrice + photoPrice + docPrice + postcardPrice + calendarPrice;
+
+        // Kredi düşümünü gerçekleştir (Bakiye yetersizse hata fırlatır)
+        try {
+            await CreditService.spendCredit(
+                user.id,
+                totalAmount,
+                `${address.receiverName || "Alıcı"} kişisine mektup gönderimi`
+            );
+        } catch (creditError: any) {
+            return { error: creditError.message || "Bakiye işlemi başarısız.", isCreditError: true };
+        }
 
         // 1. Create the permanent letter
         const createdLetter = await prisma.letter.create({

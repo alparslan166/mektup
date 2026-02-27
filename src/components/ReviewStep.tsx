@@ -6,19 +6,104 @@ import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Mail, ImageIcon, Calendar,
 import { motion, AnimatePresence } from "framer-motion";
 
 import { useLetterStore } from "@/store/letterStore";
+import { getPricingSettings } from "@/app/actions/settingsActions";
 
 export default function ReviewStep({ goBack, goNext }: { goBack: () => void, goNext: () => void }) {
     const { letter, extras, address, setCurrentStep } = useLetterStore();
     const [showPreview, setShowPreview] = React.useState(false);
 
+    // Pricing States
+    const [pricingKeys, setPricingKeys] = React.useState({
+        letterSendPrice: 100,
+        photoCreditPrice: 10,
+        postcardCreditPrice: 15,
+        scentCreditPrice: 20,
+        docCreditPrice: 5,
+        calendarCreditPrice: 30,
+        envelopeColorPrice: 10,
+        paperColorPrice: 10
+    });
+
+    React.useEffect(() => {
+        const fetchPrices = async () => {
+            const res = await getPricingSettings();
+            if (res.success && res.data) {
+                setPricingKeys({
+                    letterSendPrice: res.data.letterSendPrice || 100,
+                    photoCreditPrice: res.data.photoCreditPrice || 10,
+                    postcardCreditPrice: res.data.postcardCreditPrice || 15,
+                    scentCreditPrice: res.data.scentCreditPrice || 20,
+                    docCreditPrice: res.data.docCreditPrice || 5,
+                    calendarCreditPrice: res.data.calendarCreditPrice || 30,
+                    envelopeColorPrice: res.data.envelopeColorPrice || 10,
+                    paperColorPrice: res.data.paperColorPrice || 10,
+                });
+            }
+        };
+        fetchPrices();
+    }, []);
+
+    // Zarf ve Kağıt Renk Farkı
+    const envelopePriceDelta = letter.envelopeColor !== "Beyaz" ? pricingKeys.envelopeColorPrice : 0;
+    const paperPriceDelta = letter.paperColor !== "Beyaz" ? pricingKeys.paperColorPrice : 0;
+
     // Calculate dynamic pricing based on selections
-    const baseLetterPrice = 120;
-    const scentPrice = extras.scent === "Yok" ? 0 : 20;
-    const photoPrice = extras.photos.length * 10;
-    const docPrice = extras.documents.length * 5;
-    const postcardPrice = extras.postcards.length * 15;
-    const calendarPrice = extras.includeCalendar ? (extras.photos.length >= 3 ? 0 : 30) : 0;
-    const shippingPrice = 45;
+    const baseLetterPrice = pricingKeys.letterSendPrice + envelopePriceDelta + paperPriceDelta;
+    const scentPrice = extras.scent === "Yok" ? 0 : pricingKeys.scentCreditPrice;
+
+    // Fotoğraf Fiyat Algoritması
+    const photoCreditPrice = pricingKeys.photoCreditPrice;
+    let actualPhotoCount = extras.photos.length;
+    let photoPriceText = "";
+
+    if (actualPhotoCount >= 10) {
+        // En az 10 fotoğraf varsa: 2 tanesi bedava
+        actualPhotoCount = actualPhotoCount - 2;
+        photoPriceText = "(2 Hediye!)";
+    } else if (actualPhotoCount >= 5) {
+        // En az 5 fotoğraf varsa: 1 tanesi bedava
+        actualPhotoCount = actualPhotoCount - 1;
+        photoPriceText = "(1 Hediye!)";
+    }
+
+    let photoPrice = actualPhotoCount * photoCreditPrice;
+
+    // Eğer tam 3 fotoğraf veya tam 3'ün katsayısı gelirse fiyattan %20 düşürülebilir 
+    // veya sadece "3. fotoğrafa %20 indirim" kuralını harmanlamak için:
+    if (extras.photos.length === 3 || extras.photos.length === 4) {
+        // İlk 2 fotoğraf 10 + 10 = 20, 3.'sü %20 indirimle 8. Yani Toplam = 28. (4 fotoğrafsa 38)
+        let discountedPhotoIndex = 8; // %20 indirimli hali
+        photoPrice = (extras.photos.length - 1) * photoCreditPrice + discountedPhotoIndex;
+        photoPriceText = "(%20 İndirim!)";
+    }
+
+    const docPrice = extras.documents.length * pricingKeys.docCreditPrice;
+
+    // Kartpostal Fiyat Algoritması
+    const postcardCreditPrice = pricingKeys.postcardCreditPrice;
+    let actualPostcardCount = extras.postcards.length;
+    let postcardPriceText = "";
+
+    if (actualPostcardCount >= 10) {
+        // En az 10 kartpostal varsa: 2 tanesi bedava
+        actualPostcardCount = actualPostcardCount - 2;
+        postcardPriceText = "(2 Hediye!)";
+    } else if (actualPostcardCount >= 5) {
+        // En az 5 kartpostal varsa: 1 tanesi bedava
+        actualPostcardCount = actualPostcardCount - 1;
+        postcardPriceText = "(1 Hediye!)";
+    }
+
+    let postcardPrice = actualPostcardCount * postcardCreditPrice;
+
+    // %20 indirim kuralı (3 fotoğrafta 1 tanesine %20 indirim)
+    if (extras.postcards.length === 3 || extras.postcards.length === 4) {
+        let discountedPostcardIndex = Math.round(postcardCreditPrice * 0.8); // 15 * 0.8 = 12
+        postcardPrice = (extras.postcards.length - 1) * postcardCreditPrice + discountedPostcardIndex;
+        postcardPriceText = "(%20 İndirim!)";
+    }
+    const calendarPrice = extras.includeCalendar ? (extras.photos.length >= 3 ? 0 : pricingKeys.calendarCreditPrice) : 0;
+    const shippingPrice = 0; // Krediye Dahil
 
     const totalPrice = baseLetterPrice + scentPrice + photoPrice + docPrice + postcardPrice + calendarPrice + shippingPrice;
 
@@ -27,8 +112,10 @@ export default function ReviewStep({ goBack, goNext }: { goBack: () => void, goN
         extras: {
             ...extras,
             photoCount: extras.photos.length,
+            photoPriceText,
             docCount: extras.documents.length,
             postcardCount: extras.postcards.length,
+            postcardPriceText,
             calendar: extras.includeCalendar
         },
         sender: {
@@ -200,44 +287,50 @@ export default function ReviewStep({ goBack, goNext }: { goBack: () => void, goN
                     <div className="flex-1">
                         <div className="bg-paper-dark/10 border border-wood/20 rounded-xl p-6 sticky top-8 shadow-sm">
                             <h3 className="font-playfair text-xl font-bold text-wood-dark border-b border-wood/20 pb-4 mb-4 text-center">
-                                Sipariş Özeti
+                                Harcanacak Kredi Özeti
                             </h3>
 
                             <div className="space-y-3 text-sm mb-6">
                                 <div className="flex justify-between items-center">
                                     <span className="text-ink-light">Mektup Ücreti</span>
-                                    <span className="font-medium text-ink">{orderDetails.pricing.baseLetter} TL</span>
+                                    <span className="font-medium text-ink">{orderDetails.pricing.baseLetter} 🪙</span>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-ink-light">Koku Seçimi ({orderDetails.extras.scent})</span>
-                                    <span className="font-medium text-ink">+{orderDetails.pricing.scent} TL</span>
+                                    <span className="font-medium text-ink">+{orderDetails.pricing.scent} 🪙</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-ink-light">Fotoğraflar ({orderDetails.extras.photoCount}x)</span>
-                                    <span className="font-medium text-ink">+{orderDetails.pricing.photos} TL</span>
+                                    <span className="text-ink-light flex items-center gap-1">
+                                        Fotoğraflar ({orderDetails.extras.photoCount}x)
+                                        {orderDetails.extras.photoPriceText && <span className="bg-seal/10 text-seal font-bold text-[10px] px-1.5 rounded-full">{orderDetails.extras.photoPriceText}</span>}
+                                    </span>
+                                    <span className="font-medium text-ink">+{orderDetails.pricing.photos} 🪙</span>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-ink-light">Belgeler ({orderDetails.extras.docCount}x)</span>
-                                    <span className="font-medium text-ink">+{orderDetails.pricing.docs} TL</span>
+                                    <span className="font-medium text-ink">+{orderDetails.pricing.docs} 🪙</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-ink-light">Kartpostallar ({orderDetails.extras.postcardCount}x)</span>
-                                    <span className="font-medium text-ink">+{orderDetails.pricing.postcards} TL</span>
+                                    <span className="text-ink-light flex items-center gap-1">
+                                        Kartpostallar ({orderDetails.extras.postcardCount}x)
+                                        {orderDetails.extras.postcardPriceText && <span className="bg-seal/10 text-seal font-bold text-[10px] px-1.5 rounded-full">{orderDetails.extras.postcardPriceText}</span>}
+                                    </span>
+                                    <span className="font-medium text-ink">+{orderDetails.pricing.postcards} 🪙</span>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-ink-light flex items-center gap-1">Takvim <span className="bg-seal text-white text-[10px] px-1.5 rounded-full">HEDİYE</span></span>
-                                    <span className="font-medium text-wood-dark line-through opacity-70">30 TL</span>
+                                    <span className="font-medium text-wood-dark line-through opacity-70">{pricingKeys.calendarCreditPrice} 🪙</span>
                                 </div>
                                 <div className="flex justify-between items-center border-t border-paper-dark/50 pt-3 mt-3">
                                     <span className="text-ink-light">Kargo Ücreti</span>
-                                    <span className="font-medium text-ink">+{orderDetails.pricing.shipping} TL</span>
+                                    <span className="font-medium text-ink">Ücretsiz / Krediye Dahil</span>
                                 </div>
                             </div>
 
                             <div className="bg-paper-light border border-wood-dark/20 rounded-lg p-4 mb-6">
                                 <div className="flex justify-between items-end">
-                                    <span className="text-wood-dark font-bold">Toplam Tutar</span>
-                                    <span className="text-3xl font-playfair font-bold text-seal">{orderDetails.pricing.total} TL</span>
+                                    <span className="text-wood-dark font-bold">Toplam Kredi</span>
+                                    <span className="text-3xl font-playfair font-bold text-seal">{orderDetails.pricing.total - orderDetails.pricing.shipping} 🪙</span>
                                 </div>
                                 <p className="text-[11px] text-ink-light/70 text-right mt-1">KDV Dahildir</p>
                             </div>
@@ -246,11 +339,11 @@ export default function ReviewStep({ goBack, goNext }: { goBack: () => void, goN
                                 onClick={goNext}
                                 className="w-full bg-seal hover:bg-seal-hover text-paper py-4 rounded-xl font-bold shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] text-lg"
                             >
-                                Ödemeye Geç
+                                Kredi ile Gönder
                                 <ArrowRight size={20} />
                             </button>
                             <p className="text-xs text-center text-ink-light mt-4 flex items-center justify-center gap-1">
-                                <CheckCircle2 size={12} className="text-wood" /> %100 Güvenli Ödeme Altyapısı
+                                <CheckCircle2 size={12} className="text-wood" /> Bakiye Sistemimizle Hızlı Gönderim
                             </p>
                         </div>
                     </div>

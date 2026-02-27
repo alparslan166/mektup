@@ -35,42 +35,45 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          String    @default("USER")
-  inboxNotifications Boolean @default(true)
-  accounts      Account[]
-  sessions      Session[]
-  drafts        Draft[]
-  letters       Letter[]  @relation("SentLetters")
-  receivedLetters Letter[] @relation("ReceivedLetters")
-  incomingLetters IncomingLetter[]
-  addresses     Address[]
+  id                 String              @id @default(cuid())
+  name               String?
+  email              String?             @unique
+  emailVerified      DateTime?
+  image              String?
+  password           String?
+  role               String              @default("USER")
+  inboxNotifications Boolean             @default(true)
+  encryptedBalance   String?
+  accounts           Account[]
+  sessions           Session[]
+  drafts             Draft[]
+  letters            Letter[]            @relation("SentLetters")
+  receivedLetters    Letter[]            @relation("ReceivedLetters")
+  incomingLetters    IncomingLetter[]
+  addresses          Address[]
+  creditTransactions CreditTransaction[]
+  giftOrders         GiftOrder[]
 }
 
 model Address {
-  id          String   @id @default(cuid())
+  id          String  @id @default(cuid())
   userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title       String   // e.g. "Ev Adresim", "İş Yeri"
-  name        String   // Alıcı Ad Soyad
-  city        String   // Şehir
-  addressText String   // Detaylı Adres
-  phone       String?  // Telefon (opsiyonel)
-  
-  // Prison specific fields
-  isPrison    Boolean  @default(false)
-  prisonName  String?
-  fatherName  String?
-  wardNumber  String?
-  prisonNote  String?
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String // e.g. "Ev Adresim", "İş Yeri"
+  name        String // Alıcı Ad Soyad
+  city        String // Şehir
+  addressText String // Detaylı Adres
+  phone       String? // Telefon (opsiyonel)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  // Prison specific fields
+  isPrison   Boolean @default(false)
+  prisonName String?
+  fatherName String?
+  wardNumber String?
+  prisonNote String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -82,12 +85,12 @@ model VerificationToken {
 }
 
 model Draft {
-  id         String   @id @default(cuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  data       Json
-  updatedAt  DateTime @updatedAt
-  createdAt  DateTime @default(now())
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  data      Json
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 }
 
 model Letter {
@@ -125,6 +128,7 @@ model Gift {
   order       Int          @default(0)
   categoryId  String
   category    GiftCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  orders      GiftOrder[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
@@ -144,4 +148,49 @@ model SiteSetting {
   key       String   @id
   value     String   @db.Text
   updatedAt DateTime @updatedAt
+}
+
+model CreditTransaction {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount      Float
+  type        String // DEPOSIT, SPEND, REFUND, vb.
+  description String
+  referenceId String? // İlgili mektup vb. nesnenin ID'si
+  createdAt   DateTime @default(now())
+}
+
+model GiftOrder {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  giftId       String
+  gift         Gift     @relation(fields: [giftId], references: [id], onDelete: Cascade)
+  
+  // Gönderici bilgileri
+  senderName   String?
+  senderCity   String?
+  senderAddress String?
+
+  // Sipariş detayı (Alıcı bilgileri)
+  receiverName String
+  addressText  String
+  city         String?
+  phone        String?
+  
+  // Cezaevi Detayları
+  isPrison     Boolean  @default(false)
+  prisonName   String?
+  fatherName   String?
+  wardNumber   String?
+  prisonNote   String?
+
+  notes        String?  @db.Text
+  
+  pricePaid    Float    // Düşülen kredi
+  status       String   @default("PAID") // PAID, PREPARING, SHIPPED, COMPLETED
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

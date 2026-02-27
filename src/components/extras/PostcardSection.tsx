@@ -6,6 +6,8 @@ import { useLetterStore } from "@/store/letterStore";
 import { useShallow } from 'zustand/react/shallow';
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { getPricingSettings } from "@/app/actions/settingsActions";
+import { Info } from "lucide-react";
 
 // Mock Data for Postcards
 export const postcardCategories = [
@@ -38,6 +40,15 @@ export default function PostcardSection() {
 
     const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({ tr: true, love: true });
     const [previewCard, setPreviewCard] = useState<any | null>(null);
+    const [postcardCreditPrice, setPostcardCreditPrice] = useState(15);
+
+    React.useEffect(() => {
+        getPricingSettings().then(res => {
+            if (res.success && res.data) {
+                setPostcardCreditPrice(res.data.postcardCreditPrice || 15);
+            }
+        });
+    }, []);
 
     const toggleCategory = (id: string) => {
         setOpenCategories(prev => ({ ...prev, [id]: !prev[id] }));
@@ -53,7 +64,7 @@ export default function PostcardSection() {
     return (
         <div className="space-y-8">
             {/* Header */}
-            <div className="text-center space-y-2 mb-8 animate-in fade-in duration-700">
+            <div className="text-center space-y-4 mb-8 animate-in fade-in duration-700">
                 <h3 className="font-playfair text-2xl font-bold text-wood-dark flex items-center justify-center gap-2">
                     Kartpostal Ekle
                 </h3>
@@ -62,6 +73,18 @@ export default function PostcardSection() {
                     <br />
                     <span className="text-seal font-medium">10x15 cm boyutunda, yüksek kaliteli fotoğraf baskısı.</span>
                 </p>
+
+                <div className="bg-seal/5 border border-seal/20 rounded-xl p-4 max-w-lg mx-auto shadow-sm">
+                    <h4 className="font-bold text-seal flex items-center justify-center gap-2 mb-2">
+                        <Info size={16} /> Fırsatları Kaçırmayın!
+                    </h4>
+                    <p className="text-xs text-ink-light space-y-1">
+                        <span className="block">• Her kartpostal <strong className="text-wood-dark">{postcardCreditPrice} 🪙</strong> değerindedir.</span>
+                        <span className="block">• <strong>3. Kartpostalda:</strong> %20 İndirim fırsatı!</span>
+                        <span className="block">• <strong>5 Kartpostal seçerseniz:</strong> 1 Tanesi Bizden Hediye!</span>
+                        <span className="block">• <strong>10 Kartpostal seçerseniz:</strong> Tam 2 Tanesi Hediye!</span>
+                    </p>
+                </div>
             </div>
 
             {/* Categories */}

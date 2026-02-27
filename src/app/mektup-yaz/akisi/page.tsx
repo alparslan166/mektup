@@ -14,6 +14,7 @@ import AutoSave from "@/components/AutoSave";
 import { useLetterStore } from "@/store/letterStore";
 import { useSession } from "next-auth/react";
 import { saveDraft } from "@/app/actions/draftActions";
+import { getPricingSettings } from "@/app/actions/settingsActions";
 
 export default function Home() {
   const currentStep = useLetterStore(state => state.currentStep);
@@ -24,6 +25,17 @@ export default function Home() {
 
   const { data: session } = useSession();
   const [isSaving, setIsSaving] = useState(false);
+  const [envelopePrice, setEnvelopePrice] = useState(10);
+  const [paperPrice, setPaperPrice] = useState(10);
+
+  React.useEffect(() => {
+    getPricingSettings().then(res => {
+      if (res.success && res.data) {
+        setEnvelopePrice(res.data.envelopeColorPrice || 10);
+        setPaperPrice(res.data.paperColorPrice || 10);
+      }
+    });
+  }, []);
 
   const handleProceed = async () => {
     const state = useLetterStore.getState();
@@ -108,9 +120,9 @@ export default function Home() {
               className="bg-transparent text-ink text-sm font-medium px-4 py-2 outline-none cursor-pointer appearance-none min-w-[120px]"
             >
               <option value="Beyaz">Beyaz</option>
-              <option value="Saman">Saman</option>
-              <option value="Kırmızı">Kırmızı</option>
-              <option value="Siyah">Siyah</option>
+              <option value="Saman">Saman (+{envelopePrice} 🪙)</option>
+              <option value="Kırmızı">Kırmızı (+{envelopePrice} 🪙)</option>
+              <option value="Siyah">Siyah (+{envelopePrice} 🪙)</option>
             </select>
           </div>
 
@@ -125,9 +137,9 @@ export default function Home() {
               className="bg-transparent text-ink text-sm font-medium px-4 py-2 outline-none cursor-pointer appearance-none min-w-[120px]"
             >
               <option value="Beyaz">Beyaz</option>
-              <option value="Saman">Saman</option>
-              <option value="Pembe">Pembe</option>
-              <option value="Açık Mavi">Açık Mavi</option>
+              <option value="Saman">Saman (+{paperPrice} 🪙)</option>
+              <option value="Pembe">Pembe (+{paperPrice} 🪙)</option>
+              <option value="Açık Mavi">Açık Mavi (+{paperPrice} 🪙)</option>
             </select>
           </div>
         </div>

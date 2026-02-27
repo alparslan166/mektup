@@ -7,11 +7,20 @@ import PostcardSection from "./extras/PostcardSection";
 import UploadSection from "./extras/UploadSection";
 import GiftSection from "./extras/GiftSection";
 import { useLetterStore } from "@/store/letterStore";
+import { getPricingSettings } from "@/app/actions/settingsActions";
 
 export default function ExtrasStep() {
     const extras = useLetterStore(state => state.extras);
     const updateExtras = useLetterStore(state => state.updateExtras);
-    const [showInboxInfo, setShowInboxInfo] = useState(false);
+    const [scentCreditPrice, setScentCreditPrice] = useState(20);
+
+    React.useEffect(() => {
+        getPricingSettings().then(res => {
+            if (res.success && res.data) {
+                setScentCreditPrice(res.data.scentCreditPrice || 20);
+            }
+        });
+    }, []);
 
     return (
         <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-6 sm:p-10 flex-col flex relative overflow-hidden">
@@ -73,10 +82,10 @@ export default function ExtrasStep() {
                             className="w-full bg-paper border border-paper-dark text-ink px-4 py-3 rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all appearance-none cursor-pointer"
                         >
                             <option value="Yok">Koku İstemiyorum</option>
-                            <option value="Gül">Gül Kokusu (+20 TL)</option>
-                            <option value="Lavanta">Lavanta Kokusu (+20 TL)</option>
-                            <option value="Okyanus">Okyanus Esintisi (+20 TL)</option>
-                            <option value="Kahve">Nostaljik Kahve (+20 TL)</option>
+                            <option value="Gül">Gül Kokusu (+{scentCreditPrice} 🪙)</option>
+                            <option value="Lavanta">Lavanta Kokusu (+{scentCreditPrice} 🪙)</option>
+                            <option value="Okyanus">Okyanus Esintisi (+{scentCreditPrice} 🪙)</option>
+                            <option value="Kahve">Nostaljik Kahve (+{scentCreditPrice} 🪙)</option>
                         </select>
                     </div>
                     <p className="text-xs text-ink-light/70 ml-1 italic">Seçim yapılması durumunda mektup kağıdınız kokulu olacaktır.</p>

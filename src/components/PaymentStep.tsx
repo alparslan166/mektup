@@ -1,16 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Stepper from "@/components/Stepper";
-import { ArrowLeft, CreditCard, Lock, ShieldCheck, CheckCircle2 } from "lucide-react";
-
+import { ArrowLeft, Wallet, ShieldCheck, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useLetterStore } from "@/store/letterStore";
 import { createLetter } from "@/app/actions/letterActions";
+import { getCreditBalanceAction } from "@/app/actions/creditActions";
 
 export default function PaymentStep({ goBack, onComplete }: { goBack: () => void, onComplete: () => void }) {
     const [isProcessing, setIsProcessing] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [balance, setBalance] = useState<number | null>(null);
+    const [isCheckingBalance, setIsCheckingBalance] = useState(true);
     const extras = useLetterStore(state => state.extras);
+    const isSubmitting = useRef(false);
+
+    React.useEffect(() => {
+        getCreditBalanceAction().then(res => {
+            if (res.success && res.balance !== undefined) {
+                setBalance(res.balance);
+            }
+            setIsCheckingBalance(false);
+        });
+    }, []);
 
     // Calculate dynamic pricing based on selections
     const baseLetterPrice = 120;
@@ -19,15 +32,22 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
     const docPrice = extras.documents.length * 5;
     const postcardPrice = extras.postcards.length * 15;
     const calendarPrice = extras.includeCalendar ? (extras.photos.length >= 3 ? 0 : 30) : 0;
-    const shippingPrice = 45;
+    // Gönderim ücretini standart olarak kredi içinde saydırıyoruz
+    // const shippingPrice = 45;
 
-    const totalAmount = baseLetterPrice + scentPrice + photoPrice + docPrice + postcardPrice + calendarPrice + shippingPrice;
+    const totalAmount = baseLetterPrice + scentPrice + photoPrice + docPrice + postcardPrice + calendarPrice;
+
+    const hasEnoughBalance = balance !== null && balance >= totalAmount;
 
     const handlePayment = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (isSubmitting.current) return; // Prevent double-clicks bypassing React state
+        isSubmitting.current = true;
+
         setIsProcessing(true);
 
-        const { letter, extras, address, resetStore } = useLetterStore.getState();
+        const { letter, extras, address } = useLetterStore.getState();
 
         // Simulate payment provider delay
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -35,6 +55,8 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
         const result = await createLetter({ letter, extras, address });
 
         setIsProcessing(false);
+        isSubmitting.current = false;
+
         if (result.success) {
             setIsSuccess(true);
         } else {
@@ -111,79 +133,59 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
 
                     {/* Payment Form (Left - 2/3) */}
                     <div className="flex-[2]">
-                        <div className="bg-paper-light border border-paper-dark rounded-xl p-6 shadow-sm">
+                        <div className="bg-paper-light border border-paper-dark rounded-xl p-6 shadow-sm min-h-full">
                             <h3 className="font-playfair text-xl font-bold text-wood-dark border-b border-paper-dark pb-3 mb-6 flex items-center gap-2">
-                                <CreditCard size={22} className="text-seal" /> Kart Bilgileri
+                                <Wallet size={22} className="text-seal" /> Bakiye Onayı
                             </h3>
 
-                            <form id="payment-form" onSubmit={handlePayment} className="space-y-5">
-                                {/* Card Name */}
-                                <div className="space-y-1">
-                                    <label className="text-sm font-semibold text-ink-light block">Kart Üzerindeki İsim</label>
-                                    <input
-                                        type="text"
-                                        placeholder="AD SOYAD"
-                                        className="w-full bg-paper text-ink text-sm px-4 py-3 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all uppercase"
-                                    />
+                            {isCheckingBalance ? (
+                                <div className="flex flex-col items-center justify-center py-12 gap-4">
+                                    <Loader2 size={32} className="text-seal animate-spin" />
+                                    <p className="text-ink-light font-medium">Bakiyeniz kontrol ediliyor...</p>
                                 </div>
-
-                                {/* Card Number */}
-                                <div className="space-y-1">
-                                    <label className="text-sm font-semibold text-ink-light block">Kart Numarası</label>
-                                    <div className="relative">
-                                        <input
-                                            type="text"
-                                            maxLength={19}
-                                            placeholder="0000 0000 0000 0000"
-                                            className="w-full bg-paper text-ink space-x-2 text-sm px-4 py-3 pl-12 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all tracking-widest font-mono"
-                                        />
-                                        <CreditCard size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-light/50" />
-                                    </div>
-                                </div>
-
-                                {/* Date & CVV */}
-                                <div className="flex gap-4">
-                                    <div className="flex-1 space-y-1">
-                                        <label className="text-sm font-semibold text-ink-light block">Son Kullanma Tarihi</label>
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="text"
-                                                maxLength={2}
-                                                placeholder="AA"
-                                                className="w-full bg-paper text-ink text-sm px-4 py-3 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all text-center font-mono"
-                                            />
-                                            <span className="text-2xl text-ink-light/50 flex items-center">/</span>
-                                            <input
-                                                type="text"
-                                                maxLength={2}
-                                                placeholder="YY"
-                                                className="w-full bg-paper text-ink text-sm px-4 py-3 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all text-center font-mono"
-                                            />
+                            ) : (
+                                <div className="space-y-6">
+                                    <div className="bg-paper border border-wood/20 p-6 rounded-2xl shadow-inner text-center relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-seal/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-2xl"></div>
+                                        <p className="text-sm font-semibold text-ink-light uppercase tracking-wider mb-2">Güncel Bakiyeniz</p>
+                                        <div className="text-4xl font-bold font-playfair text-wood-dark flex justify-center items-center gap-2">
+                                            {balance} <span className="text-2xl text-gold">🪙</span>
                                         </div>
                                     </div>
 
-                                    <div className="flex-1 space-y-1">
-                                        <label className="text-sm font-semibold text-ink-light block">CVV</label>
-                                        <div className="relative">
-                                            <input
-                                                type="text"
-                                                maxLength={3}
-                                                placeholder="000"
-                                                className="w-full bg-paper text-ink text-sm px-4 py-3 pl-10 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all font-mono"
-                                            />
-                                            <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-light/50" />
+                                    {!hasEnoughBalance && (
+                                        <div className="bg-rose-50 border border-rose-200 p-5 rounded-2xl flex items-start gap-4">
+                                            <div className="mt-0.5">
+                                                <AlertCircle size={24} className="text-rose-500" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-rose-800 mb-1">Yetersiz Bakiye</h4>
+                                                <p className="text-sm text-rose-700 leading-relaxed mb-3">
+                                                    Bu mektubu göndermek için <strong className="font-bold">{totalAmount - (balance || 0)} 🪙</strong> daha krediye ihtiyacınız var.
+                                                </p>
+                                                <Link href="/app/cuzdan" className="inline-block bg-rose-600 hover:bg-rose-700 text-white font-semibold px-5 py-2 rounded-lg text-sm transition-colors">
+                                                    Cüzdana Git ve Kredi Yükle
+                                                </Link>
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
+
+                                    {hasEnoughBalance && (
+                                        <div className="bg-emerald-50 border border-emerald-200 p-5 rounded-2xl flex items-start gap-4">
+                                            <div className="mt-0.5">
+                                                <CheckCircle2 size={24} className="text-emerald-500" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-emerald-800 mb-1">Mükemmel!</h4>
+                                                <p className="text-sm text-emerald-700 leading-relaxed">
+                                                    Bu işlem için yeterli bakiyeniz bulunuyor. Sağdaki özet alanından işlemi onaylayarak mektubunuzu yola çıkarabilirsiniz.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
+                            )}
 
-                            </form>
-
-                            <div className="mt-8 flex items-center justify-center gap-6 opacity-60">
-                                {/* Mock Payment Provider Logos */}
-                                <div className="font-bold text-xl italic tracking-tighter text-blue-900 border border-blue-900/20 px-2 rounded">VISA</div>
-                                <div className="font-bold text-xl italic text-red-600 flex items-center"><span className="w-4 h-4 rounded-full bg-red-600 mr-[-6px] mix-blend-multiply"></span><span className="w-4 h-4 rounded-full bg-yellow-500 mr-1 mix-blend-multiply"></span>mastercard</div>
-                                <div className="font-bold text-lg text-emerald-700 flex items-center gap-1 border border-emerald-700/20 px-2 rounded"><Lock size={14} /> troy</div>
-                            </div>
                         </div>
                     </div>
 
@@ -192,39 +194,38 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
                         <div className="bg-paper-dark/10 border border-seal/20 rounded-xl p-6 sticky top-8 shadow-sm">
                             <div className="flex items-center gap-2 text-seal mb-4 justify-center">
                                 <ShieldCheck size={28} />
-                                <span className="font-bold text-sm leading-tight">256-Bit SSL ile<br />Güvenli Ödeme</span>
+                                <span className="font-bold text-sm leading-tight">Şifrelenmiş Cüzdanla<br />Güvenli İşlem</span>
                             </div>
 
                             <h3 className="font-playfair text-lg font-bold text-wood-dark border-b border-paper-dark pb-3 mb-4 text-center">
-                                Sepet Tutarı
+                                Toplam İşlem Tutarı
                             </h3>
 
                             <div className="bg-paper border border-wood/20 rounded-lg p-4 mb-6 text-center shadow-inner">
-                                <span className="text-3xl font-playfair font-bold text-wood-dark">{totalAmount} TL</span>
-                                <p className="text-[11px] text-ink-light/80 mt-1">KDV ve Kargo Dahil</p>
+                                <span className="text-3xl font-playfair font-bold text-wood-dark">{totalAmount} 🪙</span>
+                                <p className="text-[11px] text-ink-light/80 mt-1">Sipariş verildikten sonra düşülür</p>
                             </div>
 
                             <button
                                 type="submit"
-                                form="payment-form"
-                                disabled={isProcessing}
-                                className="w-full bg-seal hover:bg-seal-hover text-paper py-4 rounded-xl font-bold shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] text-lg disabled:opacity-70 disabled:cursor-wait relative overflow-hidden"
+                                onClick={handlePayment}
+                                disabled={isProcessing || isCheckingBalance || !hasEnoughBalance}
+                                className="w-full bg-seal hover:bg-seal-hover text-paper py-4 rounded-xl font-bold shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] text-lg disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
                             >
                                 {isProcessing ? (
                                     <span className="flex items-center gap-2">
-                                        <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        İşleniyor...
+                                        <Loader2 size={24} className="animate-spin text-white" />
+                                        Mektup Oluşturuluyor...
                                     </span>
+                                ) : !hasEnoughBalance && !isCheckingBalance ? (
+                                    <>Yetersiz Bakiye</>
                                 ) : (
-                                    <>Ödemeyi Tamamla <CheckCircle2 size={20} /></>
+                                    <>Kredi ile Onayla <CheckCircle2 size={20} /></>
                                 )}
                             </button>
 
                             <p className="text-[10px] text-center text-ink-light/60 mt-4 leading-tight">
-                                Ödemeyi Tamamla butonuna basarak Mesafeli Satış Sözleşmesini ve Ön Bilgilendirme Formunu kabul etmiş sayılırsınız.
+                                İşlemi onaylayarak mektubunuzun postaya verilmesini ve bakiyenizin düşülmesini kabul etmiş sayılırsınız.
                             </p>
                         </div>
                     </div>

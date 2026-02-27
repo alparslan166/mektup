@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { X, ChevronLeft, ChevronRight, Calendar, ZoomIn } from "lucide-react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { markIncomingLetterAsRead } from "@/app/actions/incomingLetterActions";
 
 interface IncomingLetterModalProps {
     letter: {
@@ -21,13 +20,6 @@ interface IncomingLetterModalProps {
 export default function IncomingLetterModal({ letter, isOpen, onClose }: IncomingLetterModalProps) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isZoomed, setIsZoomed] = useState(false);
-
-    // Mark as read on open
-    React.useEffect(() => {
-        if (isOpen && !letter.isRead) {
-            markIncomingLetterAsRead(letter.id);
-        }
-    }, [isOpen, letter.id, letter.isRead]);
 
     if (!isOpen) return null;
 
@@ -136,8 +128,8 @@ export default function IncomingLetterModal({ letter, isOpen, onClose }: Incomin
                                 key={idx}
                                 onClick={() => setCurrentImageIndex(idx)}
                                 className={`relative w-16 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${idx === currentImageIndex
-                                        ? "border-seal shadow-md scale-105"
-                                        : "border-transparent opacity-60 hover:opacity-100"
+                                    ? "border-seal shadow-md scale-105"
+                                    : "border-transparent opacity-60 hover:opacity-100"
                                     }`}
                             >
                                 <Image src={img} alt={`Sayfa ${idx + 1}`} fill className="object-cover" />
