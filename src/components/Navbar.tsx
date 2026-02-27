@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut, X, LogIn, UserPlus, ShieldCheck, Gift, GitGraphIcon, Truck, Inbox, CircleDollarSign, Wallet } from "lucide-react";
+import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut, X, LogIn, UserPlus, ShieldCheck, Gift, GitGraphIcon, Truck, Inbox, CircleDollarSign, Wallet, Tag } from "lucide-react";
 import { useLetterStore } from "@/store/letterStore";
 import { useUIStore } from "@/store/uiStore";
 import { getCreditBalanceAction } from "@/app/actions/creditActions";
@@ -91,10 +91,6 @@ const Navbar = () => {
                                 <Wallet size={18} />
                                 <span>Kredi Yükle</span>
                             </Link>
-                            <Link href="/yorumlar" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
-                                <GitGraphIcon size={18} />
-                                <span>Analizler</span>
-                            </Link>
                         </>
                     ) :
                         (
@@ -113,6 +109,10 @@ const Navbar = () => {
                                         <span>GÖNDERİLENLER</span>
                                     </Link>
                                 )} */}
+                                <Link href="/kampanyalar" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all text-amber-200" title="Aktif Kampanyalar">
+                                    <Tag size={18} />
+                                    <span>KAMPANYALAR</span>
+                                </Link>
                                 <Link href="/yorumlar" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
                                     <MessageSquare size={18} />
                                     <span>YORUMLAR</span>
@@ -169,13 +169,21 @@ const Navbar = () => {
                     )}
                 </div>
 
-                {/* Mobile Menu Button */}
-                <button
-                    onClick={toggleMenu}
-                    className="md:hidden text-paper p-2 hover:bg-paper/10 rounded-md transition-colors shrink-0 z-50"
-                >
-                    {isOpen ? <X size={26} /> : <Menu size={26} />}
-                </button>
+                {/* Mobile Menu Button & Mobile Balance */}
+                <div className="md:hidden flex items-center gap-2 z-50">
+                    {status === "authenticated" && (
+                        <Link href="/cuzdan" className="flex items-center gap-1 bg-wood/20 backdrop-blur-md text-paper border border-wood/30 hover:bg-wood/30 px-2.5 py-1.5 rounded-md font-bold text-sm transition-all shadow-sm">
+                            <span>{creditBalance}</span>
+                            <span className="text-sm leading-none drop-shadow-sm">🪙</span>
+                        </Link>
+                    )}
+                    <button
+                        onClick={toggleMenu}
+                        className="text-paper p-1.5 hover:bg-paper/10 rounded-md transition-colors shrink-0"
+                    >
+                        {isOpen ? <X size={26} /> : <Menu size={26} />}
+                    </button>
+                </div>
             </div>
 
             {/* Mobile Menu Overlay */}
@@ -204,10 +212,6 @@ const Navbar = () => {
                                     <Wallet size={22} />
                                     <span>Kredi Yükle</span>
                                 </Link>
-                                <Link href="/yorumlar" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
-                                    <GitGraphIcon size={22} />
-                                    <span>Analizler</span>
-                                </Link>
                             </>
                         ) : (
                             <>
@@ -225,6 +229,10 @@ const Navbar = () => {
                                         <span>GÖNDERİLENLER</span>
                                     </Link>
                                 )}
+                                <Link href="/kampanyalar" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 text-amber-200 hover:text-white">
+                                    <Tag size={22} />
+                                    <span>KAMPANYALAR</span>
+                                </Link>
                                 <Link href="/yorumlar" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                                     <MessageSquare size={22} />
                                     <span>YORUMLAR</span>
