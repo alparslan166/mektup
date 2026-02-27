@@ -154,13 +154,13 @@ export default function InboxPage() {
             toast.success("Mektubunuz başarıyla açıldı! İstediğiniz zaman ücretsiz olarak görüntüleyebilirsiniz.");
             // Mektubu güncelleyelim (isRead=true ve images dolacak)
             const updatedIncomingLetters = incomingLetters.map(l =>
-                l.id === unlockingLetter.id ? { ...l, isRead: true, images: res.letter.images } : l
+                l.id === unlockingLetter.id ? { ...l, isRead: true, images: res.letter?.images || [] } : l
             );
             setIncomingLetters(updatedIncomingLetters);
             setIsUnlockModalOpen(false);
 
             // Hemen arkasına mektubu açalım
-            setSelectedIncomingLetter({ ...unlockingLetter, isRead: true, images: res.letter.images });
+            setSelectedIncomingLetter({ ...unlockingLetter, isRead: true, images: res.letter?.images || [] });
             setIsIncomingModalOpen(true);
         } else {
             if (res.isCreditError) {
