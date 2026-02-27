@@ -22,6 +22,7 @@ import {
 import { updateLetterStatus, updateTrackingCode } from "@/app/actions/adminActions";
 import { toast } from "react-hot-toast";
 import { postcardCategories } from "@/components/extras/PostcardSection";
+import { getCompanyAddress } from "@/app/actions/settingsActions";
 
 interface Letter {
     id: string;
@@ -46,6 +47,15 @@ export default function LettersList({ initialLetters }: { initialLetters: Letter
     const [selectedLetter, setSelectedLetter] = useState<Letter | null>(null);
     const [trackingCode, setTrackingCode] = useState("");
     const [isUpdating, setIsUpdating] = useState(false);
+    const [companyAddress, setCompanyAddress] = useState("");
+
+    // Fetch company address
+    React.useEffect(() => {
+        (async () => {
+            const res = await getCompanyAddress();
+            if (res.success && res.address) setCompanyAddress(res.address);
+        })();
+    }, []);
 
     const filteredLetters = letters.filter(l => {
         const matchesSearch = l.senderName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -116,6 +126,16 @@ export default function LettersList({ initialLetters }: { initialLetters: Letter
         const splitText = doc.splitTextToSize(content, 180);
         doc.text(splitText, 10, 10);
 
+        // Add reply note if wantReplyInInbox
+        if (letter.data.extras?.wantReplyInInbox) {
+            const noteY = Math.min(splitText.length * 7 + 30, 250);
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            const note = `--- Cevap Mektubu Bilgilendirmesi ---\nBu mektubu yazan kisi, cevap mektuplarini asagidaki adresimize gondermenizi rica etmektedir.\nFirmamiz mektubunuzu gondericiye dijital olarak iletecektir.\n\nCevap Adresi:\n${companyAddress || 'Mektuplas'}`;
+            const noteLines = doc.splitTextToSize(note, 180);
+            doc.text(noteLines, 10, noteY);
+        }
+
         doc.save(`mektup_${letter.id.slice(-6)}.pdf`);
         toast.success("PDF indirildi");
     };
@@ -151,6 +171,7 @@ Zarf: ${letter.data.letter.envelopeColor}
 Kagit: ${letter.data.letter.paperColor}
 Koku: ${letter.data.extras.scent}
 Hediyeler: ${giftsList}
+Gelen Mektup: ${letter.data.extras.wantReplyInInbox ? 'Evet - Cevap bekliyor' : 'Hayir'}
 Tarih: ${new Date(letter.createdAt).toLocaleDateString('tr-TR')}
             `;
             zip.file("ozet.txt", summary);
@@ -452,6 +473,11 @@ Tarih: ${new Date(letter.createdAt).toLocaleDateString('tr-TR')}
                                                     Hediye Var
                                                 </span>
                                             )}
+                                            {selectedLetter.data.extras.wantReplyInInbox && (
+                                                <span className="px-3 py-1 bg-teal-50 text-teal-700 text-xs font-bold rounded-full border border-teal-100">
+                                                    📬 Gelen Mektup
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -606,6 +632,27 @@ Tarih: ${new Date(letter.createdAt).toLocaleDateString('tr-TR')}
                                 <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100 font-serif text-slate-800 leading-relaxed max-h-96 overflow-y-auto print:max-h-none print:p-0 print:bg-white print:border-none shadow-inner prose prose-slate max-w-none">
                                     <div dangerouslySetInnerHTML={{ __html: selectedLetter.data.letter.content }} />
                                 </div>
+
+                                {/* Reply Note */}
+                                {selectedLetter.data.extras?.wantReplyInInbox && (
+                                    <div className="mt-6 p-5 bg-teal-50 border border-teal-200 rounded-xl">
+                                        <h4 className="text-sm font-bold text-teal-800 flex items-center gap-2 mb-2">
+                                            <MessageSquare size={16} />
+                                            📬 Cevap Mektubu Bilgilendirmesi
+                                        </h4>
+                                        <p className="text-xs text-teal-700 leading-relaxed">
+                                            Bu mektubu yazan kişi, cevap mektuplarını aşağıdaki adrese göndermenizi rica etmektedir.
+                                            Firmamız mektubunuzu göndericiye dijital olarak iletecektir.
+                                        </p>
+                                        <div className="mt-3 p-3 bg-white rounded-lg border border-teal-100">
+                                            <p className="text-xs font-bold text-teal-900">Cevap Adresi:</p>
+                                            <p className="text-xs text-teal-700 whitespace-pre-line">{companyAddress || "Henüz adres girilmemiş."}</p>
+                                        </div>
+                                        <p className="text-[10px] text-teal-600 mt-2 italic">
+                                            ⚠️ Bu bilgi mektubun sonuna otomatik olarak eklenecektir.
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

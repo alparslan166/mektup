@@ -3,10 +3,11 @@
 import React, { useState, useEffect } from "react";
 import Stepper from "@/components/Stepper";
 import { useLetterStore } from "@/store/letterStore";
-import { ArrowLeft, ArrowRight, User, Phone, BookOpen, X, Home, Briefcase, Map, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, User, Phone, BookOpen, X, Home, Briefcase, Map, Loader2, Inbox, CheckCircle2, MapPin, Globe, Building2, Clock, Mail, HelpCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import citiesData from "../../sehirler.json";
 import { useShallow } from 'zustand/react/shallow';
+import { getCompanyAddress } from "@/app/actions/settingsActions";
 
 interface Address {
     id: string;
@@ -38,6 +39,11 @@ export default function InfoStep() {
     const [saveSenderToAddressBook, setSaveSenderToAddressBook] = useState(false);
     const [saveReceiverToAddressBook, setSaveReceiverToAddressBook] = useState(false);
     const [isSavingAddress, setIsSavingAddress] = useState(false);
+    const [showInboxInfoModal, setShowInboxInfoModal] = useState(false);
+    const [companyAddress, setCompanyAddress] = useState("");
+
+    const extras = useLetterStore(state => state.extras);
+    const updateExtras = useLetterStore(state => state.updateExtras);
 
     // Prison selection states
     const [availableCities, setAvailableCities] = useState<string[]>(Object.values(citiesData).sort((a, b) => a.localeCompare(b, 'tr-TR')) as string[]);
@@ -84,6 +90,14 @@ export default function InfoStep() {
             }
         };
         fetchAddresses();
+    }, []);
+
+    // Fetch company address for the popup
+    useEffect(() => {
+        (async () => {
+            const res = await getCompanyAddress();
+            if (res.success && res.address) setCompanyAddress(res.address);
+        })();
     }, []);
 
     const handleSelectAddress = (addr: Address) => {
@@ -495,6 +509,135 @@ export default function InfoStep() {
                     </div>
                 </div>
             </div>
+
+            {/* Gelen Mektup Section */}
+            <div className="mt-10 pt-8 border-t-2 border-dashed border-seal/20">
+                <div className="flex flex-col items-center text-center space-y-4">
+                    {/* Checkbox Button */}
+                    <label
+                        className={`w-full max-w-xl flex items-start gap-4 p-5 rounded-2xl border-2 cursor-pointer transition-all duration-300 ${extras.wantReplyInInbox
+                            ? "border-seal bg-seal/5 shadow-md"
+                            : "border-paper-dark bg-paper-light hover:border-seal hover:bg-seal/5"
+                            }`}
+                    >
+                        <input
+                            type="checkbox"
+                            checked={extras.wantReplyInInbox}
+                            onChange={(e) => updateExtras({ wantReplyInInbox: e.target.checked })}
+                            className="sr-only"
+                        />
+                        <div className={`mt-0.5 w-6 h-6 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-all duration-300 ${extras.wantReplyInInbox
+                            ? "bg-seal border-seal"
+                            : "border-paper-dark bg-white"
+                            }`}>
+                            {extras.wantReplyInInbox && <CheckCircle2 size={16} className="text-white" />}
+                        </div>
+                        <div className="flex-1 text-left">
+                            <span className="text-sm font-bold text-ink block mb-1">
+                                Mektubuma cevabı gelen kutusunda görmek istiyorum
+                            </span>
+                            <span className="text-xs text-ink-light leading-relaxed block">
+                                Bu seçeneği işaretlerseniz, yakınınız cevap mektuplarını bizim adresimize gönderir. Biz de mektubun fotoğraflarını çekip hesabınıza yükleriz.
+                            </span>
+                        </div>
+                    </label>
+
+                    {/* Gelen Mektup Nedir? button */}
+                    <button
+                        onClick={() => setShowInboxInfoModal(true)}
+                        className="flex items-center gap-2 text-seal hover:text-seal-hover text-sm font-bold transition-colors"
+                    >
+                        <HelpCircle size={16} />
+                        <span>Gelen Mektup Nedir?</span>
+                    </button>
+                </div>
+            </div>
+
+            {/* Gelen Mektup Nedir? Popup Modal */}
+            <AnimatePresence>
+                {showInboxInfoModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/60 backdrop-blur-sm"
+                        onClick={() => setShowInboxInfoModal(false)}
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-paper rounded-2xl shadow-xl w-full max-w-lg max-h-[85vh] overflow-y-auto border border-paper-dark"
+                        >
+                            <div className="p-6 border-b border-paper-dark flex justify-between items-center bg-paper-light rounded-t-2xl">
+                                <h3 className="font-playfair text-xl font-bold text-wood-dark flex items-center gap-2">
+                                    <Inbox size={22} className="text-seal" />
+                                    Gelen Mektup Nedir?
+                                </h3>
+                                <button onClick={() => setShowInboxInfoModal(false)} className="text-ink-light hover:text-ink transition-colors p-1 bg-paper border border-paper-dark rounded-full shadow-sm">
+                                    <X size={18} />
+                                </button>
+                            </div>
+
+                            <div className="p-6 space-y-5">
+                                <p className="text-sm text-ink font-medium leading-relaxed">
+                                    Cezaevindeki yakınınızdan mektup almak istiyorsunuz ama,
+                                </p>
+
+                                <div className="space-y-2">
+                                    <div className="flex items-start gap-3 bg-seal/5 rounded-xl p-3 border border-seal/10">
+                                        <MapPin size={18} className="text-seal flex-shrink-0 mt-0.5" />
+                                        <span className="text-xs text-ink font-medium">Sabit bir adresiniz yok</span>
+                                    </div>
+                                    <div className="flex items-start gap-3 bg-seal/5 rounded-xl p-3 border border-seal/10">
+                                        <Building2 size={18} className="text-seal flex-shrink-0 mt-0.5" />
+                                        <span className="text-xs text-ink font-medium">Köyde veya ücra bir yerde yaşıyorsanız</span>
+                                    </div>
+                                    <div className="flex items-start gap-3 bg-seal/5 rounded-xl p-3 border border-seal/10">
+                                        <Globe size={18} className="text-seal flex-shrink-0 mt-0.5" />
+                                        <span className="text-xs text-ink font-medium">Yurtdışında yaşıyorsanız</span>
+                                    </div>
+                                    <div className="flex items-start gap-3 bg-seal/5 rounded-xl p-3 border border-seal/10">
+                                        <MapPin size={18} className="text-seal flex-shrink-0 mt-0.5" />
+                                        <span className="text-xs text-ink font-medium">Adresinizi vermek istemiyorsanız</span>
+                                    </div>
+                                    <div className="flex items-start gap-3 bg-seal/5 rounded-xl p-3 border border-seal/10">
+                                        <Clock size={18} className="text-seal flex-shrink-0 mt-0.5" />
+                                        <span className="text-xs text-ink font-medium">Çalıştığınız için evinize gelen mektuplar geri gidiyorsa</span>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-xl p-5 space-y-3 border border-paper-dark shadow-sm">
+                                    <h4 className="text-sm font-bold text-wood-dark flex items-center gap-2">
+                                        <Mail size={16} className="text-seal" />
+                                        Nasıl Çalışır?
+                                    </h4>
+                                    <p className="text-xs text-ink leading-relaxed">
+                                        Yapmanız gereken çok basit: Mektup yazdığınızda <strong>"Mektubuma cevabı gelen kutusunda görmek istiyorum"</strong> seçeneğini işaretliyorsunuz.
+                                    </p>
+                                    <ol className="text-xs text-ink space-y-2.5 list-decimal list-inside leading-relaxed">
+                                        <li>Mektuba bu bilgiyi ekliyoruz.</li>
+                                        <li>Bu bilgiye istinaden yakınınız mektupları <strong>bizim adresimize</strong> gönderir.</li>
+                                        <li>Firmamız adınıza gelen mektupların fotoğraflarını çekip hesabınıza yükler.</li>
+                                        <li>Mektubunuzu nerede olursanız olun, farketmez, kolayca okuyabilirsiniz.</li>
+                                    </ol>
+                                    <p className="text-xs text-ink font-semibold mt-3">
+                                        Adınıza gelen mektupları <strong className="text-seal">GELEN MEKTUP KUTUSUNDA</strong> okuyabilirsiniz.
+                                    </p>
+                                </div>
+
+                                {companyAddress && (
+                                    <div className="bg-seal/5 rounded-xl p-4 border border-seal/20">
+                                        <p className="text-xs font-bold text-ink mb-1">📮 Cevap Adresi:</p>
+                                        <p className="text-xs text-ink leading-relaxed whitespace-pre-line">{companyAddress}</p>
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Address Selection Modal */}
             <AnimatePresence>

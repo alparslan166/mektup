@@ -26,6 +26,10 @@ export default function SSSPage() {
         {
             question: "Teslimatı kim yapıyor?",
             answer: "Teslimatlarımız anlaşmalı olduğumuz profesyonel kargo / kurye firmaları (Sürat, Yurtiçi veya özel kuryeler) aracılığıyla yapılmaktadır. Mektup yola çıktığında alıcının telefon numarasına SMS veya sisteme girdiğiniz maile kargo takip numarası iletilir."
+        },
+        {
+            question: "Gelen Mektup (Cevap Mektubu) hizmeti nedir ve nasıl çalışır?",
+            answer: "Eğer mektup gönderdiğiniz kişiden fiziksel bir cevap bekliyorsanız ancak sabit bir adresiniz yoksa veya adresinizi paylaşmak istemiyorsanız bu hizmeti kullanabilirsiniz. Mektubunuzu gönderirken 'Mektubuma cevabı gelen kutusunda görmek istiyorum' seçeneğini işaretlemeniz yeterlidir. Mektubunuzun sonuna cevap adresi olarak kendi şirket adresimizi ekleriz. Alıcının gönderdiği mektup bize ulaştığında, özel olarak fotoğraflanır ve sistemdeki 'Gelen Kutusu' sayfanıza dijital olarak yüklenir. Böylece fiziksel mektubunuzu dilediğiniz yerden okuyabilirsiniz."
         }
     ];
 

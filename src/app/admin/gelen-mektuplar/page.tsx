@@ -6,6 +6,7 @@ import {
     Image as ImageIcon, Trash2, CheckCircle, Mail, ArrowRight, ChevronDown, ChevronUp, Eye
 } from "lucide-react";
 import { searchUsersForAdmin, createIncomingLetter, getAllIncomingLetters } from "@/app/actions/incomingLetterActions";
+import { getCompanyAddress, updateCompanyAddress } from "@/app/actions/settingsActions";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
 
@@ -26,9 +27,34 @@ export default function AdminGelenMektuplar() {
     const [loadingLetters, setLoadingLetters] = useState(true);
     const [expandedLetter, setExpandedLetter] = useState<string | null>(null);
 
+    // Company address
+    const [companyAddress, setCompanyAddress] = useState("");
+    const [isEditingAddress, setIsEditingAddress] = useState(false);
+    const [isSavingAddress, setIsSavingAddress] = useState(false);
+
     useEffect(() => {
         fetchExistingLetters();
+        fetchCompanyAddress();
     }, []);
+
+    const fetchCompanyAddress = async () => {
+        const res = await getCompanyAddress();
+        if (res.success && res.address) {
+            setCompanyAddress(res.address);
+        }
+    };
+
+    const handleSaveAddress = async () => {
+        setIsSavingAddress(true);
+        const res = await updateCompanyAddress(companyAddress);
+        if (res.success) {
+            toast.success("Adres güncellendi.");
+            setIsEditingAddress(false);
+        } else {
+            toast.error(res.error || "Adres güncellenemedi.");
+        }
+        setIsSavingAddress(false);
+    };
 
     useEffect(() => {
         const debounce = setTimeout(() => {
@@ -149,12 +175,70 @@ export default function AdminGelenMektuplar() {
     return (
         <div className="space-y-8">
             {/* Header */}
-            <header className="flex justify-between items-end">
+            <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-900">Gelen Mektuplar</h2>
                     <p className="text-slate-500">Kullanıcılar adına gelen fiziksel mektupların fotoğraflarını yükleyin.</p>
                 </div>
             </header>
+
+            {/* Company Address Section */}
+            <div className="bg-white shadow-sm border border-slate-200 rounded-xl p-6">
+                <div className="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            📮 Adresimiz
+                        </h3>
+                        <p className="text-xs text-slate-500 mt-1">Kullanıcılar cevap mektuplarını bu adrese gönderecektir.</p>
+                    </div>
+                    {!isEditingAddress ? (
+                        <button
+                            onClick={() => setIsEditingAddress(true)}
+                            className="text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors px-4 py-2 bg-blue-50 rounded-lg hover:bg-blue-100"
+                        >
+                            Düzenle
+                        </button>
+                    ) : (
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => { setIsEditingAddress(false); fetchCompanyAddress(); }}
+                                className="text-sm font-medium text-slate-500 hover:text-slate-700 px-3 py-2 rounded-lg transition-colors"
+                            >
+                                İptal
+                            </button>
+                            <button
+                                onClick={handleSaveAddress}
+                                disabled={isSavingAddress || !companyAddress.trim()}
+                                className="text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 px-4 py-2 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-1"
+                            >
+                                {isSavingAddress ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle size={14} />}
+                                Kaydet
+                            </button>
+                        </div>
+                    )}
+                </div>
+
+                {isEditingAddress ? (
+                    <textarea
+                        value={companyAddress}
+                        onChange={(e) => setCompanyAddress(e.target.value)}
+                        placeholder="Şirket adresini buraya yazın... Örn: Mektuplaş, Atatürk Mah. Cumhuriyet Cad. No:1 Kadıköy/İstanbul"
+                        className="w-full border border-slate-200 rounded-xl py-3 px-4 text-sm focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-none h-24"
+                    />
+                ) : (
+                    <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        {companyAddress ? (
+                            <p className="text-sm text-slate-800 font-medium leading-relaxed whitespace-pre-line">{companyAddress}</p>
+                        ) : (
+                            <p className="text-sm text-slate-400 italic">Henüz bir adres girilmemiş. "Düzenle" butonuna tıklayarak adres ekleyin.</p>
+                        )}
+                    </div>
+                )}
+
+                <p className="text-[11px] text-amber-600 mt-3 font-medium bg-amber-50 px-3 py-2 rounded-lg border border-amber-100">
+                    ⚠️ Bu adres, "Gelen Mektup" özelliğini seçen kullanıcıların mektuplarına otomatik olarak eklenir. Lütfen doğru ve güncel olduğundan emin olun.
+                </p>
+            </div>
 
             {/* Upload Form */}
             <div className="bg-white shadow-sm border border-slate-200 rounded-xl p-6 space-y-6">
