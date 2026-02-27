@@ -1,20 +1,26 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Mail, Calendar, MapPin, Search, Filter, ArrowRight, Loader2, Inbox, Bell, BellOff, Plus, User as UserIcon, X } from "lucide-react";
+import { Mail, Calendar, MapPin, Search, ArrowRight, Loader2, Inbox, Bell, BellOff, Plus, User as UserIcon, X, Image as ImageIcon } from "lucide-react";
 import { getReceivedLetters, getNotificationPreference, toggleInboxNotifications, searchUsers } from "@/app/actions/messageActions";
+import { getIncomingLetters } from "@/app/actions/incomingLetterActions";
 import LetterDetailsModal from "@/components/LetterDetailsModal";
+import IncomingLetterModal from "@/components/IncomingLetterModal";
 import DMWritingModal from "@/components/DMWritingModal";
 import { useLetterStore } from "@/store/letterStore";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
+import NextImage from "next/image";
 
 export default function InboxPage() {
     const [letters, setLetters] = useState<any[]>([]);
+    const [incomingLetters, setIncomingLetters] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedLetter, setSelectedLetter] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedIncomingLetter, setSelectedIncomingLetter] = useState<any>(null);
+    const [isIncomingModalOpen, setIsIncomingModalOpen] = useState(false);
     const [notificationsEnabled, setNotificationsEnabled] = useState(true);
     const [isToggling, setIsToggling] = useState(false);
 
@@ -33,7 +39,7 @@ export default function InboxPage() {
     const resetStore = useLetterStore(state => state.resetStore);
 
     useEffect(() => {
-        fetchLetters();
+        fetchAllLetters();
         fetchNotificationPreference();
     }, []);
 
@@ -90,11 +96,17 @@ export default function InboxPage() {
         setIsDMModalOpen(true);
     };
 
-    const fetchLetters = async () => {
+    const fetchAllLetters = async () => {
         setLoading(true);
-        const res = await getReceivedLetters();
-        if (res.success && res.letters) {
-            setLetters(res.letters);
+        const [dmRes, incomingRes] = await Promise.all([
+            getReceivedLetters(),
+            getIncomingLetters(),
+        ]);
+        if (dmRes.success && dmRes.letters) {
+            setLetters(dmRes.letters);
+        }
+        if (incomingRes.success && incomingRes.letters) {
+            setIncomingLetters(incomingRes.letters);
         }
         setLoading(false);
     };
@@ -103,6 +115,17 @@ export default function InboxPage() {
         setSelectedLetter(letter);
         setIsModalOpen(true);
     };
+
+    const handleOpenIncomingModal = (letter: any) => {
+        setSelectedIncomingLetter(letter);
+        setIsIncomingModalOpen(true);
+    };
+
+    // Merge and sort all letters by date
+    const allItems = [
+        ...letters.map(l => ({ ...l, _type: "dm" as const })),
+        ...incomingLetters.map(l => ({ ...l, _type: "incoming" as const })),
+    ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return (
         <main className="min-h-screen pt-24 pb-20 px-6">
@@ -161,7 +184,7 @@ export default function InboxPage() {
                         <Loader2 size={40} className="text-seal animate-spin" />
                         <p className="text-ink-light font-bold font-kurale">Mektuplarınız getiriliyor...</p>
                     </div>
-                ) : letters.length === 0 ? (
+                ) : allItems.length === 0 ? (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -178,58 +201,114 @@ export default function InboxPage() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <AnimatePresence>
-                            {letters.map((letter, idx) => (
+                            {allItems.map((item, idx) => (
                                 <motion.div
-                                    key={letter.id}
+                                    key={item.id}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: idx * 0.05 }}
                                     className="group relative"
                                 >
-                                    <div
-                                        onClick={() => handleOpenModal(letter)}
-                                        className="h-full bg-white rounded-3xl p-6 border border-paper-dark shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer flex flex-col group-hover:-translate-y-2"
-                                    >
-                                        <div className="flex items-start justify-between mb-6">
-                                            <div className="w-12 h-12 bg-seal/5 rounded-2xl flex items-center justify-center text-seal group-hover:bg-seal group-hover:text-white transition-colors duration-500">
-                                                <Mail size={24} />
-                                            </div>
-                                            <div className="bg-paper-dark/50 px-3 py-1 rounded-lg">
-                                                <span className="text-[10px] font-black text-wood font-mono">
-                                                    #{letter.id.slice(-6).toUpperCase()}
-                                                </span>
-                                            </div>
-                                        </div>
+                                    {item._type === "incoming" ? (
+                                        /* Incoming Physical Letter Card */
+                                        <div
+                                            onClick={() => handleOpenIncomingModal(item)}
+                                            className="h-full bg-white rounded-3xl p-6 border border-seal/20 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer flex flex-col group-hover:-translate-y-2 relative overflow-hidden"
+                                        >
+                                            {/* Subtle seal accent */}
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-seal/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl pointer-events-none"></div>
 
-                                        <div className="space-y-4 flex-1">
-                                            <div>
-                                                <p className="text-[10px] font-black text-ink-light uppercase tracking-widest mb-1">Gönderici</p>
-                                                <h4 className="text-xl font-playfair font-bold text-ink truncate">
-                                                    {letter.senderName || letter.data?.address?.senderName || "Anonim"}
-                                                </h4>
-                                            </div>
+                                            {!item.isRead && (
+                                                <div className="absolute top-4 right-4 w-3 h-3 bg-seal rounded-full animate-pulse shadow-lg shadow-seal/50"></div>
+                                            )}
 
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <div className="flex items-center gap-2 text-ink-light">
-                                                    <Calendar size={14} className="shrink-0" />
-                                                    <span className="text-xs font-bold">
-                                                        {new Date(letter.createdAt).toLocaleDateString('tr-TR')}
-                                                    </span>
+                                            <div className="flex items-start justify-between mb-6">
+                                                <div className="w-12 h-12 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                                    <NextImage src="/images/kus-logo.png" alt="Mektuplaş" width={40} height={40} />
                                                 </div>
-                                                <div className="flex items-center gap-2 text-ink-light">
-                                                    <MapPin size={14} className="shrink-0" />
-                                                    <span className="text-xs font-bold truncate">
-                                                        {letter.receiverCity || letter.data?.address?.receiverCity || "-"}
+                                                <div className="bg-seal/10 px-3 py-1 rounded-lg">
+                                                    <span className="text-[10px] font-black text-seal font-mono">
+                                                        📬 FİZİKSEL
                                                     </span>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className="mt-8 pt-6 border-t border-paper-dark flex items-center justify-between text-seal overflow-hidden">
-                                            <span className="text-xs font-black uppercase tracking-widest group-hover:translate-x-1 transition-transform duration-300">Detayları Gör</span>
-                                            <ArrowRight size={18} className="translate-x-8 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
+                                            <div className="space-y-4 flex-1">
+                                                <div>
+                                                    <p className="text-[10px] font-black text-ink-light uppercase tracking-widest mb-1">Gönderici</p>
+                                                    <h4 className="text-xl font-playfair font-bold text-seal">
+                                                        Mektuplaş
+                                                    </h4>
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div className="flex items-center gap-2 text-ink-light">
+                                                        <Calendar size={14} className="shrink-0" />
+                                                        <span className="text-xs font-bold">
+                                                            {new Date(item.createdAt).toLocaleDateString('tr-TR')}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2 text-ink-light">
+                                                        <ImageIcon size={14} className="shrink-0" />
+                                                        <span className="text-xs font-bold">
+                                                            {item.images?.length || 0} sayfa
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="mt-8 pt-6 border-t border-seal/20 flex items-center justify-between text-seal overflow-hidden">
+                                                <span className="text-xs font-black uppercase tracking-widest group-hover:translate-x-1 transition-transform duration-300">Mektubu Oku</span>
+                                                <ArrowRight size={18} className="translate-x-8 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
+                                            </div>
                                         </div>
-                                    </div>
+                                    ) : (
+                                        /* DM Letter Card (existing) */
+                                        <div
+                                            onClick={() => handleOpenModal(item)}
+                                            className="h-full bg-white rounded-3xl p-6 border border-paper-dark shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer flex flex-col group-hover:-translate-y-2"
+                                        >
+                                            <div className="flex items-start justify-between mb-6">
+                                                <div className="w-12 h-12 bg-seal/5 rounded-2xl flex items-center justify-center text-seal group-hover:bg-seal group-hover:text-white transition-colors duration-500">
+                                                    <Mail size={24} />
+                                                </div>
+                                                <div className="bg-paper-dark/50 px-3 py-1 rounded-lg">
+                                                    <span className="text-[10px] font-black text-wood font-mono">
+                                                        #{item.id.slice(-6).toUpperCase()}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-4 flex-1">
+                                                <div>
+                                                    <p className="text-[10px] font-black text-ink-light uppercase tracking-widest mb-1">Gönderici</p>
+                                                    <h4 className="text-xl font-playfair font-bold text-ink truncate">
+                                                        {item.senderName || item.data?.address?.senderName || "Anonim"}
+                                                    </h4>
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div className="flex items-center gap-2 text-ink-light">
+                                                        <Calendar size={14} className="shrink-0" />
+                                                        <span className="text-xs font-bold">
+                                                            {new Date(item.createdAt).toLocaleDateString('tr-TR')}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2 text-ink-light">
+                                                        <MapPin size={14} className="shrink-0" />
+                                                        <span className="text-xs font-bold truncate">
+                                                            {item.receiverCity || item.data?.address?.receiverCity || "-"}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="mt-8 pt-6 border-t border-paper-dark flex items-center justify-between text-seal overflow-hidden">
+                                                <span className="text-xs font-black uppercase tracking-widest group-hover:translate-x-1 transition-transform duration-300">Detayları Gör</span>
+                                                <ArrowRight size={18} className="translate-x-8 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
+                                            </div>
+                                        </div>
+                                    )}
                                 </motion.div>
                             ))}
                         </AnimatePresence>
@@ -246,13 +325,21 @@ export default function InboxPage() {
                 />
             )}
 
+            {selectedIncomingLetter && (
+                <IncomingLetterModal
+                    letter={selectedIncomingLetter}
+                    isOpen={isIncomingModalOpen}
+                    onClose={() => setIsIncomingModalOpen(false)}
+                />
+            )}
+
             {/* DM Writing Modal */}
             <DMWritingModal
                 isOpen={isDMModalOpen}
                 onClose={() => setIsDMModalOpen(false)}
                 recipientId={writingRecipient?.id || ""}
                 recipientName={writingRecipient?.name || ""}
-                onSuccess={fetchLetters}
+                onSuccess={fetchAllLetters}
             />
 
             {/* Recipient Search Modal */}
@@ -341,7 +428,8 @@ export default function InboxPage() {
             <style jsx global>{`
                 .font-kurale { font-family: 'Kurale', serif; }
                 .font-playfair { font-family: 'Playfair Display', serif; }
-            `}</style>
+            `}
+            </style>
         </main>
     );
 }
