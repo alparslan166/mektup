@@ -26,14 +26,6 @@ export async function POST(req: Request) {
         const hashedPassword = await bcrypt.hash(password, 10);
         const newReferralCode = nanoid(8);
 
-        // Check if referred by someone
-        let referredBy = null;
-        if (referralCode) {
-            referredBy = await prisma.user.findUnique({
-                where: { referralCode },
-            });
-        }
-
         // Create user
         const user = await prisma.user.create({
             data: {
@@ -41,30 +33,9 @@ export async function POST(req: Request) {
                 email,
                 password: hashedPassword,
                 referralCode: newReferralCode,
-                referredById: referredBy ? referredBy.id : null,
                 emailVerified: null, // Set to null until verified
             },
         });
-
-        // Award rewards even before verification to keep referral chain intact
-        if (referredBy) {
-            const pricing = await getPricingSettings();
-            const rewardAmount = pricing.success && pricing.data ? pricing.data.referralRewardAmount : 15;
-
-            // Award to referrer
-            await CreditService.addCredits(
-                referredBy.id,
-                rewardAmount,
-                `Yeni Arkadaş Davet Ödülü (${name}) 🤝`
-            );
-
-            // Award to new user
-            await CreditService.addCredits(
-                user.id,
-                rewardAmount,
-                "Hoş Geldin Referans Ödülü 🎊"
-            );
-        }
 
         // Create verification token
         const token = crypto.randomUUID();

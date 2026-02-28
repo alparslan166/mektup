@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { User, Settings, Package, Heart, MapPin, Save, Key, Loader2, Edit2, ShieldCheck, LogOut, Copy, Share2 } from "lucide-react";
 import { updateProfile, updatePassword } from "@/app/actions/userActions";
+import { redeemReferralCode } from "@/app/actions/referralActions";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { signOut } from "next-auth/react";
@@ -10,16 +11,19 @@ import { signOut } from "next-auth/react";
 interface ProfileClientProps {
     session: any;
     referralCode: string;
+    referredById: string | null;
     stats: {
         letters: number;
         addresses: number;
     };
 }
 
-export default function ProfileClient({ session, referralCode, stats }: ProfileClientProps) {
+export default function ProfileClient({ session, referralCode, referredById, stats }: ProfileClientProps) {
     const [activeTab, setActiveTab] = useState<"overview" | "settings">("overview");
     const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
     const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+    const [referralInput, setReferralInput] = useState("");
+    const [isRedeeming, setIsRedeeming] = useState(false);
 
     const [profileData, setProfileData] = useState({
         name: session.user?.name || "",
@@ -143,31 +147,71 @@ export default function ProfileClient({ session, referralCode, stats }: ProfileC
 
                             {/* Referral Section */}
                             <div className="mt-8 p-6 bg-gradient-to-br from-wood/5 to-wood/10 rounded-2xl border border-wood/20">
-                                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-wood shadow-sm">
-                                            <Share2 size={24} />
+                                <div className="space-y-6">
+                                    <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-wood shadow-sm">
+                                                <Share2 size={24} />
+                                            </div>
+                                            <div>
+                                                <h3 className="font-bold text-ink">Referans Kodunuz</h3>
+                                                <p className="text-xs text-ink-light font-medium">Bu kodu arkadaşlarınızla paylaşarak kredi kazanabilirsiniz!</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h3 className="font-bold text-ink">Arkadaşlarını Davet Et</h3>
-                                            <p className="text-xs text-ink-light font-medium">Davet ettiğin her arkadaşın için kredi kazan!</p>
+                                        <div className="flex items-center gap-2 w-full md:w-auto">
+                                            <div className="flex-1 md:w-32 bg-white border border-wood/20 px-4 py-2 rounded-lg font-mono text-sm font-bold text-ink text-center select-all">
+                                                {referralCode}
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(referralCode);
+                                                    toast.success("Referans kodu kopyalandı!");
+                                                }}
+                                                className="p-2.5 bg-wood text-white rounded-lg hover:bg-wood-dark transition-colors shadow-sm"
+                                                title="Kodu Kopyala"
+                                            >
+                                                <Copy size={18} />
+                                            </button>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-2 w-full md:w-auto">
-                                        <div className="flex-1 bg-white border border-wood/20 px-4 py-2 rounded-lg font-mono text-xs text-ink truncate select-all">
-                                            {`${window.location.origin}/auth/register?ref=${referralCode}`}
+
+                                    {!referredById && (
+                                        <div className="pt-6 border-t border-wood/10">
+                                            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                                                <div>
+                                                    <h4 className="font-bold text-ink text-sm">Davet Kodu Gir</h4>
+                                                    <p className="text-[10px] text-ink-light font-medium">Sizi davet eden arkadaşınızın kodunu girerek hediye kredi kazanın.</p>
+                                                </div>
+                                                <div className="flex gap-2 w-full md:w-auto">
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Örn: AB12CD34"
+                                                        value={referralInput}
+                                                        onChange={(e) => setReferralInput(e.target.value.toUpperCase())}
+                                                        className="flex-1 bg-white border border-wood/20 px-4 py-2 rounded-lg text-sm outline-none focus:border-wood transition-all font-mono"
+                                                    />
+                                                    <button
+                                                        onClick={async () => {
+                                                            if (!referralInput) return;
+                                                            setIsRedeeming(true);
+                                                            const res = await redeemReferralCode(referralInput);
+                                                            setIsRedeeming(false);
+                                                            if (res.success) {
+                                                                toast.success(res.message || "Ödül hesabınıza yüklendi!");
+                                                                setReferralInput("");
+                                                            } else {
+                                                                toast.error(res.error || "Kod geçersiz.");
+                                                            }
+                                                        }}
+                                                        disabled={isRedeeming || !referralInput}
+                                                        className="px-6 py-2 bg-seal text-white rounded-lg font-bold text-sm hover:bg-seal-hover transition-all disabled:opacity-50 flex items-center gap-2"
+                                                    >
+                                                        {isRedeeming ? <Loader2 size={16} className="animate-spin" /> : "Giriş Yap"}
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <button
-                                            onClick={() => {
-                                                navigator.clipboard.writeText(`${window.location.origin}/auth/register?ref=${referralCode}`);
-                                                toast.success("Davet linki kopyalandı!");
-                                            }}
-                                            className="p-2 bg-wood text-white rounded-lg hover:bg-wood-dark transition-colors shadow-sm"
-                                            title="Linki Kopyala"
-                                        >
-                                            <Copy size={18} />
-                                        </button>
-                                    </div>
+                                    )}
                                 </div>
                             </div>
 

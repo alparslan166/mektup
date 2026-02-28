@@ -85,48 +85,16 @@ export const authOptions: NextAuthOptions = {
     events: {
         async createUser({ user }) {
             // This event runs when a user is created via an adapter (Google Login)
-            const cookieStore = await cookies();
-            const referralCode = cookieStore.get("next-auth.referral-code")?.value;
             const newReferralCode = nanoid(8);
 
-            let referrerId: string | null = null;
-            if (referralCode) {
-                const referrer = await prisma.user.findUnique({
-                    where: { referralCode }
-                });
-                if (referrer) {
-                    referrerId = referrer.id;
-                }
-            }
-
-            // Update user with referral code and referrer
+            // Just assign a unique referral code to the new user.
+            // Linking/Rewards are now manual via the Profile page.
             await prisma.user.update({
                 where: { id: user.id },
                 data: {
                     referralCode: newReferralCode,
-                    referredById: referrerId
                 }
             });
-
-            // Award rewards if there's a referrer
-            if (referrerId) {
-                const pricing = await getPricingSettings();
-                const rewardAmount = pricing.success && pricing.data ? pricing.data.referralRewardAmount : 15;
-
-                // Award to referrer
-                await CreditService.addCredits(
-                    referrerId,
-                    rewardAmount,
-                    `Yeni Arkadaş Davet Ödülü (${user.name}) 🤝`
-                );
-
-                // Award to new user
-                await CreditService.addCredits(
-                    user.id,
-                    rewardAmount,
-                    "Hoş Geldin Referans Ödülü 🎊"
-                );
-            }
         }
     },
     secret: process.env.NEXTAUTH_SECRET,
