@@ -2,6 +2,8 @@ import { getAllLetters } from "@/app/actions/adminActions";
 import LettersList from "@/components/admin/LettersList";
 import { Mail } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminLettersPage() {
     const result = await getAllLetters();
 
