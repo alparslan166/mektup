@@ -53,6 +53,8 @@ model User {
   addresses          Address[]
   creditTransactions CreditTransaction[]
   giftOrders         GiftOrder[]
+  comments           Comment[]
+  firstCommentRewardReceived Boolean @default(false)
 }
 
 model Address {
@@ -193,4 +195,21 @@ model GiftOrder {
   
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String?
+  body      String   @db.Text
+  rating    Int      @default(5)
+  
+  // Self-relation for replies
+  parentId  String?
+  parent    Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentReplies")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -27,7 +27,7 @@ export async function sendEmail({
 
     try {
         const { data, error } = await resend.emails.send({
-            from: "Mektuplas <onboarding@resend.dev>", // Replace with your verified domain
+            from: "Mektuplas <iletisim@mektuplas.com>", // Replace with your verified domain
             to: [to],
             subject: subject,
             text: text,

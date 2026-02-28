@@ -14,6 +14,7 @@ const DOC_CREDIT_PRICE_KEY = "doc_credit_price";
 const CALENDAR_CREDIT_PRICE_KEY = "calendar_credit_price";
 const ENVELOPE_COLOR_PRICE_KEY = "envelope_color_price";
 const PAPER_COLOR_PRICE_KEY = "paper_color_price";
+const COMMENT_REWARD_AMOUNT_KEY = "comment_reward_amount";
 
 // Get the company reply address
 export async function getCompanyAddress(): Promise<{ success: boolean; address?: string }> {
@@ -61,10 +62,11 @@ export async function getPricingSettings(): Promise<{
         calendarCreditPrice: number;
         envelopeColorPrice: number;
         paperColorPrice: number;
+        commentRewardAmount: number;
     }
 }> {
     try {
-        const [sendSetting, openSetting, photoSetting, postcardSetting, scentSetting, docSetting, calendarSetting, envelopeColorSetting, paperColorSetting] = await Promise.all([
+        const [sendSetting, openSetting, photoSetting, postcardSetting, scentSetting, docSetting, calendarSetting, envelopeColorSetting, paperColorSetting, commentRewardAmountSetting] = await Promise.all([
             prisma.siteSetting.findUnique({ where: { key: LETTER_SEND_PRICE_KEY } }),
             prisma.siteSetting.findUnique({ where: { key: INCOMING_LETTER_OPEN_PRICE_KEY } }),
             prisma.siteSetting.findUnique({ where: { key: PHOTO_CREDIT_PRICE_KEY } }),
@@ -74,6 +76,7 @@ export async function getPricingSettings(): Promise<{
             prisma.siteSetting.findUnique({ where: { key: CALENDAR_CREDIT_PRICE_KEY } }),
             prisma.siteSetting.findUnique({ where: { key: ENVELOPE_COLOR_PRICE_KEY } }),
             prisma.siteSetting.findUnique({ where: { key: PAPER_COLOR_PRICE_KEY } }),
+            prisma.siteSetting.findUnique({ where: { key: COMMENT_REWARD_AMOUNT_KEY } }),
         ]);
 
         return {
@@ -88,6 +91,7 @@ export async function getPricingSettings(): Promise<{
                 calendarCreditPrice: calendarSetting?.value ? parseFloat(calendarSetting.value) : 30, // Varsayılan 30 kredi
                 envelopeColorPrice: envelopeColorSetting?.value ? parseFloat(envelopeColorSetting.value) : 10, // Varsayılan 10 kredi
                 paperColorPrice: paperColorSetting?.value ? parseFloat(paperColorSetting.value) : 10, // Varsayılan 10 kredi
+                commentRewardAmount: commentRewardAmountSetting?.value ? parseFloat(commentRewardAmountSetting.value) : 50, // Varsayılan 50 kredi ödül
             }
         };
     } catch (error) {
@@ -106,7 +110,8 @@ export async function updatePricingSettings(
     docCreditPrice: number,
     calendarCreditPrice: number,
     envelopeColorPrice: number,
-    paperColorPrice: number
+    paperColorPrice: number,
+    commentRewardAmount: number
 ): Promise<{ success: boolean; error?: string }> {
     const session = await getServerSession(authOptions);
     if (!session || (session.user as any).role !== "ADMIN") {
@@ -159,6 +164,11 @@ export async function updatePricingSettings(
                 where: { key: PAPER_COLOR_PRICE_KEY },
                 update: { value: paperColorPrice.toString() },
                 create: { key: PAPER_COLOR_PRICE_KEY, value: paperColorPrice.toString() },
+            }),
+            prisma.siteSetting.upsert({
+                where: { key: COMMENT_REWARD_AMOUNT_KEY },
+                update: { value: commentRewardAmount.toString() },
+                create: { key: COMMENT_REWARD_AMOUNT_KEY, value: commentRewardAmount.toString() },
             })
         ]);
 

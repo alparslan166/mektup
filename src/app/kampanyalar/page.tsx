@@ -1,16 +1,27 @@
-import React from 'react';
-import Link from 'next/link';
-import { Tag, MailPlus, Gift, Sparkles, ArrowRight, UserPlus, MessageCircleHeart } from 'lucide-react';
+"use client";
 
-export const metadata = {
-    title: "Kampanyalar & İndirimler | Mektuplaş",
-    description: "Mektuplaş'ın sizlere özel sunduğu indirimler, hediye kredi fırsatları ve mektup kampanyaları.",
-};
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Tag, MailPlus, Gift, Sparkles, ArrowRight, UserPlus, MessageCircleHeart, Loader2 } from 'lucide-react';
+import { getPricingSettings } from '@/app/actions/settingsActions';
 
 export default function CampaignsPage() {
+    const [rewardAmount, setRewardAmount] = useState<number | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            const res = await getPricingSettings();
+            if (res.success && res.data) {
+                setRewardAmount(res.data.commentRewardAmount);
+            }
+            setIsLoading(false);
+        };
+        fetchSettings();
+    }, []);
+
     return (
         <div className="min-h-screen flex flex-col font-sans">
-
             <main className="flex-1 max-w-5xl mx-auto w-full px-6 py-12 md:py-20">
 
                 {/* Başlık Alanı */}
@@ -21,13 +32,13 @@ export default function CampaignsPage() {
                     <h1 className="text-4xl md:text-5xl font-playfair font-black text-ink mb-4">
                         Aktif Kampanyalarımız
                     </h1>
-                    <p className="text-white font-kurale italic text-lg max-w-2xl mx-auto">
+                    <p className="text-ink-light italic text-lg max-w-2xl mx-auto bg-paper/30 py-2 px-4 rounded-full backdrop-blur-sm inline-block">
                         Mektuplaşırken daha fazla anı biriktirebilmeniz için hazırladığımız özel indirimler ve fırsatlar.
                     </p>
                 </div>
 
                 {/* Kampanyalar Grid */}
-                <div className="grid grid-cols-2 gap-4 md:gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 
                     {/* Kampanya 1 */}
                     <div className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 border border-paper-dark shadow-xl shadow-rose-900/5 relative overflow-hidden group hover:border-rose-300 transition-colors flex flex-col">
@@ -59,7 +70,7 @@ export default function CampaignsPage() {
                         </div>
                     </div>
 
-                    {/* Kampanya 2 (Gelecek Planlaması için Örnek) */}
+                    {/* Kampanya 2 */}
                     <div className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 border border-paper-dark shadow-lg relative overflow-hidden group hover:border-seal-light transition-colors flex flex-col">
                         <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-seal/5 rounded-bl-full -z-10 group-hover:bg-seal/10 transition-colors"></div>
 
@@ -90,7 +101,7 @@ export default function CampaignsPage() {
                     </div>
 
                     {/* Kampanya 3: Arkadaşını Davet Et */}
-                    <div className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 border border-paper-dark shadow-xl shadow-wood-800/5 relative overflow-hidden group hover:border-wood-dark/40 transition-colors flex flex-col xl:col-span-2">
+                    <div className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 border border-paper-dark shadow-xl shadow-wood-800/5 relative overflow-hidden group hover:border-wood-dark/40 transition-colors flex flex-col md:col-span-2">
                         <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-wood/10 rounded-bl-full -z-10 group-hover:bg-wood/20 transition-colors"></div>
 
                         <div className="bg-white border md:border-2 border-wood/20 text-wood-dark w-fit px-2 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-wider mb-4 md:mb-6 flex items-center gap-1 md:gap-2 shadow-sm">
@@ -120,7 +131,7 @@ export default function CampaignsPage() {
                     </div>
 
                     {/* Kampanya 4: Yorum Yap */}
-                    <div className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 border border-paper-dark shadow-xl shadow-amber-900/5 relative overflow-hidden group hover:border-amber-400/40 transition-colors flex flex-col xl:col-span-2">
+                    <div className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 border border-paper-dark shadow-xl shadow-amber-900/5 relative overflow-hidden group hover:border-amber-400/40 transition-colors flex flex-col md:col-span-2">
                         <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-amber-50 rounded-bl-full -z-10 group-hover:bg-amber-100 transition-colors"></div>
 
                         <div className="bg-white border md:border-2 border-amber-200 text-amber-600 w-fit px-2 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-wider mb-4 md:mb-6 flex items-center gap-1 md:gap-2 shadow-sm">
@@ -133,18 +144,27 @@ export default function CampaignsPage() {
                                 <MessageCircleHeart size={24} className="md:w-8 md:h-8" />
                             </div>
                             <div>
-                                <h3 className="text-lg md:text-2xl font-playfair font-bold text-ink leading-tight">Mektubunu Değerlendir, <br /><span className="text-amber-600 text-xl md:text-3xl">%25 İndirim Kazan!</span></h3>
+                                <h3 className="text-lg md:text-2xl font-playfair font-bold text-ink leading-tight">Mektubunu Değerlendir, <br /><span className="text-amber-600 text-xl md:text-3xl">Hediye Kredi Kazan!</span></h3>
                             </div>
                         </div>
 
-                        <p className="text-ink-light leading-snug md:leading-relaxed mb-6 md:mb-8 text-xs md:text-base flex-1 md:w-[80%]">
-                            Sevdiklerinize gönderdiğiniz mektupların teslimatından sonra, <strong>Yorumlar</strong> sayfamızdan bir değerlendirme bıraktığınızda ve sipariş deneyiminizi paylaştığınızda, teşekkür olarak bir sonraki siparişinizde kullanabilmeniz için hesabınıza anında <strong>%25 indirim kredisi</strong> tanımlanır!
-                        </p>
+                        <div className="text-ink-light leading-snug md:leading-relaxed mb-6 md:mb-8 text-xs md:text-base flex-1 md:w-[80%]">
+                            {isLoading ? (
+                                <div className="flex items-center gap-2 text-amber-600/50">
+                                    <Loader2 size={16} className="animate-spin" />
+                                    <span>Güncel kampanya yükleniyor...</span>
+                                </div>
+                            ) : (
+                                <p>
+                                    Sevdiklerinize gönderdiğiniz mektupların teslimatından sonra, <strong>Yorumlar</strong> sayfamızdan bir değerlendirme bıraktığınızda ve sipariş deneyiminizi paylaştığınızda, teşekkür olarak hesabınıza anında <strong>{rewardAmount} Kredi 🪙</strong> tanımlanır!
+                                </p>
+                            )}
+                        </div>
 
                         <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between mt-auto gap-3 w-full">
                             <span className="text-[10px] md:text-xs font-bold text-amber-600 uppercase tracking-wider">Otomatik Yüklenir</span>
                             <Link href="/yorumlar" className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-lg md:rounded-xl font-bold transition-all shadow-md active:scale-95 flex items-center justify-center w-full xl:w-auto gap-1.5 md:gap-2 text-[11px] md:text-sm">
-                                Yorum Cüzdanına Git <ArrowRight size={14} className="md:w-4 md:h-4" />
+                                Yorum Yapmaya Git <ArrowRight size={14} className="md:w-4 md:h-4" />
                             </Link>
                         </div>
                     </div>
@@ -156,7 +176,7 @@ export default function CampaignsPage() {
                     <p className="text-wood-dark/80 mb-8 max-w-2xl mx-auto">
                         Mektuplaş ailesi olarak size her zaman en iyi fiyatları sunmayı amaçlıyoruz. Zaman zaman yaptığımız <strong>%50 cüzdan yükleme bonusları</strong> ve özel gün indirimlerini kaçırma!
                     </p>
-                    <Link href="/auth/register" className="inline-flex items-center justify-center gap-2 bg-wood-dark hover:bg-wood-dark/90 text-white font-bold py-4 px-10 rounded-full transition-all shadow-xl hover:shadow-2xl active:scale-95 hover:-translate-y-1">
+                    <Link href="/api/auth/register" className="inline-flex items-center justify-center gap-2 bg-wood-dark hover:bg-wood-dark/90 text-white font-bold py-4 px-10 rounded-full transition-all shadow-xl hover:shadow-2xl active:scale-95 hover:-translate-y-1">
                         Ücretsiz Kayıt Ol & Cüzdan Aç <ArrowRight size={18} />
                     </Link>
                 </div>
@@ -165,4 +185,3 @@ export default function CampaignsPage() {
         </div>
     );
 }
-

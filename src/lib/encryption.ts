@@ -89,11 +89,17 @@ export function decryptBalance(encryptedData: string | null | undefined): number
         }
 
         return balance;
-    } catch (error) {
+    } catch (error: any) {
         console.error('Bakiye çözme hatası (Muhtemelen key değişti veya veri bozuldu):', error);
-        // Güvenlik gereği bakiye çözülemediğinde işlemi durdurmak (throw) önemlidir, 
-        // ancak kullanıcı deneyimi için (bakiye sıfırlanmış kabul edilebilir) bu senaryo
-        // duruma göre yönetilmelidir. Şimdilik hata fırlatıyoruz.
+
+        // Eğer geliştirme ortamındaysak ve hata kimlik doğrulama (auth) hatasıysa, 
+        // muhtemelen KEY değişmiştir. Bu durumda 0 dönüp devam edebiliriz.
+        if (process.env.NODE_ENV !== 'production' && error.message?.includes('Unsupported state')) {
+            console.warn('GELİŞTİRME UYARISI: Şifreleme anahtarı değişmiş olabilir. Bakiye 0 olarak kabul ediliyor.');
+            return 0;
+        }
+
+        // Güvenlik gereği bakiye çözülemediğinde işlemi durdurmak (throw) önemlidir.
         throw new Error('Kredi/Bakiye bilgisi doğrulanamadı.');
     }
 }

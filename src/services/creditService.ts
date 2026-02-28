@@ -39,17 +39,18 @@ export class CreditService {
      * @param referenceId (Opsiyonel) İlgili sipariş vb id'si
      * @returns Güncel bakiye
      */
-    static async addCredit(
+    static async addCredits(
         userId: string,
         amount: number,
         description: string,
-        referenceId?: string
+        referenceId?: string,
+        existingTx?: any
     ): Promise<number> {
         if (amount <= 0) {
             throw new Error('Amount must be strictly positive to add credit');
         }
 
-        return await prisma.$transaction(async (tx) => {
+        const execute = async (tx: any) => {
             // Postgres özel row lock işlemi: Bu kullanıcı için diğer transaction'ları beklet
             await tx.$queryRaw`SELECT id FROM "User" WHERE id = ${userId} FOR UPDATE`;
 
@@ -82,7 +83,25 @@ export class CreditService {
             });
 
             return newBalance;
+        };
+
+        if (existingTx) {
+            return await execute(existingTx);
+        }
+
+        return await prisma.$transaction(async (tx) => {
+            return await execute(tx);
         });
+    }
+
+    // Keep addCredit for backward compatibility
+    static async addCredit(
+        userId: string,
+        amount: number,
+        description: string,
+        referenceId?: string
+    ): Promise<number> {
+        return this.addCredits(userId, amount, description, referenceId);
     }
 
     /**

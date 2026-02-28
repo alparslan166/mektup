@@ -20,7 +20,8 @@ export default function AdminPricingPage() {
         docCreditPrice: 5,
         calendarCreditPrice: 30,
         envelopeColorPrice: 10,
-        paperColorPrice: 10
+        paperColorPrice: 10,
+        commentRewardAmount: 50
     });
 
     useEffect(() => {
@@ -41,6 +42,7 @@ export default function AdminPricingPage() {
                 calendarCreditPrice: res.data.calendarCreditPrice,
                 envelopeColorPrice: res.data.envelopeColorPrice,
                 paperColorPrice: res.data.paperColorPrice,
+                commentRewardAmount: res.data.commentRewardAmount,
             });
         } else {
             toast.error("Fiyat ayarları yüklenirken bir sorun oluştu.");
@@ -70,7 +72,8 @@ export default function AdminPricingPage() {
             prices.docCreditPrice,
             prices.calendarCreditPrice,
             prices.envelopeColorPrice,
-            prices.paperColorPrice
+            prices.paperColorPrice,
+            prices.commentRewardAmount
         );
 
         if (res.success) {
@@ -270,13 +273,40 @@ export default function AdminPricingPage() {
                 </div>
             </div>
 
+            {/* Ödül ve Kampanya Ayarları */}
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                    <div>
+                        <h3 className="font-bold text-slate-800">3. Ödül ve Kampanya Ayarları</h3>
+                        <p className="text-xs text-slate-500 font-medium">Kullanıcılara teşvik amaçlı verilecek krediler.</p>
+                    </div>
+                </div>
+
+                <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="space-y-1.5 focus-within:text-blue-600 transition-colors">
+                        <label className="text-sm font-semibold text-slate-700 block text-emerald-600 font-bold">İlk Yorum Ödülü</label>
+                        <div className="relative">
+                            <input
+                                name="commentRewardAmount"
+                                type="number"
+                                min="0"
+                                value={prices.commentRewardAmount}
+                                onChange={handleInputChange}
+                                className="w-full pl-4 pr-10 py-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-100 focus:border-emerald-400 outline-none font-medium text-slate-800 transition-all text-sm"
+                            />
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-400 font-bold select-none">🪙</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* Hediyeler Yönlendirme Kutusu */}
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden">
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 text-blue-200/50 -mr-10">
                     <Gift size={180} />
                 </div>
                 <div className="relative z-10 flex-1">
-                    <h3 className="text-xl font-bold text-blue-900 mb-2">3. Hediyeler Yönetimi</h3>
+                    <h3 className="text-xl font-bold text-blue-900 mb-2">4. Hediyeler Yönetimi</h3>
                     <p className="text-sm text-blue-700 max-w-lg leading-relaxed">
                         Çikolatalar, Papatya Çayları, Kahveler ve diğer tüm özel hediyeler kendi görselleri ve açıklamalarıyla ayrı bir modülde tutulmaktadır. Hediyelerin kredi fiyatlarını yönetmek için <strong>Hediye Yönetimi</strong> sayfasına gidebilirsiniz.
                     </p>
