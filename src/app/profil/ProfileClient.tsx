@@ -175,43 +175,50 @@ export default function ProfileClient({ session, referralCode, referredById, sta
                                         </div>
                                     </div>
 
-                                    {!referredById && (
-                                        <div className="pt-6 border-t border-wood/10">
-                                            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                                                <div>
-                                                    <h4 className="font-bold text-ink text-sm">Davet Kodu Gir</h4>
-                                                    <p className="text-[10px] text-ink-light font-medium">Sizi davet eden arkadaşınızın kodunu girerek hediye kredi kazanın.</p>
-                                                </div>
-                                                <div className="flex gap-2 w-full md:w-auto">
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Örn: AB12CD34"
-                                                        value={referralInput}
-                                                        onChange={(e) => setReferralInput(e.target.value.toUpperCase())}
-                                                        className="flex-1 bg-white border border-wood/20 px-4 py-2 rounded-lg text-sm outline-none focus:border-wood transition-all font-mono"
-                                                    />
-                                                    <button
-                                                        onClick={async () => {
-                                                            if (!referralInput) return;
-                                                            setIsRedeeming(true);
-                                                            const res = await redeemReferralCode(referralInput);
-                                                            setIsRedeeming(false);
-                                                            if (res.success) {
-                                                                toast.success(res.message || "Ödül hesabınıza yüklendi!");
-                                                                setReferralInput("");
-                                                            } else {
-                                                                toast.error(res.error || "Kod geçersiz.");
-                                                            }
-                                                        }}
-                                                        disabled={isRedeeming || !referralInput}
-                                                        className="px-6 py-2 bg-seal text-white rounded-lg font-bold text-sm hover:bg-seal-hover transition-all disabled:opacity-50 flex items-center gap-2"
-                                                    >
-                                                        {isRedeeming ? <Loader2 size={16} className="animate-spin" /> : "Giriş Yap"}
-                                                    </button>
-                                                </div>
+                                    <div className="pt-6 border-t border-wood/10">
+                                        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                                            <div>
+                                                <h4 className={`font-bold text-sm ${referredById ? "text-ink-light" : "text-ink"}`}>
+                                                    {referredById ? "Referans Kodu Kullanıldı" : "Davet Kodu Gir"}
+                                                </h4>
+                                                <p className="text-[10px] text-ink-light font-medium">
+                                                    {referredById ? "Bir arkadaşınızın davet kodunu daha önce kullandınız." : "Sizi davet eden arkadaşınızın kodunu girerek hediye kredi kazanın."}
+                                                </p>
+                                            </div>
+                                            <div className="flex gap-2 w-full md:w-auto">
+                                                <input
+                                                    type="text"
+                                                    placeholder={referredById ? "KULLANILDI" : "Örn: AB12CD34"}
+                                                    value={referredById ? "" : referralInput}
+                                                    disabled={!!referredById}
+                                                    onChange={(e) => setReferralInput(e.target.value.toUpperCase())}
+                                                    className={`flex-1 px-4 py-2 rounded-lg text-sm outline-none transition-all font-mono ${referredById
+                                                        ? "bg-paper-dark border-transparent text-ink-light cursor-not-allowed"
+                                                        : "bg-white border border-wood/20 focus:border-wood"}`}
+                                                />
+                                                <button
+                                                    onClick={async () => {
+                                                        if (!referralInput || referredById) return;
+                                                        setIsRedeeming(true);
+                                                        const res = await redeemReferralCode(referralInput);
+                                                        setIsRedeeming(false);
+                                                        if (res.success) {
+                                                            toast.success(res.message || "Ödül hesabınıza yüklendi!");
+                                                            setReferralInput("");
+                                                        } else {
+                                                            toast.error(res.error || "Kod geçersiz.");
+                                                        }
+                                                    }}
+                                                    disabled={isRedeeming || !referralInput || !!referredById}
+                                                    className={`px-6 py-2 rounded-lg font-bold text-sm transition-all flex items-center gap-2 ${referredById
+                                                        ? "bg-paper-dark text-ink-light cursor-not-allowed"
+                                                        : "bg-seal text-white hover:bg-seal-hover shadow-sm disabled:opacity-50"}`}
+                                                >
+                                                    {isRedeeming ? <Loader2 size={16} className="animate-spin" /> : (referredById ? "Kullanıldı" : "Giriş Yap")}
+                                                </button>
                                             </div>
                                         </div>
-                                    )}
+                                    </div>
                                 </div>
                             </div>
 
