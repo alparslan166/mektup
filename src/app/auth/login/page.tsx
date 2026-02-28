@@ -14,8 +14,16 @@ function LoginForm() {
 
     const router = useRouter();
     const searchParams = useSearchParams();
+    const referralCode = searchParams.get("ref");
     const isRegistered = searchParams.get("registered") === "true";
     const authError = searchParams.get("error");
+
+    // Store referral code in cookie for Google Login persistence
+    React.useEffect(() => {
+        if (referralCode) {
+            document.cookie = `next-auth.referral-code=${referralCode}; path=/; max-age=3600; SameSite=Lax`;
+        }
+    }, [referralCode]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

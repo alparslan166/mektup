@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
 
@@ -13,6 +13,15 @@ export default function RegisterPage() {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const referralCode = searchParams.get("ref");
+
+    // Store referral code in cookie for Google Login persistence
+    React.useEffect(() => {
+        if (referralCode) {
+            document.cookie = `next-auth.referral-code=${referralCode}; path=/; max-age=3600; SameSite=Lax`;
+        }
+    }, [referralCode]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -23,7 +32,7 @@ export default function RegisterPage() {
             const res = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, password }),
+                body: JSON.stringify({ name, email, password, referralCode }),
             });
 
             if (res.ok) {
