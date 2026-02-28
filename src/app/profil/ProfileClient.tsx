@@ -12,13 +12,14 @@ interface ProfileClientProps {
     session: any;
     referralCode: string;
     referredById: string | null;
+    referralCount: number;
     stats: {
         letters: number;
         addresses: number;
     };
 }
 
-export default function ProfileClient({ session, referralCode, referredById, stats }: ProfileClientProps) {
+export default function ProfileClient({ session, referralCode, referredById, referralCount, stats }: ProfileClientProps) {
     const [activeTab, setActiveTab] = useState<"overview" | "settings">("overview");
     const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
     const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
@@ -155,23 +156,36 @@ export default function ProfileClient({ session, referralCode, referredById, sta
                                             </div>
                                             <div>
                                                 <h3 className="font-bold text-ink">Referans Kodunuz</h3>
-                                                <p className="text-xs text-ink-light font-medium">Bu kodu arkadaşlarınızla paylaşarak kredi kazanabilirsiniz!</p>
+                                                <p className="text-xs text-ink-light font-medium">
+                                                    {referralCount > 0
+                                                        ? "Tebrikler! Bir arkadaşınızı davet ederek ödülünüzü kazandınız."
+                                                        : "Bu kodu arkadaşlarınızla paylaşarak kredi kazanabilirsiniz!"}
+                                                </p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2 w-full md:w-auto">
-                                            <div className="flex-1 md:w-32 bg-white border border-wood/20 px-4 py-2 rounded-lg font-mono text-sm font-bold text-ink text-center select-all">
-                                                {referralCode}
-                                            </div>
-                                            <button
-                                                onClick={() => {
-                                                    navigator.clipboard.writeText(referralCode);
-                                                    toast.success("Referans kodu kopyalandı!");
-                                                }}
-                                                className="p-2.5 bg-wood text-white rounded-lg hover:bg-wood-dark transition-colors shadow-sm"
-                                                title="Kodu Kopyala"
-                                            >
-                                                <Copy size={18} />
-                                            </button>
+                                            {referralCount > 0 ? (
+                                                <div className="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-100 font-bold text-sm">
+                                                    <ShieldCheck size={18} />
+                                                    Davet Hakkı Kullanıldı
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <div className="flex-1 md:w-32 bg-white border border-wood/20 px-4 py-2 rounded-lg font-mono text-sm font-bold text-ink text-center select-all">
+                                                        {referralCode}
+                                                    </div>
+                                                    <button
+                                                        onClick={() => {
+                                                            navigator.clipboard.writeText(referralCode);
+                                                            toast.success("Referans kodu kopyalandı!");
+                                                        }}
+                                                        className="p-2.5 bg-wood text-white rounded-lg hover:bg-wood-dark transition-colors shadow-sm"
+                                                        title="Kodu Kopyala"
+                                                    >
+                                                        <Copy size={18} />
+                                                    </button>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
 

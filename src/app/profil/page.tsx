@@ -15,10 +15,11 @@ export default async function ProfilePage() {
     const userId = (session.user as any).id;
 
     // Fetch real stats
-    const [user, letterCount, addressCount] = await Promise.all([
+    const [user, letterCount, addressCount, referredCount] = await Promise.all([
         prisma.user.findUnique({ where: { id: userId }, select: { referralCode: true, referredById: true } }),
         prisma.letter.count({ where: { userId } }),
         prisma.address.count({ where: { userId } }),
+        prisma.user.count({ where: { referredById: userId } }),
     ]);
 
     return (
@@ -28,6 +29,7 @@ export default async function ProfilePage() {
                     session={session}
                     referralCode={user?.referralCode || ""}
                     referredById={user?.referredById || null}
+                    referralCount={referredCount}
                     stats={{
                         letters: letterCount,
                         addresses: addressCount

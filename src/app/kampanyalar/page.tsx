@@ -118,7 +118,7 @@ export default function CampaignsPage() {
                                 <UserPlus size={24} className="md:w-8 md:h-8" />
                             </div>
                             <div>
-                                <h3 className="text-lg md:text-2xl font-playfair font-bold text-ink leading-tight">Arkadaşını Davet Et, <br /><span className="text-wood-dark text-xl md:text-3xl">İkiniz de %15 İndirim Kazanın!</span></h3>
+                                <h3 className="text-lg md:text-2xl font-playfair font-bold text-ink leading-tight">Arkadaşını Davet Et, <br /><span className="text-wood-dark text-xl md:text-3xl">İkiniz de {referralReward || 15} Kredi 🪙 kazanın!</span></h3>
                             </div>
                         </div>
 

@@ -45,6 +45,15 @@ export async function redeemReferralCode(code: string) {
             return { success: false, error: "Geçersiz referans kodu." };
         }
 
+        // Check if referrer already has a referral reward
+        const existingReferrals = await prisma.user.count({
+            where: { referredById: referrer.id }
+        });
+
+        if (existingReferrals >= 1) {
+            return { success: false, error: "Bu kodun kullanım limiti dolmuştur." };
+        }
+
         // Prevent reciprocal referrals (A refers B, B refers A)
         if (referrer.referredById === currentUser.id) {
             return { success: false, error: "Karşılıklı referans kullanılamaz." };
