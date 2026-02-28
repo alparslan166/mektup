@@ -1,43 +1,15 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
+import { getFAQs } from "@/app/actions/faqActions";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import FAQClient from "./FAQClient";
 
-export default function SSSPage() {
-    const defaultFaqs = [
-        {
-            question: "Geleceğe Mektup tam olarak nedir?",
-            answer: "Geleceğe Mektup, sevdiklerinize veya kendinize, belirlediğiniz ileri bir tarihte teslim edilmek üzere fiziksel bir mektup göndermenizi sağlayan nostaljik bir köprüdür. Dijital mesajların aksine somut, kokulu ve duygusal bir deneyim sunar."
-        },
-        {
-            question: "Mektuplarım ne kadar sürede teslim ediliyor?",
-            answer: "Senaryonuza bağlıdır. 'Hemen Postaya Ver (İlk İş Günü)' seçeneğini seçerseniz ertesi gün kargoya verilir. '1 Hafta', '1 Ay' veya 'Özel Tarih' seçerseniz, belirlediğiniz gün kargoya verilecek şekilde sistemimizde güvenle saklanır."
-        },
-        {
-            question: "Koku seçeneği nedir ve nasıl uygulanıyor?",
-            answer: "Nostaljik deneyimi artırmak için mektubunuzla birlikte gitmesini istediğiniz özel esanslar ekleyebilirsiniz. Gül, Lavanta, Okyanus veya Nostaljik Kahve kokularından birini seçtiğinizde, zarf kapatılmadan önce kağıda o koku hafifçe sprey ile uygulanır."
-        },
-        {
-            question: "Mektubuma fotoğraf ekleyebilir miyim?",
-            answer: "Evet! Ekstralar adımında mektubunuzla birlikte gitmesini istediğiniz fotoğrafları (en fazla 50 adede kadar) ekleyebilirsiniz. Bu fotoğraflar mektup kağıdınızla birlikte zarfın içine yerleştirilir."
-        },
-        {
-            question: "Teslimatı kim yapıyor?",
-            answer: "Teslimatlarımız anlaşmalı olduğumuz profesyonel kargo / kurye firmaları (Sürat, Yurtiçi veya özel kuryeler) aracılığıyla yapılmaktadır. Mektup yola çıktığında alıcının telefon numarasına SMS veya sisteme girdiğiniz maile kargo takip numarası iletilir."
-        },
-        {
-            question: "Gelen Mektup (Cevap Mektubu) hizmeti nedir ve nasıl çalışır?",
-            answer: "Eğer mektup gönderdiğiniz kişiden fiziksel bir cevap bekliyorsanız ancak sabit bir adresiniz yoksa veya adresinizi paylaşmak istemiyorsanız bu hizmeti kullanabilirsiniz. Mektubunuzu gönderirken 'Mektubuma cevabı gelen kutusunda görmek istiyorum' seçeneğini işaretlemeniz yeterlidir. Mektubunuzun sonuna cevap adresi olarak kendi şirket adresimizi ekleriz. Alıcının gönderdiği mektup bize ulaştığında, özel olarak fotoğraflanır ve sistemdeki 'Gelen Kutusu' sayfanıza dijital olarak yüklenir. Böylece fiziksel mektubunuzu dilediğiniz yerden okuyabilirsiniz."
-        }
-    ];
-
-    const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-    const toggleFaq = (index: number) => {
-        setOpenIndex(openIndex === index ? null : index);
-    };
+export default async function SSSPage() {
+    const session = await getServerSession(authOptions);
+    const isAdmin = (session?.user as any)?.role === "ADMIN";
+    const faqs = await getFAQs();
 
     return (
         <div className="container mx-auto px-4 py-12 max-w-3xl flex-1 flex flex-col animate-in fade-in duration-300">
@@ -46,7 +18,7 @@ export default function SSSPage() {
                 <span className="font-medium text-sm">Ana Sayfaya Dön</span>
             </Link>
 
-            <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-8 sm:p-12 relative overflow-hidden">
+            <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-4 sm:p-8 lg:p-12 relative overflow-hidden">
                 {/* Decorative Elements */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-seal/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl pointer-events-none"></div>
 
@@ -59,45 +31,7 @@ export default function SSSPage() {
                     </p>
                 </div>
 
-                <div className="space-y-4">
-                    {defaultFaqs.map((faq, index) => (
-                        <div
-                            key={index}
-                            className="border border-paper-dark rounded-lg overflow-hidden transition-all bg-paper-light"
-                        >
-                            <button
-                                onClick={() => toggleFaq(index)}
-                                className="w-full text-left px-6 py-4 flex items-center justify-between font-bold text-ink hover:text-wood transition-colors focus:outline-none focus:bg-paper-dark/10"
-                            >
-                                <span>{faq.question}</span>
-                                {openIndex === index ? (
-                                    <ChevronUp size={20} className="text-wood flex-shrink-0" />
-                                ) : (
-                                    <ChevronDown size={20} className="text-ink-light flex-shrink-0" />
-                                )}
-                            </button>
-
-                            <AnimatePresence initial={false}>
-                                {openIndex === index && (
-                                    <motion.div
-                                        key="content"
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: "auto", opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                                        className="overflow-hidden"
-                                    >
-                                        <div className="px-6 pb-6 text-ink-light leading-relaxed">
-                                            <div className="pt-2 border-t border-paper-dark">
-                                                {faq.answer}
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-                    ))}
-                </div>
+                <FAQClient initialFaqs={faqs} isAdmin={isAdmin} />
 
                 <div className="mt-12 p-6 bg-seal/5 rounded-xl border border-seal/20 text-center">
                     <p className="text-ink font-medium mb-2">Başka bir sorunuz mu var?</p>
@@ -105,7 +39,6 @@ export default function SSSPage() {
                         Bizimle İletişime Geçin
                     </Link>
                 </div>
-
             </div>
         </div>
     );
