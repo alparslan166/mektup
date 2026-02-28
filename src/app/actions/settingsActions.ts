@@ -15,6 +15,8 @@ const CALENDAR_CREDIT_PRICE_KEY = "calendar_credit_price";
 const ENVELOPE_COLOR_PRICE_KEY = "envelope_color_price";
 const PAPER_COLOR_PRICE_KEY = "paper_color_price";
 const COMMENT_REWARD_AMOUNT_KEY = "comment_reward_amount";
+const SECOND_LETTER_REWARD_AMOUNT_KEY = "second_letter_reward_amount";
+const REFERRAL_REWARD_AMOUNT_KEY = "referral_reward_amount";
 
 // Get the company reply address
 export async function getCompanyAddress(): Promise<{ success: boolean; address?: string }> {
@@ -63,10 +65,12 @@ export async function getPricingSettings(): Promise<{
         envelopeColorPrice: number;
         paperColorPrice: number;
         commentRewardAmount: number;
+        secondLetterRewardAmount: number;
+        referralRewardAmount: number;
     }
 }> {
     try {
-        const [sendSetting, openSetting, photoSetting, postcardSetting, scentSetting, docSetting, calendarSetting, envelopeColorSetting, paperColorSetting, commentRewardAmountSetting] = await Promise.all([
+        const [sendSetting, openSetting, photoSetting, postcardSetting, scentSetting, docSetting, calendarSetting, envelopeColorSetting, paperColorSetting, commentRewardAmountSetting, secondLetterRewardAmountSetting, referralRewardAmountSetting] = await Promise.all([
             prisma.siteSetting.findUnique({ where: { key: LETTER_SEND_PRICE_KEY } }),
             prisma.siteSetting.findUnique({ where: { key: INCOMING_LETTER_OPEN_PRICE_KEY } }),
             prisma.siteSetting.findUnique({ where: { key: PHOTO_CREDIT_PRICE_KEY } }),
@@ -77,6 +81,8 @@ export async function getPricingSettings(): Promise<{
             prisma.siteSetting.findUnique({ where: { key: ENVELOPE_COLOR_PRICE_KEY } }),
             prisma.siteSetting.findUnique({ where: { key: PAPER_COLOR_PRICE_KEY } }),
             prisma.siteSetting.findUnique({ where: { key: COMMENT_REWARD_AMOUNT_KEY } }),
+            prisma.siteSetting.findUnique({ where: { key: SECOND_LETTER_REWARD_AMOUNT_KEY } }),
+            prisma.siteSetting.findUnique({ where: { key: REFERRAL_REWARD_AMOUNT_KEY } }),
         ]);
 
         return {
@@ -92,6 +98,8 @@ export async function getPricingSettings(): Promise<{
                 envelopeColorPrice: envelopeColorSetting?.value ? parseFloat(envelopeColorSetting.value) : 10, // Varsayılan 10 kredi
                 paperColorPrice: paperColorSetting?.value ? parseFloat(paperColorSetting.value) : 10, // Varsayılan 10 kredi
                 commentRewardAmount: commentRewardAmountSetting?.value ? parseFloat(commentRewardAmountSetting.value) : 50, // Varsayılan 50 kredi ödül
+                secondLetterRewardAmount: secondLetterRewardAmountSetting?.value ? parseFloat(secondLetterRewardAmountSetting.value) : 50, // Varsayılan 50 kredi ödül
+                referralRewardAmount: referralRewardAmountSetting?.value ? parseFloat(referralRewardAmountSetting.value) : 15, // Varsayılan 15 kredi ödül
             }
         };
     } catch (error) {
@@ -111,7 +119,9 @@ export async function updatePricingSettings(
     calendarCreditPrice: number,
     envelopeColorPrice: number,
     paperColorPrice: number,
-    commentRewardAmount: number
+    commentRewardAmount: number,
+    secondLetterRewardAmount: number,
+    referralRewardAmount: number
 ): Promise<{ success: boolean; error?: string }> {
     const session = await getServerSession(authOptions);
     if (!session || (session.user as any).role !== "ADMIN") {
@@ -169,6 +179,16 @@ export async function updatePricingSettings(
                 where: { key: COMMENT_REWARD_AMOUNT_KEY },
                 update: { value: commentRewardAmount.toString() },
                 create: { key: COMMENT_REWARD_AMOUNT_KEY, value: commentRewardAmount.toString() },
+            }),
+            prisma.siteSetting.upsert({
+                where: { key: SECOND_LETTER_REWARD_AMOUNT_KEY },
+                update: { value: secondLetterRewardAmount.toString() },
+                create: { key: SECOND_LETTER_REWARD_AMOUNT_KEY, value: secondLetterRewardAmount.toString() },
+            }),
+            prisma.siteSetting.upsert({
+                where: { key: REFERRAL_REWARD_AMOUNT_KEY },
+                update: { value: referralRewardAmount.toString() },
+                create: { key: REFERRAL_REWARD_AMOUNT_KEY, value: referralRewardAmount.toString() },
             })
         ]);
 

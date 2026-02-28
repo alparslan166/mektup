@@ -337,7 +337,7 @@ export default function YorumlarPage() {
 
                                         {/* Show/Hide Replies Toggle */}
                                         {comment.replies && comment.replies.length > 0 && (
-                                            <div className="flex justify-end mt-4">
+                                            <div className="flex justify-end">
                                                 <button
                                                     onClick={() => toggleReplies(comment.id)}
                                                     className="text-[11px] font-bold text-wood hover:text-wood-dark transition-colors flex items-center gap-1.5 bg-wood/5 px-4 py-2 rounded-full border border-wood/10 outline-none"

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { User, Settings, Package, Heart, MapPin, Save, Key, Loader2, Edit2, ShieldCheck, LogOut } from "lucide-react";
+import { User, Settings, Package, Heart, MapPin, Save, Key, Loader2, Edit2, ShieldCheck, LogOut, Copy, Share2 } from "lucide-react";
 import { updateProfile, updatePassword } from "@/app/actions/userActions";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,13 +9,14 @@ import { signOut } from "next-auth/react";
 
 interface ProfileClientProps {
     session: any;
+    referralCode: string;
     stats: {
         letters: number;
         addresses: number;
     };
 }
 
-export default function ProfileClient({ session, stats }: ProfileClientProps) {
+export default function ProfileClient({ session, referralCode, stats }: ProfileClientProps) {
     const [activeTab, setActiveTab] = useState<"overview" | "settings">("overview");
     const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
     const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
@@ -138,6 +139,36 @@ export default function ProfileClient({ session, stats }: ProfileClientProps) {
                                     <div className="text-xs font-bold text-ink-light uppercase tracking-widest">Adreslerim</div>
                                     <p className="text-[10px] text-seal font-bold">Yönet &rarr;</p>
                                 </a>
+                            </div>
+
+                            {/* Referral Section */}
+                            <div className="mt-8 p-6 bg-gradient-to-br from-wood/5 to-wood/10 rounded-2xl border border-wood/20">
+                                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-wood shadow-sm">
+                                            <Share2 size={24} />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-ink">Arkadaşlarını Davet Et</h3>
+                                            <p className="text-xs text-ink-light font-medium">Davet ettiğin her arkadaşın için kredi kazan!</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 w-full md:w-auto">
+                                        <div className="flex-1 bg-white border border-wood/20 px-4 py-2 rounded-lg font-mono text-xs text-ink truncate select-all">
+                                            {`${window.location.origin}/auth/register?ref=${referralCode}`}
+                                        </div>
+                                        <button
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(`${window.location.origin}/auth/register?ref=${referralCode}`);
+                                                toast.success("Davet linki kopyalandı!");
+                                            }}
+                                            className="p-2 bg-wood text-white rounded-lg hover:bg-wood-dark transition-colors shadow-sm"
+                                            title="Linki Kopyala"
+                                        >
+                                            <Copy size={18} />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
 
                             {/* Info Box */}

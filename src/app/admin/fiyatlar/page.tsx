@@ -21,7 +21,9 @@ export default function AdminPricingPage() {
         calendarCreditPrice: 30,
         envelopeColorPrice: 10,
         paperColorPrice: 10,
-        commentRewardAmount: 50
+        commentRewardAmount: 50,
+        secondLetterRewardAmount: 50,
+        referralRewardAmount: 15
     });
 
     useEffect(() => {
@@ -43,6 +45,8 @@ export default function AdminPricingPage() {
                 envelopeColorPrice: res.data.envelopeColorPrice,
                 paperColorPrice: res.data.paperColorPrice,
                 commentRewardAmount: res.data.commentRewardAmount,
+                secondLetterRewardAmount: res.data.secondLetterRewardAmount,
+                referralRewardAmount: res.data.referralRewardAmount,
             });
         } else {
             toast.error("Fiyat ayarları yüklenirken bir sorun oluştu.");
@@ -73,7 +77,9 @@ export default function AdminPricingPage() {
             prices.calendarCreditPrice,
             prices.envelopeColorPrice,
             prices.paperColorPrice,
-            prices.commentRewardAmount
+            prices.commentRewardAmount,
+            prices.secondLetterRewardAmount,
+            prices.referralRewardAmount
         );
 
         if (res.success) {
@@ -295,6 +301,36 @@ export default function AdminPricingPage() {
                                 className="w-full pl-4 pr-10 py-3 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-100 focus:border-emerald-400 outline-none font-medium text-slate-800 transition-all text-sm"
                             />
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-400 font-bold select-none">🪙</div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-1.5 focus-within:text-blue-600 transition-colors">
+                        <label className="text-sm font-semibold text-slate-700 block text-rose-600 font-bold">2. Mektup Ödülü</label>
+                        <div className="relative">
+                            <input
+                                name="secondLetterRewardAmount"
+                                type="number"
+                                min="0"
+                                value={prices.secondLetterRewardAmount}
+                                onChange={handleInputChange}
+                                className="w-full pl-4 pr-10 py-3 bg-white border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-100 focus:border-rose-400 outline-none font-medium text-slate-800 transition-all text-sm"
+                            />
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-rose-400 font-bold select-none">🪙</div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-1.5 focus-within:text-blue-600 transition-colors">
+                        <label className="text-sm font-semibold text-slate-700 block text-indigo-600 font-bold">Referans Ödülü</label>
+                        <div className="relative">
+                            <input
+                                name="referralRewardAmount"
+                                type="number"
+                                min="0"
+                                value={prices.referralRewardAmount}
+                                onChange={handleInputChange}
+                                className="w-full pl-4 pr-10 py-3 bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 outline-none font-medium text-slate-800 transition-all text-sm"
+                            />
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-indigo-400 font-bold select-none">🪙</div>
                         </div>
                     </div>
                 </div>

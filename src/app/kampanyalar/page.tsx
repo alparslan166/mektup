@@ -7,6 +7,8 @@ import { getPricingSettings } from '@/app/actions/settingsActions';
 
 export default function CampaignsPage() {
     const [rewardAmount, setRewardAmount] = useState<number | null>(null);
+    const [secondLetterReward, setSecondLetterReward] = useState<number | null>(null);
+    const [referralReward, setReferralReward] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -14,6 +16,8 @@ export default function CampaignsPage() {
             const res = await getPricingSettings();
             if (res.success && res.data) {
                 setRewardAmount(res.data.commentRewardAmount);
+                setSecondLetterReward(res.data.secondLetterRewardAmount);
+                setReferralReward(res.data.referralRewardAmount);
             }
             setIsLoading(false);
         };
@@ -54,12 +58,12 @@ export default function CampaignsPage() {
                                 <MailPlus size={24} className="md:w-8 md:h-8" />
                             </div>
                             <div>
-                                <h3 className="text-lg md:text-2xl font-playfair font-bold text-ink leading-tight">İkinci Mektubuna <br /><span className="text-rose-600 text-xl md:text-3xl">%20 İndirim!</span></h3>
+                                <h3 className="text-lg md:text-2xl font-playfair font-bold text-ink leading-tight">İkinci Mektubuna <br /><span className="text-rose-600 text-xl md:text-3xl">{secondLetterReward || 50} Kredi Hediye!</span></h3>
                             </div>
                         </div>
 
                         <p className="text-ink-light leading-snug md:leading-relaxed mb-6 md:mb-8 text-xs md:text-base flex-1">
-                            Sevdiklerinize yazacağınız ilk mektubunuzdan sonraki <strong>2. mektup gönderiminizde</strong> sistemimiz anında fiyattan %20 indirim (kredi) düşer! Daha çok yazın, daha kârlı çıkın.
+                            Sevdiklerinize yazacağınız ilk mektubunuzdan sonraki <strong>2. mektup gönderiminizde</strong> sistemimiz anında hesabınıza <strong>{secondLetterReward || 50} Kredi 🪙</strong> tanımlar! Daha çok yazın, daha kârlı çıkın.
                         </p>
 
                         <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between mt-auto gap-3">
@@ -119,7 +123,7 @@ export default function CampaignsPage() {
                         </div>
 
                         <p className="text-ink-light leading-snug md:leading-relaxed mb-6 md:mb-8 text-xs md:text-base flex-1 md:w-[80%]">
-                            Hemen Profil sayfandan sana özel davet linkini al ve arkadaşına gönder. Arkadaşın senin linkinle <strong>Mektuplaş</strong> ailesine katıldığında, hem ona hoş geldin hediyesi olarak hem de sana teşekkür olarak <strong>bir mektup ücretinin tam %15&apos;i</strong> kadar kredi anında cüzdanlarınıza eklensin!
+                            Hemen Profil sayfandan sana özel davet linkini al ve arkadaşına gönder. Arkadaşın senin linkinle <strong>Mektuplaş</strong> ailesine katıldığında, hem ona hoş geldin hediyesi olarak hem de sana teşekkür olarak <strong>tam {referralReward || 15} Kredi 🪙</strong> anında cüzdanlarınıza eklensin!
                         </p>
 
                         <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between mt-auto gap-3 w-full">

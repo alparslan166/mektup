@@ -110,6 +110,34 @@ export async function createLetter(letterData: any) {
             where: { userId: user.id }
         });
 
+        // 2.5 Kampanya: İkinci Mektup Ödülü
+        // Bu işlemi daha sağlıklı yapmak için kulannıcıyı tekrar çekip flag kontrolü yapıyoruz
+        const currentUser = await prisma.user.findUnique({
+            where: { id: user.id },
+            select: { secondLetterRewardReceived: true }
+        });
+
+        if (currentUser && !currentUser.secondLetterRewardReceived) {
+            const letterCount = await prisma.letter.count({
+                where: { userId: user.id }
+            });
+
+            if (letterCount >= 2) {
+                const rewardAmount = pricingRes.data?.secondLetterRewardAmount || 50;
+                await CreditService.addCredits(
+                    user.id,
+                    rewardAmount,
+                    "İkinci Mektup Kampanya Ödülü 🎁"
+                );
+
+                // Flag'i güncelle
+                await prisma.user.update({
+                    where: { id: user.id },
+                    data: { secondLetterRewardReceived: true }
+                });
+            }
+        }
+
         // 3. Send email notifications
         if (user.email) {
             await sendOrderReceivedEmail(user.email, createdLetter.id);

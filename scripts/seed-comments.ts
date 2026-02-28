@@ -7,7 +7,15 @@ async function main() {
     await prisma.comment.deleteMany({});
 
     const users = await prisma.user.findMany({
-        take: 10, // İlk 10 kullanıcıyı alalım yorum atanlar farklı görünsün
+        where: {
+            NOT: {
+                OR: [
+                    { name: { contains: 'admin', mode: 'insensitive' } },
+                    { email: { contains: 'admin', mode: 'insensitive' } }
+                ]
+            }
+        },
+        take: 20, // Daha fazla çeşitlilik için sayıyı artıralım
     });
 
     if (users.length === 0) {
@@ -63,6 +71,19 @@ async function main() {
         "Gönül rahatlığıyla mektup gönderebileceğiniz tek adres."
     ];
 
+    const replyBodies = [
+        "Kesinlikle katılıyorum, çok doğru bir tespit.",
+        "Ben de aynı fikirdeyim, gerçekten harika çalışıyorlar.",
+        "Bilgi için teşekkürler, deneyeceğim.",
+        "Hangi şehirden gönderim yapmıştınız? Merak ettim.",
+        "Sorunsuz ulaştı mı gerçekten? Ben de göndermeyi düşünüyorum.",
+        "Harika bir yorum, teşekkürler paylaştığınız için.",
+        "Benim mektubum da 2 günde ulaştı, inanılmaz!",
+        "Kredi sistemi gerçekten çok pratik olmuş değil mi?",
+        "Müşteri hizmetleri konusunda haklısınız, çok nazikler.",
+        "Sitenin hızı beni de çok şaşırttı."
+    ];
+
     const titles = [
         "Mükemmel Hizmet", "Teşekkürler", "Harika Tasarım", "Hızlı Teslimat",
         "Çok Memnunum", "Kaliteli Baskı", "Güvenilir Platform", "Modern Çözüm",
@@ -85,6 +106,29 @@ async function main() {
                 rating: randomRating,
             }
         });
+    }
+
+    console.log('💬 Bazı yorumlara yanıtlar ekleniyor...');
+    const allComments = await prisma.comment.findMany();
+
+    // Yorumların %40'ına yanıt ekleyelim
+    for (const comment of allComments) {
+        if (Math.random() > 0.6) {
+            const replyCount = Math.floor(Math.random() * 3) + 1; // 1-3 arası yanıt
+            for (let j = 0; j < replyCount; j++) {
+                const randomUser = users[Math.floor(Math.random() * users.length)];
+                const replyBody = replyBodies[Math.floor(Math.random() * replyBodies.length)];
+
+                await prisma.comment.create({
+                    data: {
+                        userId: randomUser.id,
+                        body: replyBody,
+                        parentId: comment.id,
+                        rating: 5 // Yanıtlar genelde puansız veya 5 yıldız kabul edilebilir
+                    }
+                });
+            }
+        }
     }
 
     console.log('✅ Tohumlama başarıyla tamamlandı!');

@@ -54,7 +54,12 @@ model User {
   creditTransactions CreditTransaction[]
   giftOrders         GiftOrder[]
   comments           Comment[]
-  firstCommentRewardReceived Boolean @default(false)
+  firstCommentRewardReceived   Boolean             @default(false)
+  secondLetterRewardReceived  Boolean             @default(false)
+  referralCode                String?             @unique
+  referredById                String?
+  referredBy                  User?               @relation("UserReferrals", fields: [referredById], references: [id])
+  referredUsers               User[]              @relation("UserReferrals")
 }
 
 model Address {
