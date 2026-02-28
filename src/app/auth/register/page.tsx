@@ -36,12 +36,8 @@ export default function RegisterPage() {
             });
 
             if (res.ok) {
-                // Kayıt başarılı, otomatik giriş yap
-                await signIn("credentials", {
-                    email,
-                    password,
-                    callbackUrl: "/",
-                });
+                // Kayıt başarılı, doğrulama e-postası gönderildi
+                router.push("/auth/login?registered=true&verify=true");
             } else {
                 const data = await res.json();
                 setError(data.message || "Bir hata oluştu.");

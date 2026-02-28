@@ -16,6 +16,8 @@ function LoginForm() {
     const searchParams = useSearchParams();
     const referralCode = searchParams.get("ref");
     const isRegistered = searchParams.get("registered") === "true";
+    const needsVerify = searchParams.get("verify") === "true";
+    const isVerified = searchParams.get("verified") === "true";
     const authError = searchParams.get("error");
 
     // Store referral code in cookie for Google Login persistence
@@ -38,7 +40,7 @@ function LoginForm() {
             });
 
             if (res?.error) {
-                setError("E-posta veya şifre hatalı.");
+                setError(res.error === "CredentialsSignin" ? "E-posta veya şifre hatalı." : res.error);
             } else {
                 router.push("/");
                 router.refresh();
@@ -62,10 +64,17 @@ function LoginForm() {
                             <p className="text-ink-light text-sm">Devam etmek için giriş yapın.</p>
                         </div>
 
-                        {isRegistered && (
+                        {isVerified && (
                             <div className="bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm p-4 rounded-xl mb-6 flex items-center gap-2">
                                 <CheckCircle2 size={18} className="text-emerald-600" />
-                                Kaydınız başarıyla oluşturuldu. Şimdi giriş yapabilirsiniz.
+                                E-posta adresiniz başarıyla doğrulandı. Şimdi giriş yapabilirsiniz.
+                            </div>
+                        )}
+
+                        {isRegistered && !isVerified && (
+                            <div className="bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm p-4 rounded-xl mb-6 flex items-center gap-2">
+                                <CheckCircle2 size={18} className="text-emerald-600" />
+                                {needsVerify ? "Kaydınız oluşturuldu. Lütfen e-posta adresinize gönderilen doğrulama linkine tıklayın." : "Kaydınız başarıyla oluşturuldu. Şimdi giriş yapabilirsiniz."}
                             </div>
                         )}
 

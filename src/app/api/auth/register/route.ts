@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs";
 import { CreditService } from "@/services/creditService";
 import { getPricingSettings } from "@/app/actions/settingsActions";
 import { nanoid } from "nanoid";
+import { sendVerificationEmail } from "@/app/actions/emailActions";
+import crypto from "crypto";
 
 export async function POST(req: Request) {
     try {
@@ -49,7 +51,8 @@ export async function POST(req: Request) {
                 email,
                 password: hashedPassword,
                 referralCode: newReferralCode,
-                referredById: referrerId
+                referredById: referrerId,
+                emailVerified: null, // Ensure explicitly null
             },
         });
 
@@ -73,8 +76,23 @@ export async function POST(req: Request) {
             );
         }
 
+        // Generate verification token
+        const token = crypto.randomUUID();
+        const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+        await prisma.verificationToken.create({
+            data: {
+                identifier: email,
+                token,
+                expires,
+            },
+        });
+
+        // Send verification email
+        await sendVerificationEmail(email, token);
+
         return NextResponse.json(
-            { message: "Kullanıcı başarıyla oluşturuldu.", userId: user.id },
+            { message: "Kullanıcı başarıyla oluşturuldu. Lütfen e-posta adresinizi doğrulayın.", userId: user.id },
             { status: 201 }
         );
     } catch (error) {

@@ -39,6 +39,10 @@ export const authOptions: NextAuthOptions = {
                     throw new Error("User not found");
                 }
 
+                if (!user.emailVerified) {
+                    throw new Error("Lütfen giriş yapmadan önce e-posta adresinizi doğrulayın.");
+                }
+
                 const isPasswordValid = await bcrypt.compare(
                     credentials.password,
                     user.password
