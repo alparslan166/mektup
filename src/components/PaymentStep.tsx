@@ -5,8 +5,9 @@ import Stepper from "@/components/Stepper";
 import { ArrowLeft, Wallet, ShieldCheck, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useLetterStore } from "@/store/letterStore";
-import { createLetter } from "@/app/actions/letterActions";
+import { createLetter, getSentLetterCount } from "@/app/actions/letterActions";
 import { getCreditBalanceAction } from "@/app/actions/creditActions";
+import { getPricingSettings } from "@/app/actions/settingsActions";
 
 export default function PaymentStep({ goBack, onComplete }: { goBack: () => void, onComplete: () => void }) {
     const [isProcessing, setIsProcessing] = useState(false);
@@ -15,6 +16,17 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
     const [isCheckingBalance, setIsCheckingBalance] = useState(true);
     const extras = useLetterStore(state => state.extras);
     const isSubmitting = useRef(false);
+    const [sentLetterCount, setSentLetterCount] = useState(0);
+    const [pricingKeys, setPricingKeys] = useState({
+        letterSendPrice: 100,
+        photoCreditPrice: 10,
+        postcardCreditPrice: 15,
+        scentCreditPrice: 20,
+        docCreditPrice: 5,
+        calendarCreditPrice: 30,
+        envelopeColorPrice: 10,
+        paperColorPrice: 10
+    });
 
     React.useEffect(() => {
         getCreditBalanceAction().then(res => {
@@ -23,15 +35,59 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
             }
             setIsCheckingBalance(false);
         });
+        getPricingSettings().then(res => {
+            if (res.success && res.data) {
+                setPricingKeys({
+                    letterSendPrice: res.data.letterSendPrice || 100,
+                    photoCreditPrice: res.data.photoCreditPrice || 10,
+                    postcardCreditPrice: res.data.postcardCreditPrice || 15,
+                    scentCreditPrice: res.data.scentCreditPrice || 20,
+                    docCreditPrice: res.data.docCreditPrice || 5,
+                    calendarCreditPrice: res.data.calendarCreditPrice || 30,
+                    envelopeColorPrice: res.data.envelopeColorPrice || 10,
+                    paperColorPrice: res.data.paperColorPrice || 10,
+                });
+            }
+        });
+        getSentLetterCount().then(count => setSentLetterCount(count));
     }, []);
 
+    // Zarf ve Kağıt Renk Farkı
+    const { letter } = useLetterStore.getState();
+    const envelopePriceDelta = letter.envelopeColor !== "Beyaz" ? pricingKeys.envelopeColorPrice : 0;
+    const paperPriceDelta = letter.paperColor !== "Beyaz" ? pricingKeys.paperColorPrice : 0;
+
     // Calculate dynamic pricing based on selections
-    const baseLetterPrice = 120;
-    const scentPrice = extras.scent === "Yok" ? 0 : 20;
-    const photoPrice = extras.photos.length * 10;
-    const docPrice = extras.documents.length * 5;
-    const postcardPrice = extras.postcards.length * 15;
-    const calendarPrice = extras.includeCalendar ? (extras.photos.length >= 3 ? 0 : 30) : 0;
+    const isFreeLetter = (sentLetterCount % 6) === 5;
+    const baseLetterPrice = isFreeLetter ? 0 : (pricingKeys.letterSendPrice + envelopePriceDelta + paperPriceDelta);
+
+    const scentPrice = extras.scent === "Yok" ? 0 : pricingKeys.scentCreditPrice;
+
+    // Fotoğraf Fiyat Algoritması
+    const photoCreditPrice = pricingKeys.photoCreditPrice;
+    let actualPhotoCount = extras.photos.length;
+    if (actualPhotoCount >= 10) actualPhotoCount -= 2;
+    else if (actualPhotoCount >= 5) actualPhotoCount -= 1;
+
+    let photoPrice = actualPhotoCount * photoCreditPrice;
+    if (extras.photos.length === 3 || extras.photos.length === 4) {
+        photoPrice = (extras.photos.length - 1) * photoCreditPrice + 8;
+    }
+
+    const docPrice = extras.documents.length * pricingKeys.docCreditPrice;
+
+    // Kartpostal Fiyat Algoritması
+    const postcardCreditPrice = pricingKeys.postcardCreditPrice;
+    let actualPostcardCount = extras.postcards.length;
+    if (actualPostcardCount >= 10) actualPostcardCount -= 2;
+    else if (actualPostcardCount >= 5) actualPostcardCount -= 1;
+
+    let postcardPrice = actualPostcardCount * postcardCreditPrice;
+    if (extras.postcards.length === 3 || extras.postcards.length === 4) {
+        postcardPrice = (extras.postcards.length - 1) * postcardCreditPrice + Math.round(postcardCreditPrice * 0.8);
+    }
+
+    const calendarPrice = extras.includeCalendar ? (extras.photos.length >= 3 ? 0 : pricingKeys.calendarCreditPrice) : 0;
     // Gönderim ücretini standart olarak kredi içinde saydırıyoruz
     // const shippingPrice = 45;
 
@@ -201,8 +257,13 @@ export default function PaymentStep({ goBack, onComplete }: { goBack: () => void
                                 Toplam İşlem Tutarı
                             </h3>
 
-                            <div className="bg-paper border border-wood/20 rounded-lg p-4 mb-6 text-center shadow-inner">
-                                <span className="text-3xl font-playfair font-bold text-wood-dark">{totalAmount} 🪙</span>
+                            <div className="bg-paper border border-wood/20 rounded-lg p-4 mb-6 text-center shadow-inner relative overflow-hidden">
+                                {isFreeLetter && (
+                                    <div className="absolute top-0 right-0 bg-seal text-white text-[10px] px-2 py-0.5 font-bold rounded-bl-lg">
+                                        HEDİYE MEKTUP 🎁
+                                    </div>
+                                )}
+                                <span className={`${isFreeLetter ? 'text-4xl' : 'text-3xl'} font-playfair font-bold text-wood-dark`}>{totalAmount} 🪙</span>
                                 <p className="text-[11px] text-ink-light/80 mt-1">Sipariş verildikten sonra düşülür</p>
                             </div>
 

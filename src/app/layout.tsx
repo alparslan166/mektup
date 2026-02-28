@@ -28,7 +28,7 @@ const kurale = Kurale({
 
 export const metadata: Metadata = {
   title: "Geleceğe Mektup | Mektup Gönder",
-  description: "Sevdiklerinize veya geleceğe nostaljik, hisli mektuplar yazın.",
+  description: "Sevdiklerinize, geleceğe veya cezaevine nostaljik, hisli mektuplar yazın. Fotoğraflı ve kokulu mektup gönderimi.",
 };
 
 export default function RootLayout({

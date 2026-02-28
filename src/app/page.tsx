@@ -13,6 +13,8 @@ import DashboardCard from '@/components/DashboardCard';
 import { useLetterStore } from '@/store/letterStore';
 import Image from "next/image";
 import { getCreditBalanceAction } from '@/app/actions/creditActions';
+import { getUnreadInboxCount } from '@/app/actions/inboxActions';
+import { getSentLetterCount } from '@/app/actions/letterActions';
 
 
 export default function LandingPage() {
@@ -20,6 +22,8 @@ export default function LandingPage() {
   const resetStore = useLetterStore(state => state.resetStore);
   const isLoading = status === "loading";
   const [balance, setBalance] = React.useState<number | null>(null);
+  const [unreadCount, setUnreadCount] = React.useState<number>(0);
+  const [sentLetterCount, setSentLetterCount] = React.useState<number>(0);
 
   React.useEffect(() => {
     const userId = (session?.user as any)?.id;
@@ -28,6 +32,12 @@ export default function LandingPage() {
         if (res.success && res.balance !== undefined) {
           setBalance(res.balance);
         }
+      });
+      getUnreadInboxCount().then(count => {
+        setUnreadCount(count);
+      });
+      getSentLetterCount().then(count => {
+        setSentLetterCount(count);
       });
     }
   }, [session]);
@@ -133,11 +143,12 @@ export default function LandingPage() {
           />
           <DashboardCard
             title="Gelen Kutusu"
-            description="Size gönderilen mektupları ve dijital mesajları buradan takip edin."
+            description={unreadCount > 0 ? `Yeni mektubunuz var! (${unreadCount} okunmamış)` : "Size gönderilen mektupları ve dijital mesajları buradan takip edin."}
             href="/gelen-kutusu"
             icon={Inbox}
-            color="paper"
+            color={unreadCount > 0 ? "red" : "paper"}
             delay={0.5}
+            className={unreadCount > 0 ? "ring-4 ring-red-500 ring-offset-4 animate-pulse shadow-[0_0_40px_rgba(239,68,68,0.6)]" : ""}
           />
           <DashboardCard
             title="Adres Defteri"
@@ -171,15 +182,21 @@ export default function LandingPage() {
         <div className="mt-20 p-8 rounded-3xl bg-wood text-paper flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
           <div className="relative z-10 text-center md:text-left">
-            <h3 className="font-playfair text-2xl font-bold mb-2">Hediye Mektup Hazır mı?</h3>
-            <p className="text-paper/70">Toplam her 5 mektup gönderiminde bir adet ücretsiz mektup hakkı kazanırsınız.</p>
+            <h3 className="font-playfair text-2xl font-bold mb-2">
+              {(sentLetterCount % 6) === 5 ? "Hediye Mektup HAKKINIZ HAZIR! 🎁" : "Hediye Mektup Yolunda..."}
+            </h3>
+            <p className="text-paper/70 font-medium">Toplam her 5 mektup gönderiminde bir sonraki mektubunuz bizden hediye!</p>
           </div>
           <div className="relative z-10 flex gap-4">
-            {[1, 2, 3, 4, 5].map(i => (
-              <div key={i} className={`w-10 h-10 rounded-full border-2 border-paper/30 flex items-center justify-center ${i === 1 ? 'bg-seal/40 border-seal' : ''}`}>
-                <Mail size={16} className={i === 1 ? 'text-white' : 'text-white/20'} />
-              </div>
-            ))}
+            {[1, 2, 3, 4, 5].map(i => {
+              const currentStep = sentLetterCount % 6;
+              const isFilled = i <= currentStep;
+              return (
+                <div key={i} className={`w-10 h-10 rounded-full border-2 transition-all duration-500 flex items-center justify-center ${isFilled ? 'bg-seal/60 border-seal shadow-[0_0_15px_rgba(196,138,92,0.4)] scale-110' : 'border-paper/30'}`}>
+                  <Mail size={16} className={isFilled ? 'text-white' : 'text-white/20'} />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -210,11 +227,11 @@ export default function LandingPage() {
           </motion.div>
 
           <motion.h1 variants={fadeIn} className="font-playfair text-5xl md:text-7xl font-bold text-paper mb-6 tracking-tight drop-shadow-xl">
-            Geleceğe <span className="text-[#e2c19e] italic drop-shadow-lg">Mektup</span> Bırakın
+            Geleceğe & <span className="text-[#e2c19e] italic drop-shadow-lg">Cezaevine</span> Mektup
           </motion.h1>
 
           <motion.p variants={fadeIn} className="text-lg md:text-xl text-paper/90 max-w-2xl mb-12 leading-relaxed font-light drop-shadow-md">
-            Kağıdın dokusunu, mürekkebin hissini ve nostaljik kokuları dijital dünyadan koparıp sevdiklerinize fiziksel olarak ulaştırıyoruz. İster haftaya, ister yıllar sonrasına...
+            Kağıdın dokusunu, mürekkebin hissini ve nostaljik kokuları dijital dünyadan koparıp sevdiklerinize fiziksel olarak ulaştırıyoruz. İster sevdiklerinize, ister cezaevine, ister yıllar sonrasına... Onlarla aranızdaki en somut bağ mektubunuz olsun.
           </motion.p>
 
           <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-5 mb-16">

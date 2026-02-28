@@ -32,7 +32,21 @@ export async function createLetter(letterData: any) {
         const envelopePriceDelta = letter.envelopeColor !== "Beyaz" ? (pricingRes.data?.envelopeColorPrice || 10) : 0;
         const paperPriceDelta = letter.paperColor !== "Beyaz" ? (pricingRes.data?.paperColorPrice || 10) : 0;
 
-        const baseLetterPrice = (pricingRes.data?.letterSendPrice || 100) + envelopePriceDelta + paperPriceDelta;
+        let baseLetterPrice = (pricingRes.data?.letterSendPrice || 100) + envelopePriceDelta + paperPriceDelta;
+
+        // Kampanya: Her 5. Mektup Ücretsiz
+        // Kampanya: 5 Ücretli + 1 Hediye (Her 6. Mektup Ücretsiz)
+        const letterCount = await prisma.letter.count({
+            where: { userId: user.id }
+        });
+
+        // Eğer gönderilen mektup sayısı 5, 11, 17 gibi ise (5+1 döngüsü) bir sonraki (şu anki) hediye olur
+        const isFreeLetter = (letterCount % 6) === 5;
+
+        if (isFreeLetter) {
+            baseLetterPrice = 0; // Sadece temel mektup ücreti 0 olur
+            console.log(`Hediye Mektup Uygulandı! Kullanıcı ID: ${user.id}, Mevcut Sayı: ${letterCount}`);
+        }
 
         const scentPrice = extras.scent === "Yok" ? 0 : (pricingRes.data?.scentCreditPrice || 20);
 
@@ -85,7 +99,7 @@ export async function createLetter(letterData: any) {
             await CreditService.spendCredit(
                 user.id,
                 totalAmount,
-                `${address.receiverName || "Alıcı"} kişisine mektup gönderimi`
+                `${address.receiverName || "Alıcı"} kişisine mektup gönderimi ${isFreeLetter ? "(Hediye Mektup 🎁)" : ""}`
             );
         } catch (creditError: any) {
             return { error: creditError.message || "Bakiye işlemi başarısız.", isCreditError: true };
@@ -183,5 +197,29 @@ export async function getLetters() {
     } catch (error) {
         console.error("GET_LETTERS_ERROR", error);
         return [];
+    }
+}
+
+/**
+ * Kullanıcının toplam ücretli mektup sayısını getirir (Kampanya takibi için)
+ */
+export async function getSentLetterCount() {
+    try {
+        const session = await getServerSession(authOptions);
+        if (!session?.user?.email) return 0;
+
+        const user = await prisma.user.findUnique({
+            where: { email: session.user.email },
+            select: { id: true }
+        });
+
+        if (!user) return 0;
+
+        return await prisma.letter.count({
+            where: { userId: user.id }
+        });
+    } catch (error) {
+        console.error("GET_SENT_LETTER_COUNT_ERROR", error);
+        return 0;
     }
 }

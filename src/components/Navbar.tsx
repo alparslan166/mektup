@@ -9,6 +9,7 @@ import { useUIStore } from "@/store/uiStore";
 import { getCreditBalanceAction } from "@/app/actions/creditActions";
 import Image from "next/image";
 import SignOutModal from "./SignOutModal";
+import { getUnreadInboxCount } from "@/app/actions/inboxActions";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +19,7 @@ const Navbar = () => {
     const resetStore = useLetterStore(state => state.resetStore);
     const creditBalance = useUIStore(state => state.creditBalance);
     const setCreditBalance = useUIStore(state => state.setCreditBalance);
+    const [unreadCount, setUnreadCount] = useState(0);
 
     React.useEffect(() => {
         if (status === "authenticated" && session) {
@@ -25,6 +27,10 @@ const Navbar = () => {
                 if (res.success && res.balance !== undefined) {
                     setCreditBalance(res.balance);
                 }
+            });
+            // Fetch unread inbox count
+            getUnreadInboxCount().then(count => {
+                setUnreadCount(count);
             });
         }
     }, [status, session, setCreditBalance]);
@@ -103,12 +109,17 @@ const Navbar = () => {
                                     <PenLine size={18} />
                                     <span>MEKTUP YAZ</span>
                                 </Link>
-                                {/* {status === "authenticated" && (
-                                    <Link href="/gonderilenler" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
-                                        <Truck size={18} />
-                                        <span>GÖNDERİLENLER</span>
+                                {status === "authenticated" && (
+                                    <Link href="/gelen-kutusu" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all relative">
+                                        <Inbox size={18} />
+                                        <span>GELEN KUTUSU</span>
+                                        {unreadCount > 0 && (
+                                            <span className="absolute -top-2 -right-3 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white animate-pulse">
+                                                {unreadCount}
+                                            </span>
+                                        )}
                                     </Link>
-                                )} */}
+                                )}
                                 <Link href="/kampanyalar" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all text-amber-200" title="Aktif Kampanyalar">
                                     <Tag size={18} />
                                     <span>KAMPANYALAR</span>
@@ -223,12 +234,21 @@ const Navbar = () => {
                                     <PenLine size={22} />
                                     <span>MEKTUP YAZ</span>
                                 </Link>
-                                {status === "authenticated" && (
-                                    <Link href="/gonderilenler" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
-                                        <Truck size={22} />
-                                        <span>GÖNDERİLENLER</span>
-                                    </Link>
-                                )}
+                                <Link href="/gelen-kutusu" onClick={closeMenu} className="flex items-center justify-between py-2 border-b border-paper/10 hover:text-white">
+                                    <div className="flex items-center gap-4">
+                                        <Inbox size={22} />
+                                        <span>GELEN KUTUSU</span>
+                                    </div>
+                                    {unreadCount > 0 && (
+                                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[11px] text-white animate-pulse">
+                                            {unreadCount}
+                                        </span>
+                                    )}
+                                </Link>
+                                <Link href="/gonderilenler" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
+                                    <Truck size={22} />
+                                    <span>GÖNDERİLENLER</span>
+                                </Link>
                                 <Link href="/kampanyalar" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 text-amber-200 hover:text-white">
                                     <Tag size={22} />
                                     <span>KAMPANYALAR</span>

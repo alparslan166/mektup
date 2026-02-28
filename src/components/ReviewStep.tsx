@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { useLetterStore } from "@/store/letterStore";
 import { getPricingSettings } from "@/app/actions/settingsActions";
+import { getSentLetterCount } from "@/app/actions/letterActions";
 
 export default function ReviewStep({ goBack, goNext }: { goBack: () => void, goNext: () => void }) {
     const { letter, extras, address, setCurrentStep } = useLetterStore();
@@ -23,6 +24,7 @@ export default function ReviewStep({ goBack, goNext }: { goBack: () => void, goN
         envelopeColorPrice: 10,
         paperColorPrice: 10
     });
+    const [sentLetterCount, setSentLetterCount] = React.useState(0);
 
     React.useEffect(() => {
         const fetchPrices = async () => {
@@ -41,6 +43,7 @@ export default function ReviewStep({ goBack, goNext }: { goBack: () => void, goN
             }
         };
         fetchPrices();
+        getSentLetterCount().then(count => setSentLetterCount(count));
     }, []);
 
     // Zarf ve Kağıt Renk Farkı
@@ -48,7 +51,13 @@ export default function ReviewStep({ goBack, goNext }: { goBack: () => void, goN
     const paperPriceDelta = letter.paperColor !== "Beyaz" ? pricingKeys.paperColorPrice : 0;
 
     // Calculate dynamic pricing based on selections
-    const baseLetterPrice = pricingKeys.letterSendPrice + envelopePriceDelta + paperPriceDelta;
+    let baseLetterPrice = pricingKeys.letterSendPrice + envelopePriceDelta + paperPriceDelta;
+    const isFreeLetter = (sentLetterCount % 6) === 5;
+
+    if (isFreeLetter) {
+        baseLetterPrice = 0;
+    }
+
     const scentPrice = extras.scent === "Yok" ? 0 : pricingKeys.scentCreditPrice;
 
     // Fotoğraf Fiyat Algoritması
@@ -293,7 +302,18 @@ export default function ReviewStep({ goBack, goNext }: { goBack: () => void, goN
                             <div className="space-y-3 text-sm mb-6">
                                 <div className="flex justify-between items-center">
                                     <span className="text-ink-light">Mektup Ücreti</span>
-                                    <span className="font-medium text-ink">{orderDetails.pricing.baseLetter} 🪙</span>
+                                    {isFreeLetter ? (
+                                        <div className="flex flex-col items-end">
+                                            <span className="text-xs text-wood-dark line-through opacity-60">
+                                                {pricingKeys.letterSendPrice + envelopePriceDelta + paperPriceDelta} 🪙
+                                            </span>
+                                            <span className="font-bold text-seal flex items-center gap-1">
+                                                Hediye Mektup (0 🪙)
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        <span className="font-medium text-ink">{orderDetails.pricing.baseLetter} 🪙</span>
+                                    )}
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-ink-light">Koku Seçimi ({orderDetails.extras.scent})</span>

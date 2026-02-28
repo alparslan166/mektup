@@ -5,6 +5,12 @@ import { getFAQs } from "@/app/actions/faqActions";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import FAQClient from "./FAQClient";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Sıkça Sorulan Sorular | Mektuplaş",
+    description: "Mektup gönderimi, cezaevi mektubu, teslimat süreleri ve nostaljik seçenekler hakkında merak ettiğiniz tüm soruların cevapları burada.",
+};
 
 export default async function SSSPage() {
     const session = await getServerSession(authOptions);

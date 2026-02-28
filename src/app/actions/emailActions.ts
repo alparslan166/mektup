@@ -28,7 +28,7 @@ export async function sendEmail({
     try {
         const { data, error } = await resend.emails.send({
             // from: "Mektuplas <iletisim@mektuplas.com>",
-            from: "onboarding@resend.dev", // Using Resend onboarding email for testing
+            from: "Mektuplaş <iletisim@mektuplas.com>",
             to: [to],
             subject: subject,
             text: text,
