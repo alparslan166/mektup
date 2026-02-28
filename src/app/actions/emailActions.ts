@@ -197,3 +197,29 @@ export async function sendContactEmail({
         `
     });
 }
+
+export async function sendVerificationEmail(email: string, token: string) {
+    const verificationUrl = `${process.env.NEXTAUTH_URL || "https://mektuplas.com"}/auth/verify?token=${token}`;
+
+    return await sendEmail({
+        to: email,
+        subject: "E-posta Adresinizi Doğrulayın - Mektuplas.com",
+        text: `Mektuplaş'a hoş geldiniz! Üyeliğinizi tamamlamak için lütfen şu bağlantıya tıklayın: ${verificationUrl}`,
+        html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+                <h1 style="color: #4a3728; font-family: serif;">Mektuplaş'a Hoş Geldiniz! 📮</h1>
+                <p>Aramıza katıldığınız için çok mutluyuz. Üyeliğinizi aktif hale getirmek ve mektuplarınızı göndermeye başlamak için e-posta adresinizi doğrulamanız gerekmektedir.</p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${verificationUrl}" style="display: inline-block; background: #c48a5c; color: white; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: bold;">E-posta Adresimi Doğrula</a>
+                </div>
+                <p style="font-size: 13px; color: #666;">
+                    Eğer buton çalışmıyorsa şu bağlantıyı tarayıcınıza yapıştırabilirsiniz:<br>
+                    <a href="${verificationUrl}" style="color: #c48a5c;">${verificationUrl}</a>
+                </p>
+                <p style="font-size: 12px; color: #999; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px;">
+                    Bu e-postayı Mektuplaş'ta yeni bir hesap oluşturulduğu için aldınız. Eğer bu işlemi siz yapmadıysanız lütfen bu e-postayı dikkate almayınız.
+                </p>
+            </div>
+        `
+    });
+}
