@@ -234,17 +234,6 @@ const Navbar = () => {
                                     <PenLine size={22} />
                                     <span>MEKTUP YAZ</span>
                                 </Link>
-                                <Link href="/gelen-kutusu" onClick={closeMenu} className="flex items-center justify-between py-2 border-b border-paper/10 hover:text-white">
-                                    <div className="flex items-center gap-4">
-                                        <Inbox size={22} />
-                                        <span>GELEN KUTUSU</span>
-                                    </div>
-                                    {unreadCount > 0 && (
-                                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[11px] text-white animate-pulse">
-                                            {unreadCount}
-                                        </span>
-                                    )}
-                                </Link>
                                 <Link href="/gonderilenler" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                                     <Truck size={22} />
                                     <span>GÖNDERİLENLER</span>

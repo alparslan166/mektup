@@ -227,7 +227,7 @@ export default function InboxPage() {
                             <div className="bg-white/20 p-1 rounded-lg group-hover:rotate-90 transition-transform duration-300">
                                 <Plus size={20} />
                             </div>
-                            <span>Yeni Mektup Yaz</span>
+                            <span>MEKTUPLAŞ</span>
                         </button>
                     </div>
                 </div>
