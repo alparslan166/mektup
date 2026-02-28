@@ -40,6 +40,7 @@ function LoginForm() {
             });
 
             if (res?.error) {
+                // NextAuth credentials sign-in failure
                 setError(res.error === "CredentialsSignin" ? "E-posta veya şifre hatalı." : res.error);
             } else {
                 router.push("/");
