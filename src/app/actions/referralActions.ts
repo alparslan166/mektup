@@ -45,6 +45,11 @@ export async function redeemReferralCode(code: string) {
             return { success: false, error: "Geçersiz referans kodu." };
         }
 
+        // Prevent reciprocal referrals (A refers B, B refers A)
+        if (referrer.referredById === currentUser.id) {
+            return { success: false, error: "Karşılıklı referans kullanılamaz." };
+        }
+
         // Get reward amount from settings
         const pricing = await getPricingSettings();
         const rewardAmount = pricing.success && pricing.data ? pricing.data.referralRewardAmount : 15;

@@ -135,7 +135,7 @@ const Navbar = () => {
                             </Link>
                             <Link href="/profil" className="flex items-center gap-2 bg-paper/10 backdrop-blur-md text-paper border border-paper/20 hover:border-paper/40 hover:bg-paper/20 px-4 py-2 rounded-md font-bold text-[13px] transition-all shadow-sm">
                                 <User size={16} />
-                                <span>{session.user?.name || "Profilim"}</span>
+                                <span>Profilim</span>
                             </Link>
                             {(session.user as any)?.role === "ADMIN" ? (
                                 <Link href="/admin/mektuplar" className="flex items-center gap-2 bg-seal/10 backdrop-blur-md text-seal border border-seal/20 hover:border-seal/40 hover:bg-seal/20 px-4 py-2 rounded-md font-bold text-[13px] transition-all shadow-sm">
@@ -267,7 +267,7 @@ const Navbar = () => {
                                     )}
                                     <Link href="/profil" onClick={closeMenu} className="flex items-center justify-center gap-2 bg-paper/10 text-paper border border-paper/20 px-6 py-4 rounded-xl font-bold transition-all shadow-sm">
                                         <User size={20} />
-                                        <span>{session.user?.name || "Profilim"}</span>
+                                        <span>Profilim</span>
                                     </Link>
                                     <button
                                         onClick={handleSignOutClick}
