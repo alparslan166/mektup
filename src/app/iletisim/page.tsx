@@ -4,9 +4,16 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Mail, MapPin, Phone, Clock, Send, CheckCircle2 } from "lucide-react";
 import { sendContactEmail } from "@/app/actions/emailActions";
+import { getContactSettings, updateContactSetting } from "@/app/actions/settingsActions";
 import { toast } from "react-hot-toast";
+import { useSession } from "next-auth/react";
+import { Pencil, X, Save, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function IletisimPage() {
+    const { data: session } = useSession();
+    const isAdmin = (session?.user as any)?.role === "ADMIN";
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [formData, setFormData] = useState({
@@ -14,6 +21,57 @@ export default function IletisimPage() {
         email: "",
         message: ""
     });
+
+    const [contactSettings, setContactSettings] = useState({
+        email: "mektuplass@gmail.com",
+        phone: "0 (850) 305 81 35",
+        address: "Nostalji Mah. Kalem Sk. No: 1, Kadıköy / İstanbul",
+        whatsapp: "+908503058135"
+    });
+
+    // Edit Modal State
+    const [editModal, setEditModal] = useState<{
+        isOpen: boolean;
+        key: 'email' | 'phone' | 'address' | 'whatsapp';
+        value: string;
+        isSubmitting: boolean;
+    }>({
+        isOpen: false,
+        key: 'email',
+        value: '',
+        isSubmitting: false
+    });
+
+    React.useEffect(() => {
+        getContactSettings().then(res => {
+            if (res.success && res.data) {
+                setContactSettings(res.data);
+            }
+        });
+    }, []);
+
+    const handleEditSetting = (key: 'email' | 'phone' | 'address' | 'whatsapp', currentValue: string) => {
+        setEditModal({
+            isOpen: true,
+            key,
+            value: currentValue,
+            isSubmitting: false
+        });
+    };
+
+    const saveSetting = async () => {
+        setEditModal(prev => ({ ...prev, isSubmitting: true }));
+        const res = await updateContactSetting(editModal.key, editModal.value);
+
+        if (res.success) {
+            setContactSettings(prev => ({ ...prev, [editModal.key]: editModal.value }));
+            toast.success("Ayar güncellendi.");
+            setEditModal(prev => ({ ...prev, isOpen: false }));
+        } else {
+            toast.error(res.error || "Güncelleme başarısız.");
+        }
+        setEditModal(prev => ({ ...prev, isSubmitting: false }));
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -68,9 +126,16 @@ export default function IletisimPage() {
                                 <Mail size={24} />
                             </div>
                             <div>
-                                <h3 className="font-bold text-ink mb-1">E-Posta</h3>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <h3 className="font-bold text-ink">E-Posta</h3>
+                                    {isAdmin && (
+                                        <button onClick={() => handleEditSetting('email', contactSettings.email)} className="p-1 hover:bg-paper-dark rounded text-seal transition-colors">
+                                            <Pencil size={12} />
+                                        </button>
+                                    )}
+                                </div>
                                 <p className="text-ink-light text-sm mb-2">Her türlü sorunuz için bize yazabilirsiniz.</p>
-                                <a href="mailto:mektuplass@gmail.com" className="text-seal font-medium hover:underline">mektuplass@gmail.com</a>
+                                <a href={`mailto:${contactSettings.email}`} className="text-seal font-medium hover:underline">{contactSettings.email}</a>
                             </div>
                         </div>
 
@@ -79,11 +144,19 @@ export default function IletisimPage() {
                                 <Phone size={24} />
                             </div>
                             <div>
-                                <h3 className="font-bold text-ink mb-1">Telefon / WhatsApp</h3>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <h3 className="font-bold text-ink">Telefon / WhatsApp</h3>
+                                    {isAdmin && (
+                                        <button onClick={() => handleEditSetting('phone', contactSettings.phone)} className="p-1 hover:bg-paper-dark rounded text-seal transition-colors">
+                                            <Pencil size={12} />
+                                        </button>
+                                    )}
+                                </div>
                                 <p className="text-ink-light text-sm mb-2">Hızlı iletişim için çalışma saatlerimiz içinde arayabilirsiniz.</p>
                                 <div className="flex flex-col">
-                                    <span className="text-ink-light text-xs mb-1 italic">Numaramız henüz aktif değildir.</span>
-                                    {/* <a href="tel:+905550000000" className="text-seal font-medium hover:underline opacity-50 cursor-not-allowed">0 (555) 000 00 00</a> */}
+                                    <a href={`tel:${contactSettings.phone.replace(/\s+/g, '')}`} className="text-seal font-medium hover:underline">
+                                        {contactSettings.phone}
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -93,10 +166,16 @@ export default function IletisimPage() {
                                 <MapPin size={24} />
                             </div>
                             <div>
-                                <h3 className="font-bold text-ink mb-1">Ofis Adresi</h3>
-                                <p className="text-ink-light text-sm leading-relaxed">
-                                    Nostalji Mah. Kalem Sk. No: 1<br />
-                                    Kadıköy / İstanbul
+                                <div className="flex items-center gap-2 mb-1">
+                                    <h3 className="font-bold text-ink">Ofis Adresi</h3>
+                                    {isAdmin && (
+                                        <button onClick={() => handleEditSetting('address', contactSettings.address)} className="p-1 hover:bg-paper-dark rounded text-seal transition-colors">
+                                            <Pencil size={12} />
+                                        </button>
+                                    )}
+                                </div>
+                                <p className="text-ink-light text-sm leading-relaxed whitespace-pre-line">
+                                    {contactSettings.address}
                                 </p>
                             </div>
                         </div>
@@ -183,6 +262,90 @@ export default function IletisimPage() {
                 </div>
 
             </div>
+
+            {/* Admin Edit Modal */}
+            <AnimatePresence>
+                {editModal.isOpen && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setEditModal(prev => ({ ...prev, isOpen: false }))}
+                            className="absolute inset-0 bg-ink/40 backdrop-blur-sm"
+                        ></motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-md bg-paper rounded-2xl shadow-2xl overflow-hidden border border-wood/20"
+                        >
+                            <div className="p-6">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="font-playfair text-xl font-bold text-wood-dark capitalize">
+                                        {editModal.key === 'address' ? 'Adres' :
+                                            editModal.key === 'email' ? 'E-posta' :
+                                                editModal.key === 'phone' ? 'Telefon' : 'WhatsApp'} Düzenle
+                                    </h3>
+                                    <button
+                                        onClick={() => setEditModal(prev => ({ ...prev, isOpen: false }))}
+                                        className="p-2 hover:bg-paper-dark rounded-full transition-colors text-ink-light"
+                                    >
+                                        <X size={20} />
+                                    </button>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="text-xs font-bold text-ink-light uppercase tracking-wider mb-2 block">
+                                            Yeni Değer
+                                        </label>
+                                        {editModal.key === 'address' ? (
+                                            <textarea
+                                                className="w-full bg-paper-light border border-paper-dark rounded-xl px-4 py-3 text-ink focus:border-seal focus:ring-1 focus:ring-seal outline-none transition-all resize-none font-medium text-sm"
+                                                rows={4}
+                                                value={editModal.value}
+                                                onChange={(e) => setEditModal(prev => ({ ...prev, value: e.target.value }))}
+                                                placeholder="Yeni adresi girin..."
+                                            />
+                                        ) : (
+                                            <input
+                                                type="text"
+                                                className="w-full bg-paper-light border border-paper-dark rounded-xl px-4 py-3 text-ink focus:border-seal focus:ring-1 focus:ring-seal outline-none transition-all font-medium text-sm"
+                                                value={editModal.value}
+                                                onChange={(e) => setEditModal(prev => ({ ...prev, value: e.target.value }))}
+                                                placeholder={`Yeni ${editModal.key} değerini girin...`}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="mt-8 flex gap-3">
+                                    <button
+                                        onClick={() => setEditModal(prev => ({ ...prev, isOpen: false }))}
+                                        className="flex-1 px-6 py-3 rounded-xl font-bold text-ink-light hover:bg-paper-dark transition-all"
+                                    >
+                                        Vazgeç
+                                    </button>
+                                    <button
+                                        onClick={saveSetting}
+                                        disabled={editModal.isSubmitting}
+                                        className="flex-1 bg-seal hover:bg-seal-hover text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+                                    >
+                                        {editModal.isSubmitting ? (
+                                            <Loader2 size={20} className="animate-spin" />
+                                        ) : (
+                                            <Save size={20} />
+                                        )}
+                                        Kaydet
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

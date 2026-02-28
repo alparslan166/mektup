@@ -17,6 +17,10 @@ const PAPER_COLOR_PRICE_KEY = "paper_color_price";
 const COMMENT_REWARD_AMOUNT_KEY = "comment_reward_amount";
 const SECOND_LETTER_REWARD_AMOUNT_KEY = "second_letter_reward_amount";
 const REFERRAL_REWARD_AMOUNT_KEY = "referral_reward_amount";
+const CONTACT_EMAIL_KEY = "contact_email";
+const CONTACT_PHONE_KEY = "contact_phone";
+const CONTACT_ADDRESS_KEY = "contact_address";
+const CONTACT_WHATSAPP_KEY = "contact_whatsapp";
 
 // Get the company reply address
 export async function getCompanyAddress(): Promise<{ success: boolean; address?: string }> {
@@ -196,5 +200,65 @@ export async function updatePricingSettings(
     } catch (error) {
         console.error("UPDATE_PRICING_SETTINGS_ERROR", error);
         return { success: false, error: "Fiyatlandırma ayarları güncellenemedi." };
+    }
+}
+
+// Get Contact Settings
+export async function getContactSettings(): Promise<{
+    success: boolean;
+    data?: {
+        email: string;
+        phone: string;
+        address: string;
+        whatsapp: string;
+    }
+}> {
+    try {
+        const [emailSetting, phoneSetting, addressSetting, whatsappSetting] = await Promise.all([
+            prisma.siteSetting.findUnique({ where: { key: CONTACT_EMAIL_KEY } }),
+            prisma.siteSetting.findUnique({ where: { key: CONTACT_PHONE_KEY } }),
+            prisma.siteSetting.findUnique({ where: { key: CONTACT_ADDRESS_KEY } }),
+            prisma.siteSetting.findUnique({ where: { key: CONTACT_WHATSAPP_KEY } }),
+        ]);
+
+        return {
+            success: true,
+            data: {
+                email: emailSetting?.value || "mektuplass@gmail.com",
+                phone: phoneSetting?.value || "0 (850) 305 81 35",
+                address: addressSetting?.value || "Nostalji Mah. Kalem Sk. No: 1, Kadıköy / İstanbul",
+                whatsapp: whatsappSetting?.value || "+908503058135",
+            }
+        };
+    } catch (error) {
+        console.error("GET_CONTACT_SETTINGS_ERROR", error);
+        return { success: false };
+    }
+}
+
+// Admin: Update a specific contact setting
+export async function updateContactSetting(key: 'email' | 'phone' | 'address' | 'whatsapp', value: string): Promise<{ success: boolean; error?: string }> {
+    const session = await getServerSession(authOptions);
+    if (!session || (session.user as any).role !== "ADMIN") {
+        return { success: false, error: "Yetkiniz yok." };
+    }
+
+    const dbKey = {
+        email: CONTACT_EMAIL_KEY,
+        phone: CONTACT_PHONE_KEY,
+        address: CONTACT_ADDRESS_KEY,
+        whatsapp: CONTACT_WHATSAPP_KEY
+    }[key];
+
+    try {
+        await prisma.siteSetting.upsert({
+            where: { key: dbKey },
+            update: { value },
+            create: { key: dbKey, value },
+        });
+        return { success: true };
+    } catch (error) {
+        console.error("UPDATE_CONTACT_SETTING_ERROR", error);
+        return { success: false, error: "İletişim ayarı güncellenemedi." };
     }
 }
