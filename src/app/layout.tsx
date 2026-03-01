@@ -28,7 +28,7 @@ const kurale = Kurale({
 });
 
 export const metadata: Metadata = {
-  title: "Geleceğe Mektup | Mektup Gönder",
+  title: "Cezaevine Mektup | Hediye gönder",
   description: "Sevdiklerinize, geleceğe veya cezaevine nostaljik, hisli mektuplar yazın. Fotoğraflı ve kokulu mektup gönderimi.",
 };
 

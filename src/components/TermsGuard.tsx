@@ -90,7 +90,7 @@ export default function TermsGuard() {
     );
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 animate-in fade-in duration-300">
             <div className="bg-paper w-full max-w-xl rounded-2xl shadow-2xl border border-wood/20 flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
                 {/* Header */}
                 <div className="bg-wood p-5 text-paper flex items-center gap-4 border-b border-wood-dark/20">
@@ -108,7 +108,7 @@ export default function TermsGuard() {
                     {/* Compact View Instructions */}
                     {!viewingContract && (
                         <p className="text-xs text-ink-light/80 italic mb-2">
-                            Mavi yazılara tıklayarak sözleşme metinlerini okuyabilirsiniz.
+                            Siyah yazılara tıklayarak sözleşme metinlerini okuyabilirsiniz.
                         </p>
                     )}
 

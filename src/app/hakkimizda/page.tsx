@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Feather } from "lucide-react";
 
 export const metadata = {
-    title: "Hakkımızda | Geleceğe Mektup",
+    title: "Hakkımızda | Cezaevine Mektup",
     description: "Geleceğe Mektup platformunun hikayesi ve kuruluş amacı.",
 };
 
