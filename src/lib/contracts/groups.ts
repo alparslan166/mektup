@@ -97,4 +97,21 @@ Platform üzerinden gönderilen mektupların içeriği tamamen Üye’nin soruml
 - Web: www.mektuplas.com
 - E-Posta: info@mektuplas.com
 - WhatsApp Destek: 0 (541) 944 68 48
-`
+`;
+
+export const GIZLILIK_VE_GUVENLIK_POLITIKASI = `
+MEKTUPLAS.COM GİZLİLİK VE GÜVENLİK POLİTİKASI
+
+Geleceğe Mektup olarak müşterilerimizin güvenliğine ve gizliliğine son derece önem veriyoruz. Mektuplarınız, fotoğraflarınız ve kişisel bilgileriniz 256-Bit şifreleme yöntemleriyle güvenli sunucularda saklanmakta olup, yasal zorunluluklar haricinde hiçbir üçüncü şahıs veya kurumla paylaşılmamaktadır.
+
+1. Toplanan Veriler
+Sistemimiz üzerinden mektup oluşturduğunuzda tarafımızca; Adınız Soyadınız, iletişim (telefon/e-posta) ve teslimat adresi bilgilerinizin yanı sıra mektubunuzun içeriği ve eklediğiniz dosyalar şifreli olarak veritabanımızda tutulur.
+
+2. Mahremiyet İlkesi
+Yazdığınız mektupların içeriği operasyon ekibimiz dahil olmak üzere hiçbir çalışanımız veya 3. şahıs tarafından okunamaz. Mektuplar, otomatik paketleme sistemlerimizle doğrudan mühürlü zarflara aktarılır ve gizlilik kurallarına uygun olarak alıcısına gönderilmek üzere hazırlanır.
+
+3. Ödeme Güvenliği
+Ödeme işlemlerinizde kullanılan kredi kartı bilgileri sistemimizde depolanmaz. Tüm ödemeler BDDK onaylı, 3D Secure ve SSL sertifikalı güvenli ödeme kuruluşları (PayTR, Iyzico vb.) aracılığıyla gerçekleştirilir.
+
+Son Güncelleme: 1 Ocak 2026
+`;

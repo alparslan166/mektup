@@ -71,8 +71,7 @@ export default function RootLayout({
             <div className="flex flex-wrap justify-center gap-5 text-sm font-medium">
               <Link href="/hakkimizda" className="hover:text-paper transition-colors">Hakkımızda</Link>
               <Link href="/sss" className="hover:text-paper transition-colors">S.S.S.</Link>
-              <Link href="/gizlilik-ve-guvenlik" className="hover:text-paper transition-colors">Gizlilik Politikası</Link>
-              <Link href="/mesafeli-satis-sozlesmesi" className="hover:text-paper transition-colors">Mesafeli Satış Sözleşmesi</Link>
+              <Link href="/sozlesmeler" className="hover:text-paper transition-colors">Sözleşmeler</Link>
               <Link href="/iletisim" className="hover:text-paper transition-colors">İletişim</Link>
             </div>
           </div>
