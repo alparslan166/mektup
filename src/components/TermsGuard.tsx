@@ -64,7 +64,7 @@ export default function TermsGuard() {
                 <ScrollText size={16} />
                 {title}
             </h4>
-            <div className="bg-paper-light border border-wood/20 rounded-lg p-4 h-40 overflow-y-auto text-xs text-ink-light leading-relaxed whitespace-pre-wrap">
+            <div className="bg-paper-light border border-wood/20 rounded-lg p-4 h-60 overflow-y-auto text-xs text-ink-light leading-relaxed whitespace-pre-wrap">
                 {content}
             </div>
         </div>
