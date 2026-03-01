@@ -21,6 +21,8 @@ export default function TermsGuard() {
         membership: false
     });
 
+    const [viewingContract, setViewingContract] = useState<string | null>(null);
+
     const isUserLoggedIn = status === "authenticated";
     const termsAccepted = (session?.user as any)?.termsAccepted;
 
@@ -58,13 +60,30 @@ export default function TermsGuard() {
 
     if (!isOpen) return null;
 
-    const ContractViewer = ({ title, content }: { title: string, content: string }) => (
-        <div className="flex flex-col gap-2 mb-4">
-            <h4 className="font-semibold text-wood-dark flex items-center gap-2">
-                <ScrollText size={16} />
-                {title}
-            </h4>
-            <div className="bg-paper-light border border-wood/20 rounded-lg p-4 h-60 overflow-y-auto text-xs text-ink-light leading-relaxed whitespace-pre-wrap">
+    const contracts = [
+        { id: "membership", title: "Üyelik Sözleşmesi", content: UYELIK_SOZLESMESI },
+        { id: "kvkk", title: "KVKK Aydınlatma Metni", content: KISISEL_VERILERIN_KORUNMASI_SOZLESMESI },
+        { id: "sales", title: "Mesafeli Satış Sözleşmesi", content: MESAFELI_SATIS_SOZLESMESI }
+    ];
+
+    const ContractViewer = ({ title, content, onClose }: { title: string, content: string, onClose: () => void }) => (
+        <div className="flex flex-col gap-2 mb-4 animate-in slide-in-from-top-2 duration-200">
+            <div className="flex items-center justify-between">
+                <h4 className="font-semibold text-wood-dark flex items-center gap-2">
+                    <ScrollText size={16} />
+                    {title}
+                </h4>
+                <button
+                    onClick={(e) => {
+                        e.preventDefault();
+                        onClose();
+                    }}
+                    className="text-xs text-wood hover:text-wood-dark underline"
+                >
+                    Kapat
+                </button>
+            </div>
+            <div className="bg-paper-light border border-wood/20 rounded-lg p-4 h-60 overflow-y-auto text-xs text-ink-light leading-relaxed whitespace-pre-wrap shadow-inner">
                 {content}
             </div>
         </div>
@@ -72,85 +91,81 @@ export default function TermsGuard() {
 
     return (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
-            <div className="bg-paper w-full max-w-2xl max-h-[90vh] rounded-2xl shadow-2xl border border-wood/20 flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
+            <div className="bg-paper w-full max-w-xl rounded-2xl shadow-2xl border border-wood/20 flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
                 {/* Header */}
-                <div className="bg-wood p-6 text-paper flex items-center gap-4 border-b border-wood-dark/20">
-                    <div className="bg-paper/20 p-2 rounded-xl">
+                <div className="bg-wood p-5 text-paper flex items-center gap-4 border-b border-wood-dark/20">
+                    <div className="bg-paper/20 p-2 rounded-xl shrink-0">
                         <ShieldCheck size={24} />
                     </div>
                     <div>
-                        <h2 className="text-xl font-playfair font-bold">Yasal Bilgilendirme ve Onay</h2>
-                        <p className="text-xs text-paper/70">Devam etmek için aşağıdaki sözleşmeleri inceleyip onaylamanız gerekmektedir.</p>
+                        <h2 className="text-lg font-playfair font-bold">Yasal Onaylar</h2>
+                        <p className="text-[11px] text-paper/70">Lütfen sözleşmeleri inceleyerek onaylayınız.</p>
                     </div>
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
-                    <ContractViewer title="Üyelik Sözleşmesi" content={UYELIK_SOZLESMESI} />
-                    <ContractViewer title="KVKK Aydınlatma Metni" content={KISISEL_VERILERIN_KORUNMASI_SOZLESMESI} />
-                    <ContractViewer title="Mesafeli Satış Sözleşmesi" content={MESAFELI_SATIS_SOZLESMESI} />
+                <div className="flex-1 p-6 md:p-8 space-y-4">
+                    {/* Compact View Instructions */}
+                    {!viewingContract && (
+                        <p className="text-xs text-ink-light/80 italic mb-2">
+                            Mavi yazılara tıklayarak sözleşme metinlerini okuyabilirsiniz.
+                        </p>
+                    )}
+
+                    {/* Active Contract View */}
+                    {viewingContract && (
+                        <ContractViewer
+                            title={contracts.find(c => c.id === viewingContract)?.title || ""}
+                            content={contracts.find(c => c.id === viewingContract)?.content || ""}
+                            onClose={() => setViewingContract(null)}
+                        />
+                    )}
 
                     {/* Checkboxes */}
-                    <div className="space-y-4 pt-4 border-t border-wood/10">
-                        <label className="flex items-start gap-3 cursor-pointer group">
-                            <div className="relative mt-1">
-                                <input
-                                    type="checkbox"
-                                    checked={accepted.membership}
-                                    onChange={(e) => setAccepted(prev => ({ ...prev, membership: e.target.checked }))}
-                                    className="peer sr-only"
-                                />
-                                <div className="w-5 h-5 border-2 border-wood/30 rounded-md bg-paper-light transition-all peer-checked:bg-seal peer-checked:border-seal group-hover:border-wood/50"></div>
-                                <Check className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-paper opacity-0 peer-checked:opacity-100 transition-opacity" size={14} />
+                    <div className="space-y-3">
+                        {contracts.map((contract) => (
+                            <div key={contract.id} className="flex items-start gap-3 group">
+                                <div className="relative mt-0.5">
+                                    <input
+                                        type="checkbox"
+                                        checked={(accepted as any)[contract.id]}
+                                        onChange={(e) => setAccepted(prev => ({ ...prev, [contract.id]: e.target.checked }))}
+                                        className="peer sr-only"
+                                        id={`check-${contract.id}`}
+                                    />
+                                    <label
+                                        htmlFor={`check-${contract.id}`}
+                                        className="block w-5 h-5 border-2 border-wood/30 rounded-md bg-paper-light cursor-pointer transition-all peer-checked:bg-seal peer-checked:border-seal group-hover:border-wood/50"
+                                    >
+                                        <Check className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-paper opacity-0 peer-checked:opacity-100 transition-opacity" size={14} />
+                                    </label>
+                                </div>
+                                <span className="text-sm text-ink-light leading-tight">
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setViewingContract(viewingContract === contract.id ? null : contract.id);
+                                        }}
+                                        className="font-bold text-wood-dark hover:text-seal transition-colors underline decoration-wood/20 underline-offset-2"
+                                    >
+                                        {contract.title}
+                                    </button>
+                                    {' '}'nı okudum ve onaylıyorum.
+                                </span>
                             </div>
-                            <span className="text-sm text-ink-light group-hover:text-wood-dark transition-colors">
-                                <span className="font-bold">Üyelik Sözleşmesi</span>'ni okudum ve onaylıyorum.
-                            </span>
-                        </label>
-
-                        <label className="flex items-start gap-3 cursor-pointer group">
-                            <div className="relative mt-1">
-                                <input
-                                    type="checkbox"
-                                    checked={accepted.kvkk}
-                                    onChange={(e) => setAccepted(prev => ({ ...prev, kvkk: e.target.checked }))}
-                                    className="peer sr-only"
-                                />
-                                <div className="w-5 h-5 border-2 border-wood/30 rounded-md bg-paper-light transition-all peer-checked:bg-seal peer-checked:border-seal group-hover:border-wood/50"></div>
-                                <Check className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-paper opacity-0 peer-checked:opacity-100 transition-opacity" size={14} />
-                            </div>
-                            <span className="text-sm text-ink-light group-hover:text-wood-dark transition-colors">
-                                <span className="font-bold">KVKK Aydınlatma Metni</span>'ni okudum ve verilerimin işlenmesine onay veriyorum.
-                            </span>
-                        </label>
-
-                        <label className="flex items-start gap-3 cursor-pointer group">
-                            <div className="relative mt-1">
-                                <input
-                                    type="checkbox"
-                                    checked={accepted.sales}
-                                    onChange={(e) => setAccepted(prev => ({ ...prev, sales: e.target.checked }))}
-                                    className="peer sr-only"
-                                />
-                                <div className="w-5 h-5 border-2 border-wood/30 rounded-md bg-paper-light transition-all peer-checked:bg-seal peer-checked:border-seal group-hover:border-wood/50"></div>
-                                <Check className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-paper opacity-0 peer-checked:opacity-100 transition-opacity" size={14} />
-                            </div>
-                            <span className="text-sm text-ink-light group-hover:text-wood-dark transition-colors">
-                                <span className="font-bold">Mesafeli Satış Sözleşmesi</span>'ni okudum ve kabul ediyorum.
-                            </span>
-                        </label>
+                        ))}
                     </div>
                 </div>
 
                 {/* Footer */}
-                <div className="p-6 bg-paper-light border-t border-wood/10 flex flex-col sm:flex-row gap-4 items-center justify-between">
-                    <p className="text-[10px] text-ink-light/60 max-w-[300px] text-center sm:text-left">
-                        Tüm kutucukları işaretlediğinizde "Onayla ve Devam Et" butonu aktif olacaktır.
+                <div className="p-5 bg-paper-light border-t border-wood/10 flex flex-col sm:flex-row gap-4 items-center justify-between">
+                    <p className="text-[10px] text-ink-light/60 max-w-[240px] text-center sm:text-left">
+                        Tüm maddeler onaylandığında "Devam Et" butonu aktif olacaktır.
                     </p>
                     <button
                         onClick={handleAccept}
                         disabled={!accepted.sales || !accepted.kvkk || !accepted.membership || isSubmitting}
-                        className="w-full sm:w-auto bg-seal hover:bg-seal-hover text-paper px-10 py-3.5 rounded-xl font-bold shadow-lg shadow-seal/20 transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-95"
+                        className="w-full sm:w-auto bg-seal hover:bg-seal-hover text-paper px-8 py-3 rounded-xl font-bold shadow-lg shadow-seal/20 transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-95 text-sm"
                     >
                         {isSubmitting ? (
                             <Loader2 className="animate-spin" size={18} />
