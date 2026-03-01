@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import Image from "next/image";
+import TermsGuard from "@/components/TermsGuard";
 
 
 const inter = Inter({
@@ -51,6 +52,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <Toaster position="top-center" />
           <Navbar />
+          <TermsGuard />
           <main className="flex-1 flex flex-col items-stretch relative z-10">
             {children}
           </main>

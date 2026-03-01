@@ -60,6 +60,7 @@ model User {
   referredById                String?
   referredBy                  User?               @relation("UserReferrals", fields: [referredById], references: [id])
   referredUsers               User[]              @relation("UserReferrals")
+  termsAccepted               Boolean             @default(false)
 }
 
 model Address {

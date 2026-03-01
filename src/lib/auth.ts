@@ -57,6 +57,7 @@ export const authOptions: NextAuthOptions = {
                     email: user.email,
                     name: user.name,
                     role: user.role,
+                    termsAccepted: user.termsAccepted,
                 };
             },
         }),
@@ -68,9 +69,14 @@ export const authOptions: NextAuthOptions = {
         signIn: "/auth/login",
     },
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user, trigger, session }) {
             if (user) {
                 token.role = (user as any).role;
+                token.termsAccepted = (user as any).termsAccepted;
+            }
+            // Add trigger to update termsAccepted after action
+            if (trigger === "update" && session?.termsAccepted !== undefined) {
+                token.termsAccepted = session.termsAccepted;
             }
             return token;
         },
@@ -78,6 +84,7 @@ export const authOptions: NextAuthOptions = {
             if (token && session.user) {
                 (session.user as any).id = token.sub;
                 (session.user as any).role = token.role;
+                (session.user as any).termsAccepted = token.termsAccepted;
             }
             return session;
         },

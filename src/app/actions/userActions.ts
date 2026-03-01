@@ -106,3 +106,26 @@ export async function getUserProfile() {
         return { error: "Profil bilgileri alınamadı." };
     }
 }
+
+export async function acceptTermsAction() {
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+        return { success: false, message: "Oturum açmanız gerekiyor." };
+    }
+
+    try {
+        await prisma.user.update({
+            where: { id: (session.user as any).id },
+            data: {
+                termsAccepted: true,
+            },
+        });
+
+        revalidatePath("/");
+        return { success: true };
+    } catch (error) {
+        console.error("Accept terms error:", error);
+        return { success: false, message: "Sözleşme onaylanırken bir hata oluştu." };
+    }
+}
