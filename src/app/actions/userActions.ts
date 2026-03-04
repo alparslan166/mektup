@@ -6,7 +6,7 @@ import { authOptions } from "@/lib/auth";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 
-export async function updateProfile(data: { name: string; email: string }) {
+export async function updateProfile(data: { name: string; email: string; phone?: string }) {
     try {
         const session = await getServerSession(authOptions);
         if (!session || !(session.user as any).id) {
@@ -29,7 +29,8 @@ export async function updateProfile(data: { name: string; email: string }) {
             where: { id: userId },
             data: {
                 name: data.name,
-                email: data.email
+                email: data.email,
+                phone: data.phone
             }
         });
 
@@ -92,7 +93,8 @@ export async function getUserProfile() {
                 id: true,
                 name: true,
                 email: true,
-                image: true
+                image: true,
+                phone: true
             }
         });
 

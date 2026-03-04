@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut, X, LogIn, UserPlus, ShieldCheck, Gift, GitGraphIcon, Truck, Inbox, CircleDollarSign, Wallet, Tag } from "lucide-react";
+import { Mail, Home, PenLine, MessageSquare, Menu, HelpCircle, User, LogOut, X, LogIn, UserPlus, ShieldCheck, Gift, GitGraphIcon, Truck, Inbox, CircleDollarSign, Wallet, Tag, Layers } from "lucide-react";
 import { useLetterStore } from "@/store/letterStore";
 import { useUIStore } from "@/store/uiStore";
 import { getCreditBalanceAction } from "@/app/actions/creditActions";
@@ -101,10 +101,6 @@ const Navbar = () => {
                     ) :
                         (
                             <>
-                                <Link href="/" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
-                                    <Home size={18} />
-                                    <span>ANASAYFA</span>
-                                </Link>
                                 <Link href={status === "unauthenticated" ? "/auth/login" : "/mektup-yaz"} onClick={resetStore} className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
                                     <PenLine size={18} />
                                     <span>MEKTUP YAZ</span>
@@ -127,6 +123,10 @@ const Navbar = () => {
                                 <Link href="/yorumlar" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
                                     <MessageSquare size={18} />
                                     <span>YORUMLAR</span>
+                                </Link>
+                                <Link href="/hizmetlerimiz" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
+                                    <Layers size={18} />
+                                    <span>HİZMETLERİMİZ</span>
                                 </Link>
                                 <Link href="/sss" className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all">
                                     <HelpCircle size={18} />
@@ -245,6 +245,10 @@ const Navbar = () => {
                                 <Link href="/yorumlar" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                                     <MessageSquare size={22} />
                                     <span>YORUMLAR</span>
+                                </Link>
+                                <Link href="/hizmetlerimiz" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
+                                    <Layers size={22} />
+                                    <span>HİZMETLERİMİZ</span>
                                 </Link>
                                 <Link href="/sss" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white">
                                     <HelpCircle size={22} />

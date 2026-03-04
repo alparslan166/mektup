@@ -29,6 +29,7 @@ export default function ProfileClient({ session, referralCode, referredById, ref
     const [profileData, setProfileData] = useState({
         name: session.user?.name || "",
         email: session.user?.email || "",
+        phone: session.user?.phone || "",
     });
 
     const [passwordData, setPasswordData] = useState({
@@ -44,6 +45,7 @@ export default function ProfileClient({ session, referralCode, referredById, ref
         setIsUpdatingProfile(false);
         if (res.success) {
             toast.success("Profil bilgileriniz güncellendi.");
+            setActiveTab(activeTab === "overview" ? "settings" : "overview")
         } else {
             toast.error(res.error || "Bir hata oluştu.");
         }
@@ -95,7 +97,15 @@ export default function ProfileClient({ session, referralCode, referredById, ref
                 <div className="flex flex-col md:flex-row justify-between items-start gap-4">
                     <div>
                         <h1 className="text-3xl font-playfair font-bold text-ink">{session.user?.name || "Kullanıcı"}</h1>
-                        <p className="text-ink-light font-medium">{session.user?.email}</p>
+                        <div className="flex flex-col sm:flex-row sm:gap-4 text-ink-light font-medium">
+                            <p>{session.user?.email}</p>
+                            {session.user?.phone && (
+                                <p className="hidden sm:block">•</p>
+                            )}
+                            {session.user?.phone && (
+                                <p>{session.user?.phone}</p>
+                            )}
+                        </div>
                     </div>
                     <div className="flex gap-2">
                         <button
@@ -286,6 +296,16 @@ export default function ProfileClient({ session, referralCode, referredById, ref
                                                 type="email"
                                                 value={profileData.email}
                                                 onChange={e => setProfileData({ ...profileData, email: e.target.value })}
+                                                className="w-full bg-paper-light border border-paper-dark rounded-xl px-4 py-3 focus:ring-2 focus:ring-seal/30 focus:border-seal outline-none transition-all font-medium"
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-ink-light uppercase ml-1">Telefon (WhatsApp)</label>
+                                            <input
+                                                type="tel"
+                                                value={profileData.phone}
+                                                onChange={e => setProfileData({ ...profileData, phone: e.target.value })}
+                                                placeholder="0 5xx xxx xx xx"
                                                 className="w-full bg-paper-light border border-paper-dark rounded-xl px-4 py-3 focus:ring-2 focus:ring-seal/30 focus:border-seal outline-none transition-all font-medium"
                                             />
                                         </div>
