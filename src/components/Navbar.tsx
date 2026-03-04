@@ -56,7 +56,7 @@ const Navbar = () => {
         <header className="bg-transparent border-b border-paper/10 py-3 w-full z-50 relative">
             <div className="container mx-auto px-6 max-w-7xl flex justify-between items-center gap-4">
                 {/* Logo */}
-                <Link href="/" onClick={closeMenu} className="flex flex-col hover:opacity-90 transition-opacity shrink-0">
+                <Link href="/" onClick={closeMenu} className="flex flex-col hover:opacity-90 transition-opacity shrink-0 -ml-4 lg:-ml-20">
                     <div className="flex items-center gap-1">
                         <div className="text-paper p-1.5 rounded-sm">
                             <Image src="/images/kus-logo.png" alt="Logo" width={40} height={40} />
