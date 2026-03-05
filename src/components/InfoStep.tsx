@@ -41,6 +41,7 @@ export default function InfoStep() {
     const [saveReceiverToAddressBook, setSaveReceiverToAddressBook] = useState(false);
     const [isSavingAddress, setIsSavingAddress] = useState(false);
     const [showInboxInfoModal, setShowInboxInfoModal] = useState(false);
+    const [showConsentModal, setShowConsentModal] = useState(false);
     const [companyAddress, setCompanyAddress] = useState("");
 
     const extras = useLetterStore(state => state.extras);
@@ -524,7 +525,13 @@ export default function InfoStep() {
                         <input
                             type="checkbox"
                             checked={extras.wantReplyInInbox}
-                            onChange={(e) => updateExtras({ wantReplyInInbox: e.target.checked })}
+                            onChange={(e) => {
+                                if (e.target.checked) {
+                                    setShowConsentModal(true);
+                                } else {
+                                    updateExtras({ wantReplyInInbox: false });
+                                }
+                            }}
                             className="sr-only"
                         />
                         <div className={`mt-0.5 w-6 h-6 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-all duration-300 ${extras.wantReplyInInbox
@@ -634,6 +641,67 @@ export default function InfoStep() {
                                         <p className="text-xs text-ink leading-relaxed whitespace-pre-line">{companyAddress}</p>
                                     </div>
                                 )}
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Consent Modal */}
+            <AnimatePresence>
+                {showConsentModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/60 backdrop-blur-sm"
+                        onClick={() => setShowConsentModal(false)}
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-paper rounded-2xl shadow-xl w-full max-w-sm overflow-hidden border border-paper-dark"
+                        >
+                            <div className="p-5 border-b border-paper-dark flex justify-between items-center bg-paper-light">
+                                <h3 className="font-playfair text-lg font-bold text-wood-dark flex items-center gap-2">
+                                    <CheckCircle2 size={20} className="text-seal" />
+                                    Onayınız Gerekiyor
+                                </h3>
+                                <button onClick={() => setShowConsentModal(false)} className="text-ink-light hover:text-ink transition-colors p-1 bg-paper border border-paper-dark rounded-full shadow-sm">
+                                    <X size={18} />
+                                </button>
+                            </div>
+
+                            <div className="p-6 space-y-4 text-center flex flex-col items-center">
+                                <div className="w-14 h-14 bg-seal/10 rounded-full flex items-center justify-center mb-1">
+                                    <Inbox size={28} className="text-seal" />
+                                </div>
+                                <p className="text-sm text-ink-light font-medium leading-relaxed">
+                                    Mektubuma gelen cevabın bilgisayar ortamında indirilmesine ve işlenmesine izin veriyorum.
+                                </p>
+
+                                <div className="flex gap-3 w-full mt-2">
+                                    <button
+                                        onClick={() => setShowConsentModal(false)}
+                                        className="flex-1 py-2.5 px-4 rounded-xl border border-paper-dark text-ink font-bold hover:bg-paper-dark transition-colors text-sm"
+                                    >
+                                        Vazgeç
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            updateExtras({
+                                                wantReplyInInbox: true,
+                                                inboxConsentDate: new Date().toISOString()
+                                            });
+                                            setShowConsentModal(false);
+                                        }}
+                                        className="flex-1 py-2.5 px-4 rounded-xl bg-seal text-white font-bold hover:bg-seal-hover transition-colors text-sm shadow-md"
+                                    >
+                                        İzin Veriyorum
+                                    </button>
+                                </div>
                             </div>
                         </motion.div>
                     </motion.div>

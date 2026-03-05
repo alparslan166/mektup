@@ -35,6 +35,7 @@ export interface ExtrasData {
     gifts: SelectedGift[];
     customDate?: string;
     wantReplyInInbox: boolean;
+    inboxConsentDate?: string | null;
 }
 
 export interface AddressData {
@@ -102,6 +103,7 @@ const initialState = {
         gifts: [],
         customDate: "",
         wantReplyInInbox: false,
+        inboxConsentDate: null,
     },
     address: {
         senderName: '',

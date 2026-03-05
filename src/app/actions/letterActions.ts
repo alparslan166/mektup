@@ -115,7 +115,9 @@ export async function createLetter(letterData: any) {
                 senderName: address.senderName,
                 receiverName: address.receiverName,
                 receiverCity: address.receiverCity,
-                totalAmount: totalAmount
+                totalAmount: totalAmount,
+                inboxConsent: extras.wantReplyInInbox || false,
+                inboxConsentDate: extras.inboxConsentDate ? new Date(extras.inboxConsentDate) : null
             }
         });
 

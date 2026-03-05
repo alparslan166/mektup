@@ -115,6 +115,8 @@ model Letter {
   receiverCity String?
   totalAmount  Float?
   trackingCode String?
+  inboxConsent Boolean  @default(false)
+  inboxConsentDate DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
