@@ -244,7 +244,6 @@ export default function HizmetlerClient({ adminWhatsApp = "0 541 944 68 48" }: H
                             <li className="flex items-center gap-2 text-sm text-ink-light bg-white/40 p-2 rounded-lg"><span className="text-rose-500">✔</span> Kitaplar</li>
                             <li className="flex items-center gap-2 text-sm text-ink-light bg-white/40 p-2 rounded-lg"><span className="text-rose-500">✔</span> Kol Saatleri</li>
                             <li className="flex items-center gap-2 text-sm text-ink-light bg-white/40 p-2 rounded-lg"><span className="text-rose-500">✔</span> Şık Tesbihler</li>
-                            <li className="flex items-center gap-2 text-sm text-ink-light bg-white/40 p-2 rounded-lg"><span className="text-rose-500">✔</span> Kişisel Bakım</li>
                         </ul>
                     </div>
 
