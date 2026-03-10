@@ -122,33 +122,25 @@ export default function AdminGelenMektuplar() {
         setIsUploading(true);
 
         try {
-            // 1. Upload each image to S3
+            // 1. Upload each image to Vercel Blob
             const uploadedUrls: string[] = [];
 
             for (const img of images) {
-                // Get presigned URL
-                const presignRes = await fetch("/api/upload", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        fileName: img.file.name,
-                        fileType: img.file.type,
-                    }),
-                });
-                const presignData = await presignRes.json();
+                const formData = new FormData();
+                formData.append("file", img.file);
 
-                if (!presignData.uploadUrl) {
-                    throw new Error("S3 upload URL alınamadı.");
+                const res = await fetch("/api/upload", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    throw new Error(errorData.error || "Görsel yüklenemedi");
                 }
 
-                // Upload to S3
-                await fetch(presignData.uploadUrl, {
-                    method: "PUT",
-                    headers: { "Content-Type": img.file.type },
-                    body: img.file,
-                });
-
-                uploadedUrls.push(presignData.publicUrl);
+                const { url } = await res.json();
+                uploadedUrls.push(url);
             }
 
             // 2. Create incoming letter record

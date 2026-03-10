@@ -38,44 +38,35 @@ export default function UploadSection() {
         const loadingToast = toast.loading("Dosya yükleniyor...");
 
         try {
-            // 1. Get Presigned URL
+            const formData = new FormData();
+            formData.append("file", file);
+
             const res = await fetch("/api/upload", {
                 method: "POST",
-                body: JSON.stringify({
-                    fileName: file.name,
-                    fileType: file.type
-                }),
-                headers: { "Content-Type": "application/json" }
+                body: formData,
             });
 
-            if (!res.ok) throw new Error("Presigned URL alınamadı");
-            const { uploadUrl, publicUrl, previewUrl } = await res.json();
-
-            // 2. Upload directly to S3
-            const uploadRes = await fetch(uploadUrl, {
-                method: "PUT",
-                body: file,
-                headers: { "Content-Type": file.type }
-            });
-
-            if (uploadRes.ok) {
-                const newFile = {
-                    id: Math.random().toString(36).substr(2, 9),
-                    name: file.name,
-                    url: publicUrl,
-                    previewUrl: previewUrl,
-                    type: type
-                };
-
-                if (type === "photo") {
-                    updateExtras({ photos: [...extras.photos, newFile] });
-                } else {
-                    updateExtras({ documents: [...extras.documents, newFile] });
-                }
-                toast.success("Dosya başarıyla yüklendi.", { id: loadingToast });
-            } else {
-                throw new Error("S3 yükleme başarısız");
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.error || "Görsel yüklenemedi");
             }
+
+            const { url } = await res.json();
+
+            const newFile = {
+                id: Math.random().toString(36).substr(2, 9),
+                name: file.name,
+                url: url,
+                previewUrl: url,
+                type: type
+            };
+
+            if (type === "photo") {
+                updateExtras({ photos: [...extras.photos, newFile] });
+            } else {
+                updateExtras({ documents: [...extras.documents, newFile] });
+            }
+            toast.success("Dosya başarıyla yüklendi.", { id: loadingToast });
         } catch (err) {
             console.error("Upload error:", err);
             toast.error("Dosya yüklenirken bir hata oluştu: " + (err as Error).message, { id: loadingToast });

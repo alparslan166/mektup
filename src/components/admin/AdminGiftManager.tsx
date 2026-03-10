@@ -193,44 +193,32 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
         const loadingToast = toast.loading("Görsel yükleniyor...");
 
         try {
-            // 1. Get Presigned URL
+            const formData = new FormData();
+            formData.append("file", file);
+
             const res = await fetch("/api/upload", {
                 method: "POST",
-                body: JSON.stringify({
-                    fileName: file.name,
-                    fileType: file.type
-                }),
-                headers: { "Content-Type": "application/json" }
+                body: formData,
             });
 
-            if (!res.ok) throw new Error("Presigned URL alınamadı");
-            const { uploadUrl, publicUrl, previewUrl } = await res.json();
-
-            // 2. Upload directly to S3
-            const uploadRes = await fetch(uploadUrl, {
-                method: "PUT",
-                body: file,
-                headers: { "Content-Type": file.type }
-            });
-
-            if (uploadRes.ok) {
-                if (type === "new") {
-                    setNewGiftData(prev => ({ ...prev, image: publicUrl, previewImage: previewUrl }));
-                } else {
-                    setEditGiftData(prev => ({ ...prev, image: publicUrl, previewImage: previewUrl }));
-                }
-                toast.success("Görsel yüklendi", { id: loadingToast });
-            } else {
-                const errorText = await uploadRes.text();
-                console.error("S3 Upload Error Response:", errorText);
-                throw new Error(`S3 yükleme başarısız: ${uploadRes.status} ${uploadRes.statusText}`);
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.error || "Görsel yüklenemedi");
             }
+
+            const { url } = await res.json();
+
+            if (type === "new") {
+                setNewGiftData(prev => ({ ...prev, image: url, previewImage: url }));
+            } else {
+                setEditGiftData(prev => ({ ...prev, image: url, previewImage: url }));
+            }
+            toast.success("Görsel yüklendi", { id: loadingToast });
         } catch (error) {
             console.error("Upload error details:", error);
             toast.error("Görsel yüklenemedi: " + (error as Error).message, { id: loadingToast });
         } finally {
             setIsUploading(false);
-            // Reset the input value so the same file can be selected again
             e.target.value = "";
         }
     };

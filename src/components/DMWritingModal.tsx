@@ -78,38 +78,31 @@ export default function DMWritingModal({ isOpen, onClose, recipientId, recipient
         const loadingToast = toast.loading("Fotoğraf yükleniyor...");
 
         try {
+            const formData = new FormData();
+            formData.append("file", file);
+
             const res = await fetch("/api/upload", {
                 method: "POST",
-                body: JSON.stringify({
-                    fileName: file.name,
-                    fileType: file.type
-                }),
-                headers: { "Content-Type": "application/json" }
+                body: formData,
             });
 
-            if (!res.ok) throw new Error("Presigned URL alınamadı");
-            const { uploadUrl, publicUrl, previewUrl } = await res.json();
-
-            const uploadRes = await fetch(uploadUrl, {
-                method: "PUT",
-                body: file,
-                headers: { "Content-Type": file.type }
-            });
-
-            if (uploadRes.ok) {
-                const newFile = {
-                    id: Math.random().toString(36).substr(2, 9),
-                    name: file.name,
-                    url: publicUrl,
-                    previewUrl: previewUrl,
-                    type: "photo" as "photo" | "doc"
-                };
-
-                useLetterStore.getState().updateExtras({ photos: [...extras.photos, newFile] });
-                toast.success("Fotoğraf başarıyla yüklendi.", { id: loadingToast });
-            } else {
-                throw new Error("S3 yükleme başarısız");
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.error || "Görsel yüklenemedi");
             }
+
+            const { url } = await res.json();
+
+            const newFile = {
+                id: Math.random().toString(36).substr(2, 9),
+                name: file.name,
+                url: url,
+                previewUrl: url,
+                type: "photo" as "photo" | "doc"
+            };
+
+            useLetterStore.getState().updateExtras({ photos: [...extras.photos, newFile] });
+            toast.success("Fotoğraf başarıyla yüklendi.", { id: loadingToast });
         } catch (err) {
             console.error("Upload error:", err);
             toast.error("Dosya yüklenirken bir hata oluştu.", { id: loadingToast });

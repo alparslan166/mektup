@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { ChevronDown, ChevronUp, MessageSquare, Printer, Inbox, ShieldCheck, Mail, Smartphone, FileText, Clock, MapPin, CreditCard, Send, Search } from "lucide-react";
+import { ChevronDown, ChevronUp, MessageSquare, Printer, Inbox, ShieldCheck, Mail, Smartphone, FileText, Clock, MapPin, CreditCard, Send, Search, Gift } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 interface Service {
     id: string;
@@ -205,6 +206,56 @@ export default function HizmetlerClient({ adminWhatsApp = "0 541 944 68 48" }: H
                                 </li>
                             </ol>
                         </div>
+                    </div>
+                </div>
+            )
+        },
+        {
+            id: "hediye",
+            title: "Cezaevine Hediye Gönderimi",
+            icon: <Gift className="text-rose-500" size={24} />,
+            shortDesc: "Mektubunuzun yanına veya tek başına anlamlı hediyeler ekleyin.",
+            content: (
+                <div className="space-y-6">
+                    <div className="bg-rose-50 p-4 rounded-lg border border-rose-100">
+                        <p className="text-rose-800 font-medium italic">"Sevdiklerinize sadece kelimelerinizi değil, onları mutlu edecek küçük sürprizleri de ulaştırıyoruz."</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-white/50 p-4 rounded-xl border border-rose-100 shadow-sm">
+                            <h4 className="font-bold text-rose-700 mb-2 flex items-center gap-2">
+                                <Mail size={18} />
+                                Mektup + Hediye
+                            </h4>
+                            <p className="text-sm text-ink-light">Yazdığınız mektubun yanına kitap, saat, tesbih gibi hediyeler ekleyerek paketinizi zenginleştirebilirsiniz.</p>
+                        </div>
+                        <div className="bg-white/50 p-4 rounded-xl border border-rose-100 shadow-sm">
+                            <h4 className="font-bold text-rose-700 mb-2 flex items-center gap-2">
+                                <Gift size={18} />
+                                Sadece Hediye
+                            </h4>
+                            <p className="text-sm text-ink-light">Mektup yazmadan da, özenle seçilmiş ürünlerimizi doğrudan sevdiklerinizin adresine gönderebilirsiniz.</p>
+                        </div>
+                    </div>
+
+                    <div className="bg-rose-500/5 p-5 rounded-xl border-l-4 border-rose-500">
+                        <h4 className="font-bold text-ink mb-3">Neler Gönderebilirsiniz?</h4>
+                        <ul className="grid grid-cols-2 gap-3">
+                            <li className="flex items-center gap-2 text-sm text-ink-light bg-white/40 p-2 rounded-lg"><span className="text-rose-500">✔</span> Kitaplar</li>
+                            <li className="flex items-center gap-2 text-sm text-ink-light bg-white/40 p-2 rounded-lg"><span className="text-rose-500">✔</span> Kol Saatleri</li>
+                            <li className="flex items-center gap-2 text-sm text-ink-light bg-white/40 p-2 rounded-lg"><span className="text-rose-500">✔</span> Şık Tesbihler</li>
+                            <li className="flex items-center gap-2 text-sm text-ink-light bg-white/40 p-2 rounded-lg"><span className="text-rose-500">✔</span> Kişisel Bakım</li>
+                        </ul>
+                    </div>
+
+                    <div className="pt-2">
+                        <Link
+                            href="/hediyeler"
+                            className="inline-flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-6 rounded-lg transition-all shadow-md hover:shadow-lg active:scale-95"
+                        >
+                            <Search size={20} />
+                            Hediyeleri İncele
+                        </Link>
                     </div>
                 </div>
             )
