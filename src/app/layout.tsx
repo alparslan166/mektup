@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import Image from "next/image";
 import TermsGuard from "@/components/TermsGuard";
+import { Instagram, Twitter } from "lucide-react";
 
 
 const inter = Inter({
@@ -68,11 +69,21 @@ export default function RootLayout({
               <p className="text-sm">© {new Date().getFullYear()} EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ. Tüm hakları saklıdır.</p>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-5 text-sm font-medium">
-              <Link href="/hakkimizda" className="hover:text-paper transition-colors">Hakkımızda</Link>
-              <Link href="/sss" className="hover:text-paper transition-colors">S.S.S.</Link>
-              <Link href="/sozlesmeler" className="hover:text-paper transition-colors">Sözleşmeler</Link>
-              <Link href="/iletisim" className="hover:text-paper transition-colors">İletişim</Link>
+            <div className="flex flex-col items-center md:items-end gap-4">
+              <div className="flex items-center gap-4">
+                <a href="https://www.instagram.com/mektuplascom" target="_blank" rel="noopener noreferrer" className="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-all hover:scale-110 text-paper" title="Instagram">
+                  <Instagram size={20} />
+                </a>
+                <a href="https://x.com/MektuplasCom" target="_blank" rel="noopener noreferrer" className="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-all hover:scale-110 text-paper" title="X">
+                  <Twitter size={20} />
+                </a>
+              </div>
+              <div className="flex flex-wrap justify-center md:justify-end gap-5 text-sm font-medium">
+                <Link href="/hakkimizda" className="hover:text-paper transition-colors">Hakkımızda</Link>
+                <Link href="/sss" className="hover:text-paper transition-colors">S.S.S.</Link>
+                <Link href="/sozlesmeler" className="hover:text-paper transition-colors">Sözleşmeler</Link>
+                <Link href="/iletisim" className="hover:text-paper transition-colors">İletişim</Link>
+              </div>
             </div>
           </div>
         </footer>
