@@ -67,7 +67,7 @@ const Navbar = () => {
                 </Link>
 
                 {/* Desktop Nav */}
-                <nav className="text-[11px] lg:text-[13px] font-bold tracking-wider text-paper/90 gap-4 lg:gap-8 hidden md:flex items-center flex-1 justify-center">
+                <nav className="text-[11px] lg:text-[13px] font-bold tracking-wider text-paper/90 gap-4 lg:gap-6 hidden md:flex items-center flex-1 justify-center">
                     {(session?.user as any)?.role === "ADMIN" && (
                         <button onClick={handleAdminMenusClick} className="cursor-pointer text-paper/90 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all flex flex-col items-center">
                             <svg width="24" height="24" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg">

@@ -65,7 +65,7 @@ export default function RootLayout({
                 <Image src="/images/kus-logo.png" alt="Logo" width={40} height={40} />
                 <p className="font-playfair text-xl text-paper">Söz kulağa, yazı uzağa gider...</p>
               </div>
-              <p className="text-sm">© {new Date().getFullYear()} Mektuplaş. Tüm hakları saklıdır.</p>
+              <p className="text-sm">© {new Date().getFullYear()} EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ. Tüm hakları saklıdır.</p>
             </div>
 
             <div className="flex flex-wrap justify-center gap-5 text-sm font-medium">
