@@ -64,7 +64,7 @@ export async function deleteCategory(id: string) {
 }
 
 // Gift Actions
-export async function createGift(data: { name: string; description?: string; price?: number; image?: string; categoryId: string }) {
+export async function createGift(data: { name: string; description?: string; price?: number; image?: string; image2?: string; categoryId: string }) {
     await ensureAdmin();
     const gift = await prisma.gift.create({
         data
@@ -74,7 +74,7 @@ export async function createGift(data: { name: string; description?: string; pri
     return gift;
 }
 
-export async function updateGift(id: string, data: { name: string; description?: string; price?: number; image?: string }) {
+export async function updateGift(id: string, data: { name: string; description?: string; price?: number; image?: string; image2?: string }) {
     await ensureAdmin();
     console.log("UPDATING GIFT:", { id, data });
     try {

@@ -14,6 +14,7 @@ interface Gift {
     description: string | null;
     price: number | null;
     image: string | null;
+    image2: string | null;
 }
 
 interface Category {
@@ -31,9 +32,9 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
     const [editCategoryName, setEditCategoryName] = useState("");
 
     const [addingGiftToCategoryId, setAddingGiftToCategoryId] = useState<string | null>(null);
-    const [newGiftData, setNewGiftData] = useState({ name: "", description: "", price: "", image: "", previewImage: "" });
+    const [newGiftData, setNewGiftData] = useState({ name: "", description: "", price: "", image: "", previewImage: "", image2: "", previewImage2: "" });
     const [editingGiftId, setEditingGiftId] = useState<string | null>(null);
-    const [editGiftData, setEditGiftData] = useState({ name: "", description: "", price: "", image: "", previewImage: "" });
+    const [editGiftData, setEditGiftData] = useState({ name: "", description: "", price: "", image: "", previewImage: "", image2: "", previewImage2: "" });
     const [isUploading, setIsUploading] = useState(false);
     const { setIsLoading } = useUIStore();
 
@@ -145,12 +146,13 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                 description: newGiftData.description,
                 price: newGiftData.price ? parseFloat(newGiftData.price) : undefined,
                 image: newGiftData.image || undefined,
+                image2: newGiftData.image2 || undefined,
                 categoryId
             });
             setCategories(prev => prev.map(c =>
                 c.id === categoryId ? { ...c, gifts: [...c.gifts, gift as Gift] } : c
             ));
-            setNewGiftData({ name: "", description: "", price: "", image: "", previewImage: "" });
+            setNewGiftData({ name: "", description: "", price: "", image: "", previewImage: "", image2: "", previewImage2: "" });
             setAddingGiftToCategoryId(null);
             toast.success("Hediye eklendi");
         } catch (error) {
@@ -168,14 +170,15 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                 name: editGiftData.name,
                 description: editGiftData.description,
                 price: editGiftData.price ? parseFloat(editGiftData.price) : undefined,
-                image: editGiftData.image || undefined
+                image: editGiftData.image || undefined,
+                image2: editGiftData.image2 || undefined
             });
             setCategories(prev => prev.map(c => ({
                 ...c,
                 gifts: c.gifts.map(g => g.id === id ? { ...g, ...updatedGift } : g)
             })));
             setEditingGiftId(null);
-            setEditGiftData({ name: "", description: "", price: "", image: "", previewImage: "" });
+            setEditGiftData({ name: "", description: "", price: "", image: "", previewImage: "", image2: "", previewImage2: "" });
             toast.success("Hediye güncellendi");
         } catch (error) {
             console.error("Hediye güncelleme hatası:", error);
@@ -185,7 +188,7 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
         }
     };
 
-    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: "new" | "edit" = "new") => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: "new" | "edit" = "new", field: "image" | "image2" = "image") => {
         const file = e.target.files?.[0];
         if (!file) return;
 
@@ -209,9 +212,17 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
             const { url } = await res.json();
 
             if (type === "new") {
-                setNewGiftData(prev => ({ ...prev, image: url, previewImage: url }));
+                if (field === "image") {
+                    setNewGiftData(prev => ({ ...prev, image: url, previewImage: url }));
+                } else {
+                    setNewGiftData(prev => ({ ...prev, image2: url, previewImage2: url }));
+                }
             } else {
-                setEditGiftData(prev => ({ ...prev, image: url, previewImage: url }));
+                if (field === "image") {
+                    setEditGiftData(prev => ({ ...prev, image: url, previewImage: url }));
+                } else {
+                    setEditGiftData(prev => ({ ...prev, image2: url, previewImage2: url }));
+                }
             }
             toast.success("Görsel yüklendi", { id: loadingToast });
         } catch (error) {
@@ -403,7 +414,9 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                                                                         description: gift.description || "",
                                                                                                         price: gift.price?.toString() || "",
                                                                                                         image: gift.image || "",
-                                                                                                        previewImage: gift.image || ""
+                                                                                                        previewImage: gift.image || "",
+                                                                                                        image2: gift.image2 || "",
+                                                                                                        previewImage2: gift.image2 || ""
                                                                                                     });
                                                                                                 }}
                                                                                                 className="p-1.5 text-slate-300 hover:text-blue-500 transition-colors"
@@ -443,42 +456,79 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                                                                     onChange={(e) => setEditGiftData({ ...editGiftData, price: e.target.value })}
                                                                                                 />
                                                                                             </div>
-                                                                                            <div className="grid grid-cols-2 gap-4 items-center">
-                                                                                                <div className="relative group">
-                                                                                                    <input
-                                                                                                        type="file"
-                                                                                                        id={`edit-gift-image-${gift.id}`}
-                                                                                                        className="hidden"
-                                                                                                        accept="image/*"
-                                                                                                        onChange={(e) => handleImageUpload(e, "edit")}
-                                                                                                        disabled={isUploading}
-                                                                                                    />
-                                                                                                    <label
-                                                                                                        htmlFor={`edit-gift-image-${gift.id}`}
-                                                                                                        className="flex items-center justify-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-white bg-slate-50 transition-colors font-medium text-slate-600"
-                                                                                                    >
-                                                                                                        {isUploading ? (
-                                                                                                            <div className="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
-                                                                                                        ) : (
-                                                                                                            <ImageIcon size={16} />
-                                                                                                        )}
-                                                                                                        <span>{editGiftData.previewImage ? "Görseli Değiştir" : "Görsel Ekle"}</span>
-                                                                                                    </label>
-                                                                                                    <p className="text-[10px] text-slate-400 mt-1 font-medium italic">Önerilen: 1:1 Kare Format</p>
-                                                                                                </div>
-                                                                                                {editGiftData.previewImage && (
-                                                                                                    <div className="flex items-center gap-2">
-                                                                                                        <div className="w-10 h-10 rounded border border-slate-200 overflow-hidden bg-white relative">
-                                                                                                            <Image src={editGiftData.previewImage} alt="Önizleme" fill sizes="40px" className="object-cover" />
-                                                                                                        </div>
-                                                                                                        <button
-                                                                                                            onClick={() => setEditGiftData(prev => ({ ...prev, image: "", previewImage: "" }))}
-                                                                                                            className="text-xs text-red-500 font-bold"
+                                                                                            <div className="grid grid-cols-2 gap-4 items-start">
+                                                                                                <div className="space-y-2">
+                                                                                                    <div className="relative group">
+                                                                                                        <input
+                                                                                                            type="file"
+                                                                                                            id={`edit-gift-image-${gift.id}`}
+                                                                                                            className="hidden"
+                                                                                                            accept="image/*"
+                                                                                                            onChange={(e) => handleImageUpload(e, "edit", "image")}
+                                                                                                            disabled={isUploading}
+                                                                                                        />
+                                                                                                        <label
+                                                                                                            htmlFor={`edit-gift-image-${gift.id}`}
+                                                                                                            className="flex items-center justify-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-white bg-slate-50 transition-colors font-medium text-slate-600"
                                                                                                         >
-                                                                                                            Kaldır
-                                                                                                        </button>
+                                                                                                            {isUploading ? (
+                                                                                                                <div className="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                                                                                                            ) : (
+                                                                                                                <ImageIcon size={16} />
+                                                                                                            )}
+                                                                                                            <span>Resim 1</span>
+                                                                                                        </label>
                                                                                                     </div>
-                                                                                                )}
+                                                                                                    {editGiftData.previewImage && (
+                                                                                                        <div className="flex items-center gap-2">
+                                                                                                            <div className="w-10 h-10 rounded border border-slate-200 overflow-hidden bg-white relative">
+                                                                                                                <Image src={editGiftData.previewImage} alt="Önizleme" fill sizes="40px" className="object-cover" />
+                                                                                                            </div>
+                                                                                                            <button
+                                                                                                                onClick={() => setEditGiftData(prev => ({ ...prev, image: "", previewImage: "" }))}
+                                                                                                                className="text-xs text-red-500 font-bold"
+                                                                                                            >
+                                                                                                                Kaldır
+                                                                                                            </button>
+                                                                                                        </div>
+                                                                                                    )}
+                                                                                                </div>
+                                                                                                <div className="space-y-2">
+                                                                                                    <div className="relative group">
+                                                                                                        <input
+                                                                                                            type="file"
+                                                                                                            id={`edit-gift-image2-${gift.id}`}
+                                                                                                            className="hidden"
+                                                                                                            accept="image/*"
+                                                                                                            onChange={(e) => handleImageUpload(e, "edit", "image2")}
+                                                                                                            disabled={isUploading}
+                                                                                                        />
+                                                                                                        <label
+                                                                                                            htmlFor={`edit-gift-image2-${gift.id}`}
+                                                                                                            className="flex items-center justify-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-white bg-slate-50 transition-colors font-medium text-slate-600"
+                                                                                                        >
+                                                                                                            {isUploading ? (
+                                                                                                                <div className="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                                                                                                            ) : (
+                                                                                                                <ImageIcon size={16} />
+                                                                                                            )}
+                                                                                                            <span>Resim 2</span>
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                    {editGiftData.previewImage2 && (
+                                                                                                        <div className="flex items-center gap-2">
+                                                                                                            <div className="w-10 h-10 rounded border border-slate-200 overflow-hidden bg-white relative">
+                                                                                                                <Image src={editGiftData.previewImage2} alt="Önizleme 2" fill sizes="40px" className="object-cover" />
+                                                                                                            </div>
+                                                                                                            <button
+                                                                                                                onClick={() => setEditGiftData(prev => ({ ...prev, image2: "", previewImage2: "" }))}
+                                                                                                                className="text-xs text-red-500 font-bold"
+                                                                                                            >
+                                                                                                                Kaldır
+                                                                                                            </button>
+                                                                                                        </div>
+                                                                                                    )}
+                                                                                                </div>
                                                                                             </div>
                                                                                             <textarea
                                                                                                 className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none resize-none bg-white font-medium"
@@ -520,42 +570,79 @@ export default function AdminGiftManager({ categories: initialCategories }: { ca
                                                                                     onChange={(e) => setNewGiftData({ ...newGiftData, price: e.target.value })}
                                                                                 />
                                                                             </div>
-                                                                            <div className="grid grid-cols-2 gap-4 items-center">
-                                                                                <div className="relative group">
-                                                                                    <input
-                                                                                        type="file"
-                                                                                        id={`gift-image-${category.id}`}
-                                                                                        className="hidden"
-                                                                                        accept="image/*"
-                                                                                        onChange={handleImageUpload}
-                                                                                        disabled={isUploading}
-                                                                                    />
-                                                                                    <label
-                                                                                        htmlFor={`gift-image-${category.id}`}
-                                                                                        className="flex items-center justify-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-slate-50 transition-colors"
-                                                                                    >
-                                                                                        {isUploading ? (
-                                                                                            <div className="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
-                                                                                        ) : (
-                                                                                            <Plus size={16} />
-                                                                                        )}
-                                                                                        <span>{newGiftData.previewImage ? "Görseli Değiştir" : "Görsel Ekle"}</span>
-                                                                                    </label>
-                                                                                    <p className="text-[10px] text-slate-400 mt-1 font-medium italic">Önerilen: 1:1 Kare Format</p>
-                                                                                </div>
-                                                                                {newGiftData.previewImage && (
-                                                                                    <div className="flex items-center gap-2">
-                                                                                        <div className="w-10 h-10 rounded border border-slate-200 overflow-hidden relative">
-                                                                                            <Image src={newGiftData.previewImage} alt="Önizleme" fill sizes="40px" className="object-cover" />
-                                                                                        </div>
-                                                                                        <button
-                                                                                            onClick={() => setNewGiftData(prev => ({ ...prev, image: "", previewImage: "" }))}
-                                                                                            className="text-xs text-red-500 font-bold"
+                                                                            <div className="grid grid-cols-2 gap-4 items-start">
+                                                                                <div className="space-y-2">
+                                                                                    <div className="relative group">
+                                                                                        <input
+                                                                                            type="file"
+                                                                                            id={`gift-image-${category.id}`}
+                                                                                            className="hidden"
+                                                                                            accept="image/*"
+                                                                                            onChange={(e) => handleImageUpload(e, "new", "image")}
+                                                                                            disabled={isUploading}
+                                                                                        />
+                                                                                        <label
+                                                                                            htmlFor={`gift-image-${category.id}`}
+                                                                                            className="flex items-center justify-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-slate-50 transition-colors"
                                                                                         >
-                                                                                            Kaldır
-                                                                                        </button>
+                                                                                            {isUploading ? (
+                                                                                                <div className="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                                                                                            ) : (
+                                                                                                <Plus size={16} />
+                                                                                            )}
+                                                                                            <span>Resim 1</span>
+                                                                                        </label>
                                                                                     </div>
-                                                                                )}
+                                                                                    {newGiftData.previewImage && (
+                                                                                        <div className="flex items-center gap-2">
+                                                                                            <div className="w-10 h-10 rounded border border-slate-200 overflow-hidden relative">
+                                                                                                <Image src={newGiftData.previewImage} alt="Önizleme" fill sizes="40px" className="object-cover" />
+                                                                                            </div>
+                                                                                            <button
+                                                                                                onClick={() => setNewGiftData(prev => ({ ...prev, image: "", previewImage: "" }))}
+                                                                                                className="text-xs text-red-500 font-bold"
+                                                                                            >
+                                                                                                Kaldır
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    )}
+                                                                                </div>
+                                                                                <div className="space-y-2">
+                                                                                    <div className="relative group">
+                                                                                        <input
+                                                                                            type="file"
+                                                                                            id={`gift-image2-${category.id}`}
+                                                                                            className="hidden"
+                                                                                            accept="image/*"
+                                                                                            onChange={(e) => handleImageUpload(e, "new", "image2")}
+                                                                                            disabled={isUploading}
+                                                                                        />
+                                                                                        <label
+                                                                                            htmlFor={`gift-image2-${category.id}`}
+                                                                                            className="flex items-center justify-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-slate-50 transition-colors"
+                                                                                        >
+                                                                                            {isUploading ? (
+                                                                                                <div className="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                                                                                            ) : (
+                                                                                                <Plus size={16} />
+                                                                                            )}
+                                                                                            <span>Resim 2</span>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                    {newGiftData.previewImage2 && (
+                                                                                        <div className="flex items-center gap-2">
+                                                                                            <div className="w-10 h-10 rounded border border-slate-200 overflow-hidden relative">
+                                                                                                <Image src={newGiftData.previewImage2} alt="Önizleme 2" fill sizes="40px" className="object-cover" />
+                                                                                            </div>
+                                                                                            <button
+                                                                                                onClick={() => setNewGiftData(prev => ({ ...prev, image2: "", previewImage2: "" }))}
+                                                                                                className="text-xs text-red-500 font-bold"
+                                                                                            >
+                                                                                                Kaldır
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    )}
+                                                                                </div>
                                                                             </div>
                                                                             <textarea
                                                                                 className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none resize-none"

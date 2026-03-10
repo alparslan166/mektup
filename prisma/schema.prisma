@@ -136,6 +136,7 @@ model Gift {
   description String?      @db.Text
   price       Float?
   image       String?
+  image2      String?
   order       Int          @default(0)
   categoryId  String
   category    GiftCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
