@@ -1,74 +1,62 @@
 export const MESAFELI_SATIS_SOZLESMESI = `
 MESAFELİ SATIŞ SÖZLEŞMESİ
 
-1. TARAFLAR
-SATICI: EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ (Bundan sonra "MEKTUPLAS.COM" olarak anılacaktır.)
-ALICI: Platform üzerinden hizmet satın alan ve bilgileri sipariş formunda yer alan son kullanıcı.
+1- TARAFLAR
+İşbu Mesafeli Satış Sözleşme ("SÖZLEŞME") sisteme kayıt olan ALICI (Üye) ve SATICI (mektuplas.com) arasında aşağıda belirtilen hüküm ve şartlar çerçevesinde elektronik ortamda kurulmuştur.
 
-2. SÖZLEŞMENİN KONUSU
-İşbu sözleşmenin konusu, Alıcı'nın MEKTUPLAS.COM platformu üzerinden elektronik ortamda siparişini verdiği; nitelikleri ve satış fiyatı belirtilen mektup yazma, basım ve gönderim hizmetinin satışı ve teslimi ile ilgili olarak 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümleri uyarınca tarafların hak ve yükümlülüklerinin saptanmasıdır.
+2- KONU
+Sözleşme’nin konusu, Satıcının, Alıcı’ya satışını yaptığı, aşağıda nitelikleri ve satış fiyatı belirtilen ürünün satışı ve Alıcı'nın belirlemiş olduğu adrese teslimi ile ilgili olarak 6502 sayılı Tüketicinin Korunması Hakkında Kanun, Mesafeli Sözleşmeler Yönetmeliği ve ilgili diğer yasal hükümler uyarınca tarafların hak ve yükümlülüklerinin belirlenmesidir.
 
-3. HİZMET BEDELİ VE ÖDEME
-● Sipariş edilen hizmetin türü, adeti ve KDV dahil toplam bedeli ödeme sayfasında belirtildiği gibidir.
-● Hizmet bedeli, sipariş anında Alıcı’nın tercih ettiği ödeme yöntemi ile (Kredi Kartı/Banka Kartı vb.) tahsil edilir.
+3- SÖZLEŞMENİN KURULMASI
+ 3.1- ALICI SÖZLEŞME’Yİ OKUDUĞUNU, ANLADIĞINI, HAKLARININ VE YÜKÜMLÜLÜKLERİNİN BİLİNCİNDE OLDUĞUNU KABUL EDER. ALICI, SÖZLEŞME KAPSAMINDA YER ALAN İŞLEMLERİN KENDİ MENFAATİNE UYGUN OLDUĞU KONUSUNDA TAM BİR KANAATE VARDIĞINI VE TÜM ŞARTLARI KENDİ ÖZGÜR İRADESİ İLE KABUL EDER.
+ 3.2- SATICI VE ALICI, SÖZLEŞMENİN HÜKÜMLERİNİN HAKSIZ ŞART SAYILABİLECEK BİR ÖZELLİK TAŞIMADIĞINI, MENFAATLER DENGESİ BAKIMINDAN BİR HAKSIZLIK OLMADIĞINI KABUL EDER.
 
-4. İFA VE TESLİMAT ŞARTLARI
-● MEKTUPLAS.COM, sipariş edilen mektubu Alıcı’nın sisteme girdiği metin ve görseller doğrultusunda basar, zarflar ,hediyeler ve seçilen gönderim türüne göre kargo/posta kuruluşuna teslim eder.
-● Alıcı tarafından girilen adres bilgilerinin hatalı veya eksik olması nedeniyle teslim edilemeyen gönderilerden MEKTUPLAS.COM sorumlu tutulamaz.
+4- SATICI BİLGİLERİ
+Ticaret Ünvanı: EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ 
+E-posta: info@mektuplas.com-mektuplass@gmail.com
 
-5. CAYMA HAKKI İSTİSNASI (KRİTİK MADDE)
-Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinin (ç) bendi uyarınca; "Tüketicinin istekleri veya kişisel ihtiyaçları doğrultusunda hazırlanan mallara ilişkin sözleşmelerde" cayma hakkı kullanılamaz.
-MEKTUPLAS.COM Notu: Sipariş edilen mektuplar, Alıcı’ya özel olarak basıldığı ve kişiselleştirildiği için, sipariş onaylanıp basım aşamasına geçildikten sonra iptal, iade veya cayma hakkı kullanılması mümkün değildir.
+5- ALICI BİLGİLERİ
+Üye'nin (ALICI) ödemeyi yaptığı andaki sisteme kayıtlı adı, soyadı, e-posta adresi, varsa adresi ve telefon numarası.
 
-Mektup Harici Gönderilen Ürünlerin Ücret İade Garantisi: Sipariş Edilen Kitap,Saat veya tesbih, cezaevi idaresi tarafından herhangi bir sebeple reddedilirse, ürün ücretini kesintisiz olarak hesabınıza iade edilecektir.
+6- SÖZLEŞME KONUSU ÜRÜN BİLGİLERİ
+Malın / Ürünün / Hizmetin türü, miktarı, rengi adedi, satış bedeli, ödeme şekli, üyenin (ALICI) seçtiği ve ardından sisteme kaydolduğu şekildedir. Sözleşme tarihi, Malın / Ürünün / Hizmetin sipariş verildiği tarih olarak kabul edilir.
 
-6. GENEL HÜKÜMLER
-● 6.1. Alıcı, mektup içeriğinin genel ahlaka, kamu düzenine ve T.C. kanunlarına uygun olduğunu taahhüt eder.
-● 6.2. MEKTUPLAS.COM, mücbir sebepler (doğal afet, genel kargo grevleri vb.) nedeniyle hizmeti süresinde ifa edemezse, durumu Alıcı'ya bildirmekle yükümlüdür.
-● 6.3. Alıcı, ödeme yapmadan önce bu sözleşmeyi ve beraberindeki "Ön Bilgilendirme Formu"nu okuduğunu ve onayladığını kabul eder.
+7- ÜRÜN TESLİMAT SÜREÇLERİ
+Ürün teslimatı postane aracılığıyla yapılmaktadır. Sipariş teslim edilirken alıcı (teslimat yapılacak kişi) yerinde bulunamazsa, aynı adreste bulunan siparişi alıcıya ulaştırabilecek kişilere teslimat yapılabilir. Resmi ve özel kuruluşlara yapılan teslimatlar kuruluşların kendi teslimat prosedürleri çerçevesinde yapılır. 
+
+8- GENEL HÜKÜMLER
+ 8.1- Alıcı, Madde 6'da belirtilen Sözleşme konusu ürünün temel nitelikleri, satış fiyatı ve ödeme şekli ile teslimata ilişkin tüm ön bilgileri okuyup bilgi sahibi olduğunu ve elektronik ortamda gerekli teyidi verdiğini beyan eder.
+ 8.2- Sözleşme konusu ürün, yasal 30 (otuz) günlük süreyi aşmamak koşulu ile her bir ürün için Alıcı'nın yerleşim yerinin uzaklığına bağlı olarak ön bilgiler içinde açıklanan süre içinde Alıcı veya gösterdiği adresteki kişi/kuruluşa teslim edilir. Satıcı bu yükümlülüğüne aykırı davranır ise tüketici işbu Sözleşmeyi fesebilir. Sözleşme’nin feshi durumunda, Satıcı, varsa teslimat masrafları da dâhil olmak üzere tahsil edilen tüm ödemeleri fesih bildiriminin kendisine ulaştığı tarihten itibaren 14 (on dört) gün içinde tüketiciye ilgili mevzuat uyarınca belirlenen kanuni faiziyle birlikte geri ödemek ve varsa tüketiciyi borç altına sokan tüm kıymetli evrak ve benzeri belgeleri iade etmek zorundadır.
+ 8.3- Sözleşme konusu ürün, Alıcı'dan başka bir kişi/kuruluşa teslim edilecek ise, teslim edilecek kişi/kuruluşun teslimatı kabul etmemesinden Satıcı sorumlu tutulamaz.
+ 8.4- Satıcı, Sözleşme konusu ürünün sağlam, eksiksiz, siparişte belirtilen niteliklere uygun olarak teslim edilmesinden sorumludur. Haklı bir sebebe dayanmak şartıyla Satıcı, Sözleşme'den doğan ifa yükümlülüğünün süresi dolmadan, Alıcı'ya eşit kalite ve fiyatta mal veya hizmet tedarik edebilir.
+ 8.5- Sözleşme konusu ürünün teslimatı için işbu Sözleşme’nin elektronik ortamda teyit edilmesi ve Sözleşme konusu siparişin bedelinin ödenmesi şarttır. Herhangi bir nedenle ürün bedeli ödenmez veya banka kayıtlarında iptal edilir ise, Satıcı ürün teslimi yükümlülüğünden kurtulmuş kabul edilir.
+ 8.6- Satıcı sipariş konusu mal ya da hizmet ediminin yerine getirilmesinin imkânsızlaştığı hallerde durumu öğrendiği tarihten itibaren 3 (üç) gün içerisinde Alıcı'ya durumu yazılı olarak veya kalıcı veri saklayıcısı ile bildirmekle yükümlüdür. Bu durumda Satıcı teslimat masrafları da dâhil olmak üzere tahsil edilen tüm ödemeleri bildirim tarihinden itibaren en geç 14 (on dört) gün içerisinde Alıcı’ya iade eder.
+ 8.7- Satıcı, malın Alıcı ya da Alıcı’nın taşıyıcı dışında belirleyeceği üçüncü bir kişiye teslimine kadar oluşan kayıp ve hasarlardan sorumludur.
+ 8.8- Alıcı’nın Satıcının belirlediği taşıyıcı dışında başka bir taşıyıcı ile malın gönderilmesini talep etmesi durumunda, malın ilgili taşıyıcıya tesliminden itibaren oluşabilecek kayıp ya da hasardan Satıcı sorumlu değildir.
+ 8.9- Sözleşme konusu ürün, yasal 30 (otuz) günlük süreyi aşmamak koşulu ile her bir ürün için Alıcı'nın yerleşim yerinin uzaklığına bağlı olarak internet sitesinde ön bilgiler içinde açıklanan süre içinde Alıcı veya gösterdiği adresteki kişi/kuruluşa, Satıcının anlaşmalı olduğu kargo firması tarafından teslim edilir. Satıcı sattığı ürünleri anlaşmalı olduğu kargo firması aracılığı ile Alıcı’ya göndermekte ve teslim ettirmektedir. Genel olarak aksi belirtilmediği sürece teslimat masrafları (kargo ücreti vb.) Alıcı’ya aittir. Satıcı satış anında yürüttüğü ve internet sitesinde şartlarını ilan ettiği kampanyaların sonucuna bağlı olarak söz konusu teslimat masraflarının tamamını ya da bir kısmını Alıcı’ya yansıtmayabilir.
+ 8.10- Üye (ALICI) suç teşkil edecek, yasal açıdan takip gerektirecek, yerel ve ulusal yasalara veya uluslararası anlaşmalara ters düşecek bir durum yaratan ya da böyle durumları teşvik eden, hiçbir tür yasadışı, tehditkar, rahatsız edici, hakaret, küfür içeren, küçük düşürücü, kaba, pornografik, rahatsız edici, ahlaka aykırı bilgi postalayamaz ve iletemez. Böyle bir durum yaşandığı takdirde posta alıcıya iletilmiş ise sorumluluk Üye'ye (ALICI) aittir. Ancak posta sistem filtrelerine takıldığı durumlarda incelemeye alınır ve gönderilmez. Bu durumdan ötürü iletilmeyen siparişlerin ücretleri ilgili Üye'ye (ALICI) 14 (on dört) gün içerisinde iade edilir. Mektuplas.com (SATICI), Üye'nin (ALICI) kişisel bilgilerini gerektiği takdirde ilgili yasal makamlarla paylaşabilir.
+
+9- CAYMA HAKKI
+6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği’nin ilgili hükümleri uyarınca;
+ Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinin 1. fıkrasının a bendinde de belirtildiği üzere kişiye özel olarak hazırlanan ürünlerde tüketicilerin cayma hakkı bulunmamaktadır. Mektup ve fotoğraf (Kişiye Özel Ürünler) ürünleri Yönetmelik'in 15. maddesinin 1.fıkrasının a bendi uyarınca kişiye özel hazırlanıldığından müşterilerimizin cayma hakkı bulunmamaktadır. Ayrıca siparişler müşterilerimize özel hazırlanıldığından sipariş verildikten sonra müşterimizin siparişlerini değiştirme ve/veya cayma hakları bulunmamaktadır.
+
+10- DELİL ANLAŞMASI VE YETKİLİ MAHKEME
+Bu Sözleşme'den ve/veya uygulanmasından doğabilecek her türlü uyuşmazlığın çözümünde Satıcı kayıtları (bilgisayar-ses kayıtları gibi manyetik ortamdaki kayıtlar dâhil) kesin delil oluşturur. Taraflar, Sözleşme’nin uygulanmasından ve yorumundan doğan ihtilaflarda mevzuat çerçevesinde belirlenen parasal sınırlar dâhilinde Alıcı ve Satıcı'nın ikametgâhının bulunduğu yerdeki Tüketici Hakem Heyetleri aşan durumlarda Alıcı'nın ve Satıcı 'nın Tüketici Mahkemeleri yetkili olacağını kabul etmiştir.
 `
 
 export const KISISEL_VERILERIN_KORUNMASI_SOZLESMESI = `
-KİŞİSEL VERİLERİN KORUNMASI AYDINLATMA METNİ
-
-6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca, EHM DIJITAL COZUMLER YAZILIM VE TICARET LIMITED SIRKETI (MEKTUPLAS.COM Platformu) olarak, veri sorumlusu sıfatıyla kişisel verilerinizi aşağıda açıklanan amaçlar kapsamında ve hukuka uygun olarak işliyoruz.
-
-1. İşlenen Kişisel Verileriniz
-Platformumuza üye olurken paylaştığınız şu veriler işlenmektedir:
-● Kimlik Bilgileri: Ad, Soyad, Doğum Tarihi.
-● İletişim Bilgileri: Telefon Numarası, E-posta Adresi.
-● Adres Bilgileri: Teslimat veya fatura için beyan edilen Açık Adres.
-● İşlem Güvenliği: IP Adresi, Giriş-Çıkış kayıtları.
-
-2. Verilerin İşlenme Amaçları
-Kişisel verileriniz şu amaçlarla işlenmektedir:
-● Mektup basım, paketleme ve lojistik süreçlerinin (kargo gönderimi) yönetilmesi.
-● Üyelik kaydının oluşturulması ve kullanıcı doğrulaması.
-● Mesafeli Satış Sözleşmesi uyarınca faturalandırma ve tahsilat işlemlerinin yapılması.
-● Hizmetimizle ilgili operasyonel bilgilendirmelerin (SMS/E-posta) iletilmesi.
-● Resmi makamlardan gelen bilgi taleplerinin yasal çerçevede karşılanması.
-
-3. Verilerin Aktarıldığı Taraflar
-Kişisel verileriniz, hizmetin ifası için zorunlu olan şu üçüncü taraflarla paylaşılabilir:
-● Lojistik Firmaları: Mektupların alıcısına ulaştırılması amacıyla adres ve iletişim bilgileriniz kargo/kurye şirketlerine aktarılır.
-● Ödeme Kuruluşları: Ödemenizin güvenle tahsil edilmesi için ilgili lisanslı ödeme sistemlerine aktarılır.
-● Yasal Makamlar: Kanuni yükümlülükler gereği yetkili kamu kurum ve kuruluşlarına (BTK, Adli makamlar vb.) bilgi verilebilir.
-
-4. Veri Toplamanın Hukuki Sebebi
-Verileriniz, KVKK’nın 5. maddesinde belirtilen;
-● "Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması",
-● "Veri sorumlusunun hukuki yükümlülüğünü yerine getirebilmesi" (Yaş kontrolü ve fatura zorunluluğu),
-● "İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması" (Profilleme ve analiz),
-hukuki sebeplerine dayanarak işlenmektedir.
-
-5. Veri Sahibi Olarak Haklarınız (11. Madde)
-KVKK uyarınca dilediğiniz zaman Platformumuza başvurarak:
-● Verilerinizin işlenip işlenmediğini öğrenme,
-● İşlenmişse bilgi talep etme,
-● Eksik veya yanlış işlenmişse düzeltilmesini isteme,
-● Şartlar oluştuğunda verilerinizin silinmesini veya yok edilmesini isteme hakkına sahipsiniz.
-
-İrtibat Bilgileri: Başvurularınızı info@mektuplas.com adresine yazılı olarak iletebilirsiniz.
+K.V.K.K Hakkında
+6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında kişisel veri olarak tanımlanabilecek müşterilerimize ait ad, soyad, e-posta adresi, T.C. Kimlik numarası, demografik veriler, mali veriler vb. veriler, siparişlerinizi almak, ürün ve hizmetlerimizi sunmak, ürün ve hizmetlerimizi geliştirmek, sistemsel sorunların çözümü, ödeme işlemlerinizi gerçekleştirmek, önceden onay vermeniz halinde siparişleriniz, ürünler ve hizmetler hakkında pazarlama amacıyla, bilgilerinizi güncellemek ve üyeliğinizi yönetmek ve sürdürmek, ilginizi çekebilecek ürün ve hizmetleri önermek ve 3. kişilerin teknik, lojistik ve benzeri diğer işlevlerini Mextup adına yerine getirmelerini sağlamak ve mesafeli satış sözleşmesi ve sair sözleşmelerin ifası amacıyla Mextup, Mextup iştirakleri ve üçüncü kişi ve/veya kuruluşlar tarafından süresiz/süreli kaydedilebilir, yazılı/manyetik arşivlerde muhafaza edilebilir, kullanılabilir, güncellenebilir, paylaşılabilir, transfer olunabilir ve sair suretler ile işlenebilir.
+Mextup müşterilerinin www.mextup.com internet sitesinin mobil versiyonu-aplikasyonunun (akıllı cihaz uygulamasının) kullandığı hallerde alışverişlerine dair her türlü kişisel olan-olmayan bilgiler de (konum verileri, incelenen ürünler ve alışveriş konusu ürün-tutar bilgileri dahil) uygun teknik yöntemler ile alınabilir, ticari amaçlar ile Mextup, Mextup iştirakleri ve üçüncü kişi ve/veya kuruluşlar tarafından süresiz/süreli kaydedilebilir, yazılı/manyetik arşivlerde muhafaza edilebilir, kullanılabilir, güncellenebilir, paylaşılabilir, transfer olunabilir ve sair suretler ile işlenebilecektir.
+Müşterilerimiz her zaman ve hiçbir gerekçe göstermeksizin aşağıda belirtilen iletişim kanallarından Mektuplas.com a ulaşarak kişisel veri kullanımı-işlenmelerini ve/veya kendilerine gönderilen ticari elektronik iletişimleri durdurulmasını talep edebilirler. Müşterilerimizin bu husustaki taleplerinin Mextup'a ulaşmasını müteakip içerisinde kişisel veri işlemleri ve/veya elektronik ticari ileti gönderimi durdurulur. Ancak yürürlükteki mevzuatın izin verdiği/işlenmesi/saklanması/tutulması zorunlu olan veriler işlenmeye veya ticari elektronik ileti gönderimine devam edilebilir. Müşterilerimiz dilerse kişisel verilerinin işlenmesi ile ilgili işlemler hakkında Mektuplas.com a her zaman başvurabilir ve bilgi alabilir. Bu hususlardaki başvuru ve talepleri yasal azami süreler içinde yerine getirilecek yahut hukuki gerekçesi tarafına açıklanarak kabul edilmeyebilecektir.
+Mektuplas.com tarafından müşterilerine yürürlükteki mevzuata uygun olarak, her türlü ürün ve hizmetlere ilişkin tanıtım, reklam, iletişim, promosyon, satış ve pazarlama amacıyla çeşitli sosyal, ticari ve sair elektronik iletiler SMS/kısa mesaj, anlık bildirim, otomatik arama, bilgisayar, telefon, e-posta/mail, faks ve diğer elektronik iletişim araçları aracılığıyla gönderilebilir.
+Müşterilerimizin belirtilen suretler ile bilgilenmeleri ve/veya kendilerine gönderilen ticari elektronik iletiler çerçevesinde bir ürün/hizmet satın alması söz konusu olursa anılan işlem ayrıca ve kanuni usulünce yapılacak tüketici sözleşmesine tabidir. Tüketici sözleşmesi kendi şartlarında ve tarafları arasında uygulanır. Sitemizden alışverişlerinizde, her işlem sırasında göreceğiniz sipariş ön bilgilendirme formu-mesafeli satış sözleşmesi şartları geçerli olacaktır.
+EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ  ne ait "MEKTUPLAS.COM"  internet sitesi ile ilgili her türlü bilgi ve içerik ile bunların düzenlenmesi, revizyonu ve kısmen/tamamen kullanımı konusunda; üçüncü kişilere ait olanlar hariç; tüm fikri-sınai haklar ve mülkiyet hakları EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ’ne aittir. 
+mektuplas.com üyelik iptal işleminizi hesabım sayfasında bulunan "Hesabımı Sil" butonuna tıklayarak gerçekleştirebilirsiniz.
+EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ (MEKTUPLAS.COM ) işbu Gizlilik Sözleşmesi’ndeki tüm maddeleri ve müşterilerine sunacağı ürün, hizmet ve fırsatlarda gerekli görebileceği her türlü değişikliği yapma hakkını saklı tutar; bu değişiklikler www.mektuplas.com internet sitesinden veya diğer uygun yöntemler ile duyurulduğu andan itibaren geçerli olacaktır. mektuplas.com zaman zaman düzenleyeceği kampanyalara ilişkin tüm hakları saklıdır.
+Mextup'a aşağıda yer alan iletişim bilgilerinden ulaşabilirsiniz.
+info@mektuplas.com-mektuplass@gmail.com
+WhatsApp : 5419446848
 `
 
 export const UYELIK_SOZLESMESI = `
@@ -102,18 +90,30 @@ Platform üzerinden gönderilen mektupların içeriği tamamen Üye’nin soruml
 `;
 
 export const GIZLILIK_VE_GUVENLIK_POLITIKASI = `
-MEKTUPLAS.COM GİZLİLİK VE GÜVENLİK POLİTİKASI
+GİZLİLİK POLİTİKASI
+İşbu Gizlilik Sözleşmesi MEKTUPLAS.COM ve/veya sair internet sitelerine ilişkin gizlilik politikasını içerir. Mextup.com internet sitesini ziyaret ederek aşağıdaki tüm yükümlülükleri ve kuralları kabul etmiş sayılırsınız.
 
-Geleceğe Mektup olarak müşterilerimizin güvenliğine ve gizliliğine son derece önem veriyoruz. Mektuplarınız, fotoğraflarınız ve kişisel bilgileriniz 256-Bit şifreleme yöntemleriyle güvenli sunucularda saklanmakta olup, yasal zorunluluklar haricinde hiçbir üçüncü şahıs veya kurumla paylaşılmamaktadır.
+Çerez Kullanımı
+Mektup, hizmetlerini sunmak ve içeriğin bireysel ihtiyaç ve ilgilere uyumunu sağlamak için çerez kullanmaktadır. Bazı durumlarda internet sitelerine bireyselleştirilmiş (kişiselleştirilmiş) erişim ve belirginleştirme çerezlere dayanmaktadır, fakat sıklıkla bir kullanıcının şifresi ile bir oturum ile yetkilendirilmesi gerekmektedir. Tarayıcıda çerezleri hizmet dışı bırakmak internet sitesindeki hizmetlerin kullanımını önlememektedir, fakat bazı teknik sorunlara yol açabilmektedir. Çerezler, kullanıcının internet sitesini kullanımı ile ilgili genel, istatistiki bilgi toplamak için de kullanılmaktadır. Çerez kullanılmasını tercih etmezseniz tarayıcınızın ayarlarından Cookie’leri silebilir yada engelleyebilirsiniz. Ancak Platform’u kullanımınızı etkileyebileceğini hatırlatmak isteriz.
 
-1. Toplanan Veriler
-Sistemimiz üzerinden mektup oluşturduğunuzda tarafımızca; Adınız Soyadınız, iletişim (telefon/e-posta) ve teslimat adresi bilgilerinizin yanı sıra mektubunuzun içeriği ve eklediğiniz dosyalar şifreli olarak veritabanımızda tutulur.
+Çerez Nedir ve Neden Kullanılmaktadır ?
+Çerezler, ziyaret ettiğiniz internet siteleri tarafından tarayıcılar aracılığıyla cihazınıza veya ağ sunucusuna depolanan küçük metin dosyalarıdır. Çerezler konusundan daha detaylı bilgi için www.aboutcookies.org ve www.allaboutcookies.org adreslerini ziyaret edebilirisiniz.
+İnternet Sitemizde çerez kullanılmasının başlıca amaçları aşağıda sıralanmaktadır : 
+a) İnternet sitesinin işlevselliğini ve performansını arttırmak yoluyla sizlere sunulan hizmetleri geliştirmek,
+b) İnternet Sitesini iyileştirmek ve İnternet Sitesi üzerinden yeni özellikler sunmak ve sunulan özellikleri sizlerin tercihlerine göre kişiselleştirmek,
+c) İnternet Sitesinin, sizin ve şirketimizin hukuki ve ticari güvenliğinin teminini sağlamak.
 
-2. Mahremiyet İlkesi
-Yazdığınız mektupların içeriği operasyon ekibimiz dahil olmak üzere hiçbir çalışanımız veya 3. şahıs tarafından okunamaz. Mektuplar, otomatik paketleme sistemlerimizle doğrudan mühürlü zarflara aktarılır ve gizlilik kurallarına uygun olarak alıcısına gönderilmek üzere hazırlanır.
+Güvenlik
+A) SSL KORUMASI :
+Mektuplas, sitesinde kişisel bilgileriniz ve kredi kartınızla yapacağınız tüm alışverişleriniz 256 Bit SSL sertifikasıyla güvence altına alınmıştır.
+Kişisel bilgilerinizi girdiğiniz her sayfa, sipariş ve ödeme işlemleri sayfaları 256 Bit SSL güvenlik sertifikası ile şifrelenmektedir. Bu sayfalarda tarayıcınızın (browser) adres çubuğunun hemen yanında bir anahtar simgesi vardır. Bu anahtar, girmiş olduğunuz hiçbir bilginin üçüncü şahıslarca görünemeyeceğinin işaretidir.
 
-3. Ödeme Güvenliği
-Ödeme işlemlerinizde kullanılan kredi kartı bilgileri sistemimizde depolanmaz. Tüm ödemeler BDDK onaylı, 3D Secure ve SSL sertifikalı güvenli ödeme kuruluşları (PayTR, Iyzico vb.) aracılığıyla gerçekleştirilir.
+B) KREDİ / BANKA KARTI GÜVENLİĞİ :
+Mextup.com sitesinde yaptığınız alışverişlerde kullanmış olduğunuz banka/kredi kartına ait bilgiler hiçbir suretle sitemizde saklanmaz ve kaydedilmez. Bu nedenle sitemiz üzerinden vereceğiniz her siparişte banka/kredi kartı bilgilerinizi yeniden girmeniz gerekmektedir.
+Kredi/Banka kartı bilgilerinize kartı tahsis eden bankanız haricinde hiç kimse erişememektedir. Güvenli bir şekilde girmiş olduğunuz kart bilgileriniz bankanızın ödeme onaylama sistemine iletilmekte ve bankanızdan gelen onay mesajından sonra siparişiniz hemen işleme alınmaktadır. Sitemizde ödeme yaparken tüm banka kartlarını kullanabilir ve güvenle alışveriş yapabilirsiniz.
 
-Son Güncelleme: 1 Ocak 2026
-`;
+C) 3D SECURE / 3 BOYUTLU GÜVENLİK :
+3D Secure, online alışverişlerin güvenliğini sağlamak amacıyla kart kuruluşları tarafından geliştirilmiş bir kimlik doğrulama sistemi olup, internetten yapılan online alışverişlerde şifreyle kredi kartı onaylama işlemi olarak da bilinmektedir. 3D Secure sisteminin Master Card için kullanılan uygulamasına "Secure Code" - Visa Kredi Kartı için olanına ise "Verified by Visa" adı verilir.
+Bu yöntemle yapılan alışverişin geçerli sayılabilmesi için, kredi kartı sahibinin yapılan işlemi kendisine verilecek olan özel bir şifreyle onaylaması gerekmektedir. www.mextup.com'da yaptığınız alışverişlerde, 3D Secure sistemi ile ödeme gerçekleşmektedir. Yani cep telefonunuza bankanız tarafından SMS olarak gönderilen kodu onaylamadan hiçbir şekilde kartınızdan çekim yapılamaz.
+`
+;

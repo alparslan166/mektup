@@ -78,11 +78,30 @@ export default function RootLayout({
                   <Twitter size={20} />
                 </a>
               </div>
-              <div className="flex flex-wrap justify-center md:justify-end gap-5 text-sm font-medium">
+              <div className="flex flex-wrap justify-center md:justify-end gap-x-5 gap-y-2 text-xs font-medium uppercase tracking-wider">
                 <Link href="/hakkimizda" className="hover:text-paper transition-colors">Hakkımızda</Link>
                 <Link href="/sss" className="hover:text-paper transition-colors">S.S.S.</Link>
-                <Link href="/sozlesmeler" className="hover:text-paper transition-colors">Sözleşmeler</Link>
+                <Link href="/sozlesmeler" className="hover:text-paper transition-colors">Mesafeli Satış Sözleşmesi</Link>
+                <Link href="/sozlesmeler" className="hover:text-paper transition-colors">Gizlilik Politikası</Link>
+                <Link href="/sozlesmeler" className="hover:text-paper transition-colors">Üyelik Sözleşmesi</Link>
+                <Link href="/sozlesmeler" className="hover:text-paper transition-colors">KVKK</Link>
                 <Link href="/iletisim" className="hover:text-paper transition-colors">İletişim</Link>
+              </div>
+              <div className="mt-2 flex items-center gap-4 flex-wrap justify-center md:justify-end">
+                <Image 
+                  src="/logo_band_colored.svg" 
+                  alt="Ödeme Yöntemleri" 
+                  width={300} 
+                  height={40} 
+                  className="opacity-80 hover:opacity-100 transition-opacity"
+                />
+                <Image 
+                  src="/iyzico_ile_ode_colored.png" 
+                  alt="iyzico ile Öde" 
+                  width={100} 
+                  height={40} 
+                  className="opacity-80 hover:opacity-100 transition-opacity object-contain"
+                />
               </div>
             </div>
           </div>
