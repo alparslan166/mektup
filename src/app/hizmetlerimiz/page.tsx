@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import HizmetlerClient from "@/app/hizmetlerimiz/HizmetlerClient";
 import { Metadata } from "next";
@@ -34,6 +35,21 @@ export default async function HizmetlerPage() {
                 </div>
 
                 <HizmetlerClient adminWhatsApp={adminWhatsApp} />
+
+                <div className="mt-16 text-center">
+                    <h2 className="font-playfair text-3xl sm:text-4xl font-bold text-wood mb-8">
+                        Nasıl Çalışır?
+                    </h2>
+                    <div className="relative aspect-[9/16] w-full max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-2xl border border-wood/10">
+                        <Image
+                            src="/nasil-calisir.png"
+                            alt="Nasıl Çalışır?"
+                            fill
+                            className="object-contain bg-white"
+                            priority
+                        />
+                    </div>
+                </div>
 
                 <div className="mt-12 p-6 bg-seal/5 rounded-xl border border-seal/20 text-center">
                     <p className="text-ink font-medium mb-2">Hizmetlerimiz hakkında daha fazla bilgi mi lazım?</p>

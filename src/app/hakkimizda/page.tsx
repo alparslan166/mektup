@@ -3,8 +3,8 @@ import Link from "next/link";
 import { ArrowLeft, Feather } from "lucide-react";
 
 export const metadata = {
-    title: "Hakkımızda | Cezaevine Mektup",
-    description: "Geleceğe Mektup platformunun hikayesi ve kuruluş amacı.",
+    title: "Hakkımızda | mektuplas.com",
+    description: "mektuplas.com hikayesi ve kuruluş amacı.",
 };
 
 export default function HakkimizdaPage() {
@@ -22,30 +22,21 @@ export default function HakkimizdaPage() {
                 </div>
 
                 <h1 className="font-playfair text-4xl sm:text-5xl font-bold text-wood-dark mb-8">
-                    Hikayemiz
+                    Hakkımızda
                 </h1>
 
                 <div className="prose prose-sm sm:prose-base text-ink max-w-none space-y-6">
                     <p className="text-lg leading-relaxed font-medium">
-                        Her şey, dijitalleşen dünyada kaybettiğimiz o somut, dokunulabilir anıları geri getirme arzusuyla başladı. Hızla akıp giden zamanın içinde, duygularımızı bir kağıda dökmenin ve o kağıdın yıllar sonra bir posta kutusunda belirmesinin büyüsüne inanıyoruz.
+                        mektuplas.com dilediğiniz anda, kağıt ve kalem ile uğraşmadan kolayca mektup gönderebilmenizi sağlayan bir uygulamadır.
                     </p>
 
                     <p className="leading-relaxed">
-                        Geleceğe Mektup, sevdiklerinize veya kendinize, zamanın ötesinde bir hediye vermeniz için tasarlandı. Sadece bir mesaj göndermiyoruz; o mesajın yazıldığı anki hisleri, özenle seçilmiş kağıdın dokusunu, zarfın kokusunu ve o nostaljik bekleyiş heyecanını mühürleyip geleceğe taşıyoruz.
+                        Sitemiz üzerinden yazacağınız mektubun fiziki hali özel yazıcılar aracılığıyla basılıp zarflanır ve PTT aracılığı ile adrese teslim edilir. Aynı şekilde seçeceğiniz hediyeler özel paketlerimizle özenle paketlenip adrese teslim edilir.
                     </p>
 
-                    <h2 className="font-playfair text-2xl font-bold text-wood mt-10 mb-4">Amacımız</h2>
+                    <h2 className="font-playfair text-2xl font-bold text-wood mt-10 mb-4">Sistem Nasıl Çalışıyor?</h2>
                     <p className="leading-relaxed">
-                        Dijital mesajların saniyeler içinde unutulduğu bir çağda, kalıcı izler bırakmak. Yazının gücünü fiziksel bir deneyimle birleştirerek, insanların hayatında tebessüm yaratacak, saklanmaya değer anılar oluşturmak.
-                    </p>
-
-                    <div className="bg-paper-light border-l-4 border-seal p-6 my-8 rounded-r-lg italic">
-                        &quot;Bir mektup, ruhlar arasındaki en samimi köprüdür.&quot;
-                    </div>
-
-                    <h2 className="font-playfair text-2xl font-bold text-wood mt-10 mb-4">Nasıl Çalışıyoruz?</h2>
-                    <p className="leading-relaxed">
-                        Siz duygularınızı kelimelere dökersiniz, biz ise o kelimeleri en yüksek kalitede kağıtlar, özenle seçilmiş zarflar ve nostaljik kokularla fiziksel bir mektuba dönüştürürüz. Belirlediğiniz tarih geldiğinde, mektubunuz güvenli bir şekilde alıcısına ulaştırılmak üzere yola çıkar. Modern dünyanın hızından uzak, eski zamanların zarafetiyle...
+                        Yazdığınız mektuplar seçtiğiniz desenlerdeki kağıtlara basılır, yine fotoğraf ve kartpostal gibi diğer içeriklerle beraber, seçtiğiniz desenlerdeki zarflara konularak PTT ile dünyanın her yerindeki alıcıya ulaştırılır.
                     </p>
                 </div>
             </div>
