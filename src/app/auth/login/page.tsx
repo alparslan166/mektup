@@ -75,7 +75,8 @@ function LoginForm() {
                         {isRegistered && !isVerified && (
                             <div className="bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm p-4 rounded-xl mb-6 flex items-center gap-2">
                                 <CheckCircle2 size={18} className="text-emerald-600" />
-                                {needsVerify ? "Kaydınız oluşturuldu. Lütfen e-posta adresinize gönderilen doğrulama linkine tıklayın." : "Kaydınız başarıyla oluşturuldu. Şimdi giriş yapabilirsiniz."}
+                                {/* Kaydınız oluşturuldu. Lütfen e-posta adresinize gönderilen doğrulama linkine tıklayın */}
+                                {needsVerify ? "Kaydınız oluşturuldu. Lütfen e-posta adresinizle giriş yapın." : "Kaydınız başarıyla oluşturuldu. Şimdi giriş yapabilirsiniz."}
                             </div>
                         )}
 
