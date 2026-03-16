@@ -22,6 +22,14 @@ const CONTACT_PHONE_KEY = "contact_phone";
 const CONTACT_ADDRESS_KEY = "contact_address";
 const CONTACT_WHATSAPP_KEY = "contact_whatsapp";
 
+// Contract Keys
+export const CONTRACT_KEYS = {
+    MESAFELI_SATIS: "contract_mesafeli_satis",
+    KVKK: "contract_kvkk",
+    UYELIK: "contract_uyelik",
+    GIZLILIK: "contract_gizlilik"
+};
+
 // Get the company reply address
 export async function getCompanyAddress(): Promise<{ success: boolean; address?: string }> {
     try {
@@ -260,5 +268,51 @@ export async function updateContactSetting(key: 'email' | 'phone' | 'address' | 
     } catch (error) {
         console.error("UPDATE_CONTACT_SETTING_ERROR", error);
         return { success: false, error: "İletişim ayarı güncellenemedi." };
+    }
+}
+
+// Get all legal contracts
+export async function getContractSettings(): Promise<{
+    success: boolean;
+    data?: Record<string, string>;
+}> {
+    try {
+        const settings = await prisma.siteSetting.findMany({
+            where: {
+                key: {
+                    in: Object.values(CONTRACT_KEYS)
+                }
+            }
+        });
+
+        const data: Record<string, string> = {};
+        settings.forEach(s => {
+            data[s.key] = s.value;
+        });
+
+        return { success: true, data };
+    } catch (error) {
+        console.error("GET_CONTRACT_SETTINGS_ERROR", error);
+        return { success: false };
+    }
+}
+
+// Admin: Update a specific contract
+export async function updateContractSetting(key: string, value: string): Promise<{ success: boolean; error?: string }> {
+    const session = await getServerSession(authOptions);
+    if (!session || (session.user as any).role !== "ADMIN") {
+        return { success: false, error: "Yetkiniz yok." };
+    }
+
+    try {
+        await prisma.siteSetting.upsert({
+            where: { key },
+            update: { value },
+            create: { key, value },
+        });
+        return { success: true };
+    } catch (error) {
+        console.error("UPDATE_CONTRACT_SETTING_ERROR", error);
+        return { success: false, error: "Sözleşme güncellenemedi." };
     }
 }
