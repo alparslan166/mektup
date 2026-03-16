@@ -25,7 +25,7 @@ export default function IletisimPage() {
     const [contactSettings, setContactSettings] = useState({
         email: "mektuplass@gmail.com",
         phone: "0 (850) 305 81 35",
-        address: "Nostalji Mah. Kalem Sk. No: 1, Kadıköy / İstanbul",
+        address: "MEŞRUTİYET MAH. KARANFİL SK. ZAFİR İŞ MERKEZİ NO: 4 iÇ KAPI NO: 91 ÇANKAYA ANKARA",
         whatsapp: "+908503058135"
     });
 
