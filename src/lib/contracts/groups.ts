@@ -13,13 +13,15 @@ Sözleşme’nin konusu, Satıcının, Alıcı’ya satışını yaptığı, aş
 
 4- SATICI BİLGİLERİ
 Ticaret Ünvanı: EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ 
+Adres: Nostalji Mah. Kalem Sk. No: 1, Kadıköy / İstanbul
+Telefon: 0 (850) 305 81 35
 E-posta: info@mektuplas.com-mektuplass@gmail.com
 
 5- ALICI BİLGİLERİ
 Üye'nin (ALICI) ödemeyi yaptığı andaki sisteme kayıtlı adı, soyadı, e-posta adresi, varsa adresi ve telefon numarası.
 
 6- SÖZLEŞME KONUSU ÜRÜN BİLGİLERİ
-Malın / Ürünün / Hizmetin türü, miktarı, rengi adedi, satış bedeli, ödeme şekli, üyenin (ALICI) seçtiği ve ardından sisteme kaydolduğu şekildedir. Sözleşme tarihi, Malın / Ürünün / Hizmetin sipariş verildiği tarih olarak kabul edilir.
+Malın / Ürünün / Hizmetin türü, miktarı, rengi (zarf ve kağıt rengi seçimi), adedi, satış bedeli, ödeme şekli, varsa seçilen ekstralar (mektup kokusu, fotoğraf baskısı, kartpostal, takvim vb.) ve seçilen hediye ürünler, Üye'nin (ALICI) seçtiği ve ardından sisteme kaydolduğu şekildedir. Sözleşme tarihi, Malın / Ürünün / Hizmetin sipariş verildiği tarih olarak kabul edilir.
 
 7- ÜRÜN TESLİMAT SÜREÇLERİ
 Ürün teslimatı postane aracılığıyla yapılmaktadır. Sipariş teslim edilirken alıcı (teslimat yapılacak kişi) yerinde bulunamazsa, aynı adreste bulunan siparişi alıcıya ulaştırabilecek kişilere teslimat yapılabilir. Resmi ve özel kuruluşlara yapılan teslimatlar kuruluşların kendi teslimat prosedürleri çerçevesinde yapılır. 
@@ -38,7 +40,8 @@ Malın / Ürünün / Hizmetin türü, miktarı, rengi adedi, satış bedeli, öd
 
 9- CAYMA HAKKI
 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği’nin ilgili hükümleri uyarınca;
- Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinin 1. fıkrasının a bendinde de belirtildiği üzere kişiye özel olarak hazırlanan ürünlerde tüketicilerin cayma hakkı bulunmamaktadır. Mektup ve fotoğraf (Kişiye Özel Ürünler) ürünleri Yönetmelik'in 15. maddesinin 1.fıkrasının a bendi uyarınca kişiye özel hazırlanıldığından müşterilerimizin cayma hakkı bulunmamaktadır. Ayrıca siparişler müşterilerimize özel hazırlanıldığından sipariş verildikten sonra müşterimizin siparişlerini değiştirme ve/veya cayma hakları bulunmamaktadır.
+ 9.1- Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinin 1. fıkrasının a bendinde de belirtildiği üzere kişiye özel olarak hazırlanan ürünlerde tüketicilerin cayma hakkı bulunmamaktadır. Mektup (içerik, kağıt/zarf seçimi, koku eklentisi), fotoğraf ve kişiye özel hazırlanan diğer tüm ürünler (Kişiye Özel Ürünler) Yönetmelik'in 15. maddesinin 1.fıkrasının a bendi uyarınca tüketiciye özel hazırlanan ürünler kapsamında olduğundan müşterilerimizin cayma hakkı bulunmamaktadır.
+ 9.2- Ayrıca siparişler müşterilerimize özel (kişiselleştirilmiş setler, paketler ve seçimler dahil) hazırlanıldığından sipariş verildikten sonra müşterimizin siparişlerini değiştirme ve/veya cayma hakları bulunmamaktadır. Mektubun yanına eklenen ve niteliği itibariyle mektup paketiyle bütünleşik sunulan hediye ürünler de bu kapsamdadır.
 
 10- DELİL ANLAŞMASI VE YETKİLİ MAHKEME
 Bu Sözleşme'den ve/veya uygulanmasından doğabilecek her türlü uyuşmazlığın çözümünde Satıcı kayıtları (bilgisayar-ses kayıtları gibi manyetik ortamdaki kayıtlar dâhil) kesin delil oluşturur. Taraflar, Sözleşme’nin uygulanmasından ve yorumundan doğan ihtilaflarda mevzuat çerçevesinde belirlenen parasal sınırlar dâhilinde Alıcı ve Satıcı'nın ikametgâhının bulunduğu yerdeki Tüketici Hakem Heyetleri aşan durumlarda Alıcı'nın ve Satıcı 'nın Tüketici Mahkemeleri yetkili olacağını kabul etmiştir.

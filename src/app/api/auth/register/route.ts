@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { CreditService } from "@/services/creditService";
 import { getPricingSettings } from "@/app/actions/settingsActions";
 import { nanoid } from "nanoid";
-import { sendVerificationEmail } from "@/app/actions/emailActions";
+// import { sendVerificationEmail } from "@/app/actions/emailActions";
 import crypto from "crypto";
 
 export async function POST(req: Request) {
@@ -33,10 +33,11 @@ export async function POST(req: Request) {
                 email,
                 password: hashedPassword,
                 referralCode: newReferralCode,
-                emailVerified: null, // Set to null until verified
+                emailVerified: new Date(), // Set to current date to bypass verification
             },
         });
 
+        /* 
         // Create verification token
         const token = crypto.randomUUID();
         const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
@@ -51,9 +52,10 @@ export async function POST(req: Request) {
 
         // Send verification email
         await sendVerificationEmail(email, token);
+        */
 
         return NextResponse.json(
-            { message: "Kayıt başarılı. Lütfen e-posta adresinizi doğrulayın.", userId: user.id },
+            { message: "Kayıt başarılı. Şimdi giriş yapabilirsiniz.", userId: user.id },
             { status: 201 }
         );
     } catch (error) {
