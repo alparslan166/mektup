@@ -118,5 +118,11 @@ Kredi/Banka kartı bilgilerinize kartı tahsis eden bankanız haricinde hiç kim
 C) 3D SECURE / 3 BOYUTLU GÜVENLİK :
 3D Secure, online alışverişlerin güvenliğini sağlamak amacıyla kart kuruluşları tarafından geliştirilmiş bir kimlik doğrulama sistemi olup, internetten yapılan online alışverişlerde şifreyle kredi kartı onaylama işlemi olarak da bilinmektedir. 3D Secure sisteminin Master Card için kullanılan uygulamasına "Secure Code" - Visa Kredi Kartı için olanına ise "Verified by Visa" adı verilir.
 Bu yöntemle yapılan alışverişin geçerli sayılabilmesi için, kredi kartı sahibinin yapılan işlemi kendisine verilecek olan özel bir şifreyle onaylaması gerekmektedir. www.mektuplas.com'da yaptığınız alışverişlerde, 3D Secure sistemi ile ödeme gerçekleşmektedir. Yani cep telefonunuza bankanız tarafından SMS olarak gönderilen kodu onaylamadan hiçbir şekilde kartınızdan çekim yapılamaz.
-`
-    ;
+`;
+
+export const CONTRACT_KEYS = {
+    MESAFELI_SATIS: "contract_mesafeli_satis",
+    KVKK: "contract_kvkk",
+    UYELIK: "contract_uyelik",
+    GIZLILIK: "contract_gizlilik"
+};

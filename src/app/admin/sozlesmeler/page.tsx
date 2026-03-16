@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { getContractSettings, updateContractSetting, CONTRACT_KEYS } from "@/app/actions/settingsActions";
+import { getContractSettings, updateContractSetting } from "@/app/actions/settingsActions";
 import { 
     MESAFELI_SATIS_SOZLESMESI, 
     KISISEL_VERILERIN_KORUNMASI_SOZLESMESI, 
     UYELIK_SOZLESMESI, 
-    GIZLILIK_VE_GUVENLIK_POLITIKASI 
+    GIZLILIK_VE_GUVENLIK_POLITIKASI,
+    CONTRACT_KEYS
 } from "@/lib/contracts/groups";
 import { toast } from "react-hot-toast";
 import { Loader2, Save, FileText, Scale, UserCheck, Shield } from "lucide-react";

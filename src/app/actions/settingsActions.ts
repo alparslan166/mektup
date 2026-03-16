@@ -3,6 +3,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { CONTRACT_KEYS } from "@/lib/contracts/groups";
 
 const COMPANY_ADDRESS_KEY = "company_reply_address";
 const LETTER_SEND_PRICE_KEY = "letter_send_price";
@@ -22,13 +23,6 @@ const CONTACT_PHONE_KEY = "contact_phone";
 const CONTACT_ADDRESS_KEY = "contact_address";
 const CONTACT_WHATSAPP_KEY = "contact_whatsapp";
 
-// Contract Keys
-export const CONTRACT_KEYS = {
-    MESAFELI_SATIS: "contract_mesafeli_satis",
-    KVKK: "contract_kvkk",
-    UYELIK: "contract_uyelik",
-    GIZLILIK: "contract_gizlilik"
-};
 
 // Get the company reply address
 export async function getCompanyAddress(): Promise<{ success: boolean; address?: string }> {

@@ -3,13 +3,14 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, FileText, Shield, UserCheck, Scale, Loader2, Pencil } from "lucide-react";
-import { getContractSettings, CONTRACT_KEYS } from "@/app/actions/settingsActions";
+import { getContractSettings } from "@/app/actions/settingsActions";
 import { useSession } from "next-auth/react";
 import {
     MESAFELI_SATIS_SOZLESMESI,
     KISISEL_VERILERIN_KORUNMASI_SOZLESMESI,
     UYELIK_SOZLESMESI,
-    GIZLILIK_VE_GUVENLIK_POLITIKASI
+    GIZLILIK_VE_GUVENLIK_POLITIKASI,
+    CONTRACT_KEYS
 } from "@/lib/contracts/groups";
 
 const initialContracts = [
