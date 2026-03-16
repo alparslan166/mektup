@@ -13,7 +13,7 @@ Sözleşme’nin konusu, Satıcının, Alıcı’ya satışını yaptığı, aş
 
 4- SATICI BİLGİLERİ
 Ticaret Ünvanı: EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ 
-Adres: Nostalji Mah. Kalem Sk. No: 1, Kadıköy / İstanbul
+Adres: MEŞRUTİYET MAH. KARANFİL SK. ZAFİR İŞ MERKEZİ NO: 4 iÇ KAPI NO: 91 ÇANKAYA ANKARA
 Telefon: 0 (850) 305 81 35
 E-posta: info@mektuplas.com-mektuplass@gmail.com
 
@@ -119,4 +119,4 @@ C) 3D SECURE / 3 BOYUTLU GÜVENLİK :
 3D Secure, online alışverişlerin güvenliğini sağlamak amacıyla kart kuruluşları tarafından geliştirilmiş bir kimlik doğrulama sistemi olup, internetten yapılan online alışverişlerde şifreyle kredi kartı onaylama işlemi olarak da bilinmektedir. 3D Secure sisteminin Master Card için kullanılan uygulamasına "Secure Code" - Visa Kredi Kartı için olanına ise "Verified by Visa" adı verilir.
 Bu yöntemle yapılan alışverişin geçerli sayılabilmesi için, kredi kartı sahibinin yapılan işlemi kendisine verilecek olan özel bir şifreyle onaylaması gerekmektedir. www.mextup.com'da yaptığınız alışverişlerde, 3D Secure sistemi ile ödeme gerçekleşmektedir. Yani cep telefonunuza bankanız tarafından SMS olarak gönderilen kodu onaylamadan hiçbir şekilde kartınızdan çekim yapılamaz.
 `
-;
+    ;
