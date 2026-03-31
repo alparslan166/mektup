@@ -28,6 +28,7 @@ export default function ReviewStep({
 }) {
   const { letter, extras, address, setCurrentStep } = useLetterStore();
   const [showPreview, setShowPreview] = React.useState(false);
+  const [agreedToTerms, setAgreedToTerms] = React.useState(false);
 
   // Pricing States
   const [pricingKeys, setPricingKeys] = React.useState({
@@ -456,8 +457,44 @@ export default function ReviewStep({
                     </div> */}
         </div>
 
+        {/* Terms Agreement */}
+        <div className="mt-8 p-4 bg-paper-light border border-paper-dark rounded-xl flex items-start gap-3 transition-all hover:border-seal/30">
+          <div className="flex items-center h-6">
+            <input
+              id="terms"
+              name="terms"
+              type="checkbox"
+              checked={agreedToTerms}
+              onChange={(e) => setAgreedToTerms(e.target.checked)}
+              className="h-5 w-5 rounded border-paper-dark text-seal focus:ring-seal cursor-pointer"
+            />
+          </div>
+          <div className="text-sm leading-6">
+            <label htmlFor="terms" className="font-medium text-ink-light cursor-pointer select-none">
+              <a
+                href="/sozlesmeler"
+                target="_blank"
+                className="text-seal hover:text-seal-hover font-bold transition-colors"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Mesafeli Satış Sözleşmesi
+              </a>
+              'ni ve{" "}
+              <a
+                href="/sozlesmeler"
+                target="_blank"
+                className="text-seal hover:text-seal-hover font-bold transition-colors"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Ön Bilgilendirme Formu
+              </a>
+              'nu okudum, onaylıyorum.
+            </label>
+          </div>
+        </div>
+
         {/* Bottom Actions */}
-        <div className="mt-8 pt-6 border-t border-paper-dark/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-6 pt-6 border-t border-paper-dark/30 flex flex-col sm:flex-row items-center justify-between gap-4">
           <button
             onClick={goBack}
             className="text-ink-light hover:text-ink px-4 py-2 rounded-md font-medium transition-colors flex items-center gap-2 order-2 sm:order-1"
@@ -468,7 +505,12 @@ export default function ReviewStep({
 
           <button
             onClick={goNext}
-            className="w-full sm:w-auto bg-seal hover:bg-seal-hover text-paper px-10 py-4 rounded-xl font-bold shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] order-1 sm:order-2"
+            disabled={!agreedToTerms}
+            className={`w-full sm:w-auto px-10 py-4 rounded-xl font-bold shadow-md transition-all flex items-center justify-center gap-2 order-1 sm:order-2 ${
+              agreedToTerms
+                ? "bg-seal hover:bg-seal-hover text-paper hover:shadow-lg active:scale-[0.98]"
+                : "bg-paper-dark text-ink-light opacity-60 cursor-not-allowed shadow-none"
+            }`}
           >
             Ödeme Adımına Geç
             <ArrowRight size={20} />

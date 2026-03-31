@@ -110,7 +110,7 @@ export default function GiftsPage() {
                                         <div className="mt-8 pt-6 border-t border-paper-dark flex flex-col gap-4">
                                             <div className="flex items-center justify-between">
                                                 <span className="text-xl font-playfair font-black text-seal">
-                                                    {gift.price ? `${gift.price} 🪙` : "Ücretsiz"}
+                                                    {gift.price ? `${gift.price} TL` : "Ücretsiz"}
                                                 </span>
                                                 <div className="bg-paper-dark/30 px-3 py-1 rounded-full text-[10px] font-black tracking-tighter text-ink-light uppercase">
                                                     Stokta Var
@@ -122,7 +122,7 @@ export default function GiftsPage() {
                                                     onClick={() => handleOpenModal(gift)}
                                                     className="w-full bg-seal hover:bg-seal-hover text-white text-sm font-bold py-2.5 rounded-xl transition-all shadow-md active:scale-95"
                                                 >
-                                                    Kredi ile Hediye Gönder
+                                                    Hediye Gönder
                                                 </button>
                                             ) : (
                                                 <Link

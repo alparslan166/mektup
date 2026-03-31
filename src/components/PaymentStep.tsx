@@ -2,360 +2,439 @@
 
 import React, { useState, useRef } from "react";
 import Stepper from "@/components/Stepper";
-import { ArrowLeft, Wallet, ShieldCheck, CheckCircle2, AlertCircle, Loader2, CreditCard, Lock } from "lucide-react";
+import {
+  ArrowLeft,
+  Wallet,
+  ShieldCheck,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+  CreditCard,
+  Lock,
+} from "lucide-react";
 import Link from "next/link";
 import { useLetterStore } from "@/store/letterStore";
 import { createLetter, getSentLetterCount } from "@/app/actions/letterActions";
 import { getCreditBalanceAction } from "@/app/actions/creditActions";
 import { getPricingSettings } from "@/app/actions/settingsActions";
 
-export default function PaymentStep({ goBack, onComplete }: { goBack: () => void, onComplete: () => void }) {
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const extras = useLetterStore(state => state.extras);
-    const isSubmitting = useRef(false);
-    const [sentLetterCount, setSentLetterCount] = useState(0);
-    const [pricingKeys, setPricingKeys] = useState({
-        letterSendPrice: 100,
-        photoCreditPrice: 10,
-        postcardCreditPrice: 15,
-        scentCreditPrice: 20,
-        docCreditPrice: 5,
-        calendarCreditPrice: 30,
-        envelopeColorPrice: 10,
-        paperColorPrice: 10
-    });
+export default function PaymentStep({
+  goBack,
+  onComplete,
+}: {
+  goBack: () => void;
+  onComplete: () => void;
+}) {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const extras = useLetterStore((state) => state.extras);
+  const isSubmitting = useRef(false);
+  const [sentLetterCount, setSentLetterCount] = useState(0);
+  const [pricingKeys, setPricingKeys] = useState({
+    letterSendPrice: 100,
+    photoCreditPrice: 10,
+    postcardCreditPrice: 15,
+    scentCreditPrice: 20,
+    docCreditPrice: 5,
+    calendarCreditPrice: 30,
+    envelopeColorPrice: 10,
+    paperColorPrice: 10,
+  });
 
-    // Payment Form States
-    const [paymentMethod, setPaymentMethod] = useState<'credit' | 'card'>('card');
-    const [cardDetails, setCardDetails] = useState({
-        number: '',
-        name: '',
-        expiry: '',
-        cvv: ''
-    });
+  // Payment Form States
+  const [paymentMethod, setPaymentMethod] = useState<"credit" | "card">("card");
+  const [cardDetails, setCardDetails] = useState({
+    number: "",
+    name: "",
+    expiry: "",
+    cvv: "",
+  });
 
-    const formatCardNumber = (value: string) => {
-        const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-        const matches = v.match(/\d{4,16}/g);
-        const match = matches && matches[0] || '';
-        const parts = [];
+  const formatCardNumber = (value: string) => {
+    const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
+    const matches = v.match(/\d{4,16}/g);
+    const match = (matches && matches[0]) || "";
+    const parts = [];
 
-        for (let i = 0, len = match.length; i < len; i += 4) {
-            parts.push(match.substring(i, i + 4));
-        }
+    for (let i = 0, len = match.length; i < len; i += 4) {
+      parts.push(match.substring(i, i + 4));
+    }
 
-        if (parts.length) {
-            return parts.join(' ');
-        } else {
-            return v;
-        }
-    };
+    if (parts.length) {
+      return parts.join(" ");
+    } else {
+      return v;
+    }
+  };
 
-    const formatExpiry = (value: string) => {
-        return value
-            .replace(
-                /^([1-9]\/|[2-9])$/g, '0$1/'
-            )
-            .replace(
-                /^(0[1-9]|1[0-2])$/g, '$1/'
-            )
-            .replace(
-                /^([0-1])([3-9])$/g, '0$1/$2'
-            )
-            .replace(
-                /^(0?[1-9]|1[0-2])([0-9]{2})$/g, '$1/$2'
-            )
-            .replace(
-                /^([0-1][0-2])([0-9]{2})$/g, '$1/$2'
-            )
-            .replace(
-                /[^0-9\/]/g, ''
-            )
-            .substring(0, 5);
-    };
+  const formatExpiry = (value: string) => {
+    return value
+      .replace(/^([1-9]\/|[2-9])$/g, "0$1/")
+      .replace(/^(0[1-9]|1[0-2])$/g, "$1/")
+      .replace(/^([0-1])([3-9])$/g, "0$1/$2")
+      .replace(/^(0?[1-9]|1[0-2])([0-9]{2})$/g, "$1/$2")
+      .replace(/^([0-1][0-2])([0-9]{2})$/g, "$1/$2")
+      .replace(/[^0-9\/]/g, "")
+      .substring(0, 5);
+  };
 
-    React.useEffect(() => {
-        getPricingSettings().then(res => {
-            if (res.success && res.data) {
-                setPricingKeys({
-                    letterSendPrice: res.data.letterSendPrice || 100,
-                    photoCreditPrice: res.data.photoCreditPrice || 10,
-                    postcardCreditPrice: res.data.postcardCreditPrice || 15,
-                    scentCreditPrice: res.data.scentCreditPrice || 20,
-                    docCreditPrice: res.data.docCreditPrice || 5,
-                    calendarCreditPrice: res.data.calendarCreditPrice || 30,
-                    envelopeColorPrice: res.data.envelopeColorPrice || 10,
-                    paperColorPrice: res.data.paperColorPrice || 10,
-                });
-            }
+  React.useEffect(() => {
+    getPricingSettings().then((res) => {
+      if (res.success && res.data) {
+        setPricingKeys({
+          letterSendPrice: res.data.letterSendPrice || 100,
+          photoCreditPrice: res.data.photoCreditPrice || 10,
+          postcardCreditPrice: res.data.postcardCreditPrice || 15,
+          scentCreditPrice: res.data.scentCreditPrice || 20,
+          docCreditPrice: res.data.docCreditPrice || 5,
+          calendarCreditPrice: res.data.calendarCreditPrice || 30,
+          envelopeColorPrice: res.data.envelopeColorPrice || 10,
+          paperColorPrice: res.data.paperColorPrice || 10,
         });
-        getSentLetterCount().then(count => setSentLetterCount(count));
-    }, []);
+      }
+    });
+    getSentLetterCount().then((count) => setSentLetterCount(count));
+  }, []);
 
-    // Zarf ve Kağıt Renk Farkı
-    const { letter } = useLetterStore.getState();
-    const envelopePriceDelta = letter.envelopeColor !== "Beyaz" ? pricingKeys.envelopeColorPrice : 0;
-    const paperPriceDelta = letter.paperColor !== "Beyaz" ? pricingKeys.paperColorPrice : 0;
+  // Zarf ve Kağıt Renk Farkı
+  const { letter } = useLetterStore.getState();
+  const envelopePriceDelta =
+    letter.envelopeColor !== "Beyaz" ? pricingKeys.envelopeColorPrice : 0;
+  const paperPriceDelta =
+    letter.paperColor !== "Beyaz" ? pricingKeys.paperColorPrice : 0;
 
-    // Calculate dynamic pricing based on selections
-    const isFreeLetter = (sentLetterCount % 6) === 5;
-    const baseLetterPrice = isFreeLetter ? 0 : (pricingKeys.letterSendPrice + envelopePriceDelta + paperPriceDelta);
+  // Calculate dynamic pricing based on selections
+  const isFreeLetter = sentLetterCount % 6 === 5;
+  const baseLetterPrice = isFreeLetter
+    ? 0
+    : pricingKeys.letterSendPrice + envelopePriceDelta + paperPriceDelta;
 
-    const scentPrice = extras.scent === "Yok" ? 0 : pricingKeys.scentCreditPrice;
+  const scentPrice = extras.scent === "Yok" ? 0 : pricingKeys.scentCreditPrice;
 
-    // Fotoğraf Fiyat Algoritması
-    const photoCreditPrice = pricingKeys.photoCreditPrice;
-    let actualPhotoCount = extras.photos.length;
-    if (actualPhotoCount >= 10) actualPhotoCount -= 2;
-    else if (actualPhotoCount >= 5) actualPhotoCount -= 1;
+  // Fotoğraf Fiyat Algoritması
+  const photoCreditPrice = pricingKeys.photoCreditPrice;
+  let actualPhotoCount = extras.photos.length;
+  if (actualPhotoCount >= 10) actualPhotoCount -= 2;
+  else if (actualPhotoCount >= 5) actualPhotoCount -= 1;
 
-    let photoPrice = actualPhotoCount * photoCreditPrice;
-    if (extras.photos.length === 3 || extras.photos.length === 4) {
-        photoPrice = (extras.photos.length - 1) * photoCreditPrice + 8;
+  let photoPrice = actualPhotoCount * photoCreditPrice;
+  if (extras.photos.length === 3 || extras.photos.length === 4) {
+    photoPrice = (extras.photos.length - 1) * photoCreditPrice + 8;
+  }
+
+  const docPrice = extras.documents.length * pricingKeys.docCreditPrice;
+
+  // Kartpostal Fiyat Algoritması
+  const postcardCreditPrice = pricingKeys.postcardCreditPrice;
+  let actualPostcardCount = extras.postcards.length;
+  if (actualPostcardCount >= 10) actualPostcardCount -= 2;
+  else if (actualPostcardCount >= 5) actualPostcardCount -= 1;
+
+  let postcardPrice = actualPostcardCount * postcardCreditPrice;
+  if (extras.postcards.length === 3 || extras.postcards.length === 4) {
+    postcardPrice =
+      (extras.postcards.length - 1) * postcardCreditPrice +
+      Math.round(postcardCreditPrice * 0.8);
+  }
+
+  const calendarPrice = extras.includeCalendar
+    ? extras.photos.length >= 3
+      ? 0
+      : pricingKeys.calendarCreditPrice
+    : 0;
+
+  const totalAmount =
+    baseLetterPrice +
+    scentPrice +
+    photoPrice +
+    docPrice +
+    postcardPrice +
+    calendarPrice;
+
+  const handlePayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (isSubmitting.current) return;
+    isSubmitting.current = true;
+
+    setIsProcessing(true);
+
+    const { letter, extras, address } = useLetterStore.getState();
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    const result = await createLetter({ letter, extras, address });
+
+    setIsProcessing(false);
+    isSubmitting.current = false;
+
+    if (result.success) {
+      setIsSuccess(true);
+    } else {
+      alert(result.error || "Bir hata oluştu.");
     }
+  };
 
-    const docPrice = extras.documents.length * pricingKeys.docCreditPrice;
-
-    // Kartpostal Fiyat Algoritması
-    const postcardCreditPrice = pricingKeys.postcardCreditPrice;
-    let actualPostcardCount = extras.postcards.length;
-    if (actualPostcardCount >= 10) actualPostcardCount -= 2;
-    else if (actualPostcardCount >= 5) actualPostcardCount -= 1;
-
-    let postcardPrice = actualPostcardCount * postcardCreditPrice;
-    if (extras.postcards.length === 3 || extras.postcards.length === 4) {
-        postcardPrice = (extras.postcards.length - 1) * postcardCreditPrice + Math.round(postcardCreditPrice * 0.8);
-    }
-
-    const calendarPrice = extras.includeCalendar ? (extras.photos.length >= 3 ? 0 : pricingKeys.calendarCreditPrice) : 0;
-
-    const totalAmount = baseLetterPrice + scentPrice + photoPrice + docPrice + postcardPrice + calendarPrice;
-
-    const handlePayment = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (isSubmitting.current) return;
-        isSubmitting.current = true;
-
-        setIsProcessing(true);
-
-        const { letter, extras, address } = useLetterStore.getState();
-
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
-        const result = await createLetter({ letter, extras, address });
-
-        setIsProcessing(false);
-        isSubmitting.current = false;
-
-        if (result.success) {
-            setIsSuccess(true);
-        } else {
-            alert(result.error || "Bir hata oluştu.");
-        }
-    };
-
-    if (isSuccess) {
-        return (
-            <div className="container mx-auto px-4 py-8 max-w-4xl flex-1 flex flex-col justify-center animate-in fade-in duration-300">
-                <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-8 sm:p-12 flex-col flex items-center text-center relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-64 h-64 bg-seal/5 rounded-full -translate-y-1/2 -translate-x-1/3 blur-3xl pointer-events-none"></div>
-                    <div className="w-24 h-24 bg-seal/10 rounded-full flex items-center justify-center mb-6 relative">
-                        <div className="absolute inset-0 border-4 border-seal rounded-full animate-ping opacity-20"></div>
-                        <CheckCircle2 size={48} className="text-seal" />
-                    </div>
-
-                    <h2 className="font-playfair text-3xl font-bold text-wood-dark mb-4">
-                        Mektubunuz İletilmiştir!
-                    </h2>
-
-                    <p className="text-ink-light mb-8 max-w-md mx-auto leading-relaxed">
-                        Ödemeniz başarıyla alındı ve mektubunuz onaylandı. Mektubunuz özenle hazırlanıp, postaya teslim edilecektir.
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row w-full max-w-md gap-4">
-                        <button
-                            onClick={() => {
-                                useLetterStore.getState().resetStore();
-                                window.location.href = '/';
-                            }}
-                            className="flex-1 bg-paper-light border border-paper-dark hover:bg-paper text-ink font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
-                        >
-                            Ana Sayfa
-                        </button>
-                        <button
-                            onClick={() => {
-                                useLetterStore.getState().resetStore();
-                                window.location.href = '/gonderilenler';
-                            }}
-                            className="flex-1 bg-seal hover:bg-seal-hover text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-md flex items-center justify-center gap-2"
-                        >
-                            Mektuplarımı Gör
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
+  if (isSuccess) {
     return (
-        <div className="container mx-auto px-4 py-8 max-w-5xl flex-1 flex flex-col animate-in fade-in duration-300">
-            <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-6 sm:p-10 flex-col flex relative overflow-hidden">
-                {/* Soft Background Accent */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-seal/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl pointer-events-none"></div>
+      <div className="container mx-auto px-4 py-8 max-w-4xl flex-1 flex flex-col justify-center animate-in fade-in duration-300">
+        <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-8 sm:p-12 flex-col flex items-center text-center relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-seal/5 rounded-full -translate-y-1/2 -translate-x-1/3 blur-3xl pointer-events-none"></div>
+          <div className="w-24 h-24 bg-seal/10 rounded-full flex items-center justify-center mb-6 relative">
+            <div className="absolute inset-0 border-4 border-seal rounded-full animate-ping opacity-20"></div>
+            <CheckCircle2 size={48} className="text-seal" />
+          </div>
 
-                {/* Header */}
-                <div className="flex items-center gap-3 mb-2">
-                    <button onClick={goBack} disabled={isProcessing} className="p-2 hover:bg-paper-dark rounded-full transition-colors group disabled:opacity-50">
-                        <ArrowLeft className="text-ink-light group-hover:text-ink transition-colors" size={24} />
-                    </button>
-                    <h2 className="font-playfair text-3xl font-bold text-wood-dark">Geleceğe Mektup</h2>
-                </div>
-                <p className="text-ink-light ml-12 text-sm sm:text-base">
-                    Mektubunuzun yola çıkması için son adım! Güvenli ödeme altyapımız ile işleminizi tamamlayabilirsiniz.
-                </p>
+          <h2 className="font-playfair text-3xl font-bold text-wood-dark mb-4">
+            Mektubunuz İletilmiştir!
+          </h2>
 
-                {/* Stepper */}
-                <div className="mt-8 mb-10">
-                    <Stepper currentStep={5} />
-                </div>
+          <p className="text-ink-light mb-8 max-w-md mx-auto leading-relaxed">
+            Ödemeniz başarıyla alındı ve mektubunuz onaylandı. Mektubunuz özenle
+            hazırlanıp, postaya teslim edilecektir.
+          </p>
 
-                <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
-                    {/* Payment Form (Left - 2/3) */}
-                    <div className="flex-[2]">
-                        <div className="bg-paper-light border border-paper-dark rounded-xl p-6 shadow-sm min-h-full">
-                            <h3 className="font-playfair text-xl font-bold text-wood-dark border-b border-paper-dark pb-3 mb-6 flex items-center gap-2">
-                                <ShieldCheck size={22} className="text-seal" /> Güvenli Ödeme
-                            </h3>
-
-                            <div className="space-y-5 animate-in slide-in-from-bottom-2 duration-300">
-                                <div className="grid grid-cols-1 gap-5">
-                                    <div className="space-y-1.5">
-                                        <label className="text-xs font-bold text-ink-light uppercase tracking-wider">Kart Üzerindeki İsim</label>
-                                        <input
-                                            type="text"
-                                            placeholder="AD SOYAD"
-                                            className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
-                                            value={cardDetails.name}
-                                            onChange={(e) => setCardDetails({ ...cardDetails, name: e.target.value.toUpperCase() })}
-                                        />
-                                    </div>
-
-                                    <div className="space-y-1.5">
-                                        <label className="text-xs font-bold text-ink-light uppercase tracking-wider">Kart Numarası</label>
-                                        <div className="relative">
-                                            <input
-                                                type="text"
-                                                placeholder="0000 0000 0000 0000"
-                                                maxLength={19}
-                                                className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
-                                                value={cardDetails.number}
-                                                onChange={(e) => setCardDetails({ ...cardDetails, number: formatCardNumber(e.target.value) })}
-                                            />
-                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-1 opacity-40">
-                                                <div className="w-8 h-5 bg-ink-light/20 rounded"></div>
-                                                <div className="w-8 h-5 bg-ink-light/20 rounded"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-5">
-                                        <div className="space-y-1.5">
-                                            <label className="text-xs font-bold text-ink-light uppercase tracking-wider">SKT (AA/YY)</label>
-                                            <input
-                                                type="text"
-                                                placeholder="MM/YY"
-                                                maxLength={5}
-                                                className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
-                                                value={cardDetails.expiry}
-                                                onChange={(e) => setCardDetails({ ...cardDetails, expiry: formatExpiry(e.target.value) })}
-                                            />
-                                        </div>
-                                        <div className="space-y-1.5">
-                                            <label className="text-xs font-bold text-ink-light uppercase tracking-wider">CVV</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="password"
-                                                    placeholder="***"
-                                                    maxLength={3}
-                                                    className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
-                                                    value={cardDetails.cvv}
-                                                    onChange={(e) => setCardDetails({ ...cardDetails, cvv: e.target.value.replace(/[^0-9]/g, '') })}
-                                                />
-                                                <Lock size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-ink-light/30" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="bg-paper-dark/30 rounded-xl p-4 flex items-center gap-4 border border-dashed border-paper-dark">
-                                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-paper-dark shadow-sm">
-                                        <ShieldCheck size={20} className="text-seal" />
-                                    </div>
-                                    <p className="text-[11px] text-ink-light leading-snug">
-                                        Kart bilgileriniz uçtan uca şifrelenir ve asla sunucularımızda saklanmaz. Ödeme altyapısı iyzico güvencesiyle sağlanmaktadır.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Payment Summary (Right - 1/3) */}
-                    <div className="flex-1">
-                        <div className="bg-paper-dark/10 border border-seal/20 rounded-xl p-6 sticky top-8 shadow-sm">
-                            <div className="flex items-center gap-2 text-seal mb-4 justify-center">
-                                <ShieldCheck size={28} />
-                                <span className="font-bold text-sm leading-tight">Şifrelenmiş Kartla<br />Güvenli İşlem</span>
-                            </div>
-
-                            <h3 className="font-playfair text-lg font-bold text-wood-dark border-b border-paper-dark pb-3 mb-4 text-center">
-                                Toplam İşlem Tutarı
-                            </h3>
-
-                            <div className="bg-paper border border-wood/20 rounded-lg p-4 mb-6 text-center shadow-inner relative overflow-hidden">
-                                <span className={`${isFreeLetter ? 'text-4xl' : 'text-3xl'} font-playfair font-bold text-wood-dark`}>{totalAmount} ₺</span>
-                                <p className="text-[11px] text-ink-light/80 mt-1">Ödeme kartınızdan tahsil edilir</p>
-                            </div>
-
-                            <button
-                                type="submit"
-                                onClick={handlePayment}
-                                disabled={
-                                    isProcessing ||
-                                    (!cardDetails.number || !cardDetails.expiry || !cardDetails.cvv || !cardDetails.name)
-                                }
-                                className="w-full bg-seal hover:bg-seal-hover text-paper py-4 rounded-xl font-bold shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] text-lg disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
-                            >
-                                {isProcessing ? (
-                                    <span className="flex items-center gap-2">
-                                        <Loader2 size={24} className="animate-spin text-white" />
-                                        Ödeme Alınıyor...
-                                    </span>
-                                ) : (
-                                    <>Direkt Ödeme Yap <CheckCircle2 size={20} /></>
-                                )}
-                            </button>
-
-                            <p className="text-[10px] text-center text-ink-light/60 mt-4 leading-tight">
-                                İşlemi onaylayarak mektubunuzun postaya verilmesini ve ödemenin alınmasını kabul etmiş sayılırsınız.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Bottom Actions */}
-                <div className="mt-8 pt-4 border-t border-paper-dark/30">
-                    <button
-                        onClick={goBack}
-                        disabled={isProcessing}
-                        className="text-ink-light hover:text-ink px-4 py-2 rounded-md font-medium transition-colors flex items-center gap-2 disabled:opacity-50"
-                    >
-                        <ArrowLeft size={18} />
-                        Özete Geri Dön
-                    </button>
-                </div>
-            </div>
+          <div className="flex flex-col sm:flex-row w-full max-w-md gap-4">
+            <button
+              onClick={() => {
+                useLetterStore.getState().resetStore();
+                window.location.href = "/";
+              }}
+              className="flex-1 bg-paper-light border border-paper-dark hover:bg-paper text-ink font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+            >
+              Ana Sayfa
+            </button>
+            <button
+              onClick={() => {
+                useLetterStore.getState().resetStore();
+                window.location.href = "/gonderilenler";
+              }}
+              className="flex-1 bg-seal hover:bg-seal-hover text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-md flex items-center justify-center gap-2"
+            >
+              Mektuplarımı Gör
+            </button>
+          </div>
         </div>
+      </div>
     );
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8 max-w-5xl flex-1 flex flex-col animate-in fade-in duration-300">
+      <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-6 sm:p-10 flex-col flex relative overflow-hidden">
+        {/* Soft Background Accent */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-seal/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl pointer-events-none"></div>
+
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-2">
+          <button
+            onClick={goBack}
+            disabled={isProcessing}
+            className="p-2 hover:bg-paper-dark rounded-full transition-colors group disabled:opacity-50"
+          >
+            <ArrowLeft
+              className="text-ink-light group-hover:text-ink transition-colors"
+              size={24}
+            />
+          </button>
+          <h2 className="font-playfair text-3xl font-bold text-wood-dark">
+            Geleceğe Mektup
+          </h2>
+        </div>
+        <p className="text-ink-light ml-12 text-sm sm:text-base">
+          Mektubunuzun yola çıkması için son adım! Güvenli ödeme altyapımız ile
+          işleminizi tamamlayabilirsiniz.
+        </p>
+
+        {/* Stepper */}
+        <div className="mt-8 mb-10">
+          <Stepper currentStep={5} />
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
+          {/* Payment Form (Left - 2/3) */}
+          <div className="flex-[2]">
+            <div className="bg-paper-light border border-paper-dark rounded-xl p-6 shadow-sm min-h-full">
+              <h3 className="font-playfair text-xl font-bold text-wood-dark border-b border-paper-dark pb-3 mb-6 flex items-center gap-2">
+                <ShieldCheck size={22} className="text-seal" /> Güvenli Ödeme
+              </h3>
+
+              <div className="space-y-5 animate-in slide-in-from-bottom-2 duration-300">
+                <div className="grid grid-cols-1 gap-5">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-ink-light uppercase tracking-wider">
+                      Kart Üzerindeki İsim
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="AD SOYAD"
+                      className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
+                      value={cardDetails.name}
+                      onChange={(e) =>
+                        setCardDetails({
+                          ...cardDetails,
+                          name: e.target.value.toUpperCase(),
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-ink-light uppercase tracking-wider">
+                      Kart Numarası
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="0000 0000 0000 0000"
+                        maxLength={19}
+                        className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
+                        value={cardDetails.number}
+                        onChange={(e) =>
+                          setCardDetails({
+                            ...cardDetails,
+                            number: formatCardNumber(e.target.value),
+                          })
+                        }
+                      />
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-1 opacity-40">
+                        <div className="w-8 h-5 bg-ink-light/20 rounded"></div>
+                        <div className="w-8 h-5 bg-ink-light/20 rounded"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-5">
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-ink-light uppercase tracking-wider">
+                        SKT (AA/YY)
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="MM/YY"
+                        maxLength={5}
+                        className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
+                        value={cardDetails.expiry}
+                        onChange={(e) =>
+                          setCardDetails({
+                            ...cardDetails,
+                            expiry: formatExpiry(e.target.value),
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-ink-light uppercase tracking-wider">
+                        CVV
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="password"
+                          placeholder="***"
+                          maxLength={3}
+                          className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
+                          value={cardDetails.cvv}
+                          onChange={(e) =>
+                            setCardDetails({
+                              ...cardDetails,
+                              cvv: e.target.value.replace(/[^0-9]/g, ""),
+                            })
+                          }
+                        />
+                        <Lock
+                          size={16}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-ink-light/30"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-paper-dark/30 rounded-xl p-4 flex items-center gap-4 border border-dashed border-paper-dark">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-paper-dark shadow-sm">
+                    <ShieldCheck size={20} className="text-seal" />
+                  </div>
+                  <p className="text-[11px] text-ink-light leading-snug">
+                    Kart bilgileriniz uçtan uca şifrelenir ve asla
+                    sunucularımızda saklanmaz. Ödeme altyapısı güvencesiyle
+                    sağlanmaktadır.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Payment Summary (Right - 1/3) */}
+          <div className="flex-1">
+            <div className="bg-paper-dark/10 border border-seal/20 rounded-xl p-6 sticky top-8 shadow-sm">
+              <div className="flex items-center gap-2 text-seal mb-4 justify-center">
+                <ShieldCheck size={28} />
+                <span className="font-bold text-sm leading-tight">
+                  Şifrelenmiş Kartla
+                  <br />
+                  Güvenli İşlem
+                </span>
+              </div>
+
+              <h3 className="font-playfair text-lg font-bold text-wood-dark border-b border-paper-dark pb-3 mb-4 text-center">
+                Toplam İşlem Tutarı
+              </h3>
+
+              <div className="bg-paper border border-wood/20 rounded-lg p-4 mb-6 text-center shadow-inner relative overflow-hidden">
+                <span
+                  className={`${isFreeLetter ? "text-4xl" : "text-3xl"} font-playfair font-bold text-wood-dark`}
+                >
+                  {totalAmount} ₺
+                </span>
+                <p className="text-[11px] text-ink-light/80 mt-1">
+                  Ödeme kartınızdan tahsil edilir
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                onClick={handlePayment}
+                disabled={
+                  isProcessing ||
+                  !cardDetails.number ||
+                  !cardDetails.expiry ||
+                  !cardDetails.cvv ||
+                  !cardDetails.name
+                }
+                className="w-full bg-seal hover:bg-seal-hover text-paper py-4 rounded-xl font-bold shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] text-lg disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+              >
+                {isProcessing ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 size={24} className="animate-spin text-white" />
+                    Ödeme Alınıyor...
+                  </span>
+                ) : (
+                  <>
+                    Direkt Ödeme Yap <CheckCircle2 size={20} />
+                  </>
+                )}
+              </button>
+
+              <p className="text-[10px] text-center text-ink-light/60 mt-4 leading-tight">
+                İşlemi onaylayarak mektubunuzun postaya verilmesini ve ödemenin
+                alınmasını kabul etmiş sayılırsınız.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Actions */}
+        <div className="mt-8 pt-4 border-t border-paper-dark/30">
+          <button
+            onClick={goBack}
+            disabled={isProcessing}
+            className="text-ink-light hover:text-ink px-4 py-2 rounded-md font-medium transition-colors flex items-center gap-2 disabled:opacity-50"
+          >
+            <ArrowLeft size={18} />
+            Özete Geri Dön
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }

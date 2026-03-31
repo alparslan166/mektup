@@ -34,6 +34,7 @@ export default function GiftOrderModal({
 }) {
     const [step, setStep] = useState<"FORM" | "PROCESSING" | "SUCCESS" | "INSUFFICIENT">("FORM");
     const [error, setError] = useState<string | null>(null);
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
 
     const creditBalance = useUIStore(state => state.creditBalance);
 
@@ -313,10 +314,7 @@ export default function GiftOrderModal({
                                     )}
                                     <div className="flex-1">
                                         <h3 className="font-bold text-ink">{gift.name}</h3>
-                                        <p className="text-sm font-playfair font-black text-seal">{gift.price || 0} 🪙</p>
-                                    </div>
-                                    <div className="text-xs bg-wood/10 text-wood px-2 py-1 rounded font-bold">
-                                        Cüzdan Bakiyeniz: {creditBalance} 🪙
+                                        <p className="text-sm font-playfair font-black text-seal">{gift.price || 0} TL</p>
                                     </div>
                                 </div>
 
@@ -453,11 +451,50 @@ export default function GiftOrderModal({
                                     />
                                 </div>
 
+                                <div className="p-4 bg-paper-light border border-paper-dark rounded-xl flex items-start gap-3 transition-all hover:border-seal/30 mb-4 mt-2">
+                                    <div className="flex items-center h-6">
+                                        <input
+                                            id="gift-terms"
+                                            name="terms"
+                                            type="checkbox"
+                                            checked={agreedToTerms}
+                                            onChange={(e) => setAgreedToTerms(e.target.checked)}
+                                            className="h-5 w-5 rounded border-paper-dark text-seal focus:ring-seal cursor-pointer"
+                                        />
+                                    </div>
+                                    <div className="text-xs leading-5">
+                                        <label htmlFor="gift-terms" className="font-medium text-ink-light cursor-pointer select-none">
+                                            <a
+                                                href="/sozlesmeler"
+                                                target="_blank"
+                                                className="text-seal hover:text-seal-hover font-bold transition-colors"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                Mesafeli Satış Sözleşmesi
+                                            </a>
+                                            'ni ve{" "}
+                                            <a
+                                                href="/sozlesmeler"
+                                                target="_blank"
+                                                className="text-seal hover:text-seal-hover font-bold transition-colors"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                Ön Bilgilendirme Formu
+                                            </a>
+                                            'nu okudum, onaylıyorum.
+                                        </label>
+                                    </div>
+                                </div>
+
                                 <button
                                     type="submit"
-                                    className="w-full bg-gradient-to-r from-seal to-wood hover:from-seal-hover hover:to-wood-dark text-white font-bold py-4 rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 mt-2"
+                                    disabled={!agreedToTerms}
+                                    className={`w-full font-bold py-4 rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 mt-2 ${agreedToTerms
+                                            ? "bg-gradient-to-r from-seal to-wood hover:from-seal-hover hover:to-wood-dark text-white shadow-md hover:shadow-lg"
+                                            : "bg-paper-dark text-ink-light opacity-60 cursor-not-allowed shadow-none"
+                                        }`}
                                 >
-                                    Siparişi Onayla & {gift.price} 🪙 Öde
+                                    Ödeme Adımına Geç
                                 </button>
                             </form>
                         )}
