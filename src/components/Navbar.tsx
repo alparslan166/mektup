@@ -273,7 +273,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Button & Mobile Balance */}
         <div className="md:hidden flex items-center gap-2 z-50">
-          {status === "authenticated" && (
+          {/* {status === "authenticated" && (
             // <Link
             //   href="/cuzdan"
             //   className="flex items-center gap-1 bg-wood/20 backdrop-blur-md text-paper border border-wood/30 hover:bg-wood/30 px-2.5 py-1.5 rounded-md font-bold text-sm transition-all shadow-sm"
@@ -281,7 +281,7 @@ const Navbar = () => {
             //   <span>{creditBalance}</span>
             //   <span className="text-sm leading-none drop-shadow-sm">🪙</span>
             // </Link>
-          )}
+          )} */}
           <button
             onClick={toggleMenu}
             className="text-paper p-1.5 hover:bg-paper/10 rounded-md transition-colors shrink-0"
