@@ -456,14 +456,22 @@ export default function ReviewStep({
                     </div> */}
         </div>
 
-        {/* Bottom Actions (Only Back button needed here since Next is in the summary box, but we can keep it for consistency or standard mobile flow) */}
-        <div className="mt-8 pt-4 border-t border-paper-dark/30">
+        {/* Bottom Actions */}
+        <div className="mt-8 pt-6 border-t border-paper-dark/30 flex flex-col sm:flex-row items-center justify-between gap-4">
           <button
             onClick={goBack}
-            className="text-ink-light hover:text-ink px-4 py-2 rounded-md font-medium transition-colors flex items-center gap-2"
+            className="text-ink-light hover:text-ink px-4 py-2 rounded-md font-medium transition-colors flex items-center gap-2 order-2 sm:order-1"
           >
             <ArrowLeft size={18} />
             Bilgilere Geri Dön
+          </button>
+
+          <button
+            onClick={goNext}
+            className="w-full sm:w-auto bg-seal hover:bg-seal-hover text-paper px-10 py-4 rounded-xl font-bold shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] order-1 sm:order-2"
+          >
+            Ödeme Adımına Geç
+            <ArrowRight size={20} />
           </button>
         </div>
       </div>
