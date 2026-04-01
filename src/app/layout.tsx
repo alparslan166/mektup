@@ -58,22 +58,22 @@ export default function RootLayout({
           <Toaster position="top-center" />
           <Navbar />
           <TermsGuard />
-          <main className="flex-1 flex flex-col items-stretch relative z-10">
+          <main className="relative z-10 flex flex-col items-stretch flex-1">
             {children}
           </main>
         </NextAuthProvider>
 
         <footer className="bg-[#1c1917] text-paper/70 py-10 mt-auto border-t border-wood/10 relative z-10">
-          <div className="container mx-auto px-6 max-w-6xl flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="container flex flex-col items-center justify-between max-w-6xl gap-6 px-6 mx-auto md:flex-row">
             <div className="text-center md:text-left">
-              <div className="text-paper rounded-sm mb-2 flex items-center gap-2">
+              <div className="flex items-center gap-2 mb-2 rounded-sm text-paper">
                 <Image
                   src="/images/kus-logo.png"
                   alt="Logo"
                   width={40}
                   height={40}
                 />
-                <p className="font-playfair text-xl text-paper">
+                <p className="text-xl font-playfair text-paper">
                   Söz kulağa, yazı uzağa gider...
                 </p>
               </div>
@@ -83,13 +83,13 @@ export default function RootLayout({
               </p>
             </div>
 
-            <div className="flex flex-col items-center md:items-end gap-4">
+            <div className="flex flex-col items-center gap-4 md:items-end">
               <div className="flex items-center gap-4">
                 <a
                   href="https://www.instagram.com/mektuplascom"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-all hover:scale-110 text-paper"
+                  className="p-2 transition-all rounded-full bg-white/10 hover:bg-white/20 hover:scale-110 text-paper"
                   title="Instagram"
                 >
                   <Instagram size={20} />
@@ -98,70 +98,70 @@ export default function RootLayout({
                   href="https://x.com/MektuplasCom"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-all hover:scale-110 text-paper"
+                  className="p-2 transition-all rounded-full bg-white/10 hover:bg-white/20 hover:scale-110 text-paper"
                   title="X"
                 >
                   <Twitter size={20} />
                 </a>
               </div>
-              <div className="flex flex-wrap justify-center md:justify-end gap-x-5 gap-y-2 text-xs font-medium uppercase tracking-wider">
+              <div className="flex flex-wrap justify-center text-xs font-medium tracking-wider uppercase md:justify-end gap-x-5 gap-y-2">
                 <Link
                   href="/hakkimizda"
-                  className="hover:text-paper transition-colors"
+                  className="transition-colors hover:text-paper"
                 >
                   Hakkımızda
                 </Link>
                 <Link
                   href="/sss"
-                  className="hover:text-paper transition-colors"
+                  className="transition-colors hover:text-paper"
                 >
                   S.S.S.
                 </Link>
                 <Link
                   href="/sozlesmeler"
-                  className="hover:text-paper transition-colors"
+                  className="transition-colors hover:text-paper"
                 >
                   Mesafeli Satış Sözleşmesi
                 </Link>
                 <Link
                   href="/sozlesmeler"
-                  className="hover:text-paper transition-colors"
+                  className="transition-colors hover:text-paper"
                 >
                   Gizlilik Politikası
                 </Link>
                 <Link
                   href="/sozlesmeler"
-                  className="hover:text-paper transition-colors"
+                  className="transition-colors hover:text-paper"
                 >
                   Üyelik Sözleşmesi
                 </Link>
                 <Link
                   href="/sozlesmeler"
-                  className="hover:text-paper transition-colors"
+                  className="transition-colors hover:text-paper"
                 >
                   KVKK
                 </Link>
                 <Link
                   href="/iletisim"
-                  className="hover:text-paper transition-colors"
+                  className="transition-colors hover:text-paper"
                 >
                   İletişim
                 </Link>
               </div>
-              <div className="mt-2 flex items-center gap-4 flex-wrap justify-center md:justify-end">
+              <div className="flex flex-wrap items-center justify-center gap-4 mt-2 md:justify-end">
                 {/* <Image 
                   src="/logo_band_colored.svg" 
                   alt="Ödeme Yöntemleri" 
                   width={300} 
                   height={40} 
-                  className="opacity-80 hover:opacity-100 transition-opacity"
+                  className="transition-opacity opacity-80 hover:opacity-100"
                 />
                 <Image 
                   src="/iyzico_ile_ode_colored.png" 
                   alt="iyzico ile Öde" 
                   width={100} 
                   height={40} 
-                  className="opacity-80 hover:opacity-100 transition-opacity object-contain"
+                  className="object-contain transition-opacity opacity-80 hover:opacity-100"
                 /> */}
               </div>
             </div>
