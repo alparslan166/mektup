@@ -94,7 +94,7 @@ export async function createLetter(letterData: any) {
 
         const totalAmount = baseLetterPrice + scentPrice + photoPrice + docPrice + postcardPrice + calendarPrice;
 
-        // Kredi düşümünü gerçekleştir (Bakiye yetersizse hata fırlatır)
+        // Ödeme işlemini gerçekleştir (Bakiye yetersizse hata fırlatır)
         try {
             await CreditService.spendCredit(
                 user.id,
@@ -102,7 +102,7 @@ export async function createLetter(letterData: any) {
                 `${address.receiverName || "Alıcı"} kişisine mektup gönderimi ${isFreeLetter ? "(Hediye Mektup 🎁)" : ""}`
             );
         } catch (creditError: any) {
-            return { error: creditError.message || "Bakiye işlemi başarısız.", isCreditError: true };
+            return { error: creditError.message || "Ödeme işlemi başarısız.", isCreditError: true };
         }
 
         // 1. Create the permanent letter
@@ -126,7 +126,7 @@ export async function createLetter(letterData: any) {
             where: { userId: user.id }
         });
 
-        // 2.5 Kampanya: İkinci Mektup Ödülü
+        // 2.5 Kampanya: İkinci Mektup Ödülü (İndirim Tanımlama)
         // Bu işlemi daha sağlıklı yapmak için kulannıcıyı tekrar çekip flag kontrolü yapıyoruz
         const currentUser = await prisma.user.findUnique({
             where: { id: user.id },
@@ -143,7 +143,7 @@ export async function createLetter(letterData: any) {
                 await CreditService.addCredits(
                     user.id,
                     rewardAmount,
-                    "İkinci Mektup Kampanya Ödülü 🎁"
+                    "İkinci Mektup Kampanya İndirimi 🎁"
                 );
 
                 // Flag'i güncelle

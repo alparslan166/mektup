@@ -54,7 +54,7 @@ export async function createGiftOrder(data: {
 
         if (giftPrice > 0) {
             try {
-                // Kredi düşüm işlemi
+                // Ödeme işlemi
                 await CreditService.spendCredit(
                     user.id,
                     giftPrice,
@@ -62,14 +62,14 @@ export async function createGiftOrder(data: {
                 );
             } catch (creditError: any) {
                 return {
-                    error: creditError.message || "Bakiye işlemi başarısız.",
+                    error: creditError.message || "Ödeme işlemi başarısız.",
                     isCreditError: true,
                     requiredCredit: giftPrice
                 };
             }
         }
 
-        // Kredi başarıyla alınırsa GiftOrder tablosunu kaydet
+        // Ödeme başarıyla alınırsa GiftOrder tablosunu kaydet
         const order = await prisma.giftOrder.create({
             data: {
                 userId: user.id,

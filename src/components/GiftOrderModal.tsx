@@ -504,7 +504,7 @@ export default function GiftOrderModal({
                                 <Loader2 size={48} className="animate-spin text-seal mx-auto" />
                                 <h3 className="text-xl font-bold text-ink font-playfair">İşlem Gerçekleştiriliyor</h3>
                                 <p className="text-ink-light text-sm">
-                                    Bakiyenizden {gift.price} 🪙 düşülüyor ve siparişiniz alınıyor, lütfen bekleyin...
+                                    Ödemeniz alınıyor ve siparişiniz onaylanıyor, lütfen bekleyin...
                                 </p>
                             </div>
                         )}
@@ -516,7 +516,7 @@ export default function GiftOrderModal({
                                 </div>
                                 <h3 className="text-2xl font-bold text-ink font-playfair">Sipariş Başarılı!</h3>
                                 <p className="text-ink-light text-sm max-w-[280px]">
-                                    Hediyeniz başarıyla satın alındı. Bakiyenizden krediniz düşüldü. Kısa sürede hazırlanıp yola çıkacaktır.
+                                    Hediyeniz başarıyla satın alındı. Ödemeniz onaylandı. Kısa sürede hazırlanıp yola çıkacaktır.
                                 </p>
                                 <button
                                     onClick={resetModal}

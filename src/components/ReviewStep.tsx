@@ -381,80 +381,125 @@ export default function ReviewStep({
           </div>
 
           {/* Pricing Column (Right - 1/3 width) sticky */}
-          {/* <div className="flex-1">
-                        <div className="bg-paper-dark/10 border border-wood/20 rounded-xl p-6 sticky top-8 shadow-sm">
-                            <h3 className="font-playfair text-xl font-bold text-wood-dark border-b border-wood/20 pb-4 mb-4 text-center">
-                                Harcanacak Kredi Özeti
-                            </h3>
+          <div className="flex-1">
+            <div className="bg-paper-dark/10 border border-wood/20 rounded-xl p-6 sticky top-8 shadow-sm">
+              <h3 className="font-playfair text-xl font-bold text-wood-dark border-b border-wood/20 pb-4 mb-4 text-center">
+                Ödeme Özeti
+              </h3>
 
-                            <div className="space-y-3 text-sm mb-6">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-ink-light">Mektup Ücreti</span>
-                                    {isFreeLetter ? (
-                                        <div className="flex flex-col items-end">
-                                            <span className="text-xs text-wood-dark line-through opacity-60">
-                                                {pricingKeys.letterSendPrice + envelopePriceDelta + paperPriceDelta} 🪙
-                                            </span>
-                                            <span className="font-bold text-seal flex items-center gap-1">
-                                                Hediye Mektup (0 🪙)
-                                            </span>
-                                        </div>
-                                    ) : (
-                                        <span className="font-medium text-ink">{orderDetails.pricing.baseLetter} 🪙</span>
-                                    )}
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-ink-light">Koku Seçimi ({orderDetails.extras.scent})</span>
-                                    <span className="font-medium text-ink">+{orderDetails.pricing.scent} 🪙</span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-ink-light flex items-center gap-1">
-                                        Fotoğraflar ({orderDetails.extras.photoCount}x)
-                                        {orderDetails.extras.photoPriceText && <span className="bg-seal/10 text-seal font-bold text-[10px] px-1.5 rounded-full">{orderDetails.extras.photoPriceText}</span>}
-                                    </span>
-                                    <span className="font-medium text-ink">+{orderDetails.pricing.photos} 🪙</span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-ink-light">Belgeler ({orderDetails.extras.docCount}x)</span>
-                                    <span className="font-medium text-ink">+{orderDetails.pricing.docs} 🪙</span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-ink-light flex items-center gap-1">
-                                        Kartpostallar ({orderDetails.extras.postcardCount}x)
-                                        {orderDetails.extras.postcardPriceText && <span className="bg-seal/10 text-seal font-bold text-[10px] px-1.5 rounded-full">{orderDetails.extras.postcardPriceText}</span>}
-                                    </span>
-                                    <span className="font-medium text-ink">+{orderDetails.pricing.postcards} 🪙</span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-ink-light flex items-center gap-1">Takvim <span className="bg-seal text-white text-[10px] px-1.5 rounded-full">HEDİYE</span></span>
-                                    <span className="font-medium text-wood-dark line-through opacity-70">{pricingKeys.calendarCreditPrice} 🪙</span>
-                                </div>
-                                <div className="flex justify-between items-center border-t border-paper-dark/50 pt-3 mt-3">
-                                    <span className="text-ink-light">Kargo Ücreti</span>
-                                    <span className="font-medium text-ink">Ücretsiz / Krediye Dahil</span>
-                                </div>
-                            </div>
+              <div className="space-y-3 text-sm mb-6">
+                <div className="flex justify-between items-center">
+                  <span className="text-ink-light">Mektup Ücreti</span>
+                  {isFreeLetter ? (
+                    <div className="flex flex-col items-end">
+                      <span className="text-xs text-wood-dark line-through opacity-60">
+                        {pricingKeys.letterSendPrice +
+                          envelopePriceDelta +
+                          paperPriceDelta}{" "}
+                        ₺
+                      </span>
+                      <span className="font-bold text-seal flex items-center gap-1">
+                        Hediye Mektup (0 ₺)
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="font-medium text-ink">
+                      {orderDetails.pricing.baseLetter} ₺
+                    </span>
+                  )}
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-ink-light">
+                    Koku Seçimi ({orderDetails.extras.scent})
+                  </span>
+                  <span className="font-medium text-ink">
+                    +{orderDetails.pricing.scent} ₺
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-ink-light flex items-center gap-1">
+                    Fotoğraflar ({orderDetails.extras.photoCount}x)
+                    {orderDetails.extras.photoPriceText && (
+                      <span className="bg-seal/10 text-seal font-bold text-[10px] px-1.5 rounded-full">
+                        {orderDetails.extras.photoPriceText}
+                      </span>
+                    )}
+                  </span>
+                  <span className="font-medium text-ink">
+                    +{orderDetails.pricing.photos} ₺
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-ink-light">
+                    Belgeler ({orderDetails.extras.docCount}x)
+                  </span>
+                  <span className="font-medium text-ink">
+                    +{orderDetails.pricing.docs} ₺
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-ink-light flex items-center gap-1">
+                    Kartpostallar ({orderDetails.extras.postcardCount}x)
+                    {orderDetails.extras.postcardPriceText && (
+                      <span className="bg-seal/10 text-seal font-bold text-[10px] px-1.5 rounded-full">
+                        {orderDetails.extras.postcardPriceText}
+                      </span>
+                    )}
+                  </span>
+                  <span className="font-medium text-ink">
+                    +{orderDetails.pricing.postcards} ₺
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-ink-light flex items-center gap-1">
+                    Takvim{" "}
+                    <span className="bg-seal text-white text-[10px] px-1.5 rounded-full">
+                      HEDİYE
+                    </span>
+                  </span>
+                  <span className="font-medium text-wood-dark line-through opacity-70">
+                    {pricingKeys.calendarCreditPrice} ₺
+                  </span>
+                </div>
+                <div className="flex justify-between items-center border-t border-paper-dark/50 pt-3 mt-3">
+                  <span className="text-ink-light">Kargo Ücreti</span>
+                  <span className="font-medium text-ink">
+                    Ücretsiz
+                  </span>
+                </div>
+              </div>
 
-                            <div className="bg-paper-light border border-wood-dark/20 rounded-lg p-4 mb-6">
-                                <div className="flex justify-between items-end">
-                                    <span className="text-wood-dark font-bold">Toplam Kredi</span>
-                                    <span className="text-3xl font-playfair font-bold text-seal">{orderDetails.pricing.total - orderDetails.pricing.shipping} 🪙</span>
-                                </div>
-                                <p className="text-[11px] text-ink-light/70 text-right mt-1">KDV Dahildir</p>
-                            </div>
+              <div className="bg-paper-light border border-wood-dark/20 rounded-lg p-4 mb-6">
+                <div className="flex justify-between items-end">
+                  <span className="text-wood-dark font-bold">Toplam Tutar</span>
+                  <span className="text-3xl font-playfair font-bold text-seal">
+                    {orderDetails.pricing.total - orderDetails.pricing.shipping}{" "}
+                    ₺
+                  </span>
+                </div>
+                <p className="text-[11px] text-ink-light/70 text-right mt-1">
+                  KDV Dahildir
+                </p>
+              </div>
 
-                            <button
-                                onClick={goNext}
-                                className="w-full bg-seal hover:bg-seal-hover text-paper py-4 rounded-xl font-bold shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] text-lg"
-                            >
-                                Kredi ile Gönder
-                                <ArrowRight size={20} />
-                            </button>
-                            <p className="text-xs text-center text-ink-light mt-4 flex items-center justify-center gap-1">
-                                <CheckCircle2 size={12} className="text-wood" /> Bakiye Sistemimizle Hızlı Gönderim
-                            </p>
-                        </div>
-                    </div> */}
+              <button
+                onClick={goNext}
+                disabled={!agreedToTerms}
+                className={`w-full py-4 rounded-xl font-bold shadow-md transition-all flex items-center justify-center gap-2 text-lg ${
+                  agreedToTerms
+                    ? "bg-seal hover:bg-seal-hover text-paper hover:shadow-lg active:scale-[0.98]"
+                    : "bg-paper-dark text-ink-light opacity-60 cursor-not-allowed"
+                }`}
+              >
+                Ödeme Yap
+                <ArrowRight size={20} />
+              </button>
+              <p className="text-xs text-center text-ink-light mt-4 flex items-center justify-center gap-1">
+                <CheckCircle2 size={12} className="text-wood" /> Güvenli Ödeme
+                Altyapısı
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Terms Agreement */}

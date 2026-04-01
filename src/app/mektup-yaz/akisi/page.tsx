@@ -120,9 +120,9 @@ export default function Home() {
               className="bg-transparent text-ink text-sm font-medium px-4 py-2 outline-none cursor-pointer appearance-none min-w-[120px]"
             >
               <option value="Beyaz">Beyaz</option>
-              <option value="Saman">Saman (+{envelopePrice} 🪙)</option>
-              <option value="Kırmızı">Kırmızı (+{envelopePrice} 🪙)</option>
-              <option value="Siyah">Siyah (+{envelopePrice} 🪙)</option>
+              <option value="Saman">Saman (+{envelopePrice} ₺)</option>
+              <option value="Kırmızı">Kırmızı (+{envelopePrice} ₺)</option>
+              <option value="Siyah">Siyah (+{envelopePrice} ₺)</option>
             </select>
           </div>
 
@@ -137,9 +137,9 @@ export default function Home() {
               className="bg-transparent text-ink text-sm font-medium px-4 py-2 outline-none cursor-pointer appearance-none min-w-[120px]"
             >
               <option value="Beyaz">Beyaz</option>
-              <option value="Saman">Saman (+{paperPrice} 🪙)</option>
-              <option value="Pembe">Pembe (+{paperPrice} 🪙)</option>
-              <option value="Açık Mavi">Açık Mavi (+{paperPrice} 🪙)</option>
+              <option value="Saman">Saman (+{paperPrice} ₺)</option>
+              <option value="Pembe">Pembe (+{paperPrice} ₺)</option>
+              <option value="Açık Mavi">Açık Mavi (+{paperPrice} ₺)</option>
             </select>
           </div>
         </div>

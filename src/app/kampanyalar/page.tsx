@@ -80,8 +80,8 @@ export default function CampaignsPage() {
             <p className="flex-1 mb-6 text-xs leading-snug text-ink-light md:leading-relaxed md:mb-8 md:text-base">
               Sevdiklerinize yazacağınız ilk mektubunuzdan sonraki{" "}
               <strong>2. mektup gönderiminizde</strong> sistemimiz anında
-              hesabınıza <strong>{secondLetterReward || 50} Kredi 🪙</strong>{" "}
-              tanımlar! Daha çok yazın, daha kârlı çıkın.
+              <strong>%20 indirim tanımlar</strong> tanımlar! Daha çok yazın, daha
+              kârlı çıkın.
             </p>
 
             <div className="flex flex-col items-start justify-between gap-3 mt-auto xl:flex-row xl:items-center">
@@ -161,8 +161,8 @@ export default function CampaignsPage() {
               Hemen Profil sayfandan sana özel davet linkini al ve arkadaşına
               gönder. Arkadaşın senin linkinle <strong>Mektuplaş</strong>{" "}
               ailesine katıldığında, hem ona hoş geldin hediyesi olarak hem de
-              sana teşekkür olarak{" "}
-              <strong>tam {referralReward || 15} TL</strong> anında hesabınıza
+              sana teşekkür olarak sonraki ilk mektubunuzda{" "}
+              <strong>%15 indirim</strong> anında
               eklensin!
             </p>
 
@@ -213,8 +213,8 @@ export default function CampaignsPage() {
                   Sevdiklerinize gönderdiğiniz mektupların teslimatından sonra,{" "}
                   <strong>Yorumlar</strong> sayfamızdan bir değerlendirme
                   bıraktığınızda ve sipariş deneyiminizi paylaştığınızda,
-                  teşekkür olarak hesabınıza anında{" "}
-                  <strong>{rewardAmount} Kredi 🪙</strong> tanımlanır!
+                  teşekkür olarak sonraki mektubunuzda anında{" "}
+                  <strong>%10 indirim</strong> tanımlanır!
                 </p>
               )}
             </div>

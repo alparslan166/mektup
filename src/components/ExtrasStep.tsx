@@ -82,10 +82,10 @@ export default function ExtrasStep() {
                             className="w-full bg-paper border border-paper-dark text-ink px-4 py-3 rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all appearance-none cursor-pointer"
                         >
                             <option value="Yok">Koku İstemiyorum</option>
-                            <option value="Gül">Gül Kokusu (+{scentCreditPrice} 🪙)</option>
-                            <option value="Lavanta">Lavanta Kokusu (+{scentCreditPrice} 🪙)</option>
-                            <option value="Okyanus">Okyanus Esintisi (+{scentCreditPrice} 🪙)</option>
-                            <option value="Kahve">Nostaljik Kahve (+{scentCreditPrice} 🪙)</option>
+                            <option value="Gül">Gül Kokusu (+{scentCreditPrice} ₺)</option>
+                            <option value="Lavanta">Lavanta Kokusu (+{scentCreditPrice} ₺)</option>
+                            <option value="Okyanus">Okyanus Esintisi (+{scentCreditPrice} ₺)</option>
+                            <option value="Kahve">Nostaljik Kahve (+{scentCreditPrice} ₺)</option>
                         </select>
                     </div>
                     <p className="text-xs text-ink-light/70 ml-1 italic">Seçim yapılması durumunda mektup kağıdınız kokulu olacaktır.</p>
