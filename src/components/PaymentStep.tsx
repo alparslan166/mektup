@@ -27,6 +27,8 @@ export default function PaymentStep({
   goBack: () => void;
   onComplete: () => void;
 }) {
+  const isHavalePrimary = true;
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [showHavaleModal, setShowHavaleModal] = useState(false);
@@ -203,7 +205,9 @@ export default function PaymentStep({
     const el = document.getElementById(`copy-${label}`);
     if (el) {
       el.textContent = "Kopyalandı!";
-      setTimeout(() => { el.textContent = "COPY"; }, 1500);
+      setTimeout(() => {
+        el.textContent = "COPY";
+      }, 1500);
     }
   };
 
@@ -290,111 +294,219 @@ export default function PaymentStep({
           <div className="flex-[2]">
             <div className="bg-paper-light border border-paper-dark rounded-xl p-6 shadow-sm min-h-full">
               <h3 className="font-playfair text-xl font-bold text-wood-dark border-b border-paper-dark pb-3 mb-6 flex items-center gap-2">
-                <ShieldCheck size={22} className="text-seal" /> Güvenli Ödeme
+                {isHavalePrimary ? (
+                  <>
+                    <Landmark size={22} className="text-seal" /> Havale / EFT
+                    Bilgileri
+                  </>
+                ) : (
+                  <>
+                    <ShieldCheck size={22} className="text-seal" /> Güvenli
+                    Ödeme
+                  </>
+                )}
               </h3>
 
-              <div className="space-y-5 animate-in slide-in-from-bottom-2 duration-300">
-                <div className="grid grid-cols-1 gap-5">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-ink-light uppercase tracking-wider">
-                      Kart Üzerindeki İsim
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="AD SOYAD"
-                      className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
-                      value={cardDetails.name}
-                      onChange={(e) =>
-                        setCardDetails({
-                          ...cardDetails,
-                          name: e.target.value.toUpperCase(),
-                        })
-                      }
-                    />
-                  </div>
+              {isHavalePrimary ? (
+                <div className="space-y-5 animate-in slide-in-from-bottom-2 duration-300">
+                  <div className="border-2 border-slate-200 rounded-xl p-5 bg-paper">
+                    <h5 className="text-xs font-bold text-ink uppercase tracking-wider mb-4">
+                      ÖDEME BİLGİLERİ (KURUMSAL HESAP)
+                    </h5>
 
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-ink-light uppercase tracking-wider">
-                      Kart Numarası
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder="0000 0000 0000 0000"
-                        maxLength={19}
-                        className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
-                        value={cardDetails.number}
-                        onChange={(e) =>
-                          setCardDetails({
-                            ...cardDetails,
-                            number: formatCardNumber(e.target.value),
-                          })
-                        }
-                      />
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-1 opacity-40">
-                        <div className="w-8 h-5 bg-ink-light/20 rounded"></div>
-                        <div className="w-8 h-5 bg-ink-light/20 rounded"></div>
+                    <div className="space-y-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-start gap-3">
+                          <span className="text-xs font-bold text-ink-light shrink-0 mt-0.5">
+                            Alıcı:
+                          </span>
+                          <span className="text-sm font-bold text-ink leading-snug">
+                            EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED
+                            ŞİRKETİ
+                          </span>
+                        </div>
+                        <button
+                          onClick={() =>
+                            copyToClipboard(
+                              "EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ",
+                              "alici",
+                            )
+                          }
+                          className="text-[10px] font-bold text-seal hover:text-seal-hover flex items-center gap-1 shrink-0 transition-colors"
+                        >
+                          <Copy size={10} />
+                          <span id="copy-alici">COPY</span>
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs font-bold text-ink-light shrink-0">
+                          Banka:
+                        </span>
+                        <span className="text-sm font-medium text-ink flex items-center gap-1.5">
+                          <span className="text-lg">🏦</span> Kuveyt Türk
+                          Katılım Bankası
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs font-bold text-ink-light shrink-0">
+                            IBAN:
+                          </span>
+                          <span className="text-sm font-mono font-bold text-ink">
+                            TR70 0020 5000 0922 5992 3000 01
+                          </span>
+                        </div>
+                        <button
+                          onClick={() =>
+                            copyToClipboard(
+                              "TR7000205000092259923000 01",
+                              "iban",
+                            )
+                          }
+                          className="text-[10px] font-bold text-seal hover:text-seal-hover flex items-center gap-1 shrink-0 transition-colors"
+                        >
+                          <Copy size={10} />
+                          <span id="copy-iban">COPY</span>
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs font-bold text-ink-light shrink-0">
+                          Tutar:
+                        </span>
+                        <span className="text-xl font-bold text-seal">
+                          {totalAmount},00 ₺{" "}
+                          <span className="text-sm font-medium text-ink-light">
+                            (KDV Dahil)
+                          </span>
+                        </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-5">
+                  <div className="bg-amber-50 border-2 border-amber-200 rounded-xl p-4 text-center">
+                    <p className="text-sm text-amber-900 leading-snug">
+                      Lütfen FAST/Havale açıklama kısmına{" "}
+                      <strong>SADECE</strong> sipariş numaranızı yazınız:
+                    </p>
+                    <div className="mt-2 inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-amber-300">
+                      <strong className="text-amber-900">{orderNumber}</strong>
+                      <button
+                        onClick={() => copyToClipboard(orderNumber, "siparis")}
+                        className="text-[10px] font-bold text-seal hover:text-seal-hover flex items-center gap-1 transition-colors"
+                      >
+                        <Copy size={10} />
+                        <span id="copy-siparis">COPY</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-5 animate-in slide-in-from-bottom-2 duration-300">
+                  <div className="grid grid-cols-1 gap-5">
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-ink-light uppercase tracking-wider">
-                        SKT (AA/YY)
+                        Kart Üzerindeki İsim
                       </label>
                       <input
                         type="text"
-                        placeholder="MM/YY"
-                        maxLength={5}
+                        placeholder="AD SOYAD"
                         className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
-                        value={cardDetails.expiry}
+                        value={cardDetails.name}
                         onChange={(e) =>
                           setCardDetails({
                             ...cardDetails,
-                            expiry: formatExpiry(e.target.value),
+                            name: e.target.value.toUpperCase(),
                           })
                         }
                       />
                     </div>
+
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-ink-light uppercase tracking-wider">
-                        CVV
+                        Kart Numarası
                       </label>
                       <div className="relative">
                         <input
-                          type="password"
-                          placeholder="***"
-                          maxLength={3}
+                          type="text"
+                          placeholder="0000 0000 0000 0000"
+                          maxLength={19}
                           className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
-                          value={cardDetails.cvv}
+                          value={cardDetails.number}
                           onChange={(e) =>
                             setCardDetails({
                               ...cardDetails,
-                              cvv: e.target.value.replace(/[^0-9]/g, ""),
+                              number: formatCardNumber(e.target.value),
                             })
                           }
                         />
-                        <Lock
-                          size={16}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-ink-light/30"
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-1 opacity-40">
+                          <div className="w-8 h-5 bg-ink-light/20 rounded"></div>
+                          <div className="w-8 h-5 bg-ink-light/20 rounded"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-5">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-ink-light uppercase tracking-wider">
+                          SKT (AA/YY)
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="MM/YY"
+                          maxLength={5}
+                          className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
+                          value={cardDetails.expiry}
+                          onChange={(e) =>
+                            setCardDetails({
+                              ...cardDetails,
+                              expiry: formatExpiry(e.target.value),
+                            })
+                          }
                         />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-ink-light uppercase tracking-wider">
+                          CVV
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="password"
+                            placeholder="***"
+                            maxLength={3}
+                            className="w-full bg-paper border border-paper-dark rounded-xl px-4 py-3 text-ink font-medium focus:border-seal outline-none transition-colors placeholder:text-ink-light/30"
+                            value={cardDetails.cvv}
+                            onChange={(e) =>
+                              setCardDetails({
+                                ...cardDetails,
+                                cvv: e.target.value.replace(/[^0-9]/g, ""),
+                              })
+                            }
+                          />
+                          <Lock
+                            size={16}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-ink-light/30"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="bg-paper-dark/30 rounded-xl p-4 flex items-center gap-4 border border-dashed border-paper-dark">
-                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-paper-dark shadow-sm">
-                    <ShieldCheck size={20} className="text-seal" />
+                  <div className="bg-paper-dark/30 rounded-xl p-4 flex items-center gap-4 border border-dashed border-paper-dark">
+                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-paper-dark shadow-sm">
+                      <ShieldCheck size={20} className="text-seal" />
+                    </div>
+                    <p className="text-[11px] text-ink-light leading-snug">
+                      Kart bilgileriniz uçtan uca şifrelenir ve asla
+                      sunucularımızda saklanmaz. Ödeme altyapısı güvencesiyle
+                      sağlanmaktadır.
+                    </p>
                   </div>
-                  <p className="text-[11px] text-ink-light leading-snug">
-                    Kart bilgileriniz uçtan uca şifrelenir ve asla
-                    sunucularımızda saklanmaz. Ödeme altyapısı güvencesiyle
-                    sağlanmaktadır.
-                  </p>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -402,9 +514,13 @@ export default function PaymentStep({
           <div className="flex-1">
             <div className="bg-paper-dark/10 border border-seal/20 rounded-xl p-6 sticky top-8 shadow-sm">
               <div className="flex items-center gap-2 text-seal mb-4 justify-center">
-                <ShieldCheck size={28} />
+                {isHavalePrimary ? (
+                  <Landmark size={28} />
+                ) : (
+                  <ShieldCheck size={28} />
+                )}
                 <span className="font-bold text-sm leading-tight">
-                  Şifrelenmiş Kartla
+                  {isHavalePrimary ? "Havale / EFT ile" : "Şifrelenmiş Kartla"}
                   <br />
                   Güvenli İşlem
                 </span>
@@ -421,49 +537,85 @@ export default function PaymentStep({
                   {totalAmount} ₺
                 </span>
                 <p className="text-[11px] text-ink-light/80 mt-1">
-                  Ödeme kartınızdan tahsil edilir
+                  {isHavalePrimary
+                    ? "Ödeme havale / EFT ile tamamlanır"
+                    : "Ödeme kartınızdan tahsil edilir"}
                 </p>
               </div>
 
-              <button
-                type="submit"
-                onClick={handlePayment}
-                disabled={
-                  isProcessing ||
-                  !cardDetails.number ||
-                  !cardDetails.expiry ||
-                  !cardDetails.cvv ||
-                  !cardDetails.name
-                }
-                className="w-full bg-seal hover:bg-seal-hover text-paper py-4 rounded-xl font-bold shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] text-lg disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
-              >
-                {isProcessing ? (
-                  <span className="flex items-center gap-2">
-                    <Loader2 size={24} className="animate-spin text-white" />
-                    Ödeme Alınıyor...
-                  </span>
-                ) : (
-                  <>
-                    Ödeme Yap <CheckCircle2 size={20} />
-                  </>
-                )}
-              </button>
+              {isHavalePrimary ? (
+                <button
+                  onClick={() => setShowHavaleModal(true)}
+                  disabled={isProcessing}
+                  className="w-full bg-seal hover:bg-seal-hover text-paper py-4 rounded-xl font-bold shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] text-lg disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+                >
+                  <Landmark size={20} />
+                  Havale / EFT ile Ödeme
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  onClick={handlePayment}
+                  disabled={
+                    isProcessing ||
+                    !cardDetails.number ||
+                    !cardDetails.expiry ||
+                    !cardDetails.cvv ||
+                    !cardDetails.name
+                  }
+                  className="w-full bg-seal hover:bg-seal-hover text-paper py-4 rounded-xl font-bold shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] text-lg disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+                >
+                  {isProcessing ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2 size={24} className="animate-spin text-white" />
+                      Ödeme Alınıyor...
+                    </span>
+                  ) : (
+                    <>
+                      Ödeme Yap <CheckCircle2 size={20} />
+                    </>
+                  )}
+                </button>
+              )}
 
               <p className="text-[10px] text-center text-ink-light/60 mt-4 leading-tight">
                 İşlemi onaylayarak mektubunuzun postaya verilmesini ve ödemenin
                 alınmasını kabul etmiş sayılırsınız.
               </p>
 
-              {/* Havale/EFT Butonu */}
+              {/* Alternatif Ödeme Butonu */}
               <div className="mt-4 pt-4 border-t border-paper-dark/30">
-                <button
-                  onClick={() => setShowHavaleModal(true)}
-                  disabled={isProcessing}
-                  className="w-full bg-white hover:bg-paper-light border-2 border-wood/30 hover:border-wood text-wood-dark py-3.5 rounded-xl font-bold shadow-sm transition-all flex items-center justify-center gap-2.5 text-sm active:scale-[0.98] disabled:opacity-50"
-                >
-                  <Landmark size={18} />
-                  Havale / EFT ile Ödeme
-                </button>
+                {isHavalePrimary ? (
+                  <button
+                    type="submit"
+                    onClick={handlePayment}
+                    disabled={
+                      isProcessing ||
+                      !cardDetails.number ||
+                      !cardDetails.expiry ||
+                      !cardDetails.cvv ||
+                      !cardDetails.name
+                    }
+                    className="w-full bg-white hover:bg-paper-light border-2 border-wood/30 hover:border-wood text-wood-dark py-3.5 rounded-xl font-bold shadow-sm transition-all flex items-center justify-center gap-2.5 text-sm active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <CheckCircle2 size={18} />
+                    <span className="flex flex-col items-start leading-tight">
+                      <span>Kredi Kartı ile Ödeme</span>
+                      <span className="text-[10px] font-medium opacity-80">
+                        Geçici olarak hizmet dışı
+                      </span>
+                    </span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setShowHavaleModal(true)}
+                    disabled={isProcessing}
+                    className="w-full bg-white hover:bg-paper-light border-2 border-wood/30 hover:border-wood text-wood-dark py-3.5 rounded-xl font-bold shadow-sm transition-all flex items-center justify-center gap-2.5 text-sm active:scale-[0.98] disabled:opacity-50"
+                  >
+                    <Landmark size={18} />
+                    Havale / EFT ile Ödeme
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -533,13 +685,21 @@ export default function PaymentStep({
                     {/* Alıcı */}
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-start gap-3">
-                        <span className="text-xs font-bold text-ink-light shrink-0 mt-0.5">Alıcı:</span>
+                        <span className="text-xs font-bold text-ink-light shrink-0 mt-0.5">
+                          Alıcı:
+                        </span>
                         <span className="text-sm font-bold text-ink leading-snug">
-                          EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ
+                          EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED
+                          ŞİRKETİ
                         </span>
                       </div>
                       <button
-                        onClick={() => copyToClipboard("EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ", "alici")}
+                        onClick={() =>
+                          copyToClipboard(
+                            "EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ",
+                            "alici",
+                          )
+                        }
                         className="text-[10px] font-bold text-seal hover:text-seal-hover flex items-center gap-1 shrink-0 transition-colors"
                       >
                         <Copy size={10} />
@@ -550,9 +710,12 @@ export default function PaymentStep({
                     {/* Banka */}
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <span className="text-xs font-bold text-ink-light shrink-0">Banka:</span>
+                        <span className="text-xs font-bold text-ink-light shrink-0">
+                          Banka:
+                        </span>
                         <span className="text-sm font-medium text-ink flex items-center gap-1.5">
-                          <span className="text-lg">🏦</span> Kuveyt Türk Katılım Bankası
+                          <span className="text-lg">🏦</span> Kuveyt Türk
+                          Katılım Bankası
                         </span>
                       </div>
                     </div>
@@ -560,13 +723,17 @@ export default function PaymentStep({
                     {/* IBAN */}
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <span className="text-xs font-bold text-ink-light shrink-0">IBAN:</span>
+                        <span className="text-xs font-bold text-ink-light shrink-0">
+                          IBAN:
+                        </span>
                         <span className="text-sm font-mono font-bold text-ink">
                           TR70 0020 5000 0922 5992 3000 01
                         </span>
                       </div>
                       <button
-                        onClick={() => copyToClipboard("TR7000205000092259923000 01", "iban")}
+                        onClick={() =>
+                          copyToClipboard("TR7000205000092259923000 01", "iban")
+                        }
                         className="text-[10px] font-bold text-seal hover:text-seal-hover flex items-center gap-1 shrink-0 transition-colors"
                       >
                         <Copy size={10} />
@@ -576,9 +743,14 @@ export default function PaymentStep({
 
                     {/* Tutar */}
                     <div className="flex items-center gap-3">
-                      <span className="text-xs font-bold text-ink-light shrink-0">Tutar:</span>
+                      <span className="text-xs font-bold text-ink-light shrink-0">
+                        Tutar:
+                      </span>
                       <span className="text-xl font-bold text-seal">
-                        {totalAmount},00 ₺ <span className="text-sm font-medium text-ink-light">(KDV Dahil)</span>
+                        {totalAmount},00 ₺{" "}
+                        <span className="text-sm font-medium text-ink-light">
+                          (KDV Dahil)
+                        </span>
                       </span>
                     </div>
                   </div>
@@ -587,8 +759,10 @@ export default function PaymentStep({
                 {/* Açıklama Uyarısı */}
                 <div className="bg-amber-50 border-2 border-amber-200 rounded-xl p-4 mb-5 text-center">
                   <p className="text-sm text-amber-900 leading-snug">
-                    Lütfen FAST/Havale açıklama kısmına<br />
-                    <strong>SADECE</strong> sipariş numaranızı yazınız: <strong>{orderNumber}</strong>
+                    Lütfen FAST/Havale açıklama kısmına
+                    <br />
+                    <strong>SADECE</strong> sipariş numaranızı yazınız:{" "}
+                    <strong>{orderNumber}</strong>
                   </p>
                 </div>
 
