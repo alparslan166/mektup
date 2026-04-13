@@ -10,6 +10,8 @@ import {
   ChevronDown,
   ChevronUp,
   Trash2,
+  PartyPopper,
+  Gift,
 } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -20,7 +22,6 @@ import {
   replyToComment,
   deleteComment,
 } from "@/app/actions/commentActions";
-import { getPricingSettings } from "@/app/actions/settingsActions";
 import { toast } from "react-hot-toast";
 
 export default function YorumlarPage() {
@@ -33,7 +34,6 @@ export default function YorumlarPage() {
 
   const [comments, setComments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [rewardAmount, setRewardAmount] = useState(50);
 
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyBody, setReplyBody] = useState("");
@@ -46,6 +46,10 @@ export default function YorumlarPage() {
   const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // İlk yorum indirim popup
+  const [showRewardModal, setShowRewardModal] = useState(false);
+  const [earnedDiscount, setEarnedDiscount] = useState(0);
+
   useEffect(() => {
     setIsMounted(true);
     fetchData();
@@ -53,16 +57,10 @@ export default function YorumlarPage() {
 
   const fetchData = async () => {
     setIsLoading(true);
-    const [commentRes, settingsRes] = await Promise.all([
-      getComments(),
-      getPricingSettings(),
-    ]);
+    const commentRes = await getComments();
 
     if (commentRes.success) {
       setComments(commentRes.data || []);
-    }
-    if (settingsRes.success && settingsRes.data) {
-      setRewardAmount(settingsRes.data.commentRewardAmount);
     }
     setIsLoading(false);
   };
@@ -81,12 +79,11 @@ export default function YorumlarPage() {
     setIsSubmitting(true);
     const res = await createComment({ title, body, rating });
     if (res.success) {
-      toast.success("Yorumunuz başarıyla gönderildi.");
-      if (res.rewardApplied) {
-        toast.success(
-          `${res.rewardAmount} Kredi ödül hesabınıza tanımlandı! 🪙`,
-          { duration: 5000 },
-        );
+      if (res.isFirstComment && res.discountPercentage) {
+        setEarnedDiscount(res.discountPercentage);
+        setShowRewardModal(true);
+      } else {
+        toast.success("Yorumunuz başarıyla gönderildi.");
       }
       setBody("");
       setTitle("");
@@ -136,8 +133,8 @@ export default function YorumlarPage() {
   const averageRating =
     comments.length > 0
       ? (
-          comments.reduce((acc, curr) => acc + curr.rating, 0) / comments.length
-        ).toFixed(1)
+        comments.reduce((acc, curr) => acc + curr.rating, 0) / comments.length
+      ).toFixed(1)
       : "5.0";
 
   const totalCommentsCount = comments.reduce(
@@ -249,10 +246,6 @@ export default function YorumlarPage() {
             <p className="mt-6 text-sm text-ink-light leading-relaxed">
               Bu sayfada kullanıcılarımızın Mektuplaş hakkındaki yorumlarını
               okuyabilir veya yeni yorum yazabilirsiniz.
-              <br />
-              <span className="text-emerald-600 font-bold mt-2 block">
-                İlk yorumunuza {rewardAmount} Kredi hediye! 🪙
-              </span>
             </p>
           </div>
 
@@ -607,6 +600,81 @@ export default function YorumlarPage() {
                     Evet, Sil
                   </button>
                 </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* İlk Yorum İndirim Kazanma Popup */}
+      <AnimatePresence>
+        {showRewardModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 30 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="bg-paper border border-wood/20 rounded-2xl p-8 max-w-sm w-full shadow-2xl relative overflow-hidden"
+            >
+              {/* Confetti background */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute -top-4 -left-4 w-24 h-24 bg-emerald-200/30 rounded-full blur-2xl" />
+                <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-amber-200/30 rounded-full blur-2xl" />
+                <div className="absolute top-8 right-8 w-16 h-16 bg-rose-200/20 rounded-full blur-xl" />
+              </div>
+
+              <div className="flex flex-col items-center text-center relative z-10">
+                <motion.div
+                  initial={{ rotate: -15, scale: 0 }}
+                  animate={{ rotate: 0, scale: 1 }}
+                  transition={{ type: "spring", delay: 0.2, stiffness: 200 }}
+                  className="w-20 h-20 bg-gradient-to-br from-emerald-100 to-emerald-200 text-emerald-600 rounded-full flex items-center justify-center mb-6 shadow-lg shadow-emerald-200/50 border-2 border-emerald-300/50"
+                >
+                  <Gift size={40} />
+                </motion.div>
+
+                <motion.h3
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-2xl font-playfair font-bold text-ink mb-2"
+                >
+                  Tebrikler! 🎉
+                </motion.h3>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="text-sm text-ink-light mb-4 leading-relaxed"
+                >
+                  İlk yorumunuz için teşekkür ederiz! Sıradaki mektubunuzda kullanabileceğiniz özel bir indirim kazandınız.
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ type: "spring", delay: 0.5, stiffness: 200 }}
+                  className="bg-gradient-to-r from-emerald-50 to-emerald-100 border-2 border-emerald-300 rounded-xl px-6 py-4 mb-6 w-full"
+                >
+                  <span className="text-sm text-emerald-700 font-medium block mb-1">Kazandığınız İndirim</span>
+                  <span className="text-4xl font-playfair font-bold text-emerald-600">
+                    %{earnedDiscount}
+                  </span>
+                  <span className="text-xs text-emerald-600/70 block mt-1">sonraki mektubunuzda geçerli</span>
+                </motion.div>
+
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                  onClick={() => setShowRewardModal(false)}
+                  className="w-full px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition-all shadow-lg shadow-emerald-600/20 active:scale-[0.98] flex items-center justify-center gap-2"
+                >
+                  <PartyPopper size={18} />
+                  Harika, Teşekkürler!
+                </motion.button>
               </div>
             </motion.div>
           </div>

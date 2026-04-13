@@ -33,7 +33,6 @@ import { toast } from "react-hot-toast";
 import NextImage from "next/image";
 import { getPricingSettings } from "@/app/actions/settingsActions";
 import { markIncomingLetterAsRead } from "@/app/actions/incomingLetterActions";
-import InsufficientCreditModal from "@/components/InsufficientCreditModal";
 
 export default function InboxPage() {
   const [letters, setLetters] = useState<any[]>([]);
@@ -58,8 +57,6 @@ export default function InboxPage() {
   const [unlockingLetter, setUnlockingLetter] = useState<any>(null);
   const [isUnlocking, setIsUnlocking] = useState(false);
   const [unlockPrice, setUnlockPrice] = useState(50);
-  const [isCreditModalOpen, setIsCreditModalOpen] = useState(false);
-  const [requiredCreditAmount, setRequiredCreditAmount] = useState(0);
 
   // DM Writing Modal States
   const [isDMModalOpen, setIsDMModalOpen] = useState(false);
@@ -196,13 +193,7 @@ export default function InboxPage() {
       });
       setIsIncomingModalOpen(true);
     } else {
-      if (res.isCreditError) {
-        setRequiredCreditAmount(res.requiredCredit || unlockPrice);
-        setIsCreditModalOpen(true);
-        setIsUnlockModalOpen(false); // Bunu kapatıp kredi uyarısını açalım
-      } else {
-        toast.error(res.error || "Mektup açılırken bir hata oluştu.");
-      }
+      toast.error(res.error || "Ödeme onayı alınamadı, mektup açılamadı.");
     }
     setIsUnlocking(false);
   };
@@ -516,7 +507,7 @@ export default function InboxPage() {
                 </div>
 
                 <p className="text-xs text-seal font-medium bg-seal/5 p-3 rounded-lg border border-seal/10">
-                  Harcandıktan sonra bu mektuba{" "}
+                  Ödeme tamamlandıktan sonra bu mektuba{" "}
                   <strong>ne zaman isterseniz ücretsiz ve sınırsız</strong>{" "}
                   erişebilirsiniz.
                 </p>
@@ -541,22 +532,12 @@ export default function InboxPage() {
                       İşleniyor...
                     </>
                   ) : (
-                    "Kredi ile Aç"
+                    "Ödeme Yap ve Aç"
                   )}
                 </button>
               </div>
             </motion.div>
           </motion.div>
-        )}
-
-        {isCreditModalOpen && (
-          <InsufficientCreditModal
-            isOpen={true}
-            onClose={() => setIsCreditModalOpen(false)}
-            requiredCredit={requiredCreditAmount}
-            currentBalance={0}
-            actionName="Gelen mektubu açmak"
-          />
         )}
       </AnimatePresence>
 

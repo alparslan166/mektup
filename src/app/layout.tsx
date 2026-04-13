@@ -149,20 +149,20 @@ export default function RootLayout({
                 </Link>
               </div>
               <div className="flex flex-wrap items-center justify-center gap-4 mt-2 md:justify-end">
-                {/* <Image 
-                  src="/logo_band_colored.svg" 
-                  alt="Ödeme Yöntemleri" 
-                  width={300} 
-                  height={40} 
+                <Image
+                  src="/logo_band_colored.svg"
+                  alt="Ödeme Yöntemleri"
+                  width={300}
+                  height={40}
                   className="transition-opacity opacity-80 hover:opacity-100"
                 />
-                <Image 
-                  src="/iyzico_ile_ode_colored.png" 
-                  alt="iyzico ile Öde" 
-                  width={100} 
-                  height={40} 
+                <Image
+                  src="/iyzico_ile_ode_colored.png"
+                  alt="iyzico ile Öde"
+                  width={100}
+                  height={40}
                   className="object-contain transition-opacity opacity-80 hover:opacity-100"
-                /> */}
+                />
               </div>
             </div>
           </div>

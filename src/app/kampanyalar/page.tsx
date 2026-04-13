@@ -71,7 +71,7 @@ export default function CampaignsPage() {
                 <h3 className="text-lg font-bold leading-tight md:text-2xl font-playfair text-ink">
                   İkinci Mektubuna <br />
                   <span className="text-xl text-rose-600 md:text-3xl">
-                    {secondLetterReward || 50} Kredi Hediye!
+                    %{secondLetterReward || 20} İndirim!
                   </span>
                 </h3>
               </div>
@@ -80,7 +80,7 @@ export default function CampaignsPage() {
             <p className="flex-1 mb-6 text-xs leading-snug text-ink-light md:leading-relaxed md:mb-8 md:text-base">
               Sevdiklerinize yazacağınız ilk mektubunuzdan sonraki{" "}
               <strong>2. mektup gönderiminizde</strong> sistemimiz anında
-              <strong>%20 indirim tanımlar</strong> tanımlar! Daha çok yazın, daha
+              <strong>%{secondLetterReward || 20} indirim tanımlar</strong> tanımlar! Daha çok yazın, daha
               kârlı çıkın.
             </p>
 
@@ -151,7 +151,7 @@ export default function CampaignsPage() {
                 <h3 className="text-lg font-bold leading-tight md:text-2xl font-playfair text-ink">
                   Arkadaşını Davet Et, <br />
                   <span className="text-xl text-wood-dark md:text-3xl">
-                    İkiniz de {referralReward || 15} Kredi TL kazanın!
+                    İkiniz de %{referralReward || 15} indirim kazanın!
                   </span>
                 </h3>
               </div>
@@ -162,7 +162,7 @@ export default function CampaignsPage() {
               gönder. Arkadaşın senin linkinle <strong>Mektuplaş</strong>{" "}
               ailesine katıldığında, hem ona hoş geldin hediyesi olarak hem de
               sana teşekkür olarak sonraki ilk mektubunuzda{" "}
-              <strong>%15 indirim</strong> anında
+              <strong>%{referralReward || 15} indirim</strong> anında
               eklensin!
             </p>
 
@@ -196,7 +196,7 @@ export default function CampaignsPage() {
                 <h3 className="text-lg font-bold leading-tight md:text-2xl font-playfair text-ink">
                   Mektubunu Değerlendir, <br />
                   <span className="text-xl text-amber-600 md:text-3xl">
-                    Hediye Kredi Kazan!
+                    %{rewardAmount || 10} İndirim Kazan!
                   </span>
                 </h3>
               </div>
@@ -214,7 +214,7 @@ export default function CampaignsPage() {
                   <strong>Yorumlar</strong> sayfamızdan bir değerlendirme
                   bıraktığınızda ve sipariş deneyiminizi paylaştığınızda,
                   teşekkür olarak sonraki mektubunuzda anında{" "}
-                  <strong>%10 indirim</strong> tanımlanır!
+                  <strong>%{rewardAmount || 10} indirim</strong> tanımlanır!
                 </p>
               )}
             </div>

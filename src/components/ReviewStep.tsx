@@ -2,6 +2,7 @@
 
 import React from "react";
 import Stepper from "@/components/Stepper";
+import { getActiveDiscounts, type ActiveDiscount } from "@/app/actions/discountActions";
 import {
   ArrowLeft,
   ArrowRight,
@@ -42,6 +43,7 @@ export default function ReviewStep({
     paperColorPrice: 10,
   });
   const [sentLetterCount, setSentLetterCount] = React.useState(0);
+  const [activeDiscount, setActiveDiscount] = React.useState<ActiveDiscount | null>(null);
 
   React.useEffect(() => {
     const fetchPrices = async () => {
@@ -61,6 +63,11 @@ export default function ReviewStep({
     };
     fetchPrices();
     getSentLetterCount().then((count) => setSentLetterCount(count));
+    getActiveDiscounts().then((res) => {
+      if (res.success && res.bestDiscount) {
+        setActiveDiscount(res.bestDiscount);
+      }
+    });
   }, []);
 
   // Zarf ve Kağıt Renk Farkı
@@ -141,7 +148,7 @@ export default function ReviewStep({
     : 0;
   const shippingPrice = 0; // Krediye Dahil
 
-  const totalPrice =
+  const subtotalPrice =
     baseLetterPrice +
     scentPrice +
     photoPrice +
@@ -149,6 +156,11 @@ export default function ReviewStep({
     postcardPrice +
     calendarPrice +
     shippingPrice;
+
+  // Kampanya indirimi uygula
+  const discountPercentage = activeDiscount ? activeDiscount.percentage : 0;
+  const discountAmount = Math.round(subtotalPrice * (discountPercentage / 100));
+  const totalPrice = subtotalPrice - discountAmount;
 
   const orderDetails = {
     letter,
@@ -180,6 +192,10 @@ export default function ReviewStep({
       postcards: postcardPrice,
       calendar: calendarPrice,
       shipping: shippingPrice,
+      subtotal: subtotalPrice,
+      discountPercentage,
+      discountAmount,
+      discountLabel: activeDiscount?.label || null,
       total: totalPrice,
     },
   };
@@ -467,15 +483,37 @@ export default function ReviewStep({
                     Ücretsiz
                   </span>
                 </div>
+
+                {/* Kampanya İndirimi */}
+                {orderDetails.pricing.discountAmount > 0 && (
+                  <div className="flex justify-between items-center bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2.5 mt-3 -mx-1">
+                    <span className="text-emerald-700 font-medium flex items-center gap-1.5 text-xs">
+                      <span className="bg-emerald-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                        %{orderDetails.pricing.discountPercentage}
+                      </span>
+                      {orderDetails.pricing.discountLabel}
+                    </span>
+                    <span className="font-bold text-emerald-600">
+                      −{orderDetails.pricing.discountAmount} ₺
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="bg-paper-light border border-wood-dark/20 rounded-lg p-4 mb-6">
                 <div className="flex justify-between items-end">
                   <span className="text-wood-dark font-bold">Toplam Tutar</span>
-                  <span className="text-3xl font-playfair font-bold text-seal">
-                    {orderDetails.pricing.total - orderDetails.pricing.shipping}{" "}
-                    ₺
-                  </span>
+                  <div className="flex flex-col items-end">
+                    {orderDetails.pricing.discountAmount > 0 && (
+                      <span className="text-sm text-ink-light line-through opacity-60">
+                        {orderDetails.pricing.subtotal} ₺
+                      </span>
+                    )}
+                    <span className="text-3xl font-playfair font-bold text-seal">
+                      {orderDetails.pricing.total}{" "}
+                      ₺
+                    </span>
+                  </div>
                 </div>
                 <p className="text-[11px] text-ink-light/70 text-right mt-1">
                   KDV Dahildir

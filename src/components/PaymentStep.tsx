@@ -4,18 +4,20 @@ import React, { useState, useRef } from "react";
 import Stepper from "@/components/Stepper";
 import {
   ArrowLeft,
-  Wallet,
   ShieldCheck,
   CheckCircle2,
-  AlertCircle,
   Loader2,
-  CreditCard,
   Lock,
+  Landmark,
+  Copy,
+  Clock,
+  FileText,
+  BadgeCheck,
+  ArrowRight,
 } from "lucide-react";
-import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLetterStore } from "@/store/letterStore";
 import { createLetter, getSentLetterCount } from "@/app/actions/letterActions";
-import { getCreditBalanceAction } from "@/app/actions/creditActions";
 import { getPricingSettings } from "@/app/actions/settingsActions";
 
 export default function PaymentStep({
@@ -27,6 +29,8 @@ export default function PaymentStep({
 }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [showHavaleModal, setShowHavaleModal] = useState(false);
+  const [isHavaleProcessing, setIsHavaleProcessing] = useState(false);
   const extras = useLetterStore((state) => state.extras);
   const isSubmitting = useRef(false);
   const [sentLetterCount, setSentLetterCount] = useState(0);
@@ -42,7 +46,6 @@ export default function PaymentStep({
   });
 
   // Payment Form States
-  const [paymentMethod, setPaymentMethod] = useState<"credit" | "card">("card");
   const [cardDetails, setCardDetails] = useState({
     number: "",
     name: "",
@@ -174,6 +177,37 @@ export default function PaymentStep({
       alert(result.error || "Bir hata oluştu.");
     }
   };
+
+  const handleHavalePayment = async () => {
+    if (isSubmitting.current) return;
+    isSubmitting.current = true;
+    setIsHavaleProcessing(true);
+
+    const { letter, extras, address } = useLetterStore.getState();
+    const result = await createLetter({ letter, extras, address });
+
+    setIsHavaleProcessing(false);
+    isSubmitting.current = false;
+
+    if (result.success) {
+      setShowHavaleModal(false);
+      setIsSuccess(true);
+    } else {
+      alert(result.error || "Bir hata oluştu.");
+    }
+  };
+
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    // Simple feedback
+    const el = document.getElementById(`copy-${label}`);
+    if (el) {
+      el.textContent = "Kopyalandı!";
+      setTimeout(() => { el.textContent = "COPY"; }, 1500);
+    }
+  };
+
+  const orderNumber = `#${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9000) + 1000)}`;
 
   if (isSuccess) {
     return (
@@ -410,7 +444,7 @@ export default function PaymentStep({
                   </span>
                 ) : (
                   <>
-                    Direkt Ödeme Yap <CheckCircle2 size={20} />
+                    Ödeme Yap <CheckCircle2 size={20} />
                   </>
                 )}
               </button>
@@ -419,6 +453,18 @@ export default function PaymentStep({
                 İşlemi onaylayarak mektubunuzun postaya verilmesini ve ödemenin
                 alınmasını kabul etmiş sayılırsınız.
               </p>
+
+              {/* Havale/EFT Butonu */}
+              <div className="mt-4 pt-4 border-t border-paper-dark/30">
+                <button
+                  onClick={() => setShowHavaleModal(true)}
+                  disabled={isProcessing}
+                  className="w-full bg-white hover:bg-paper-light border-2 border-wood/30 hover:border-wood text-wood-dark py-3.5 rounded-xl font-bold shadow-sm transition-all flex items-center justify-center gap-2.5 text-sm active:scale-[0.98] disabled:opacity-50"
+                >
+                  <Landmark size={18} />
+                  Havale / EFT ile Ödeme
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -435,6 +481,168 @@ export default function PaymentStep({
           </button>
         </div>
       </div>
+
+      {/* Havale/EFT Modal */}
+      <AnimatePresence>
+        {showHavaleModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden relative"
+            >
+              {/* Header */}
+              <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-5 text-center relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/4 blur-xl" />
+                <div className="relative z-10">
+                  <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-sm font-bold px-4 py-2 rounded-full mb-2">
+                    <CheckCircle2 size={18} />
+                    Siparişiniz Alındı
+                  </div>
+                  <h3 className="text-white font-playfair text-xl font-bold">
+                    Ödeme Bekleniyor
+                  </h3>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-6">
+                {/* Sipariş No */}
+                <div className="flex items-center justify-between mb-5">
+                  <h4 className="text-lg font-bold text-ink">
+                    Sipariş No: {orderNumber}
+                  </h4>
+                  <button
+                    onClick={() => copyToClipboard(orderNumber, "siparis")}
+                    className="text-xs font-bold text-seal hover:text-seal-hover flex items-center gap-1 transition-colors"
+                  >
+                    <Copy size={12} />
+                    <span id="copy-siparis">COPY</span>
+                  </button>
+                </div>
+
+                {/* Ödeme Bilgileri */}
+                <div className="border-2 border-slate-200 rounded-xl p-5 mb-5">
+                  <h5 className="text-xs font-bold text-ink uppercase tracking-wider mb-4">
+                    ÖDEME BİLGİLERİ (KURUMSAL HESAP)
+                  </h5>
+
+                  <div className="space-y-4">
+                    {/* Alıcı */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-start gap-3">
+                        <span className="text-xs font-bold text-ink-light shrink-0 mt-0.5">Alıcı:</span>
+                        <span className="text-sm font-bold text-ink leading-snug">
+                          EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard("EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ", "alici")}
+                        className="text-[10px] font-bold text-seal hover:text-seal-hover flex items-center gap-1 shrink-0 transition-colors"
+                      >
+                        <Copy size={10} />
+                        <span id="copy-alici">COPY</span>
+                      </button>
+                    </div>
+
+                    {/* Banka */}
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs font-bold text-ink-light shrink-0">Banka:</span>
+                        <span className="text-sm font-medium text-ink flex items-center gap-1.5">
+                          <span className="text-lg">🏦</span> Kuveyt Türk Katılım Bankası
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* IBAN */}
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs font-bold text-ink-light shrink-0">IBAN:</span>
+                        <span className="text-sm font-mono font-bold text-ink">
+                          TR70 0020 5000 0922 5992 3000 01
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard("TR7000205000092259923000 01", "iban")}
+                        className="text-[10px] font-bold text-seal hover:text-seal-hover flex items-center gap-1 shrink-0 transition-colors"
+                      >
+                        <Copy size={10} />
+                        <span id="copy-iban">COPY</span>
+                      </button>
+                    </div>
+
+                    {/* Tutar */}
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-bold text-ink-light shrink-0">Tutar:</span>
+                      <span className="text-xl font-bold text-seal">
+                        {totalAmount},00 ₺ <span className="text-sm font-medium text-ink-light">(KDV Dahil)</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Açıklama Uyarısı */}
+                <div className="bg-amber-50 border-2 border-amber-200 rounded-xl p-4 mb-5 text-center">
+                  <p className="text-sm text-amber-900 leading-snug">
+                    Lütfen FAST/Havale açıklama kısmına<br />
+                    <strong>SADECE</strong> sipariş numaranızı yazınız: <strong>{orderNumber}</strong>
+                  </p>
+                </div>
+
+                {/* Kurumsal Güvence */}
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-5">
+                  <div className="flex items-center justify-center gap-1.5 mb-3">
+                    <BadgeCheck size={16} className="text-slate-700" />
+                    <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      KURUMSAL İŞLEM GÜVENCESİ
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-center gap-6 text-[10px] text-slate-500 font-medium">
+                    <span className="flex items-center gap-1">
+                      <Clock size={12} /> 7/24 FAST (Anında Onay)
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <FileText size={12} /> E-FATURA GARANTİSİ
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <BadgeCheck size={12} /> LTD. ŞTİ. HESABI
+                    </span>
+                  </div>
+                </div>
+
+                {/* Butonlar */}
+                <button
+                  onClick={handleHavalePayment}
+                  disabled={isHavaleProcessing}
+                  className="w-full bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white py-4 rounded-xl font-bold shadow-lg shadow-rose-600/20 transition-all flex items-center justify-center gap-2 text-base active:scale-[0.98] disabled:opacity-50 mb-3"
+                >
+                  {isHavaleProcessing ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2 size={20} className="animate-spin" />
+                      İşleniyor...
+                    </span>
+                  ) : (
+                    <>
+                      ÖDEME YAPILDI, SİPARİŞİ TAMAMLA <ArrowRight size={18} />
+                    </>
+                  )}
+                </button>
+
+                <button
+                  onClick={() => setShowHavaleModal(false)}
+                  disabled={isHavaleProcessing}
+                  className="w-full text-slate-500 hover:text-slate-700 hover:bg-slate-50 py-3 rounded-xl font-medium text-sm transition-colors disabled:opacity-50"
+                >
+                  İptal ve Geri Dön
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

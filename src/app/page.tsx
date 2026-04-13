@@ -14,7 +14,6 @@ import {
   Archive,
   ArrowDown,
   BookOpen,
-  Wallet,
   Sparkles,
   PlusCircle,
   Inbox,
@@ -26,7 +25,6 @@ import { useSession } from "next-auth/react";
 import DashboardCard from "@/components/DashboardCard";
 import { useLetterStore } from "@/store/letterStore";
 import Image from "next/image";
-import { getCreditBalanceAction } from "@/app/actions/creditActions";
 import { getUnreadInboxCount } from "@/app/actions/inboxActions";
 import { getSentLetterCount } from "@/app/actions/letterActions";
 
@@ -34,18 +32,12 @@ export default function LandingPage() {
   const { data: session, status } = useSession();
   const resetStore = useLetterStore((state) => state.resetStore);
   const isLoading = status === "loading";
-  const [balance, setBalance] = React.useState<number | null>(null);
   const [unreadCount, setUnreadCount] = React.useState<number>(0);
   const [sentLetterCount, setSentLetterCount] = React.useState<number>(0);
 
   React.useEffect(() => {
     const userId = (session?.user as any)?.id;
     if (userId) {
-      getCreditBalanceAction().then((res) => {
-        if (res.success && res.balance !== undefined) {
-          setBalance(res.balance);
-        }
-      });
       getUnreadInboxCount().then((count) => {
         setUnreadCount(count);
       });

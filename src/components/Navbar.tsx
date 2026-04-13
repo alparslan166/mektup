@@ -21,13 +21,10 @@ import {
   Truck,
   Inbox,
   CircleDollarSign,
-  Wallet,
   Tag,
   Layers,
 } from "lucide-react";
 import { useLetterStore } from "@/store/letterStore";
-import { useUIStore } from "@/store/uiStore";
-import { getCreditBalanceAction } from "@/app/actions/creditActions";
 import Image from "next/image";
 import SignOutModal from "./SignOutModal";
 import { getUnreadInboxCount } from "@/app/actions/inboxActions";
@@ -38,23 +35,16 @@ const Navbar = () => {
   const [adminMenus, setAdminMenus] = useState(false);
   const { data: session, status } = useSession();
   const resetStore = useLetterStore((state) => state.resetStore);
-  const creditBalance = useUIStore((state) => state.creditBalance);
-  const setCreditBalance = useUIStore((state) => state.setCreditBalance);
   const [unreadCount, setUnreadCount] = useState(0);
 
   React.useEffect(() => {
     if (status === "authenticated" && session) {
-      getCreditBalanceAction().then((res) => {
-        if (res.success && res.balance !== undefined) {
-          setCreditBalance(res.balance);
-        }
-      });
       // Fetch unread inbox count
       getUnreadInboxCount().then((count) => {
         setUnreadCount(count);
       });
     }
-  }, [status, session, setCreditBalance]);
+  }, [status, session]);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
@@ -150,13 +140,6 @@ const Navbar = () => {
               >
                 <Gift size={18} />
                 <span>Hediyeler</span>
-              </Link>
-              <Link
-                href="/admin/kredi-yukle"
-                className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all"
-              >
-                <Wallet size={18} />
-                <span>Kredi Yükle</span>
               </Link>
             </>
           ) : (
@@ -331,14 +314,6 @@ const Navbar = () => {
                 >
                   <Gift size={22} />
                   <span>Hediyeler</span>
-                </Link>
-                <Link
-                  href="/admin/kredi-yukle"
-                  onClick={closeMenu}
-                  className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white"
-                >
-                  <Wallet size={22} />
-                  <span>Kredi Yükle</span>
                 </Link>
               </>
             ) : (
