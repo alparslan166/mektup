@@ -142,6 +142,12 @@ export default function RootLayout({
                   KVKK
                 </Link>
                 <Link
+                  href="/sozlesmeler"
+                  className="transition-colors hover:text-paper"
+                >
+                  Teslimat ve İade Şartları
+                </Link>
+                <Link
                   href="/iletisim"
                   className="transition-colors hover:text-paper"
                 >

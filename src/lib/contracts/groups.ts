@@ -45,7 +45,7 @@ Malın / Ürünün / Hizmetin türü, miktarı, rengi (zarf ve kağıt rengi se�
 
 10- DELİL ANLAŞMASI VE YETKİLİ MAHKEME
 Bu Sözleşme'den ve/veya uygulanmasından doğabilecek her türlü uyuşmazlığın çözümünde Satıcı kayıtları (bilgisayar-ses kayıtları gibi manyetik ortamdaki kayıtlar dâhil) kesin delil oluşturur. Taraflar, Sözleşme’nin uygulanmasından ve yorumundan doğan ihtilaflarda mevzuat çerçevesinde belirlenen parasal sınırlar dâhilinde Alıcı ve Satıcı'nın ikametgâhının bulunduğu yerdeki Tüketici Hakem Heyetleri aşan durumlarda Alıcı'nın ve Satıcı 'nın Tüketici Mahkemeleri yetkili olacağını kabul etmiştir.
-`
+`;
 
 export const KISISEL_VERILERIN_KORUNMASI_SOZLESMESI = `
 K.V.K.K Hakkında
@@ -60,7 +60,7 @@ EHM DİJİTAL ÇÖZÜMLER YAZILIM VE TİCARET LİMİTED ŞİRKETİ (MEKTUPLAS.CO
 Mektuplaş'a aşağıda yer alan iletişim bilgilerinden ulaşabilirsiniz.
 info@mektuplas.com-mektuplass@gmail.com
 WhatsApp : 5419446848
-`
+`;
 
 export const UYELIK_SOZLESMESI = `
 EHM DIJITAL COZUMLER YAZILIM VE TICARET LIMITED SIRKETI (MEKTUPLAS.COM) ÜYELİK SÖZLEŞMESİ
@@ -120,9 +120,30 @@ C) 3D SECURE / 3 BOYUTLU GÜVENLİK :
 Bu yöntemle yapılan alışverişin geçerli sayılabilmesi için, kredi kartı sahibinin yapılan işlemi kendisine verilecek olan özel bir şifreyle onaylaması gerekmektedir. www.mektuplas.com'da yaptığınız alışverişlerde, 3D Secure sistemi ile ödeme gerçekleşmektedir. Yani cep telefonunuza bankanız tarafından SMS olarak gönderilen kodu onaylamadan hiçbir şekilde kartınızdan çekim yapılamaz.
 `;
 
+export const TESLIMAT_VE_IADE_SARTLARI = `
+Teslimat ve İade Şartları
+
+1. Teslimat Şartları
+Siparişleriniz, ödemeniz onaylandıktan sonra seçtiğiniz paket özelliklerine göre 1 ile 3 iş günü içerisinde işleme alınır ve fiziksel olarak hazırlanarak kargoya/postaya teslim edilir. Teslimat süreleri, teslimatın yapılacağı bölgeye ve kargo/posta servisinin yoğunluğuna göre değişiklik gösterebilir.
+* Cezaevi ve askeri birlik gönderilerinde kurumların kendi kabul prosedürleri geçerlidir.
+* Hatalı veya eksik adres bildirimlerinden kaynaklanan teslimat gecikmelerinden platformumuz sorumlu değildir.
+
+2. İptal ve İade Şartları
+Mektuplas.com üzerinden verilen siparişler, 6502 sayılı Tüketicinin Korunması Hakkında Kanun gereği "alıcının isteği ile kişiye özel hazırlanan ürünler" kapsamında yer almaktadır. Bu nedenle;
+* Hazırlanma aşamasına geçmiş, basılmış veya kargolanmış mektupların iadesi ve iptali mümkün değildir.
+* Ancak, henüz işleme alınmamış siparişleriniz için müşteri hizmetlerimizle iletişime geçerek iptal talebinde bulunabilirsiniz.
+
+3. Kusurlu Ürün ve Yeniden Gönderim
+Tarafımızdan kaynaklanan baskı hataları, yanlış ürün gönderimi (yanlış zarf, yanlış koku vb.) veya eksik içerik durumlarında, ilgili sipariş hiçbir ek ücret talep edilmeksizin yeniden hazırlanarak öncelikli olarak gönderilir.
+
+4. İade Süreci ve Geri Ödemeler
+İptal onayı alınan siparişlerin geri ödemeleri, ödeme altyapısı üzerinden 7-10 iş günü içerisinde ödeme yaptığınız kredi veya banka kartına iade edilir. İade tutarının hesabınıza yansıma süresi, bankanızın işlem süreçlerine bağlı olarak değişiklik gösterebilir.
+`;
+
 export const CONTRACT_KEYS = {
-    MESAFELI_SATIS: "contract_mesafeli_satis",
-    KVKK: "contract_kvkk",
-    UYELIK: "contract_uyelik",
-    GIZLILIK: "contract_gizlilik"
+  MESAFELI_SATIS: "contract_mesafeli_satis",
+  KVKK: "contract_kvkk",
+  UYELIK: "contract_uyelik",
+  GIZLILIK: "contract_gizlilik",
+  TESLIMAT_IADE: "contract_teslimat_iade",
 };
