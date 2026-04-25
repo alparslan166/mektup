@@ -80,8 +80,12 @@ EHM DIJITAL COZUMLER YAZILIM VE TICARET LIMITED SIRKETI (MEKTUPLAS.COM) ÜYELİK
 4.1. Üye’nin kişisel verileri (Adres, Telefon vb.), 6698 sayılı KVKK kapsamında yalnızca hizmetin ifası ve yasal yükümlülükler çerçevesinde işlenir.
 4.2. Ödeme işlemleri Platform’dan bağımsız olarak ilgili banka ve ödeme kuruluşları tarafından yürütülür. Platform, Üye’nin kredi kartı şifresi gibi kritik verilerini asla görüntüleyemez ve kaydedemez.
 
-5. İÇERİK SORUMLULUĞU
-Platform üzerinden gönderilen mektupların içeriği tamamen Üye’nin sorumluluğundadır. T.C. kanunlarına aykırı, suç teşkil eden veya üçüncü kişilerin haklarını ihlal eden içeriklerden doğacak hukuki süreçlerde Platform taraf değildir.
+5. İÇERİK SORUMLULUĞU VE MODERASYON
+5.1. Platform üzerinden gönderilen mektupların içeriği tamamen Üye’nin sorumluluğundadır. T.C. kanunlarına aykırı, suç teşkil eden veya üçüncü kişilerin haklarını ihlal eden içeriklerden doğacak hukuki süreçlerde Platform taraf değildir.
+5.2. Tüm mektuplar, gönderim öncesinde manuel ve/veya otomatik moderasyon süreçlerinden geçer.
+5.3. Platform’u kullanabilmek için kullanıcı kimlik doğrulama zorunluluğu bulunmaktadır; doğrulanamayan hesaplar üzerinden gönderim yapılamaz.
+5.4. Taciz, tehdit, hakaret, nefret söylemi veya yasa dışı unsurlar içeren içerikler tespit edildiğinde gönderim engellenir.
+5.5. Yasa dışı içerik tespit edilmesi halinde, ilgili mevzuat kapsamında gerekli görüldüğü takdirde ilgili mercilere bildirim yapılır ve kullanıcı bilgileri yetkili makamlarla paylaşılabilir.
 
 6. TEBLİGAT VE İLETİŞİM
 Üye, MEKTUPLAS.COM’a bildirdiği e-posta ve telefon numarasının yasal tebligat adresi olduğunu ve bu kanallar üzerinden yapılacak bildirimlerin geçerli sayılacağını kabul eder.

@@ -256,7 +256,7 @@ export default function InboxPage() {
               </button>
             </div>
 
-            <button
+            {/* <button
               onClick={() => setIsSearchModalOpen(true)}
               className="bg-ink text-white px-8 py-4 rounded-[2rem] font-black transition-all hover:scale-105 active:scale-95 shadow-xl flex items-center gap-3 group"
             >
@@ -264,7 +264,7 @@ export default function InboxPage() {
                 <Plus size={20} />
               </div>
               <span>MEKTUPLAŞ</span>
-            </button>
+            </button> */}
           </div>
         </div>
 
