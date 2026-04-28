@@ -33,6 +33,8 @@ export default function PaymentStep({
   const [isSuccess, setIsSuccess] = useState(false);
   const [showHavaleModal, setShowHavaleModal] = useState(false);
   const [isHavaleProcessing, setIsHavaleProcessing] = useState(false);
+  const orderNumber = useLetterStore((state) => state.orderNumber);
+  const setOrderNumber = useLetterStore((state) => state.setOrderNumber);
   const extras = useLetterStore((state) => state.extras);
   const isSubmitting = useRef(false);
   const [sentLetterCount, setSentLetterCount] = useState(0);
@@ -101,6 +103,16 @@ export default function PaymentStep({
     getSentLetterCount().then((count) => setSentLetterCount(count));
   }, []);
 
+  React.useEffect(() => {
+    if (orderNumber) return;
+
+    const year = new Date().getFullYear();
+    const randomPart = String(Math.floor(Math.random() * 900000) + 100000);
+    setOrderNumber(`#${year}-${randomPart}`);
+  }, [orderNumber, setOrderNumber]);
+
+  const effectiveOrderNumber = orderNumber ?? "";
+
   // Zarf ve Kağıt Renk Farkı
   const { letter } = useLetterStore.getState();
   const envelopePriceDelta =
@@ -168,7 +180,12 @@ export default function PaymentStep({
 
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    const result = await createLetter({ letter, extras, address });
+    const result = await createLetter({
+      letter,
+      extras,
+      address,
+      orderNumber: effectiveOrderNumber,
+    });
 
     setIsProcessing(false);
     isSubmitting.current = false;
@@ -186,7 +203,12 @@ export default function PaymentStep({
     setIsHavaleProcessing(true);
 
     const { letter, extras, address } = useLetterStore.getState();
-    const result = await createLetter({ letter, extras, address });
+    const result = await createLetter({
+      letter,
+      extras,
+      address,
+      orderNumber: effectiveOrderNumber,
+    });
 
     setIsHavaleProcessing(false);
     isSubmitting.current = false;
@@ -206,12 +228,10 @@ export default function PaymentStep({
     if (el) {
       el.textContent = "Kopyalandı!";
       setTimeout(() => {
-        el.textContent = "COPY";
+        el.textContent = "Kopyala";
       }, 1500);
     }
   };
-
-  const orderNumber = `#${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9000) + 1000)}`;
 
   if (isSuccess) {
     return (
@@ -335,7 +355,7 @@ export default function PaymentStep({
                           className="text-[10px] font-bold text-seal hover:text-seal-hover flex items-center gap-1 shrink-0 transition-colors"
                         >
                           <Copy size={10} />
-                          <span id="copy-alici">COPY</span>
+                          <span id="copy-alici">Kopyala</span>
                         </button>
                       </div>
 
@@ -368,7 +388,7 @@ export default function PaymentStep({
                           className="text-[10px] font-bold text-seal hover:text-seal-hover flex items-center gap-1 shrink-0 transition-colors"
                         >
                           <Copy size={10} />
-                          <span id="copy-iban">COPY</span>
+                          <span id="copy-iban">Kopyala</span>
                         </button>
                       </div>
 
@@ -392,13 +412,17 @@ export default function PaymentStep({
                       <strong>SADECE</strong> sipariş numaranızı yazınız:
                     </p>
                     <div className="mt-2 inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-amber-300">
-                      <strong className="text-amber-900">{orderNumber}</strong>
+                      <strong className="text-amber-900">
+                        {effectiveOrderNumber}
+                      </strong>
                       <button
-                        onClick={() => copyToClipboard(orderNumber, "siparis")}
+                        onClick={() =>
+                          copyToClipboard(effectiveOrderNumber, "siparis")
+                        }
                         className="text-[10px] font-bold text-seal hover:text-seal-hover flex items-center gap-1 transition-colors"
                       >
                         <Copy size={10} />
-                        <span id="copy-siparis">COPY</span>
+                        <span id="copy-siparis">Kopyala</span>
                       </button>
                     </div>
                   </div>
@@ -664,14 +688,16 @@ export default function PaymentStep({
                 {/* Sipariş No */}
                 <div className="flex items-center justify-between mb-5">
                   <h4 className="text-lg font-bold text-ink">
-                    Sipariş No: {orderNumber}
+                    Sipariş No: {effectiveOrderNumber}
                   </h4>
                   <button
-                    onClick={() => copyToClipboard(orderNumber, "siparis")}
+                    onClick={() =>
+                      copyToClipboard(effectiveOrderNumber, "siparis")
+                    }
                     className="text-xs font-bold text-seal hover:text-seal-hover flex items-center gap-1 transition-colors"
                   >
                     <Copy size={12} />
-                    <span id="copy-siparis">COPY</span>
+                    <span id="copy-siparis">Kopyala</span>
                   </button>
                 </div>
 
@@ -703,7 +729,7 @@ export default function PaymentStep({
                         className="text-[10px] font-bold text-seal hover:text-seal-hover flex items-center gap-1 shrink-0 transition-colors"
                       >
                         <Copy size={10} />
-                        <span id="copy-alici">COPY</span>
+                        <span id="copy-alici">Kopyala</span>
                       </button>
                     </div>
 
@@ -737,7 +763,7 @@ export default function PaymentStep({
                         className="text-[10px] font-bold text-seal hover:text-seal-hover flex items-center gap-1 shrink-0 transition-colors"
                       >
                         <Copy size={10} />
-                        <span id="copy-iban">COPY</span>
+                        <span id="copy-iban">Kopyala</span>
                       </button>
                     </div>
 
@@ -762,7 +788,7 @@ export default function PaymentStep({
                     Lütfen FAST/Havale açıklama kısmına
                     <br />
                     <strong>SADECE</strong> sipariş numaranızı yazınız:{" "}
-                    <strong>{orderNumber}</strong>
+                    <strong>{effectiveOrderNumber}</strong>
                   </p>
                 </div>
 

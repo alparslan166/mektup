@@ -17,11 +17,11 @@ import { saveDraft } from "@/app/actions/draftActions";
 import { getPricingSettings } from "@/app/actions/settingsActions";
 
 export default function Home() {
-  const currentStep = useLetterStore(state => state.currentStep);
-  const nextStep = useLetterStore(state => state.nextStep);
-  const prevStep = useLetterStore(state => state.prevStep);
-  const letter = useLetterStore(state => state.letter);
-  const updateLetter = useLetterStore(state => state.updateLetter);
+  const currentStep = useLetterStore((state) => state.currentStep);
+  const nextStep = useLetterStore((state) => state.nextStep);
+  const prevStep = useLetterStore((state) => state.prevStep);
+  const letter = useLetterStore((state) => state.letter);
+  const updateLetter = useLetterStore((state) => state.updateLetter);
 
   const { data: session } = useSession();
   const [isSaving, setIsSaving] = useState(false);
@@ -29,7 +29,7 @@ export default function Home() {
   const [paperPrice, setPaperPrice] = useState(10);
 
   React.useEffect(() => {
-    getPricingSettings().then(res => {
+    getPricingSettings().then((res) => {
       if (res.success && res.data) {
         setEnvelopePrice(res.data.envelopeColorPrice || 10);
         setPaperPrice(res.data.paperColorPrice || 10);
@@ -42,13 +42,21 @@ export default function Home() {
     if (session?.user) {
       setIsSaving(true);
       try {
-        const result = await saveDraft({
-          letter: state.letter,
-          extras: state.extras,
-          address: state.address
-        }, state.draftId);
+        const result = await saveDraft(
+          {
+            orderNumber: state.orderNumber,
+            letter: state.letter,
+            extras: state.extras,
+            address: state.address,
+          },
+          state.draftId,
+        );
 
-        if (result.success && result.draftId && result.draftId !== state.draftId) {
+        if (
+          result.success &&
+          result.draftId &&
+          result.draftId !== state.draftId
+        ) {
           state.setDraftId(result.draftId);
         }
       } catch (error) {
@@ -63,9 +71,9 @@ export default function Home() {
 
   // Map color names to actual CSS colors for the editor background
   const paperColors: Record<string, string> = {
-    "Beyaz": "#ffffff",
-    "Saman": "#f4e4bc",
-    "Pembe": "#fdf1f4",
+    Beyaz: "#ffffff",
+    Saman: "#f4e4bc",
+    Pembe: "#fdf1f4",
     "Açık Mavi": "#eef7fd",
   };
 
@@ -77,18 +85,27 @@ export default function Home() {
   }
 
   if (currentStep === 5) {
-    return <PaymentStep goBack={() => useLetterStore.getState().setCurrentStep(1)} onComplete={nextStep} />;
+    return (
+      <PaymentStep
+        goBack={() => useLetterStore.getState().setCurrentStep(1)}
+        onComplete={nextStep}
+      />
+    );
   }
 
   if (currentStep === 4) {
-    return <ReviewStep goBack={() => useLetterStore.getState().setCurrentStep(1)} goNext={nextStep} />;
+    return (
+      <ReviewStep
+        goBack={() => useLetterStore.getState().setCurrentStep(1)}
+        goNext={nextStep}
+      />
+    );
   }
 
   // Fallback to Step 1 (Editor)
   // Merged Step 1, 2, 3 into a single scrolling view layout
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl flex-1 flex flex-col gap-8 animate-in fade-in duration-300">
-
       {/* 1. EDITOR SECTION */}
       <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-6 sm:p-10 flex-col flex relative overflow-hidden">
         {/* Subtle decorative background piece */}
@@ -97,14 +114,18 @@ export default function Home() {
         {/* Header */}
         <div className="flex justify-center mb-2">
           <h2 className="font-playfair text-3xl font-bold text-wood-dark">
-            {useLetterStore.getState().address.isPrison ? "Cezaevine Mektup" : "Mektup Yazın"}
+            {useLetterStore.getState().address.isPrison
+              ? "Cezaevine Mektup"
+              : "Mektup Yazın"}
           </h2>
         </div>
         <p className="text-ink-light text-center text-sm sm:text-base">
-          Aşağıdaki boş alana mektubunuzu yazabilirsiniz. Ek olarak zarf ve kağıt rengini buradan seçebilirsiniz.
+          Aşağıdaki boş alana mektubunuzu yazabilirsiniz. Ek olarak zarf ve
+          kağıt rengini buradan seçebilirsiniz.
         </p>
         <p className="text-seal/80 text-center text-xs sm:text-sm mt-2 italic font-medium">
-          * İlhamınız yarım kalır diye korkmayın; yazdıklarınız otomatik kaydedilir ve "Taslaklar" sayfasından her zaman devam edebilirsiniz.
+          * İlhamınız yarım kalır diye korkmayın; yazdıklarınız otomatik
+          kaydedilir ve "Taslaklar" sayfasından her zaman devam edebilirsiniz.
         </p>
 
         {/* Options Row */}
@@ -162,7 +183,11 @@ export default function Home() {
           className="bg-seal hover:bg-seal-hover text-paper w-full max-w-md py-4 rounded-xl font-bold text-lg shadow-lg transition-all hover:shadow-xl hover:-translate-y-1 flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-70"
         >
           {isSaving ? "Kaydediliyor..." : "Postaya Ver"}
-          {isSaving ? <Loader2 className="animate-spin" size={24} /> : <ArrowRight size={24} />}
+          {isSaving ? (
+            <Loader2 className="animate-spin" size={24} />
+          ) : (
+            <ArrowRight size={24} />
+          )}
         </button>
       </div>
 

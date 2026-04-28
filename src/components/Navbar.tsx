@@ -21,6 +21,7 @@ import {
   Truck,
   Inbox,
   CircleDollarSign,
+  BarChart3,
   Tag,
   Layers,
 } from "lucide-react";
@@ -133,6 +134,13 @@ const Navbar = () => {
               >
                 <CircleDollarSign size={18} />
                 <span>Fiyatlar</span>
+              </Link>
+              <Link
+                href="/admin/analizler"
+                className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all"
+              >
+                <BarChart3 size={18} />
+                <span>Analizler</span>
               </Link>
               <Link
                 href="/admin/gifts"
@@ -306,6 +314,14 @@ const Navbar = () => {
                 >
                   <CircleDollarSign size={22} />
                   <span>Fiyatlar</span>
+                </Link>
+                <Link
+                  href="/admin/analizler"
+                  onClick={closeMenu}
+                  className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white"
+                >
+                  <BarChart3 size={22} />
+                  <span>Analizler</span>
                 </Link>
                 <Link
                   href="/admin/gifts"

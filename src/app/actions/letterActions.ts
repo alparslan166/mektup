@@ -27,6 +27,11 @@ export async function createLetter(letterData: any) {
     }
 
     const { letter, extras, address } = letterData;
+    const orderNumber =
+      typeof letterData.orderNumber === "string" &&
+      letterData.orderNumber.trim().length > 0
+        ? letterData.orderNumber.trim()
+        : null;
 
     // Fiyatlandırma ayarlarını çek
     const pricingRes = await getPricingSettings();
@@ -126,7 +131,9 @@ export async function createLetter(letterData: any) {
     const discountRes = await getActiveDiscounts();
     const bestDiscount = discountRes.bestDiscount;
     const discountPercentage = bestDiscount ? bestDiscount.percentage : 0;
-    const discountAmount = Math.round(subtotalAmount * (discountPercentage / 100));
+    const discountAmount = Math.round(
+      subtotalAmount * (discountPercentage / 100),
+    );
     const totalAmount = subtotalAmount - discountAmount;
 
     // 1. Create the permanent letter
@@ -136,6 +143,7 @@ export async function createLetter(letterData: any) {
         receiverId: address.receiverId || null,
         data: {
           ...letterData,
+          orderNumber,
           appliedDiscount: bestDiscount?.type || null,
           discountPercentage: discountPercentage,
           discountAmount: discountAmount,
@@ -176,7 +184,7 @@ export async function createLetter(letterData: any) {
 
     // 3. Send email notifications
     if (user.email) {
-      await sendOrderReceivedEmail(user.email, createdLetter.id);
+      await sendOrderReceivedEmail(user.email, orderNumber || createdLetter.id);
     }
 
     // 4. Send DM notification to receiver if applicable
