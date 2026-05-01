@@ -27,10 +27,16 @@ const kurale = Kurale({
   subsets: ["latin", "latin-ext"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mektuplas.com";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Cezaevine Mektup Gönder | Tespih, Saat, Hediye Gönder",
   description:
     "Cezaevine mektup gönder! Sevdiklerinize en güvenilir şekilde fotoğraflı, kokulu mektup ve hediye (Tespih, Saat vb.) gönderimi yapın.",
+  verification: {
+    google: "mA1jXBSHoDlR83zsH4rdG41XqoW8DV16oVV5PSTFDS8",
+  },
 };
 
 export default function RootLayout({
