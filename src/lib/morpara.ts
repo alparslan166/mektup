@@ -55,7 +55,7 @@ export function getMorparaConfig(): MorparaConfig {
   };
 }
 
-function formatMorparaTimestamp(date = new Date()) {
+function formatCompactMorparaTimestamp(date = new Date()) {
   const year = date.getFullYear().toString();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
@@ -63,6 +63,15 @@ function formatMorparaTimestamp(date = new Date()) {
   const minutes = String(date.getMinutes()).padStart(2, "0");
   const seconds = String(date.getSeconds()).padStart(2, "0");
   return `${year}${month}${day}${hours}${minutes}${seconds}`;
+}
+
+function formatMorparaTimestamp(date = new Date()) {
+  const mode = process.env.MORPARA_TIMESTAMP_FORMAT?.trim().toLowerCase();
+  if (mode === "compact") {
+    return formatCompactMorparaTimestamp(date);
+  }
+
+  return date.toISOString();
 }
 
 function decodeBase64IfPossible(value: string) {

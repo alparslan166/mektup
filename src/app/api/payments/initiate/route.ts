@@ -26,8 +26,20 @@ function getOrderNumberFromLetterData(letterData: unknown, letterId: string) {
   return `ORD-${letterId}`;
 }
 
-function getHostedPaymentUrl(attemptId: string) {
-  return `/odeme/mock-hosted?attemptId=${attemptId}`;
+function getHostedPaymentUrl(
+  orderNumber: string,
+  conversationId: string,
+  status: "processing" | "failed" | "success" = "processing",
+) {
+  return `/odeme/sonuc?status=${status}&order=${encodeURIComponent(orderNumber)}&conversationId=${encodeURIComponent(conversationId)}`;
+}
+
+function getUiStatusFromAttemptStatus(
+  status: string,
+): "processing" | "failed" | "success" {
+  if (status === "FAILED" || status === "CANCELLED") return "failed";
+  if (status === "APPROVED") return "success";
+  return "processing";
 }
 
 function buildConversationId(orderNumber: string) {
@@ -108,7 +120,12 @@ export async function POST(req: Request) {
         hostedPaymentUrl:
           typeof existingHostedUrl === "string"
             ? existingHostedUrl
-            : getHostedPaymentUrl(existingAttempt.id),
+            : getHostedPaymentUrl(
+                existingAttempt.orderNumber,
+                existingAttempt.conversationId ||
+                  buildConversationId(existingAttempt.orderNumber),
+                getUiStatusFromAttemptStatus(existingAttempt.status),
+              ),
         provider: existingAttempt.provider,
         mode: typeof existingHostedUrl === "string" ? "live" : "mock",
       });
@@ -126,9 +143,9 @@ export async function POST(req: Request) {
       },
     });
 
-    let hostedPaymentUrl = getHostedPaymentUrl(createdAttempt.id);
-    let mode: "live" | "mock" = "mock";
     const conversationId = buildConversationId(orderNumber);
+    let hostedPaymentUrl = getHostedPaymentUrl(orderNumber, conversationId);
+    let mode: "live" | "mock" = "mock";
 
     await (prisma as any).paymentAttempt.update({
       where: { id: createdAttempt.id },
@@ -177,6 +194,35 @@ export async function POST(req: Request) {
         }
       }
     } catch (error) {
+      const technicalErrorCode =
+        ((error as { cause?: { code?: string } }).cause?.code as
+          | string
+          | undefined) ||
+        ((error as { code?: string }).code as string | undefined) ||
+        "MORPARA_FETCH_ERROR";
+
+      const technicalErrorMessage =
+        error instanceof Error ? error.message : "Bilinmeyen bağlantı hatası";
+
+      await (prisma as any).paymentAttempt.update({
+        where: { id: createdAttempt.id },
+        data: {
+          status: "FAILED",
+          checkResponseCode: technicalErrorCode,
+          checkResponseDescription: "Morpara bağlantı hatası",
+          rawCallbackPayload: {
+            conversationId,
+            fallbackErrorCode: technicalErrorCode,
+            fallbackErrorMessage: technicalErrorMessage,
+          },
+        },
+      });
+
+      hostedPaymentUrl = getHostedPaymentUrl(
+        orderNumber,
+        conversationId,
+        "failed",
+      );
       console.warn("MORPARA_HOSTED_REDIRECT_FALLBACK", error);
     }
 

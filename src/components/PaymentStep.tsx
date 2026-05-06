@@ -634,20 +634,14 @@ export default function PaymentStep({
                   <button
                     type="submit"
                     onClick={handlePayment}
-                    disabled={
-                      isProcessing ||
-                      !cardDetails.number ||
-                      !cardDetails.expiry ||
-                      !cardDetails.cvv ||
-                      !cardDetails.name
-                    }
+                    disabled={isProcessing}
                     className="w-full bg-white hover:bg-paper-light border-2 border-wood/30 hover:border-wood text-wood-dark py-3.5 rounded-xl font-bold shadow-sm transition-all flex items-center justify-center gap-2.5 text-sm active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <CheckCircle2 size={18} />
                     <span className="flex flex-col items-start leading-tight">
                       <span>Kredi Kartı ile Ödeme</span>
                       <span className="text-[10px] font-medium opacity-80">
-                        Geçici olarak hizmet dışı
+                        Morpara güvenli sayfasında devam et
                       </span>
                     </span>
                   </button>
