@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLetterStore } from "@/store/letterStore";
-import { createLetter, getSentLetterCount } from "@/app/actions/letterActions";
+import { getSentLetterCount } from "@/app/actions/letterActions";
 import { getPricingSettings } from "@/app/actions/settingsActions";
 
 export default function PaymentStep({
@@ -177,23 +177,32 @@ export default function PaymentStep({
     setIsProcessing(true);
 
     const { letter, extras, address } = useLetterStore.getState();
+    try {
+      const res = await fetch("/api/payments/initiate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          letter,
+          extras,
+          address,
+          orderNumber: effectiveOrderNumber,
+        }),
+      });
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+      const data = await res.json();
 
-    const result = await createLetter({
-      letter,
-      extras,
-      address,
-      orderNumber: effectiveOrderNumber,
-    });
+      if (!res.ok || !data?.hostedPaymentUrl) {
+        alert(data?.error || "Ödeme başlatılamadı.");
+        return;
+      }
 
-    setIsProcessing(false);
-    isSubmitting.current = false;
-
-    if (result.success) {
-      setIsSuccess(true);
-    } else {
-      alert(result.error || "Bir hata oluştu.");
+      window.location.href = data.hostedPaymentUrl;
+    } catch (error) {
+      console.error("PAYMENT_INITIATE_CLIENT_ERROR", error);
+      alert("Ödeme başlatılırken bir hata oluştu.");
+    } finally {
+      setIsProcessing(false);
+      isSubmitting.current = false;
     }
   };
 
@@ -203,21 +212,33 @@ export default function PaymentStep({
     setIsHavaleProcessing(true);
 
     const { letter, extras, address } = useLetterStore.getState();
-    const result = await createLetter({
-      letter,
-      extras,
-      address,
-      orderNumber: effectiveOrderNumber,
-    });
+    try {
+      const res = await fetch("/api/payments/initiate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          letter,
+          extras,
+          address,
+          orderNumber: effectiveOrderNumber,
+        }),
+      });
 
-    setIsHavaleProcessing(false);
-    isSubmitting.current = false;
+      const data = await res.json();
 
-    if (result.success) {
+      if (!res.ok || !data?.hostedPaymentUrl) {
+        alert(data?.error || "Ödeme başlatılamadı.");
+        return;
+      }
+
       setShowHavaleModal(false);
-      setIsSuccess(true);
-    } else {
-      alert(result.error || "Bir hata oluştu.");
+      window.location.href = data.hostedPaymentUrl;
+    } catch (error) {
+      console.error("PAYMENT_INITIATE_HAVALE_CLIENT_ERROR", error);
+      alert("Ödeme başlatılırken bir hata oluştu.");
+    } finally {
+      setIsHavaleProcessing(false);
+      isSubmitting.current = false;
     }
   };
 

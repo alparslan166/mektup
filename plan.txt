@@ -1,4 +1,396 @@
-ptt eposta
-iletişim
-indirimler
-sss
+API DokümantasyonuEntegrasyon Yöntemleri
+Ortak Ödeme Sayfası
+MorPOS Yönlendirmeli Ödeme (Hosted Payment)
+MorPOS Hosted Payment modeli ile kart bilgileri MorPOS’un güvenli ödeme sayfasında alınır.
+Kullanıcı, ödeme başlatıldıktan sonra MorPOS tarafından sunulan ödeme ekranına yönlendirilir.
+
+Endpoint
+
+Copy
+POST /v1/HostedPayment/HostedPaymentRedirect
+Headers
+Anahtar
+Tür
+Açıklama
+Örnek
+x-ClientID
+
+String
+
+API istemcisi için benzersiz tanımlayıcı
+
+sizin-istemci-id’niz
+
+x-ClientSecret
+
+String
+
+API istemcisi için gizli anahtar
+
+sizin-gizli-anahtarınız
+
+x-GrantType
+
+String
+
+Kullanılan erişim token türü
+
+client_credentials
+
+x-Scope
+
+String
+
+API kapsamı
+
+pf_write, pf_read
+
+x-Timestamp
+
+String
+
+İstek zaman damgası (ISO 8601)
+
+2024-12-17T12:34:56Z
+
+Request Body
+Alan
+Zorunlu
+Tür
+Açıklama
+Örnek
+merchantId
+
+✅
+
+String
+
+Üye işyeri için benzersiz kimlik
+
+100000000000004
+
+returnUrl
+
+✅
+
+URL
+
+Başarılı işlem sonrası yönlendirme URL
+
+https://www.ornek.com/basari
+
+failUrl
+
+✅
+
+URL
+
+Başarısız işlem sonrası yönlendirme URL
+
+https://www.ornek.com/hata
+
+paymentMethod
+
+✅
+
+String
+
+Ödeme yöntemi
+
+EMBEDDEDPAYMENT
+
+paymentInstrumentType
+
+✅
+
+String
+
+Ödeme aracı türü
+
+CARD
+
+language
+
+✅
+
+String
+
+İşlem dili
+
+en
+
+conversationId
+
+✅
+
+String
+
+Takip için benzersiz kimlik
+
+MP20240305001
+
+sign
+
+✅
+
+String
+
+İsteğin dijital imzası
+
+ABC123...
+
+transactionDetails.transactionType
+
+✅
+
+String
+
+İşlem türü
+
+SALE
+
+transactionDetails.installmentCount
+
+✅
+
+Integer
+
+Taksit sayısı (0 = tek çekim)
+
+0
+
+transactionDetails.amount
+
+✅
+
+Decimal
+
+İşlem tutarı
+
+1.00
+
+transactionDetails.currencyCode
+
+✅
+
+Integer
+
+Para birimi kodu (TRY = 949)
+
+949
+
+transactionDetails.vftFlag
+
+❌
+
+Boolean
+
+VFT kullanım durumu
+
+false
+
+extraParameter.pFSubMerchantId
+
+❌
+
+String
+
+Alt üye işyeri kimliği
+
+12345
+
+Örnek Request
+
+Copy
+{
+  "merchantId": "100000000000004",
+  "returnUrl": "https://www.ornek.com/basari",
+  "failUrl": "https://www.ornek.com/hata",
+  "paymentMethod": "HOSTEDPAYMENT",
+  "paymentInstrumentType": "CARD",
+  "language": "en",
+  "conversationId": "MSD2024030500000000123",
+  "sign": "AAVWY3RZKJVVCEAD8LDQB4KWJL4QX/IQQRGQ3XIWAAG=",
+  "transactionDetails": {
+    "transactionType": "SALE",
+    "installmentCount": 0,
+    "amount": "1.00",
+    "currencyCode": "949",
+    "vftFlag": false
+  },
+  "extraParameter": {
+    "pFSubMerchantId": "12345"
+  }
+}
+Örnek Response
+
+Copy
+{
+    "returnUrl": "https://api.morpara.com/hostedpaymentpage/SdL+XGrAcMi+Z+7brD69kMasgWJIPui/nP1CFNETmXo="
+}
+İşleyiş Notları
+Kart bilgileri merchant sistemine iletilmez
+
+Kullanıcı MorPOS’un hosted ödeme sayfasına yönlendirilir
+
+Kart verileri MorPOS altyapısında işlenir
+
+PCI-DSS yükümlülüğü minimum seviyededir
+
+Ödeme sonucuna göre kullanıcı:
+
+Başarılı işlemde returnUrl
+
+Başarısız işlemde failUrl
+adresine yönlendirilir
+
+Hosted Payment, 3D Secure ve non-3D Secure senaryoları destekler
+
+
+
+---------------------
+
+API DokümantasyonuÖdemeler
+Ödeme Sorgulama
+Ödeme Sorgulama servisi, bir ödeme işleminin sonucunun:
+
+teknik problemler nedeniyle response bilgisinden alınamadığı,
+
+işlem sonucunun tekrar doğrulanmak istendiği
+
+durumlarda kullanılır.
+
+Bu servis ile, daha önce başlatılmış bir ödemenin nihai durumu (Başarılı, Başarısız, Beklemede vb.) sistem üzerinden tekrar sorgulanabilir.
+
+ℹ️ Ödeme sorgulama işlemi yalnızca bilgi amaçlıdır, ödeme durumunu değiştirmez.
+
+Endpoint
+
+Copy
+POST /v1/Payment/CheckPayment
+Headers
+Anahtar
+Tür
+Açıklama
+Örnek
+x-ClientID
+
+String
+
+API istemcisi için benzersiz tanımlayıcı
+
+sizin-istemci-id'niz
+
+x-ClientSecret
+
+String
+
+API istemcisi için gizli anahtar
+
+sizin-gizli-anahtarınız
+
+x-GrantType
+
+String
+
+Kullanılan erişim tokeni türü
+
+istemci_kimlik_bilgileri
+
+x-Scope
+
+String
+
+API kapsamı
+
+pf_write, pf_read
+
+x-Timestamp
+
+String
+
+İstek zaman damgası
+
+2024-12-17T12:34:56Z
+
+Request Body
+Alan
+Zorunlu
+Tür
+Açıklama
+Örnek
+merchantId
+
+✅
+
+Integer
+
+Üye işyeri için benzersiz kimlik
+
+100000000000004
+
+conversationId
+
+✅
+
+String
+
+İşlem takibi için oluşturulan benzersiz kimlik
+
+MSD2024030500000000115
+
+sign
+
+✅
+
+String
+
+İsteğin doğrulanması için dijital imza
+
+AAVWY3RZKJVVCEAD8LDQB4K
+
+Response Body
+Ödeme sorgulama servisi, sorgulanan ödemenin mevcut durumunu ve detaylarını döner.
+
+Örnek Request
+
+Copy
+POST /v1/Payment/CheckPayment
+Content-Type: application/json
+x-ClientID: sizin-istemci-id'niz
+x-ClientSecret: sizin-gizli-anahtarınız
+x-GrantType: istemci_kimlik_bilgileri
+x-Scope: pf_write, pf_read
+x-Timestamp: 2024-12-17T12:34:56Z
+
+Copy
+{
+  "merchantId": 100000000000004,
+  "conversationId": "MSD2024030500000000115",
+  "sign": "AAVWY3RZKJVVCEAD8LDQB4K..."
+}
+Örnek Response
+
+Copy
+{
+  "responseCode": "B0000",
+  "responseDescription": "Approved",
+  "responseDate": "02/06/2025 15:45:31",
+  "mdStatus": "",
+  "conversationId": "YBS57148868202773272",
+  "orderId": "5000000045202502030049",
+  "paymentId": "5000000045202502030049",
+  "bankUniqueReferenceNumber": "503715446698",
+  "paymentInstrumentType": "CARD",
+  "transactionDate": "02/06/2025 15:45:17",
+  "transactionStatus": "Normal",
+  "transactionType": "Satış",
+  "paymentInfo": {
+    "installmentCommission": 0.25,
+    "installmentCount": 1,
+    "amount": 25.00,
+    "currency": "949",
+    "authCode": "683819"
+  },
+  "sign": "AVPGVFPHPS+HXCKT4IWQ6EYL/UMYQANXXHQ6YTNNMA8="
+}

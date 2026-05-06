@@ -53,6 +53,7 @@ model User {
   addresses          Address[]
   creditTransactions CreditTransaction[]
   giftOrders         GiftOrder[]
+  paymentAttempts    PaymentAttempt[]
   comments           Comment[]
   firstCommentRewardReceived   Boolean             @default(false)
   secondLetterRewardReceived  Boolean             @default(false)
@@ -108,8 +109,9 @@ model Letter {
   user         User     @relation("SentLetters", fields: [userId], references: [id], onDelete: Cascade)
   receiverId   String?
   receiver     User?    @relation("ReceivedLetters", fields: [receiverId], references: [id], onDelete: SetNull)
+  paymentAttempts PaymentAttempt[]
   data         Json
-  status       String   @default("PAID") // PENDING, PAID, PREPARING, SHIPPED, COMPLETED
+  status       String   @default("PAID") // PENDING_PAYMENT, PAID, PREPARING, SHIPPED, COMPLETED
   senderName   String?
   receiverName String?
   receiverCity String?
@@ -119,6 +121,31 @@ model Letter {
   inboxConsentDate DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model PaymentAttempt {
+  id                       String   @id @default(cuid())
+  userId                   String
+  user                     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  letterId                 String?
+  letter                   Letter?  @relation(fields: [letterId], references: [id], onDelete: SetNull)
+  orderNumber              String   @unique
+  conversationId           String?  @unique
+  provider                 String   @default("MORPARA")
+  providerPaymentId        String?
+  amount                   Float
+  currency                 String   @default("TRY")
+  status                   String   @default("INITIATED") // INITIATED, PENDING, APPROVED, FAILED, CANCELLED
+  checkResponseCode        String?
+  checkResponseDescription String?
+  isFinalized              Boolean  @default(false)
+  rawCallbackPayload       Json?
+  rawCheckPayload          Json?
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
 }
 
 model GiftCategory {
