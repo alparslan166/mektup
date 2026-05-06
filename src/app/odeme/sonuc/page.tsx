@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, Clock3, XCircle } from "lucide-react";
@@ -18,7 +18,7 @@ type StatusResponse = {
 const POLL_INTERVAL_MS = 3000;
 const MAX_POLL_ATTEMPTS = 20;
 
-export default function PaymentResultPage() {
+function PaymentResultContent() {
   const searchParams = useSearchParams();
   const order = searchParams.get("order") || "";
   const conversationId = searchParams.get("conversationId") || "";
@@ -221,5 +221,29 @@ export default function PaymentResultPage() {
         )}
       </div>
     </div>
+  );
+}
+
+function PaymentResultFallback() {
+  return (
+    <div className="container mx-auto px-4 py-10 max-w-3xl">
+      <div className="bg-paper border border-paper-dark rounded-xl p-8 text-center shadow-sm">
+        <Clock3 className="mx-auto text-seal mb-4 animate-pulse" size={52} />
+        <h1 className="font-playfair text-3xl font-bold text-wood-dark mb-2">
+          Ödeme Durumu Kontrol Ediliyor
+        </h1>
+        <p className="text-ink-light">
+          Lütfen bekleyin, işleminizi doğruluyoruz.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default function PaymentResultPage() {
+  return (
+    <Suspense fallback={<PaymentResultFallback />}>
+      <PaymentResultContent />
+    </Suspense>
   );
 }
