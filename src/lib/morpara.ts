@@ -4,7 +4,7 @@ type MorparaConfig = {
   baseUrl: string;
   clientId: string;
   clientSecret: string;
-  apiKey?: string;
+  apiKey: string;
   grantType: string;
   scope: string;
   merchantId: string;
@@ -47,7 +47,7 @@ export function getMorparaConfig(): MorparaConfig {
     baseUrl: getEnv("MORPARA_BASE_URL"),
     clientId: getEnv("MORPARA_CLIENT_ID"),
     clientSecret: getEnv("MORPARA_CLIENT_SECRET"),
-    apiKey: process.env.MORPARA_API_KEY?.trim() || undefined,
+    apiKey: getEnv("MORPARA_API_KEY"),
     grantType: process.env.MORPARA_GRANT_TYPE?.trim() || "client_credentials",
     scope: process.env.MORPARA_SCOPE?.trim() || "pf_write, pf_read",
     merchantId: getEnv("MORPARA_MERCHANT_ID"),
@@ -103,6 +103,15 @@ function hashSha256Base64Upper(value: string) {
     .toUpperCase();
 }
 
+function generateConversationMerchantApiKeySign(
+  conversationId: string,
+  merchantId: string,
+) {
+  const config = getMorparaConfig();
+  const canonical = `${conversationId};${merchantId};${config.apiKey}`;
+  return hashSha256Base64Upper(canonical);
+}
+
 export function getMorparaHeaders(timestamp?: string): MorparaHeaders {
   const config = getMorparaConfig();
   const xTimestamp = timestamp || formatMorparaTimestamp();
@@ -143,15 +152,10 @@ export function buildHostedPaymentPayload(input: HostedPaymentInput) {
   const currencyCode = input.currencyCode || "949";
   const installmentCount = input.installmentCount ?? 0;
   const language = input.language || "tr";
-
-  const sign = generateMorparaSign([
-    config.merchantId,
+  const sign = generateConversationMerchantApiKeySign(
     input.conversationId,
-    input.amount,
-    currencyCode,
-    input.returnUrl,
-    input.failUrl,
-  ]);
+    config.merchantId,
+  );
 
   return {
     merchantId: config.merchantId,
@@ -174,7 +178,10 @@ export function buildHostedPaymentPayload(input: HostedPaymentInput) {
 
 export function buildCheckPaymentPayload(input: CheckPaymentInput) {
   const config = getMorparaConfig();
-  const sign = generateMorparaSign([config.merchantId, input.conversationId]);
+  const sign = generateConversationMerchantApiKeySign(
+    input.conversationId,
+    config.merchantId,
+  );
 
   return {
     merchantId: Number(config.merchantId),
@@ -202,7 +209,27 @@ function getStringField(
     return value.trim();
   }
 
+  if (typeof value === "number") {
+    return String(value);
+  }
+
   return null;
+}
+
+function getStringFieldCaseInsensitive(
+  payload: Record<string, unknown>,
+  key: string,
+): string | null {
+  const direct = getStringField(payload, key);
+  if (direct) return direct;
+
+  const lowerKey = key.toLowerCase();
+  const matchedKey = Object.keys(payload).find(
+    (currentKey) => currentKey.toLowerCase() === lowerKey,
+  );
+
+  if (!matchedKey) return null;
+  return getStringField(payload, matchedKey);
 }
 
 function areEqualSafe(a: string, b: string) {
@@ -217,8 +244,7 @@ function areEqualSafe(a: string, b: string) {
 }
 
 export function verifyMorparaCallbackSign(payload: Record<string, unknown>) {
-  const callbackSign =
-    getStringField(payload, "sign") || getStringField(payload, "Sign");
+  const callbackSign = getStringFieldCaseInsensitive(payload, "sign");
   const enforce = process.env.MORPARA_CALLBACK_SIGN_ENFORCE !== "false";
 
   if (!callbackSign) {
@@ -228,24 +254,26 @@ export function verifyMorparaCallbackSign(payload: Record<string, unknown>) {
     };
   }
 
-  const configured = process.env.MORPARA_CALLBACK_SIGN_FIELDS?.trim();
-  const signFields = configured
-    ? configured
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean)
-    : [
-        "conversationId",
-        "orderId",
-        "paymentId",
-        "responseCode",
-        "responseDescription",
-      ];
-
-  const signParts = signFields.map(
-    (field) => getStringField(payload, field) || "",
+  const config = getMorparaConfig();
+  const conversationId = getStringFieldCaseInsensitive(
+    payload,
+    "conversationId",
   );
-  const expectedSign = generateMorparaSign(signParts);
+
+  if (!conversationId) {
+    return {
+      isValid: !enforce,
+      reason: "Callback conversationId alanı bulunamadı.",
+    };
+  }
+
+  const merchantId =
+    getStringFieldCaseInsensitive(payload, "merchantId") || config.merchantId;
+
+  const expectedSign = generateConversationMerchantApiKeySign(
+    conversationId,
+    merchantId,
+  );
   const normalizedCallbackSign = callbackSign.toUpperCase();
 
   return {
