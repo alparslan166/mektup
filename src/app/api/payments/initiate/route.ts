@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 import { createPendingLetter } from "@/app/actions/letterActions";
 import {
   buildHostedPaymentPayload,
+  getMorparaEnvDiagnostics,
   getHostedPaymentRedirectUrl,
   getMorparaHeaders,
 } from "@/lib/morpara";
@@ -240,7 +241,14 @@ export async function POST(req: Request) {
         conversationId,
         amount: formatAmount(letter.totalAmount),
       });
+      const envDiagnostics = getMorparaEnvDiagnostics();
       const morparaHeaders = getMorparaHeaders();
+
+      console.info("MORPARA_ENV_CHECK", {
+        orderNumber,
+        conversationId,
+        ...envDiagnostics,
+      });
 
       console.info("MORPARA_HOSTED_REDIRECT_REQUEST_HEADERS", {
         orderNumber,

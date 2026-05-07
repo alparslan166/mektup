@@ -33,6 +33,44 @@ type CheckPaymentInput = {
   conversationId: string;
 };
 
+type MorparaEnvDiagnostics = {
+  hasBaseUrl: boolean;
+  hasClientId: boolean;
+  hasClientSecret: boolean;
+  hasApiKey: boolean;
+  hasMerchantId: boolean;
+  hasSecretKey: boolean;
+  baseUrl: string;
+  scope: string;
+  grantType: string;
+  timestampFormat: string;
+  timestampHourMode: string;
+  headerSecretMode: string;
+  clientIdMask: string;
+  merchantIdMask: string;
+  clientSecretFingerprint: string;
+  apiKeyFingerprint: string;
+};
+
+function getEnvOptional(name: string): string {
+  return process.env[name]?.trim() || "";
+}
+
+function maskEnvValue(value: string) {
+  if (!value) return "";
+  if (value.length <= 6) return "***";
+  return `${value.slice(0, 3)}***${value.slice(-3)}`;
+}
+
+function fingerprintEnvValue(value: string) {
+  if (!value) return "";
+  return crypto
+    .createHash("sha256")
+    .update(value, "utf8")
+    .digest("hex")
+    .slice(0, 12);
+}
+
 function normalizeMorparaScope(value: string) {
   return value
     .split(",")
@@ -48,6 +86,45 @@ function getEnv(name: string): string {
   }
 
   return value.trim();
+}
+
+export function getMorparaEnvDiagnostics(): MorparaEnvDiagnostics {
+  const baseUrl = getEnvOptional("MORPARA_BASE_URL");
+  const clientId = getEnvOptional("MORPARA_CLIENT_ID");
+  const clientSecret = getEnvOptional("MORPARA_CLIENT_SECRET");
+  const apiKey = getEnvOptional("MORPARA_API_KEY");
+  const merchantId = getEnvOptional("MORPARA_MERCHANT_ID");
+  const secretKey = getEnvOptional("MORPARA_SECRET_KEY");
+  const scope = normalizeMorparaScope(
+    getEnvOptional("MORPARA_SCOPE") || "pf_write,pf_read",
+  );
+  const grantType =
+    getEnvOptional("MORPARA_GRANT_TYPE") || "client_credentials";
+  const timestampFormat =
+    getEnvOptional("MORPARA_TIMESTAMP_FORMAT").toLowerCase() || "iso";
+  const timestampHourMode =
+    getEnvOptional("MORPARA_TIMESTAMP_HOUR_MODE") || "12";
+  const headerSecretMode =
+    getEnvOptional("MORPARA_HEADER_SECRET_MODE") || "hash";
+
+  return {
+    hasBaseUrl: baseUrl.length > 0,
+    hasClientId: clientId.length > 0,
+    hasClientSecret: clientSecret.length > 0,
+    hasApiKey: apiKey.length > 0,
+    hasMerchantId: merchantId.length > 0,
+    hasSecretKey: secretKey.length > 0,
+    baseUrl,
+    scope,
+    grantType,
+    timestampFormat,
+    timestampHourMode,
+    headerSecretMode,
+    clientIdMask: maskEnvValue(clientId),
+    merchantIdMask: maskEnvValue(merchantId),
+    clientSecretFingerprint: fingerprintEnvValue(clientSecret),
+    apiKeyFingerprint: fingerprintEnvValue(apiKey),
+  };
 }
 
 export function getMorparaConfig(): MorparaConfig {
