@@ -74,13 +74,13 @@ function formatMorparaTimestamp(date = new Date()) {
   return date.toISOString();
 }
 
-function decodeBase64IfPossible(value: string) {
-  try {
-    const decoded = Buffer.from(value, "base64").toString("utf8");
-    return decoded || value;
-  } catch {
-    return value;
+function decodeBase64Strict(value: string) {
+  const decoded = Buffer.from(value, "base64").toString("utf8");
+  if (!decoded || decoded.trim().length === 0) {
+    throw new Error("MORPARA_CLIENT_SECRET base64 decode failed");
   }
+
+  return decoded;
 }
 
 function buildHeaderClientSecret(clientSecret: string, timestamp: string) {
@@ -89,10 +89,9 @@ function buildHeaderClientSecret(clientSecret: string, timestamp: string) {
     return clientSecret;
   }
 
-  const decodedSecret = decodeBase64IfPossible(clientSecret);
+  const decodedSecret = decodeBase64Strict(clientSecret);
   const combined = `${decodedSecret}${timestamp}`;
-  const shaHex = crypto.createHash("sha256").update(combined).digest("hex");
-  return Buffer.from(shaHex, "utf8").toString("base64");
+  return crypto.createHash("sha256").update(combined, "utf8").digest("base64");
 }
 
 function hashSha256Base64Upper(value: string) {
