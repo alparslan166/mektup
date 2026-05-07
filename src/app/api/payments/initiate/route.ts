@@ -42,6 +42,27 @@ function getUiStatusFromAttemptStatus(
   return "processing";
 }
 
+async function markInitiateFailed(
+  attemptId: string,
+  conversationId: string,
+  technicalErrorCode: string,
+  technicalErrorMessage: string,
+) {
+  await (prisma as any).paymentAttempt.update({
+    where: { id: attemptId },
+    data: {
+      status: "FAILED",
+      checkResponseCode: technicalErrorCode,
+      checkResponseDescription: "Morpara bağlantı/başlatma hatası",
+      rawCallbackPayload: {
+        conversationId,
+        fallbackErrorCode: technicalErrorCode,
+        fallbackErrorMessage: technicalErrorMessage,
+      },
+    },
+  });
+}
+
 function buildConversationId(orderNumber: string) {
   const clean = orderNumber.replace(/[^a-zA-Z0-9]/g, "");
   return clean.slice(0, 32) || `MP${Date.now()}`;
@@ -109,6 +130,44 @@ export async function POST(req: Request) {
               .hostedPaymentUrl
           : null;
 
+      const hasLiveHostedUrl = typeof existingHostedUrl === "string";
+      const isTerminalStatus =
+        existingAttempt.status === "APPROVED" ||
+        existingAttempt.status === "FAILED" ||
+        existingAttempt.status === "CANCELLED";
+
+      if (!hasLiveHostedUrl && !isTerminalStatus) {
+        const technicalErrorCode = "STALE_ATTEMPT_NO_HOSTED_URL";
+        const technicalErrorMessage =
+          "Önceki deneme hosted ödeme URL üretemediği için sonlandırıldı";
+
+        await markInitiateFailed(
+          existingAttempt.id,
+          existingAttempt.conversationId ||
+            buildConversationId(existingAttempt.orderNumber),
+          technicalErrorCode,
+          technicalErrorMessage,
+        );
+
+        return NextResponse.json({
+          success: true,
+          paymentAttemptId: existingAttempt.id,
+          orderNumber: existingAttempt.orderNumber,
+          conversationId: existingAttempt.conversationId || undefined,
+          amount: existingAttempt.amount,
+          currency: existingAttempt.currency,
+          status: "FAILED",
+          hostedPaymentUrl: getHostedPaymentUrl(
+            existingAttempt.orderNumber,
+            existingAttempt.conversationId ||
+              buildConversationId(existingAttempt.orderNumber),
+            "failed",
+          ),
+          provider: existingAttempt.provider,
+          mode: "mock",
+        });
+      }
+
       return NextResponse.json({
         success: true,
         paymentAttemptId: existingAttempt.id,
@@ -171,27 +230,75 @@ export async function POST(req: Request) {
         cache: "no-store",
       });
 
-      if (response.ok) {
-        const responseData = (await response.json()) as { returnUrl?: string };
-        if (
-          typeof responseData.returnUrl === "string" &&
-          responseData.returnUrl
-        ) {
-          hostedPaymentUrl = responseData.returnUrl;
-          mode = "live";
+      const responseText = await response.text();
+      let responseData: {
+        returnUrl?: string;
+        responseCode?: string;
+        responseDescription?: string;
+      } | null = null;
+      try {
+        responseData = responseText
+          ? (JSON.parse(responseText) as {
+              returnUrl?: string;
+              responseCode?: string;
+              responseDescription?: string;
+            })
+          : null;
+      } catch {
+        responseData = null;
+      }
 
-          await (prisma as any).paymentAttempt.update({
-            where: { id: createdAttempt.id },
-            data: {
-              status: "PENDING",
+      if (!response.ok) {
+        const technicalErrorCode =
+          responseData?.responseCode || `HTTP_${response.status}`;
+        const technicalErrorMessage =
+          responseData?.responseDescription ||
+          responseText ||
+          "HostedPaymentRedirect başarısız döndü";
+
+        await markInitiateFailed(
+          createdAttempt.id,
+          conversationId,
+          technicalErrorCode,
+          technicalErrorMessage,
+        );
+
+        hostedPaymentUrl = getHostedPaymentUrl(
+          orderNumber,
+          conversationId,
+          "failed",
+        );
+      } else if (
+        typeof responseData?.returnUrl === "string" &&
+        responseData.returnUrl
+      ) {
+        hostedPaymentUrl = responseData.returnUrl;
+        mode = "live";
+
+        await (prisma as any).paymentAttempt.update({
+          where: { id: createdAttempt.id },
+          data: {
+            status: "PENDING",
+            conversationId,
+            rawCallbackPayload: {
+              hostedPaymentUrl,
               conversationId,
-              rawCallbackPayload: {
-                hostedPaymentUrl,
-                conversationId,
-              },
             },
-          });
-        }
+          },
+        });
+      } else {
+        await markInitiateFailed(
+          createdAttempt.id,
+          conversationId,
+          "MORPARA_RETURN_URL_MISSING",
+          "HostedPaymentRedirect returnUrl alanı boş döndü",
+        );
+
+        hostedPaymentUrl = getHostedPaymentUrl(
+          orderNumber,
+          conversationId,
+          "failed",
+        );
       }
     } catch (error) {
       const technicalErrorCode =
@@ -204,19 +311,12 @@ export async function POST(req: Request) {
       const technicalErrorMessage =
         error instanceof Error ? error.message : "Bilinmeyen bağlantı hatası";
 
-      await (prisma as any).paymentAttempt.update({
-        where: { id: createdAttempt.id },
-        data: {
-          status: "FAILED",
-          checkResponseCode: technicalErrorCode,
-          checkResponseDescription: "Morpara bağlantı hatası",
-          rawCallbackPayload: {
-            conversationId,
-            fallbackErrorCode: technicalErrorCode,
-            fallbackErrorMessage: technicalErrorMessage,
-          },
-        },
-      });
+      await markInitiateFailed(
+        createdAttempt.id,
+        conversationId,
+        technicalErrorCode,
+        technicalErrorMessage,
+      );
 
       hostedPaymentUrl = getHostedPaymentUrl(
         orderNumber,
@@ -234,7 +334,7 @@ export async function POST(req: Request) {
         conversationId,
         amount: createdAttempt.amount,
         currency: createdAttempt.currency,
-        status: mode === "live" ? "PENDING" : createdAttempt.status,
+        status: mode === "live" ? "PENDING" : "FAILED",
         hostedPaymentUrl,
         provider: createdAttempt.provider,
         mode,
