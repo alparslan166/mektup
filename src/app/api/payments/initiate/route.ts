@@ -78,6 +78,22 @@ function truncateForLog(value: string, max = 1000) {
   return `${value.slice(0, max)}...`;
 }
 
+function maskLogValue(value: string) {
+  if (!value) return value;
+  if (value.length <= 6) return "***";
+  return `${value.slice(0, 3)}***${value.slice(-3)}`;
+}
+
+function getMaskedMorparaHeadersForLog(headers: Record<string, string>) {
+  return {
+    "x-ClientID": maskLogValue(headers["x-ClientID"] || ""),
+    "x-ClientSecret": maskLogValue(headers["x-ClientSecret"] || ""),
+    "x-GrantType": headers["x-GrantType"] || "",
+    "x-Scope": headers["x-Scope"] || "",
+    "x-Timestamp": headers["x-Timestamp"] || "",
+  };
+}
+
 function getBaseUrl(req: Request) {
   if (process.env.APP_BASE_URL) {
     return process.env.APP_BASE_URL;
@@ -224,12 +240,20 @@ export async function POST(req: Request) {
         conversationId,
         amount: formatAmount(letter.totalAmount),
       });
+      const morparaHeaders = getMorparaHeaders();
+
+      console.info("MORPARA_HOSTED_REDIRECT_REQUEST_HEADERS", {
+        orderNumber,
+        conversationId,
+        endpoint: getHostedPaymentRedirectUrl(),
+        headers: getMaskedMorparaHeadersForLog(morparaHeaders),
+      });
 
       const response = await fetch(getHostedPaymentRedirectUrl(), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...getMorparaHeaders(),
+          ...morparaHeaders,
         },
         body: JSON.stringify(requestBody),
         cache: "no-store",

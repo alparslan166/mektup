@@ -49,7 +49,7 @@ export function getMorparaConfig(): MorparaConfig {
     clientSecret: getEnv("MORPARA_CLIENT_SECRET"),
     apiKey: getEnv("MORPARA_API_KEY"),
     grantType: process.env.MORPARA_GRANT_TYPE?.trim() || "client_credentials",
-    scope: process.env.MORPARA_SCOPE?.trim() || "pf_write, pf_read",
+    scope: process.env.MORPARA_SCOPE?.trim() || "pf_write,pf_read",
     merchantId: getEnv("MORPARA_MERCHANT_ID"),
     secretKey: getEnv("MORPARA_SECRET_KEY"),
   };
@@ -59,7 +59,10 @@ function formatCompactMorparaTimestamp(date = new Date()) {
   const year = date.getFullYear().toString();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-  const hours = String(date.getHours()).padStart(2, "0");
+  const hourMode = process.env.MORPARA_TIMESTAMP_HOUR_MODE?.trim();
+  const rawHours = date.getHours();
+  const hoursValue = hourMode === "24" ? rawHours : ((rawHours + 11) % 12) + 1;
+  const hours = String(hoursValue).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
   const seconds = String(date.getSeconds()).padStart(2, "0");
   return `${year}${month}${day}${hours}${minutes}${seconds}`;
