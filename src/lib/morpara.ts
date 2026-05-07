@@ -33,6 +33,14 @@ type CheckPaymentInput = {
   conversationId: string;
 };
 
+function normalizeMorparaScope(value: string) {
+  return value
+    .split(",")
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0)
+    .join(",");
+}
+
 function getEnv(name: string): string {
   const value = process.env[name];
   if (!value || value.trim().length === 0) {
@@ -43,13 +51,15 @@ function getEnv(name: string): string {
 }
 
 export function getMorparaConfig(): MorparaConfig {
+  const rawScope = process.env.MORPARA_SCOPE?.trim() || "pf_write,pf_read";
+
   return {
     baseUrl: getEnv("MORPARA_BASE_URL"),
     clientId: getEnv("MORPARA_CLIENT_ID"),
     clientSecret: getEnv("MORPARA_CLIENT_SECRET"),
     apiKey: getEnv("MORPARA_API_KEY"),
     grantType: process.env.MORPARA_GRANT_TYPE?.trim() || "client_credentials",
-    scope: process.env.MORPARA_SCOPE?.trim() || "pf_write,pf_read",
+    scope: normalizeMorparaScope(rawScope),
     merchantId: getEnv("MORPARA_MERCHANT_ID"),
     secretKey: getEnv("MORPARA_SECRET_KEY"),
   };
