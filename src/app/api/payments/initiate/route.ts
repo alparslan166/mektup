@@ -73,6 +73,11 @@ function formatAmount(amount: number | null) {
   return normalized.toFixed(2);
 }
 
+function truncateForLog(value: string, max = 1000) {
+  if (value.length <= max) return value;
+  return `${value.slice(0, max)}...`;
+}
+
 function getBaseUrl(req: Request) {
   if (process.env.APP_BASE_URL) {
     return process.env.APP_BASE_URL;
@@ -256,6 +261,17 @@ export async function POST(req: Request) {
           responseText ||
           "HostedPaymentRedirect başarısız döndü";
 
+        console.warn("MORPARA_HOSTED_REDIRECT_NON_OK", {
+          status: response.status,
+          statusText: response.statusText,
+          orderNumber,
+          conversationId,
+          providerResponseCode: responseData?.responseCode || null,
+          providerResponseDescription:
+            responseData?.responseDescription || null,
+          responseBody: truncateForLog(responseText),
+        });
+
         await markInitiateFailed(
           createdAttempt.id,
           conversationId,
@@ -287,6 +303,15 @@ export async function POST(req: Request) {
           },
         });
       } else {
+        console.warn("MORPARA_HOSTED_REDIRECT_MISSING_RETURN_URL", {
+          orderNumber,
+          conversationId,
+          providerResponseCode: responseData?.responseCode || null,
+          providerResponseDescription:
+            responseData?.responseDescription || null,
+          responseBody: truncateForLog(responseText),
+        });
+
         await markInitiateFailed(
           createdAttempt.id,
           conversationId,
