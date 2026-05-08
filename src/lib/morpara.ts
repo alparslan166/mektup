@@ -73,10 +73,10 @@ function fingerprintEnvValue(value: string) {
 
 function normalizeMorparaScope(value: string) {
   return value
-    .split(",")
+    .split(/[,\s]+/)
     .map((part) => part.trim())
     .filter((part) => part.length > 0)
-    .join(",");
+    .join(" ");
 }
 
 function getEnv(name: string): string {
@@ -128,7 +128,7 @@ export function getMorparaEnvDiagnostics(): MorparaEnvDiagnostics {
 }
 
 export function getMorparaConfig(): MorparaConfig {
-  const rawScope = process.env.MORPARA_SCOPE?.trim() || "pf_write,pf_read";
+  const rawScope = process.env.MORPARA_SCOPE?.trim() || "pf_write pf_read";
 
   return {
     baseUrl: getEnv("MORPARA_BASE_URL"),
@@ -148,7 +148,7 @@ function formatCompactMorparaTimestamp(date = new Date()) {
   const day = String(date.getDate()).padStart(2, "0");
   const hourMode = process.env.MORPARA_TIMESTAMP_HOUR_MODE?.trim();
   const rawHours = date.getHours();
-  const hoursValue = hourMode === "24" ? rawHours : ((rawHours + 11) % 12) + 1;
+  const hoursValue = hourMode === "24" ? rawHours : rawHours % 12 || 12;
   const hours = String(hoursValue).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
   const seconds = String(date.getSeconds()).padStart(2, "0");
