@@ -164,24 +164,16 @@ function formatMorparaTimestamp(date = new Date()) {
   return date.toISOString();
 }
 
-function decodeBase64Strict(value: string) {
-  const decoded = Buffer.from(value, "base64").toString("utf8");
-  if (!decoded || decoded.trim().length === 0) {
-    throw new Error("MORPARA_CLIENT_SECRET base64 decode failed");
-  }
-
-  return decoded;
-}
-
 function buildHeaderClientSecret(clientSecret: string, timestamp: string) {
   const mode = process.env.MORPARA_HEADER_SECRET_MODE?.trim() || "hash";
   if (mode === "raw") {
     return clientSecret;
   }
 
-  const decodedSecret = decodeBase64Strict(clientSecret);
-  const combined = `${decodedSecret}${timestamp}`;
-  return crypto.createHash("sha256").update(combined, "utf8").digest("base64");
+  const decodedSecretBuffer = Buffer.from(clientSecret, "base64");
+  const timestampBuffer = Buffer.from(timestamp, "utf8");
+  const combined = Buffer.concat([decodedSecretBuffer, timestampBuffer]);
+  return crypto.createHash("sha256").update(combined).digest("base64");
 }
 
 function hashSha256Base64Upper(value: string) {
