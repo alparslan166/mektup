@@ -250,7 +250,7 @@ export async function POST(req: Request) {
 
       const signFingerprint = crypto
         .createHash("sha256")
-        .update(String(requestBody.sign || ""), "utf8")
+        .update(String(requestBody.Sign || ""), "utf8")
         .digest("hex")
         .slice(0, 12);
 
@@ -258,11 +258,11 @@ export async function POST(req: Request) {
         orderNumber,
         conversationId,
         ...getMorparaSignDiagnostics(),
-        signLength: String(requestBody.sign || "").length,
+        signLength: String(requestBody.Sign || "").length,
         signFingerprint,
         body: {
           ...requestBody,
-          sign: maskLogValue(String(requestBody.sign || "")),
+          Sign: maskLogValue(String(requestBody.Sign || "")),
         },
       });
 
@@ -277,22 +277,29 @@ export async function POST(req: Request) {
       });
 
       const responseText = await response.text();
-      let responseData: {
-        returnUrl?: string;
-        responseCode?: string;
-        responseDescription?: string;
-      } | null = null;
+      let responseRaw: Record<string, unknown> | null = null;
       try {
-        responseData = responseText
-          ? (JSON.parse(responseText) as {
-              returnUrl?: string;
-              responseCode?: string;
-              responseDescription?: string;
-            })
+        responseRaw = responseText
+          ? (JSON.parse(responseText) as Record<string, unknown>)
           : null;
       } catch {
-        responseData = null;
+        responseRaw = null;
       }
+
+      // Morpara hem PascalCase (ReturnUrl, ResponseCode, ResponseDescription)
+      // hem de camelCase dönebilir; her iki anahtara da bakıyoruz.
+      const pickStringField = (key: string) => {
+        if (!responseRaw) return undefined;
+        const pascal = `${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+        const value =
+          (responseRaw[key] as unknown) ?? (responseRaw[pascal] as unknown);
+        return typeof value === "string" ? value : undefined;
+      };
+      const responseData = {
+        returnUrl: pickStringField("returnUrl"),
+        responseCode: pickStringField("responseCode"),
+        responseDescription: pickStringField("responseDescription"),
+      };
 
       if (!response.ok) {
         const technicalErrorCode =

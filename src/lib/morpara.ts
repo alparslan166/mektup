@@ -299,24 +299,28 @@ export function buildHostedPaymentPayload(input: HostedPaymentInput) {
     config.merchantId,
   );
 
+  // Morpara HostedPaymentRedirect VM PascalCase field isimleri kullanıyor;
+  // .NET model binding case-sensitive olduğu için camelCase gönderildiğinde
+  // tüm alanlar null görünüp HTTP 500 (NullReferenceException) dönüyordu.
+  // extraParameter.pFSubMerchantId zorunlu (boş string olarak kabul ediliyor).
   return {
-    // Morpara HostedPaymentRedirect VM'inde merchantId field'ı string olarak
-    // tanımlı; numeric göndermek "JSON value could not be converted to
-    // System.String" model binding hatasına neden oluyor.
-    merchantId: config.merchantId,
-    returnUrl: input.returnUrl,
-    failUrl: input.failUrl,
-    paymentMethod: "HOSTEDPAYMENT",
-    paymentInstrumentType: "CARD",
-    language,
-    conversationId: input.conversationId,
-    sign,
-    transactionDetails: {
-      transactionType: "SALE",
-      installmentCount,
-      amount: input.amount,
-      currencyCode,
-      vftFlag: false,
+    MerchantId: config.merchantId,
+    ReturnUrl: input.returnUrl,
+    FailUrl: input.failUrl,
+    PaymentMethod: "HOSTEDPAYMENT",
+    PaymentInstrumentType: "CARD",
+    Language: language,
+    ConversationId: input.conversationId,
+    Sign: sign,
+    TransactionDetails: {
+      TransactionType: "SALE",
+      InstallmentCount: installmentCount,
+      Amount: input.amount,
+      CurrencyCode: currencyCode,
+      VftFlag: false,
+    },
+    extraParameter: {
+      pFSubMerchantId: "",
     },
   };
 }
