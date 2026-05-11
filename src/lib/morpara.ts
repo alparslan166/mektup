@@ -229,6 +229,13 @@ function generateConversationMerchantApiKeySign(
   return encodeMorparaSign(canonical);
 }
 
+export function getMorparaSignDiagnostics() {
+  return {
+    signEncoding:
+      process.env.MORPARA_SIGN_ENCODING?.trim().toLowerCase() || "hex_b64",
+  };
+}
+
 export function getMorparaHeaders(timestamp?: string): MorparaHeaders {
   const config = getMorparaConfig();
   const xTimestamp = timestamp || formatMorparaTimestamp();

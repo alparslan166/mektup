@@ -7,6 +7,7 @@ import { createPendingLetter } from "@/app/actions/letterActions";
 import {
   buildHostedPaymentPayload,
   getMorparaEnvDiagnostics,
+  getMorparaSignDiagnostics,
   getHostedPaymentRedirectUrl,
   getMorparaHeaders,
 } from "@/lib/morpara";
@@ -243,6 +244,24 @@ export async function POST(req: Request) {
         conversationId,
         endpoint: getHostedPaymentRedirectUrl(),
         headers: getMaskedMorparaHeadersForLog(morparaHeaders),
+      });
+
+      const signFingerprint = crypto
+        .createHash("sha256")
+        .update(String(requestBody.sign || ""), "utf8")
+        .digest("hex")
+        .slice(0, 12);
+
+      console.info("MORPARA_HOSTED_REDIRECT_REQUEST_BODY", {
+        orderNumber,
+        conversationId,
+        signEncoding: getMorparaSignDiagnostics().signEncoding,
+        signLength: String(requestBody.sign || "").length,
+        signFingerprint,
+        body: {
+          ...requestBody,
+          sign: maskLogValue(String(requestBody.sign || "")),
+        },
       });
 
       const response = await fetch(getHostedPaymentRedirectUrl(), {
