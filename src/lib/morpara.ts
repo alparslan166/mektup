@@ -192,13 +192,41 @@ function hashSha256Base64Upper(value: string) {
     .toUpperCase();
 }
 
+function encodeMorparaSign(canonical: string) {
+  // Morpara'nın paylaştığı x-ClientSecret CryptoJS örneği hex-then-base64
+  // pattern'i kullanıyor. sign alanı için resmi spec elimizde olmadığı
+  // için MORPARA_SIGN_ENCODING env'i ile mode'lar arasında geçiş
+  // yapabiliyoruz. Varsayılan: x-ClientSecret ile aynı pattern (hex_b64).
+  const mode =
+    process.env.MORPARA_SIGN_ENCODING?.trim().toLowerCase() || "hex_b64";
+
+  const digest = crypto.createHash("sha256").update(canonical, "utf8");
+
+  if (mode === "hex") {
+    return digest.digest("hex");
+  }
+  if (mode === "hex_upper") {
+    return digest.digest("hex").toUpperCase();
+  }
+  if (mode === "base64") {
+    return digest.digest("base64");
+  }
+  if (mode === "base64_upper") {
+    return digest.digest("base64").toUpperCase();
+  }
+
+  // hex_b64 (default): Base64( UTF-8 bytes of lowercase hex of SHA256 )
+  const hex = digest.digest("hex");
+  return Buffer.from(hex, "utf8").toString("base64");
+}
+
 function generateConversationMerchantApiKeySign(
   conversationId: string,
   merchantId: string,
 ) {
   const config = getMorparaConfig();
   const canonical = `${conversationId};${merchantId};${config.apiKey}`;
-  return hashSha256Base64Upper(canonical);
+  return encodeMorparaSign(canonical);
 }
 
 export function getMorparaHeaders(timestamp?: string): MorparaHeaders {
