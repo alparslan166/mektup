@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -65,8 +66,13 @@ async function markInitiateFailed(
 }
 
 function buildConversationId(orderNumber: string) {
+  // Morpara, conversationId için alfanumerik ve yeterli uzunlukta (>=16)
+  // benzersiz bir değer bekliyor. Order number tek başına çok kısa
+  // kalabildiği için sonuna rastgele bir UUID parçası ekliyoruz.
   const clean = orderNumber.replace(/[^a-zA-Z0-9]/g, "");
-  return clean.slice(0, 32) || `MP${Date.now()}`;
+  const randomSuffix = crypto.randomUUID().replace(/-/g, "");
+  const base = clean || `MP${Date.now()}`;
+  return `${base}${randomSuffix}`.slice(0, 48);
 }
 
 function formatAmount(amount: number | null) {
@@ -199,8 +205,11 @@ export async function POST(req: Request) {
           },
         });
 
-    const conversationId =
-      createdAttempt.conversationId || buildConversationId(orderNumber);
+    // Her initiate denemesinde Morpara'ya yeni bir conversationId gönderiyoruz.
+    // Bu hem min uzunluk gereksinimini garanti eder hem de daha önce Morpara
+    // tarafında reddedilmiş (örn. eski 403/400 alan) bir id'nin tekrar
+    // gönderilmesini engeller.
+    const conversationId = buildConversationId(orderNumber);
     let hostedPaymentUrl = getHostedPaymentUrl(orderNumber, conversationId);
     let mode: "live" | "mock" = "mock";
 
