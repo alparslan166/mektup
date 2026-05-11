@@ -66,12 +66,11 @@ async function markInitiateFailed(
 }
 
 function buildConversationId(_orderNumber: string) {
-  // Morpara conversationId için 32 karakter, tamamı alfanumerik (UUID hex)
-  // bir değer bekliyor. Order number ile prefix'lemek 32+ karaktere
-  // çıkardığında "Invalid ConversationId" döndürüyor; bu yüzden saf UUID
-  // hex kullanıyoruz. Order number ile korelasyon zaten DB'de
-  // PaymentAttempt.orderNumber + conversationId üzerinden sağlanıyor.
-  return crypto.randomUUID().replace(/-/g, "");
+  // Morpara, conversationId alanını dash'li standart UUID v4 formatında
+  // (8-4-4-4-12, toplam 36 karakter) bekliyor. Numeric, hex-only ve
+  // order-number prefix'li değerlerin hepsi "Invalid ConversationId / 166"
+  // olarak reddedildi.
+  return crypto.randomUUID();
 }
 
 function formatAmount(amount: number | null) {
