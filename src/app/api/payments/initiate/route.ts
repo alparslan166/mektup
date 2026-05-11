@@ -155,22 +155,13 @@ export async function POST(req: Request) {
       const hasLiveHostedUrl = typeof existingHostedUrl === "string";
       const isTerminalStatus =
         existingAttempt.status === "APPROVED" ||
-        existingAttempt.status === "FAILED" ||
         existingAttempt.status === "CANCELLED";
 
-      if (!hasLiveHostedUrl && !isTerminalStatus) {
-        const technicalErrorCode = "STALE_ATTEMPT_NO_HOSTED_URL";
-        const technicalErrorMessage =
-          "Önceki deneme hosted ödeme URL üretemediği için sonlandırıldı";
-
-        await markInitiateFailed(
-          existingAttempt.id,
-          existingAttempt.conversationId ||
-            buildConversationId(existingAttempt.orderNumber),
-          technicalErrorCode,
-          technicalErrorMessage,
-        );
-
+      // Terminal (APPROVED/CANCELLED) ya da hâlâ kullanılabilir bir hosted
+      // URL varsa mevcut attempt'i aynen döndür. Aksi halde (INITIATED /
+      // PENDING / FAILED ve URL yok) aşağıdaki Morpara fetch akışıyla
+      // yeniden dene.
+      if (isTerminalStatus || hasLiveHostedUrl) {
         return NextResponse.json({
           success: true,
           paymentAttemptId: existingAttempt.id,
@@ -178,59 +169,49 @@ export async function POST(req: Request) {
           conversationId: existingAttempt.conversationId || undefined,
           amount: existingAttempt.amount,
           currency: existingAttempt.currency,
-          status: "FAILED",
-          hostedPaymentUrl: getHostedPaymentUrl(
-            existingAttempt.orderNumber,
-            existingAttempt.conversationId ||
-              buildConversationId(existingAttempt.orderNumber),
-            "failed",
-          ),
+          status: existingAttempt.status,
+          hostedPaymentUrl:
+            typeof existingHostedUrl === "string"
+              ? existingHostedUrl
+              : getHostedPaymentUrl(
+                  existingAttempt.orderNumber,
+                  existingAttempt.conversationId ||
+                    buildConversationId(existingAttempt.orderNumber),
+                  getUiStatusFromAttemptStatus(existingAttempt.status),
+                ),
           provider: existingAttempt.provider,
-          mode: "mock",
+          mode: typeof existingHostedUrl === "string" ? "live" : "mock",
         });
       }
-
-      return NextResponse.json({
-        success: true,
-        paymentAttemptId: existingAttempt.id,
-        orderNumber: existingAttempt.orderNumber,
-        conversationId: existingAttempt.conversationId || undefined,
-        amount: existingAttempt.amount,
-        currency: existingAttempt.currency,
-        status: existingAttempt.status,
-        hostedPaymentUrl:
-          typeof existingHostedUrl === "string"
-            ? existingHostedUrl
-            : getHostedPaymentUrl(
-                existingAttempt.orderNumber,
-                existingAttempt.conversationId ||
-                  buildConversationId(existingAttempt.orderNumber),
-                getUiStatusFromAttemptStatus(existingAttempt.status),
-              ),
-        provider: existingAttempt.provider,
-        mode: typeof existingHostedUrl === "string" ? "live" : "mock",
-      });
     }
 
-    const createdAttempt = await (prisma as any).paymentAttempt.create({
-      data: {
-        userId: letter.userId,
-        letterId: letter.id,
-        orderNumber,
-        provider: "MORPARA",
-        amount: letter.totalAmount || 0,
-        currency: "TRY",
-        status: "INITIATED",
-      },
-    });
+    const createdAttempt = existingAttempt
+      ? existingAttempt
+      : await (prisma as any).paymentAttempt.create({
+          data: {
+            userId: letter.userId,
+            letterId: letter.id,
+            orderNumber,
+            provider: "MORPARA",
+            amount: letter.totalAmount || 0,
+            currency: "TRY",
+            status: "INITIATED",
+          },
+        });
 
-    const conversationId = buildConversationId(orderNumber);
+    const conversationId =
+      createdAttempt.conversationId || buildConversationId(orderNumber);
     let hostedPaymentUrl = getHostedPaymentUrl(orderNumber, conversationId);
     let mode: "live" | "mock" = "mock";
 
     await (prisma as any).paymentAttempt.update({
       where: { id: createdAttempt.id },
-      data: { conversationId },
+      data: {
+        conversationId,
+        status: "INITIATED",
+        checkResponseCode: null,
+        checkResponseDescription: null,
+      },
     });
 
     try {
