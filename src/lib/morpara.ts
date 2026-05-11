@@ -300,11 +300,10 @@ export function buildHostedPaymentPayload(input: HostedPaymentInput) {
   );
 
   return {
-    // CheckPayment payload'ında merchantId Number olarak gönderiliyor;
-    // HostedPaymentRedirect için de Morpara backend'inin numeric beklemesi
-    // muhtemel. String gönderirken HTTP 500 (NullReferenceException)
-    // dönüyordu, numeric'e çevirip deneyelim.
-    merchantId: Number(config.merchantId),
+    // Morpara HostedPaymentRedirect VM'inde merchantId field'ı string olarak
+    // tanımlı; numeric göndermek "JSON value could not be converted to
+    // System.String" model binding hatasına neden oluyor.
+    merchantId: config.merchantId,
     returnUrl: input.returnUrl,
     failUrl: input.failUrl,
     paymentMethod: "HOSTEDPAYMENT",
