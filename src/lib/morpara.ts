@@ -170,10 +170,18 @@ function buildHeaderClientSecret(clientSecret: string, timestamp: string) {
     return clientSecret;
   }
 
-  const decodedSecretBuffer = Buffer.from(clientSecret, "base64");
-  const timestampBuffer = Buffer.from(timestamp, "utf8");
-  const combined = Buffer.concat([decodedSecretBuffer, timestampBuffer]);
-  return crypto.createHash("sha256").update(combined).digest("base64");
+  // Morpara reference (CryptoJS):
+  //   decoded = Base64Decode(clientSecret) as UTF-8 string
+  //   combined = decoded + xTimestamp
+  //   hashHex = SHA256(combined).toString(Hex)            // 64 lowercase hex chars
+  //   xClientSecret = Base64( UTF-8 bytes of hashHex )    // base64 of the hex string
+  const decodedSecret = Buffer.from(clientSecret, "base64").toString("utf8");
+  const combined = `${decodedSecret}${timestamp}`;
+  const sha256Hex = crypto
+    .createHash("sha256")
+    .update(combined, "utf8")
+    .digest("hex");
+  return Buffer.from(sha256Hex, "utf8").toString("base64");
 }
 
 function hashSha256Base64Upper(value: string) {
