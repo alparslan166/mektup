@@ -65,14 +65,13 @@ async function markInitiateFailed(
   });
 }
 
-function buildConversationId(orderNumber: string) {
-  // Morpara, conversationId için alfanumerik ve yeterli uzunlukta (>=16)
-  // benzersiz bir değer bekliyor. Order number tek başına çok kısa
-  // kalabildiği için sonuna rastgele bir UUID parçası ekliyoruz.
-  const clean = orderNumber.replace(/[^a-zA-Z0-9]/g, "");
-  const randomSuffix = crypto.randomUUID().replace(/-/g, "");
-  const base = clean || `MP${Date.now()}`;
-  return `${base}${randomSuffix}`.slice(0, 48);
+function buildConversationId(_orderNumber: string) {
+  // Morpara conversationId için 32 karakter, tamamı alfanumerik (UUID hex)
+  // bir değer bekliyor. Order number ile prefix'lemek 32+ karaktere
+  // çıkardığında "Invalid ConversationId" döndürüyor; bu yüzden saf UUID
+  // hex kullanıyoruz. Order number ile korelasyon zaten DB'de
+  // PaymentAttempt.orderNumber + conversationId üzerinden sağlanıyor.
+  return crypto.randomUUID().replace(/-/g, "");
 }
 
 function formatAmount(amount: number | null) {
