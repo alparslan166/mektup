@@ -220,19 +220,37 @@ function encodeMorparaSign(canonical: string) {
   return Buffer.from(hex, "utf8").toString("base64");
 }
 
+function getSignKey(config: MorparaConfig) {
+  const keyField =
+    process.env.MORPARA_SIGN_KEY_FIELD?.trim().toLowerCase() || "apikey";
+  if (keyField === "secretkey" || keyField === "secret_key") {
+    return { key: config.secretKey, fieldUsed: "secretKey" };
+  }
+  return { key: config.apiKey, fieldUsed: "apiKey" };
+}
+
 function generateConversationMerchantApiKeySign(
   conversationId: string,
   merchantId: string,
 ) {
   const config = getMorparaConfig();
-  const canonical = `${conversationId};${merchantId};${config.apiKey}`;
+  const { key } = getSignKey(config);
+  const canonical = `${conversationId};${merchantId};${key}`;
   return encodeMorparaSign(canonical);
 }
 
 export function getMorparaSignDiagnostics() {
+  const config = getMorparaConfig();
+  const { fieldUsed, key } = getSignKey(config);
   return {
     signEncoding:
       process.env.MORPARA_SIGN_ENCODING?.trim().toLowerCase() || "hex_b64",
+    signKeyField: fieldUsed,
+    signKeyFingerprint: crypto
+      .createHash("sha256")
+      .update(key, "utf8")
+      .digest("hex")
+      .slice(0, 12),
   };
 }
 

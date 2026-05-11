@@ -67,11 +67,13 @@ async function markInitiateFailed(
 }
 
 function buildConversationId(_orderNumber: string) {
-  // Morpara, conversationId alanını dash'li standart UUID v4 formatında
-  // (8-4-4-4-12, toplam 36 karakter) bekliyor. Numeric, hex-only ve
-  // order-number prefix'li değerlerin hepsi "Invalid ConversationId / 166"
-  // olarak reddedildi.
-  return crypto.randomUUID();
+  // Morpara conversationId algoritması:
+  //   - Null/empty olmayacak
+  //   - Uzunluğu TAM 20 karakter
+  //   - Sadece İngilizce harf + rakam (alfanumerik)
+  //   - Türkçe karakter içermeyecek
+  // 16 random byte -> 32 char lowercase hex -> ilk 20 char.
+  return crypto.randomBytes(16).toString("hex").slice(0, 20);
 }
 
 function formatAmount(amount: number | null) {
@@ -255,7 +257,7 @@ export async function POST(req: Request) {
       console.info("MORPARA_HOSTED_REDIRECT_REQUEST_BODY", {
         orderNumber,
         conversationId,
-        signEncoding: getMorparaSignDiagnostics().signEncoding,
+        ...getMorparaSignDiagnostics(),
         signLength: String(requestBody.sign || "").length,
         signFingerprint,
         body: {
