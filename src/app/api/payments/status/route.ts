@@ -76,18 +76,8 @@ function extractTokenFromPayload(payload: unknown): string | undefined {
     typeof hostedPaymentUrl === "string" &&
     hostedPaymentUrl.trim().length > 0
   ) {
-    try {
-      const url = new URL(hostedPaymentUrl);
-      const queryTokenKeys = ["token", "Token", "paymentToken", "PaymentToken"];
-      for (const key of queryTokenKeys) {
-        const value = url.searchParams.get(key);
-        if (value && value.trim().length > 0) {
-          return value.trim();
-        }
-      }
-    } catch {
-      return undefined;
-    }
+    const extracted = extractTokenFromUrl(hostedPaymentUrl);
+    if (extracted.value) return extracted.value;
   }
 
   return undefined;
@@ -115,21 +105,48 @@ function detectTokenSourceFromPayload(payload: unknown): string | null {
     typeof hostedPaymentUrl === "string" &&
     hostedPaymentUrl.trim().length > 0
   ) {
-    try {
-      const url = new URL(hostedPaymentUrl);
-      const queryTokenKeys = ["token", "Token", "paymentToken", "PaymentToken"];
-      for (const key of queryTokenKeys) {
-        const value = url.searchParams.get(key);
-        if (value && value.trim().length > 0) {
-          return `hostedPaymentUrl:${key}`;
-        }
-      }
-    } catch {
-      return null;
+    const extracted = extractTokenFromUrl(hostedPaymentUrl);
+    if (extracted.source) {
+      return `hostedPaymentUrl:${extracted.source}`;
     }
   }
 
   return null;
+}
+
+function extractTokenFromUrl(rawUrl: string): {
+  value?: string;
+  source: "token" | "Token" | "paymentToken" | "PaymentToken" | "path" | null;
+} {
+  try {
+    const url = new URL(rawUrl);
+    const queryTokenKeys = [
+      "token",
+      "Token",
+      "paymentToken",
+      "PaymentToken",
+    ] as const;
+
+    for (const key of queryTokenKeys) {
+      const value = url.searchParams.get(key);
+      if (value && value.trim().length > 0) {
+        return { value: value.trim(), source: key };
+      }
+    }
+
+    const segments = url.pathname
+      .split("/")
+      .map((segment) => segment.trim())
+      .filter(Boolean);
+    const lastSegment = segments[segments.length - 1];
+    if (lastSegment && /^[A-Za-z0-9_-]{10,}$/.test(lastSegment)) {
+      return { value: lastSegment, source: "path" };
+    }
+
+    return { source: null };
+  } catch {
+    return { source: null };
+  }
 }
 
 async function callCheckPayment(
