@@ -226,9 +226,10 @@ export async function POST(req: Request) {
 
     try {
       const baseUrl = getBaseUrl(req);
+      const returnBridgeBase = `${baseUrl}/api/payments/morpara/return`;
       const requestBody = buildHostedPaymentPayload({
-        returnUrl: `${baseUrl}/odeme/sonuc?status=success&order=${encodeURIComponent(orderNumber)}`,
-        failUrl: `${baseUrl}/odeme/sonuc?status=failed&order=${encodeURIComponent(orderNumber)}`,
+        returnUrl: `${returnBridgeBase}?status=success&order=${encodeURIComponent(orderNumber)}&conversationId=${encodeURIComponent(conversationId)}`,
+        failUrl: `${returnBridgeBase}?status=failed&order=${encodeURIComponent(orderNumber)}&conversationId=${encodeURIComponent(conversationId)}`,
         conversationId,
         amount: formatAmount(letter.totalAmount),
       });
