@@ -8,6 +8,8 @@ type ReturnPayload = {
   orderNumber?: string;
   conversationId?: string;
   conversationID?: string;
+  token?: string;
+  Token?: string;
 };
 
 function normalizeStatus(value: string | null | undefined): ReturnStatus {
@@ -34,6 +36,7 @@ function buildResultUrl(req: Request, input: ReturnPayload) {
     input.conversationId,
     input.conversationID,
   );
+  const token = pickFirstString(input.token, input.Token);
 
   const url = new URL("/odeme/sonuc", req.url);
   url.searchParams.set("status", status);
@@ -42,6 +45,9 @@ function buildResultUrl(req: Request, input: ReturnPayload) {
   }
   if (conversationId) {
     url.searchParams.set("conversationId", conversationId);
+  }
+  if (token) {
+    url.searchParams.set("token", token);
   }
 
   return url;
@@ -55,6 +61,8 @@ function fromSearchParams(req: Request): ReturnPayload {
     orderNumber: url.searchParams.get("orderNumber") || undefined,
     conversationId: url.searchParams.get("conversationId") || undefined,
     conversationID: url.searchParams.get("conversationID") || undefined,
+    token: url.searchParams.get("token") || undefined,
+    Token: url.searchParams.get("Token") || undefined,
   };
 }
 
@@ -79,6 +87,8 @@ async function fromBody(req: Request): Promise<ReturnPayload> {
           typeof payload.conversationID === "string"
             ? payload.conversationID
             : undefined,
+        token: typeof payload.token === "string" ? payload.token : undefined,
+        Token: typeof payload.Token === "string" ? payload.Token : undefined,
       };
     } catch {
       return {};
@@ -93,6 +103,8 @@ async function fromBody(req: Request): Promise<ReturnPayload> {
       orderNumber: form.get("orderNumber")?.toString(),
       conversationId: form.get("conversationId")?.toString(),
       conversationID: form.get("conversationID")?.toString(),
+      token: form.get("token")?.toString(),
+      Token: form.get("Token")?.toString(),
     };
   } catch {
     return {};
@@ -114,6 +126,8 @@ export async function POST(req: Request) {
     orderNumber: body.orderNumber || query.orderNumber,
     conversationId: body.conversationId || query.conversationId,
     conversationID: body.conversationID || query.conversationID,
+    token: body.token || query.token,
+    Token: body.Token || query.Token,
   });
 
   return NextResponse.redirect(target, 303);

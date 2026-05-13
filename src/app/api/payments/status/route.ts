@@ -61,11 +61,14 @@ function getMaskedMorparaHeadersForLog(headers: Record<string, string>) {
 
 async function callCheckPayment(
   conversationId: string,
-  context: { orderNumber: string; attemptId: string },
+  context: { orderNumber: string; attemptId: string; token?: string },
 ) {
   const endpoint = getCheckPaymentUrl();
   const morparaHeaders = getMorparaHeaders();
-  const requestBody = buildCheckPaymentPayload({ conversationId });
+  const requestBody = buildCheckPaymentPayload({
+    conversationId,
+    token: context.token,
+  });
   const rawSign = String(requestBody.sign || "");
   const signFingerprint = crypto
     .createHash("sha256")
@@ -165,7 +168,7 @@ async function callCheckPayment(
   };
 }
 
-async function reconcilePendingAttempt(attempt: AttemptRecord) {
+async function reconcilePendingAttempt(attempt: AttemptRecord, token?: string) {
   if (!attempt.conversationId) return attempt;
   if (attempt.status === "APPROVED" || attempt.status === "FAILED")
     return attempt;
@@ -179,6 +182,7 @@ async function reconcilePendingAttempt(attempt: AttemptRecord) {
     const check = await callCheckPayment(attempt.conversationId, {
       orderNumber: attempt.orderNumber,
       attemptId: attempt.id,
+      token,
     });
     const isApproved =
       check.responseCode === "B0000" &&
@@ -277,6 +281,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const orderNumber = searchParams.get("order")?.trim();
     const conversationId = searchParams.get("conversationId")?.trim();
+    const token = searchParams.get("token")?.trim() || undefined;
 
     if (!orderNumber && !conversationId) {
       return NextResponse.json(
@@ -313,7 +318,7 @@ export async function GET(req: Request) {
 
     const resolvedAttempt =
       normalizeUiStatus(attempt.status, attempt.isFinalized) === "processing"
-        ? await reconcilePendingAttempt(attempt as AttemptRecord)
+        ? await reconcilePendingAttempt(attempt as AttemptRecord, token)
         : (attempt as AttemptRecord);
 
     return NextResponse.json({

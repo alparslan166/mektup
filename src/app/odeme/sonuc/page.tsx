@@ -22,6 +22,7 @@ function PaymentResultContent() {
   const searchParams = useSearchParams();
   const order = searchParams.get("order") || "";
   const conversationId = searchParams.get("conversationId") || "";
+  const token = searchParams.get("token") || "";
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,8 +34,9 @@ function PaymentResultContent() {
     const params = new URLSearchParams();
     if (order) params.set("order", order);
     if (conversationId) params.set("conversationId", conversationId);
+    if (token) params.set("token", token);
     return params.toString();
-  }, [order, conversationId]);
+  }, [order, conversationId, token]);
 
   useEffect(() => {
     if (!query) {
