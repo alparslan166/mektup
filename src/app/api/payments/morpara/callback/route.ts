@@ -22,6 +22,19 @@ function normalizePayload(payload: unknown): Record<string, unknown> {
   return payload as Record<string, unknown>;
 }
 
+function maskLogValue(value: string | null | undefined) {
+  if (!value) return undefined;
+  if (value.length <= 6) return "***";
+  return `${value.slice(0, 3)}***${value.slice(-3)}`;
+}
+
+function extractPresentKeys(payload: Record<string, unknown>) {
+  return Object.keys(payload).filter((key) => {
+    const value = payload[key];
+    return typeof value === "string" && value.trim().length > 0;
+  });
+}
+
 function extractOrderNumber(payload: Record<string, unknown>): string | null {
   const possibleKeys = [
     "orderNumber",
@@ -30,6 +43,30 @@ function extractOrderNumber(payload: Record<string, unknown>): string | null {
     "merchantOrderId",
     "merchantPaymentId",
   ];
+
+  for (const key of possibleKeys) {
+    const value = payload[key];
+    if (typeof value === "string" && value.trim().length > 0) {
+      return value.trim();
+    }
+  }
+
+  return null;
+}
+
+function detectTokenSource(payload: Record<string, unknown>) {
+  const possibleKeys = ["token", "Token", "paymentToken", "PaymentToken"];
+  for (const key of possibleKeys) {
+    const value = payload[key];
+    if (typeof value === "string" && value.trim().length > 0) {
+      return key;
+    }
+  }
+  return null;
+}
+
+function extractToken(payload: Record<string, unknown>): string | null {
+  const possibleKeys = ["token", "Token", "paymentToken", "PaymentToken"];
 
   for (const key of possibleKeys) {
     const value = payload[key];
@@ -58,6 +95,7 @@ function extractProviderPaymentId(
 
 async function callCheckPayment(
   conversationId: string,
+  token?: string,
 ): Promise<CheckPaymentResult | null> {
   let endpoint: string;
   let requestBody: Record<string, unknown>;
@@ -65,7 +103,7 @@ async function callCheckPayment(
 
   try {
     endpoint = getCheckPaymentUrl();
-    requestBody = buildCheckPaymentPayload({ conversationId });
+    requestBody = buildCheckPaymentPayload({ conversationId, token });
     headers = {
       "Content-Type": "application/json",
       ...getMorparaHeaders(),
@@ -111,6 +149,16 @@ export async function POST(req: Request) {
     const raw = await req.json();
     const payload = normalizePayload(raw);
     const callbackConversationId = extractConversationId(payload);
+    const callbackToken = extractToken(payload);
+    const callbackTokenSource = detectTokenSource(payload);
+
+    console.info("MORPARA_CALLBACK_RECEIVED", {
+      orderNumberHint: extractOrderNumber(payload),
+      conversationId: callbackConversationId,
+      presentKeys: extractPresentKeys(payload),
+      tokenSource: callbackTokenSource,
+      tokenMask: maskLogValue(callbackToken),
+    });
 
     const orderNumber = extractOrderNumber(payload);
     if (!orderNumber && !callbackConversationId) {
@@ -174,6 +222,8 @@ export async function POST(req: Request) {
       ...payload,
       orderNumber,
       conversationId,
+      token: callbackToken || undefined,
+      tokenSource: callbackTokenSource || undefined,
       providerPaymentId: providerPaymentId || undefined,
     };
 
@@ -200,7 +250,10 @@ export async function POST(req: Request) {
       );
     }
 
-    const checkPayment = await callCheckPayment(conversationId);
+    const checkPayment = await callCheckPayment(
+      conversationId,
+      callbackToken || undefined,
+    );
 
     const responseCode = checkPayment?.responseCode || "CHECK_UNAVAILABLE";
     const responseDescription =

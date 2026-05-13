@@ -26,6 +26,7 @@ type AttemptRecord = {
   checkResponseCode: string | null;
   checkResponseDescription: string | null;
   letterId: string | null;
+  rawCallbackPayload?: unknown;
   updatedAt: Date;
 };
 
@@ -57,6 +58,38 @@ function getMaskedMorparaHeadersForLog(headers: Record<string, string>) {
     "x-Scope": headers["x-Scope"] || "",
     "x-Timestamp": headers["x-Timestamp"] || "",
   };
+}
+
+function extractTokenFromPayload(payload: unknown): string | undefined {
+  if (!payload || typeof payload !== "object") return undefined;
+  const record = payload as Record<string, unknown>;
+  const keys = ["token", "Token", "paymentToken", "PaymentToken"];
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === "string" && value.trim().length > 0) {
+      return value.trim();
+    }
+  }
+  return undefined;
+}
+
+function maskOptionalToken(value: string | undefined) {
+  if (!value) return undefined;
+  if (value.length <= 6) return "***";
+  return `${value.slice(0, 3)}***${value.slice(-3)}`;
+}
+
+function detectTokenSourceFromPayload(payload: unknown): string | null {
+  if (!payload || typeof payload !== "object") return null;
+  const record = payload as Record<string, unknown>;
+  const keys = ["token", "Token", "paymentToken", "PaymentToken"];
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === "string" && value.trim().length > 0) {
+      return key;
+    }
+  }
+  return null;
 }
 
 async function callCheckPayment(
@@ -305,6 +338,7 @@ export async function GET(req: Request) {
         checkResponseCode: true,
         checkResponseDescription: true,
         letterId: true,
+        rawCallbackPayload: true,
         updatedAt: true,
       },
     });
@@ -316,9 +350,35 @@ export async function GET(req: Request) {
       );
     }
 
+    const effectiveToken =
+      token ||
+      extractTokenFromPayload((attempt as AttemptRecord).rawCallbackPayload);
+    const payloadTokenSource = detectTokenSourceFromPayload(
+      (attempt as AttemptRecord).rawCallbackPayload,
+    );
+
+    console.info("PAYMENT_STATUS_TOKEN_RESOLUTION", {
+      orderNumber: attempt.orderNumber,
+      attemptId: attempt.id,
+      conversationId: attempt.conversationId,
+      queryTokenPresent: Boolean(token),
+      queryTokenMask: maskOptionalToken(token),
+      payloadTokenSource,
+      payloadTokenMask: maskOptionalToken(
+        extractTokenFromPayload((attempt as AttemptRecord).rawCallbackPayload),
+      ),
+      effectiveTokenPresent: Boolean(effectiveToken),
+      effectiveTokenMask: maskOptionalToken(effectiveToken),
+      status: attempt.status,
+      isFinalized: attempt.isFinalized,
+    });
+
     const resolvedAttempt =
       normalizeUiStatus(attempt.status, attempt.isFinalized) === "processing"
-        ? await reconcilePendingAttempt(attempt as AttemptRecord, token)
+        ? await reconcilePendingAttempt(
+            attempt as AttemptRecord,
+            effectiveToken,
+          )
         : (attempt as AttemptRecord);
 
     return NextResponse.json({

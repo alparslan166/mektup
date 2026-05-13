@@ -10,6 +10,8 @@ type ReturnPayload = {
   conversationID?: string;
   token?: string;
   Token?: string;
+  paymentToken?: string;
+  PaymentToken?: string;
 };
 
 function normalizeStatus(value: string | null | undefined): ReturnStatus {
@@ -29,6 +31,36 @@ function pickFirstString(
   return undefined;
 }
 
+function maskLogValue(value: string | undefined) {
+  if (!value) return undefined;
+  if (value.length <= 6) return "***";
+  return `${value.slice(0, 3)}***${value.slice(-3)}`;
+}
+
+function extractPresentKeys(input: ReturnPayload) {
+  return Object.entries(input)
+    .filter(([, value]) => typeof value === "string" && value.trim().length > 0)
+    .map(([key]) => key);
+}
+
+function resolveToken(input: ReturnPayload) {
+  const entries: Array<[keyof ReturnPayload, string | undefined]> = [
+    ["token", input.token],
+    ["Token", input.Token],
+    ["paymentToken", input.paymentToken],
+    ["PaymentToken", input.PaymentToken],
+  ];
+
+  for (const [sourceKey, value] of entries) {
+    const trimmed = typeof value === "string" ? value.trim() : "";
+    if (trimmed.length > 0) {
+      return { value: trimmed, sourceKey };
+    }
+  }
+
+  return { value: undefined, sourceKey: null };
+}
+
 function buildResultUrl(req: Request, input: ReturnPayload) {
   const status = normalizeStatus(input.status);
   const order = pickFirstString(input.order, input.orderNumber);
@@ -36,7 +68,8 @@ function buildResultUrl(req: Request, input: ReturnPayload) {
     input.conversationId,
     input.conversationID,
   );
-  const token = pickFirstString(input.token, input.Token);
+  const tokenResult = resolveToken(input);
+  const token = tokenResult.value;
 
   const url = new URL("/odeme/sonuc", req.url);
   url.searchParams.set("status", status);
@@ -63,6 +96,8 @@ function fromSearchParams(req: Request): ReturnPayload {
     conversationID: url.searchParams.get("conversationID") || undefined,
     token: url.searchParams.get("token") || undefined,
     Token: url.searchParams.get("Token") || undefined,
+    paymentToken: url.searchParams.get("paymentToken") || undefined,
+    PaymentToken: url.searchParams.get("PaymentToken") || undefined,
   };
 }
 
@@ -89,6 +124,14 @@ async function fromBody(req: Request): Promise<ReturnPayload> {
             : undefined,
         token: typeof payload.token === "string" ? payload.token : undefined,
         Token: typeof payload.Token === "string" ? payload.Token : undefined,
+        paymentToken:
+          typeof payload.paymentToken === "string"
+            ? payload.paymentToken
+            : undefined,
+        PaymentToken:
+          typeof payload.PaymentToken === "string"
+            ? payload.PaymentToken
+            : undefined,
       };
     } catch {
       return {};
@@ -105,6 +148,8 @@ async function fromBody(req: Request): Promise<ReturnPayload> {
       conversationID: form.get("conversationID")?.toString(),
       token: form.get("token")?.toString(),
       Token: form.get("Token")?.toString(),
+      paymentToken: form.get("paymentToken")?.toString(),
+      PaymentToken: form.get("PaymentToken")?.toString(),
     };
   } catch {
     return {};
@@ -113,6 +158,15 @@ async function fromBody(req: Request): Promise<ReturnPayload> {
 
 export async function GET(req: Request) {
   const query = fromSearchParams(req);
+  const resolvedToken = resolveToken(query);
+  console.info("MORPARA_RETURN_BRIDGE_GET", {
+    inputChannel: "query",
+    presentKeys: extractPresentKeys(query),
+    order: query.order || query.orderNumber || null,
+    conversationId: query.conversationId || query.conversationID || null,
+    tokenSource: resolvedToken.sourceKey,
+    tokenMask: maskLogValue(resolvedToken.value),
+  });
   const target = buildResultUrl(req, query);
   return NextResponse.redirect(target, 302);
 }
@@ -120,7 +174,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const query = fromSearchParams(req);
   const body = await fromBody(req);
-  const target = buildResultUrl(req, {
+  const merged: ReturnPayload = {
     status: body.status || query.status,
     order: body.order || query.order,
     orderNumber: body.orderNumber || query.orderNumber,
@@ -128,6 +182,30 @@ export async function POST(req: Request) {
     conversationID: body.conversationID || query.conversationID,
     token: body.token || query.token,
     Token: body.Token || query.Token,
+    paymentToken: body.paymentToken || query.paymentToken,
+    PaymentToken: body.PaymentToken || query.PaymentToken,
+  };
+  const resolvedToken = resolveToken(merged);
+  console.info("MORPARA_RETURN_BRIDGE_POST", {
+    inputChannel: "body+query",
+    queryPresentKeys: extractPresentKeys(query),
+    bodyPresentKeys: extractPresentKeys(body),
+    mergedPresentKeys: extractPresentKeys(merged),
+    order: merged.order || merged.orderNumber || null,
+    conversationId: merged.conversationId || merged.conversationID || null,
+    tokenSource: resolvedToken.sourceKey,
+    tokenMask: maskLogValue(resolvedToken.value),
+  });
+  const target = buildResultUrl(req, {
+    status: merged.status,
+    order: merged.order,
+    orderNumber: merged.orderNumber,
+    conversationId: merged.conversationId,
+    conversationID: merged.conversationID,
+    token: merged.token,
+    Token: merged.Token,
+    paymentToken: merged.paymentToken,
+    PaymentToken: merged.PaymentToken,
   });
 
   return NextResponse.redirect(target, 303);
