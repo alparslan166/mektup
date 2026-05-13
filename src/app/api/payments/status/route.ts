@@ -70,6 +70,26 @@ function extractTokenFromPayload(payload: unknown): string | undefined {
       return value.trim();
     }
   }
+
+  const hostedPaymentUrl = record.hostedPaymentUrl;
+  if (
+    typeof hostedPaymentUrl === "string" &&
+    hostedPaymentUrl.trim().length > 0
+  ) {
+    try {
+      const url = new URL(hostedPaymentUrl);
+      const queryTokenKeys = ["token", "Token", "paymentToken", "PaymentToken"];
+      for (const key of queryTokenKeys) {
+        const value = url.searchParams.get(key);
+        if (value && value.trim().length > 0) {
+          return value.trim();
+        }
+      }
+    } catch {
+      return undefined;
+    }
+  }
+
   return undefined;
 }
 
@@ -89,6 +109,26 @@ function detectTokenSourceFromPayload(payload: unknown): string | null {
       return key;
     }
   }
+
+  const hostedPaymentUrl = record.hostedPaymentUrl;
+  if (
+    typeof hostedPaymentUrl === "string" &&
+    hostedPaymentUrl.trim().length > 0
+  ) {
+    try {
+      const url = new URL(hostedPaymentUrl);
+      const queryTokenKeys = ["token", "Token", "paymentToken", "PaymentToken"];
+      for (const key of queryTokenKeys) {
+        const value = url.searchParams.get(key);
+        if (value && value.trim().length > 0) {
+          return `hostedPaymentUrl:${key}`;
+        }
+      }
+    } catch {
+      return null;
+    }
+  }
+
   return null;
 }
 
