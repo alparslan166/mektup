@@ -27,6 +27,7 @@ type HostedPaymentInput = {
   currencyCode?: string;
   installmentCount?: number;
   language?: string;
+  pfSubMerchantId?: string;
 };
 
 type CheckPaymentInput = {
@@ -239,6 +240,44 @@ function generateConversationMerchantApiKeySign(
   return encodeMorparaSign(canonical);
 }
 
+function generateHostedPaymentSign(input: {
+  conversationId: string;
+  merchantId: string;
+  returnUrl: string;
+  failUrl: string;
+  paymentMethod: string;
+  language: string;
+  paymentInstrumentType: string;
+  transactionType: string;
+  vftFlagCanonical: "False" | "True";
+  installmentCount: number;
+  amount: string;
+  currencyCode: string;
+  pfSubMerchantId: string;
+}) {
+  const config = getMorparaConfig();
+  const { key } = getSignKey(config);
+
+  const canonical = [
+    input.conversationId,
+    input.merchantId,
+    input.returnUrl,
+    input.failUrl,
+    input.paymentMethod,
+    input.language,
+    input.paymentInstrumentType,
+    input.transactionType,
+    input.vftFlagCanonical,
+    String(input.installmentCount),
+    input.amount,
+    input.currencyCode,
+    input.pfSubMerchantId,
+    key,
+  ].join(";");
+
+  return encodeMorparaSign(canonical);
+}
+
 export function getMorparaSignDiagnostics() {
   const config = getMorparaConfig();
   const { fieldUsed, key } = getSignKey(config);
@@ -294,10 +333,26 @@ export function buildHostedPaymentPayload(input: HostedPaymentInput) {
   const currencyCode = input.currencyCode || "949";
   const installmentCount = input.installmentCount ?? 0;
   const language = input.language || "tr";
-  const sign = generateConversationMerchantApiKeySign(
-    input.conversationId,
-    config.merchantId,
-  );
+  const paymentMethod = "HOSTEDPAYMENT";
+  const paymentInstrumentType = "CARD";
+  const transactionType = "SALE";
+  const vftFlag = false;
+  const pfSubMerchantId = input.pfSubMerchantId ?? "";
+  const sign = generateHostedPaymentSign({
+    conversationId: input.conversationId,
+    merchantId: config.merchantId,
+    returnUrl: input.returnUrl,
+    failUrl: input.failUrl,
+    paymentMethod,
+    language,
+    paymentInstrumentType,
+    transactionType,
+    vftFlagCanonical: "False",
+    installmentCount,
+    amount: input.amount,
+    currencyCode,
+    pfSubMerchantId,
+  });
 
   // Morpara HostedPaymentRedirect VM PascalCase field isimleri kullanıyor;
   // .NET model binding case-sensitive olduğu için camelCase gönderildiğinde
@@ -307,20 +362,20 @@ export function buildHostedPaymentPayload(input: HostedPaymentInput) {
     MerchantId: config.merchantId,
     ReturnUrl: input.returnUrl,
     FailUrl: input.failUrl,
-    PaymentMethod: "HOSTEDPAYMENT",
-    PaymentInstrumentType: "CARD",
+    PaymentMethod: paymentMethod,
+    PaymentInstrumentType: paymentInstrumentType,
     Language: language,
     ConversationId: input.conversationId,
     Sign: sign,
     TransactionDetails: {
-      TransactionType: "SALE",
+      TransactionType: transactionType,
       InstallmentCount: installmentCount,
       Amount: input.amount,
       CurrencyCode: currencyCode,
-      VftFlag: false,
+      VftFlag: vftFlag,
     },
     extraParameter: {
-      pFSubMerchantId: "",
+      pFSubMerchantId: pfSubMerchantId,
     },
   };
 }
