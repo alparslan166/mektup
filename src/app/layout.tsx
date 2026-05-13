@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display, Kurale } from "next/font/google";
 import Link from "next/link";
+import Script from "next/script";
 import Navbar from "@/components/Navbar";
 import PageLoader from "@/components/PageLoader";
 import { NextAuthProvider } from "@/providers/NextAuthProvider";
@@ -28,6 +29,7 @@ const kurale = Kurale({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mektuplas.com";
+const gaMeasurementId = "G-3KBRXLMF0L";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -54,6 +56,17 @@ export default function RootLayout({
           backgroundPosition: "center",
         }}
       >
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaMeasurementId}');`}
+        </Script>
+
         <div className="absolute inset-0 bg-paper/5 z-[-1] pointer-events-none"></div>
 
         <Suspense fallback={null}>
