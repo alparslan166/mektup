@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -7,6 +8,7 @@ import {
   buildCheckPaymentPayload,
   getCheckPaymentUrl,
   getMorparaHeaders,
+  getMorparaSignDiagnostics,
 } from "@/lib/morpara";
 
 function normalizeUiStatus(status: string, isFinalized: boolean) {
@@ -36,29 +38,130 @@ function pickField(
   return typeof value === "string" ? value : undefined;
 }
 
-async function callCheckPayment(conversationId: string) {
-  const response = await fetch(getCheckPaymentUrl(), {
+function truncateForLog(value: string, max = 1000) {
+  if (value.length <= max) return value;
+  return `${value.slice(0, max)}...`;
+}
+
+function maskLogValue(value: string) {
+  if (!value) return value;
+  if (value.length <= 6) return "***";
+  return `${value.slice(0, 3)}***${value.slice(-3)}`;
+}
+
+function getMaskedMorparaHeadersForLog(headers: Record<string, string>) {
+  return {
+    "x-ClientID": maskLogValue(headers["x-ClientID"] || ""),
+    "x-ClientSecret": maskLogValue(headers["x-ClientSecret"] || ""),
+    "x-GrantType": headers["x-GrantType"] || "",
+    "x-Scope": headers["x-Scope"] || "",
+    "x-Timestamp": headers["x-Timestamp"] || "",
+  };
+}
+
+async function callCheckPayment(
+  conversationId: string,
+  context: { orderNumber: string; attemptId: string },
+) {
+  const endpoint = getCheckPaymentUrl();
+  const morparaHeaders = getMorparaHeaders();
+  const requestBody = buildCheckPaymentPayload({ conversationId });
+  const rawSign = String(requestBody.sign || "");
+  const signFingerprint = crypto
+    .createHash("sha256")
+    .update(rawSign, "utf8")
+    .digest("hex")
+    .slice(0, 12);
+
+  console.info("MORPARA_CHECK_PAYMENT_REQUEST_HEADERS", {
+    orderNumber: context.orderNumber,
+    attemptId: context.attemptId,
+    conversationId,
+    endpoint,
+    headers: getMaskedMorparaHeadersForLog(morparaHeaders),
+  });
+
+  console.info("MORPARA_CHECK_PAYMENT_REQUEST_BODY", {
+    orderNumber: context.orderNumber,
+    attemptId: context.attemptId,
+    conversationId,
+    ...getMorparaSignDiagnostics(),
+    signLength: rawSign.length,
+    signFingerprint,
+    body: {
+      ...requestBody,
+      sign: maskLogValue(rawSign),
+    },
+  });
+
+  const response = await fetch(endpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      ...getMorparaHeaders(),
+      ...morparaHeaders,
     },
-    body: JSON.stringify(buildCheckPaymentPayload({ conversationId })),
+    body: JSON.stringify(requestBody),
     cache: "no-store",
   });
 
+  const responseText = await response.text();
+  let responseRaw: Record<string, unknown> | null = null;
+  try {
+    responseRaw = responseText
+      ? (JSON.parse(responseText) as Record<string, unknown>)
+      : null;
+  } catch {
+    responseRaw = null;
+  }
+
+  const responseCode = responseRaw
+    ? pickField(responseRaw, "responseCode")
+    : undefined;
+  const responseDescription = responseRaw
+    ? pickField(responseRaw, "responseDescription")
+    : undefined;
+  const correlationId = responseRaw
+    ? pickField(responseRaw, "correlationId") ||
+      (typeof responseRaw.CorrelationId === "string"
+        ? responseRaw.CorrelationId
+        : undefined)
+    : undefined;
+
   if (!response.ok) {
+    console.warn("MORPARA_CHECK_PAYMENT_NON_OK", {
+      orderNumber: context.orderNumber,
+      attemptId: context.attemptId,
+      conversationId,
+      status: response.status,
+      statusText: response.statusText,
+      providerResponseCode: responseCode || null,
+      providerResponseDescription: responseDescription || null,
+      correlationId: correlationId || null,
+      responseBody: truncateForLog(responseText),
+    });
+
     return {
       responseCode: `HTTP_${response.status}`,
       responseDescription: `CheckPayment HTTP ${response.status}`,
+      isTechnicalError: true,
     };
   }
 
-  const raw = (await response.json()) as Record<string, unknown>;
+  console.info("MORPARA_CHECK_PAYMENT_OK", {
+    orderNumber: context.orderNumber,
+    attemptId: context.attemptId,
+    conversationId,
+    providerResponseCode: responseCode || null,
+    providerResponseDescription: responseDescription || null,
+    correlationId: correlationId || null,
+  });
+
+  const raw = responseRaw || {};
   return {
     responseCode: pickField(raw, "responseCode") || "CHECK_UNAVAILABLE",
     responseDescription:
       pickField(raw, "responseDescription") || "CheckPayment sonucu alınamadı",
+    isTechnicalError: false,
   };
 }
 
@@ -73,26 +176,17 @@ async function reconcilePendingAttempt(attempt: AttemptRecord) {
   if (nowMs - lastUpdatedAtMs < 8000) return attempt;
 
   try {
-    const check = await callCheckPayment(attempt.conversationId);
+    const check = await callCheckPayment(attempt.conversationId, {
+      orderNumber: attempt.orderNumber,
+      attemptId: attempt.id,
+    });
     const isApproved =
       check.responseCode === "B0000" &&
       check.responseDescription === "Approved";
+    const isTechnicalPending =
+      check.isTechnicalError || check.responseCode === "CHECK_UNAVAILABLE";
 
-    if (!isApproved) {
-      await (prisma as any).paymentAttempt.update({
-        where: { id: attempt.id },
-        data: {
-          status: "FAILED",
-          checkResponseCode: check.responseCode,
-          checkResponseDescription: check.responseDescription,
-          rawCheckPayload: {
-            conversationId: attempt.conversationId,
-            data: check,
-            source: "status-poll-fallback",
-          },
-        },
-      });
-    } else if (attempt.letterId) {
+    if (isApproved && attempt.letterId) {
       const finalizeResult = await finalizePendingLetterBySystem(
         attempt.letterId,
       );
@@ -113,6 +207,33 @@ async function reconcilePendingAttempt(attempt: AttemptRecord) {
           },
         });
       }
+    } else if (isTechnicalPending) {
+      await (prisma as any).paymentAttempt.update({
+        where: { id: attempt.id },
+        data: {
+          checkResponseCode: check.responseCode,
+          checkResponseDescription: check.responseDescription,
+          rawCheckPayload: {
+            conversationId: attempt.conversationId,
+            data: check,
+            source: "status-poll-fallback",
+          },
+        },
+      });
+    } else {
+      await (prisma as any).paymentAttempt.update({
+        where: { id: attempt.id },
+        data: {
+          status: "FAILED",
+          checkResponseCode: check.responseCode,
+          checkResponseDescription: check.responseDescription,
+          rawCheckPayload: {
+            conversationId: attempt.conversationId,
+            data: check,
+            source: "status-poll-fallback",
+          },
+        },
+      });
     }
   } catch (error) {
     console.warn("PAYMENT_STATUS_RECONCILE_ERROR", {
