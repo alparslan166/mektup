@@ -77,7 +77,7 @@ function normalizeMorparaScope(value: string) {
     .split(/[,\s]+/)
     .map((part) => part.trim())
     .filter((part) => part.length > 0)
-    .join(" ");
+    .join(", ");
 }
 
 function getEnv(name: string): string {
@@ -386,9 +386,13 @@ export function buildCheckPaymentPayload(input: CheckPaymentInput) {
     input.conversationId,
     config.merchantId,
   );
+  const merchantIdNumber = Number(config.merchantId);
+  const merchantId = Number.isFinite(merchantIdNumber)
+    ? merchantIdNumber
+    : config.merchantId;
 
   return {
-    merchantId: config.merchantId,
+    merchantId,
     conversationId: input.conversationId,
     sign,
   };
