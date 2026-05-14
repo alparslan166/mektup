@@ -388,9 +388,9 @@ export function buildCheckPaymentPayload(input: CheckPaymentInput) {
   );
 
   return {
-    MerchantId: config.merchantId,
-    ConversationId: input.conversationId,
-    Sign: sign,
+    merchantId: config.merchantId,
+    conversationId: input.conversationId,
+    sign,
   };
 }
 
