@@ -386,13 +386,9 @@ export function buildCheckPaymentPayload(input: CheckPaymentInput) {
     input.conversationId,
     config.merchantId,
   );
-  const merchantIdNumber = Number(config.merchantId);
-  const merchantId = Number.isFinite(merchantIdNumber)
-    ? merchantIdNumber
-    : config.merchantId;
 
   return {
-    merchantId,
+    merchantId: config.merchantId,
     conversationId: input.conversationId,
     sign,
   };

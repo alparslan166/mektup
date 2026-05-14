@@ -66,10 +66,11 @@ async function callCheckPayment(
 ) {
   const endpoint = getCheckPaymentUrl();
   const morparaHeaders = getMorparaHeaders();
-  const requestBody = buildCheckPaymentPayload({
+  const checkPaymentRequest = buildCheckPaymentPayload({
     conversationId,
   });
-  const rawSign = String(requestBody.sign || "");
+  const requestBody = { checkPaymentRequest };
+  const rawSign = String(checkPaymentRequest.sign || "");
   const signFingerprint = crypto
     .createHash("sha256")
     .update(rawSign, "utf8")
@@ -92,8 +93,10 @@ async function callCheckPayment(
     signLength: rawSign.length,
     signFingerprint,
     body: {
-      ...requestBody,
-      sign: maskLogValue(rawSign),
+      checkPaymentRequest: {
+        ...checkPaymentRequest,
+        sign: maskLogValue(rawSign),
+      },
     },
   });
 

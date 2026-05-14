@@ -102,7 +102,9 @@ async function callCheckPayment(
 
   try {
     endpoint = getCheckPaymentUrl();
-    requestBody = buildCheckPaymentPayload({ conversationId });
+    requestBody = {
+      checkPaymentRequest: buildCheckPaymentPayload({ conversationId }),
+    };
     headers = {
       "Content-Type": "application/json",
       ...getMorparaHeaders(),
