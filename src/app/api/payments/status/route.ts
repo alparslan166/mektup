@@ -70,7 +70,7 @@ async function callCheckPayment(
     conversationId,
   });
   const requestBody = { checkPaymentRequest };
-  const rawSign = String(checkPaymentRequest.sign || "");
+  const rawSign = String(checkPaymentRequest.Sign || "");
   const signFingerprint = crypto
     .createHash("sha256")
     .update(rawSign, "utf8")
@@ -95,7 +95,7 @@ async function callCheckPayment(
     body: {
       checkPaymentRequest: {
         ...checkPaymentRequest,
-        sign: maskLogValue(rawSign),
+        Sign: maskLogValue(rawSign),
       },
     },
   });
