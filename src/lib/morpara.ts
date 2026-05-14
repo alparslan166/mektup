@@ -32,7 +32,6 @@ type HostedPaymentInput = {
 
 type CheckPaymentInput = {
   conversationId: string;
-  token?: string;
 };
 
 type MorparaEnvDiagnostics = {
@@ -391,7 +390,6 @@ export function buildCheckPaymentPayload(input: CheckPaymentInput) {
   return {
     merchantId: config.merchantId,
     conversationId: input.conversationId,
-    token: input.token,
     sign,
   };
 }

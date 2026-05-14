@@ -95,7 +95,6 @@ function extractProviderPaymentId(
 
 async function callCheckPayment(
   conversationId: string,
-  token?: string,
 ): Promise<CheckPaymentResult | null> {
   let endpoint: string;
   let requestBody: Record<string, unknown>;
@@ -103,7 +102,7 @@ async function callCheckPayment(
 
   try {
     endpoint = getCheckPaymentUrl();
-    requestBody = buildCheckPaymentPayload({ conversationId, token });
+    requestBody = buildCheckPaymentPayload({ conversationId });
     headers = {
       "Content-Type": "application/json",
       ...getMorparaHeaders(),
@@ -250,10 +249,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const checkPayment = await callCheckPayment(
-      conversationId,
-      callbackToken || undefined,
-    );
+    const checkPayment = await callCheckPayment(conversationId);
 
     const responseCode = checkPayment?.responseCode || "CHECK_UNAVAILABLE";
     const responseDescription =

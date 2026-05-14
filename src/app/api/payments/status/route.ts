@@ -60,104 +60,14 @@ function getMaskedMorparaHeadersForLog(headers: Record<string, string>) {
   };
 }
 
-function extractTokenFromPayload(payload: unknown): string | undefined {
-  if (!payload || typeof payload !== "object") return undefined;
-  const record = payload as Record<string, unknown>;
-  const keys = ["token", "Token", "paymentToken", "PaymentToken"];
-  for (const key of keys) {
-    const value = record[key];
-    if (typeof value === "string" && value.trim().length > 0) {
-      return value.trim();
-    }
-  }
-
-  const hostedPaymentUrl = record.hostedPaymentUrl;
-  if (
-    typeof hostedPaymentUrl === "string" &&
-    hostedPaymentUrl.trim().length > 0
-  ) {
-    const extracted = extractTokenFromUrl(hostedPaymentUrl);
-    if (extracted.value) return extracted.value;
-  }
-
-  return undefined;
-}
-
-function maskOptionalToken(value: string | undefined) {
-  if (!value) return undefined;
-  if (value.length <= 6) return "***";
-  return `${value.slice(0, 3)}***${value.slice(-3)}`;
-}
-
-function detectTokenSourceFromPayload(payload: unknown): string | null {
-  if (!payload || typeof payload !== "object") return null;
-  const record = payload as Record<string, unknown>;
-  const keys = ["token", "Token", "paymentToken", "PaymentToken"];
-  for (const key of keys) {
-    const value = record[key];
-    if (typeof value === "string" && value.trim().length > 0) {
-      return key;
-    }
-  }
-
-  const hostedPaymentUrl = record.hostedPaymentUrl;
-  if (
-    typeof hostedPaymentUrl === "string" &&
-    hostedPaymentUrl.trim().length > 0
-  ) {
-    const extracted = extractTokenFromUrl(hostedPaymentUrl);
-    if (extracted.source) {
-      return `hostedPaymentUrl:${extracted.source}`;
-    }
-  }
-
-  return null;
-}
-
-function extractTokenFromUrl(rawUrl: string): {
-  value?: string;
-  source: "token" | "Token" | "paymentToken" | "PaymentToken" | "path" | null;
-} {
-  try {
-    const url = new URL(rawUrl);
-    const queryTokenKeys = [
-      "token",
-      "Token",
-      "paymentToken",
-      "PaymentToken",
-    ] as const;
-
-    for (const key of queryTokenKeys) {
-      const value = url.searchParams.get(key);
-      if (value && value.trim().length > 0) {
-        return { value: value.trim(), source: key };
-      }
-    }
-
-    const segments = url.pathname
-      .split("/")
-      .map((segment) => segment.trim())
-      .filter(Boolean);
-    const lastSegment = segments[segments.length - 1];
-    if (lastSegment && /^[A-Za-z0-9_-]{10,}$/.test(lastSegment)) {
-      return { value: lastSegment, source: "path" };
-    }
-
-    return { source: null };
-  } catch {
-    return { source: null };
-  }
-}
-
 async function callCheckPayment(
   conversationId: string,
-  context: { orderNumber: string; attemptId: string; token?: string },
+  context: { orderNumber: string; attemptId: string },
 ) {
   const endpoint = getCheckPaymentUrl();
   const morparaHeaders = getMorparaHeaders();
   const requestBody = buildCheckPaymentPayload({
     conversationId,
-    token: context.token,
   });
   const rawSign = String(requestBody.sign || "");
   const signFingerprint = crypto
@@ -258,7 +168,7 @@ async function callCheckPayment(
   };
 }
 
-async function reconcilePendingAttempt(attempt: AttemptRecord, token?: string) {
+async function reconcilePendingAttempt(attempt: AttemptRecord) {
   if (!attempt.conversationId) return attempt;
   if (attempt.status === "APPROVED" || attempt.status === "FAILED")
     return attempt;
@@ -272,7 +182,6 @@ async function reconcilePendingAttempt(attempt: AttemptRecord, token?: string) {
     const check = await callCheckPayment(attempt.conversationId, {
       orderNumber: attempt.orderNumber,
       attemptId: attempt.id,
-      token,
     });
     const isApproved =
       check.responseCode === "B0000" &&
@@ -371,7 +280,6 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const orderNumber = searchParams.get("order")?.trim();
     const conversationId = searchParams.get("conversationId")?.trim();
-    const token = searchParams.get("token")?.trim() || undefined;
 
     if (!orderNumber && !conversationId) {
       return NextResponse.json(
@@ -407,35 +315,9 @@ export async function GET(req: Request) {
       );
     }
 
-    const effectiveToken =
-      token ||
-      extractTokenFromPayload((attempt as AttemptRecord).rawCallbackPayload);
-    const payloadTokenSource = detectTokenSourceFromPayload(
-      (attempt as AttemptRecord).rawCallbackPayload,
-    );
-
-    console.info("PAYMENT_STATUS_TOKEN_RESOLUTION", {
-      orderNumber: attempt.orderNumber,
-      attemptId: attempt.id,
-      conversationId: attempt.conversationId,
-      queryTokenPresent: Boolean(token),
-      queryTokenMask: maskOptionalToken(token),
-      payloadTokenSource,
-      payloadTokenMask: maskOptionalToken(
-        extractTokenFromPayload((attempt as AttemptRecord).rawCallbackPayload),
-      ),
-      effectiveTokenPresent: Boolean(effectiveToken),
-      effectiveTokenMask: maskOptionalToken(effectiveToken),
-      status: attempt.status,
-      isFinalized: attempt.isFinalized,
-    });
-
     const resolvedAttempt =
       normalizeUiStatus(attempt.status, attempt.isFinalized) === "processing"
-        ? await reconcilePendingAttempt(
-            attempt as AttemptRecord,
-            effectiveToken,
-          )
+        ? await reconcilePendingAttempt(attempt as AttemptRecord)
         : (attempt as AttemptRecord);
 
     return NextResponse.json({
