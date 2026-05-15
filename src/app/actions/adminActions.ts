@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import {
+  sendOrderReceivedEmail,
   sendTrackingCodeEmail,
   sendPreparingEmail,
   sendCompletedEmail,
@@ -48,11 +49,20 @@ export async function updateLetterStatus(letterId: string, status: string) {
     const orderRef =
       ((letter.data as any)?.orderNumber as string | undefined) || letter.id;
 
-    // Trigger emails based on status
-    if (status === "PREPARING" && letter.user?.email) {
-      await sendPreparingEmail(letter.user.email, orderRef);
-    } else if (status === "COMPLETED" && letter.user?.email) {
-      await sendCompletedEmail(letter.user.email, orderRef);
+    if (letter.user?.email) {
+      if (status === "PAID") {
+        await sendOrderReceivedEmail(letter.user.email, orderRef);
+      } else if (status === "PREPARING") {
+        await sendPreparingEmail(letter.user.email, orderRef);
+      } else if (status === "SHIPPED") {
+        await sendTrackingCodeEmail(
+          letter.user.email,
+          orderRef,
+          letter.trackingCode || undefined,
+        );
+      } else if (status === "COMPLETED") {
+        await sendCompletedEmail(letter.user.email, orderRef);
+      }
     }
 
     revalidatePath("/admin/mektuplar");
