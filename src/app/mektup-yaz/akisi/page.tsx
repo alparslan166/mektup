@@ -21,12 +21,33 @@ export default function Home() {
   const nextStep = useLetterStore((state) => state.nextStep);
   const prevStep = useLetterStore((state) => state.prevStep);
   const letter = useLetterStore((state) => state.letter);
+  const address = useLetterStore((state) => state.address);
   const updateLetter = useLetterStore((state) => state.updateLetter);
 
   const { data: session } = useSession();
   const [isSaving, setIsSaving] = useState(false);
   const [envelopePrice, setEnvelopePrice] = useState(10);
   const [paperPrice, setPaperPrice] = useState(10);
+  const isAddressComplete = address.isPrison
+    ? Boolean(
+        address.senderName.trim() &&
+        address.senderCity.trim() &&
+        address.senderAddress.trim() &&
+        address.receiverName.trim() &&
+        address.receiverCity.trim() &&
+        address.prisonName?.trim() &&
+        address.receiverAddress.trim() &&
+        address.wardNumber?.trim(),
+      )
+    : Boolean(
+        address.senderName.trim() &&
+        address.senderCity.trim() &&
+        address.senderAddress.trim() &&
+        address.receiverName.trim() &&
+        address.receiverPhone.trim() &&
+        address.receiverCity.trim() &&
+        address.receiverAddress.trim(),
+      );
 
   React.useEffect(() => {
     getPricingSettings().then((res) => {
@@ -39,6 +60,30 @@ export default function Home() {
 
   const handleProceed = async () => {
     const state = useLetterStore.getState();
+    const currentAddress = state.address;
+    const canProceed = currentAddress.isPrison
+      ? Boolean(
+          currentAddress.senderName.trim() &&
+          currentAddress.senderCity.trim() &&
+          currentAddress.senderAddress.trim() &&
+          currentAddress.receiverName.trim() &&
+          currentAddress.receiverCity.trim() &&
+          currentAddress.prisonName?.trim() &&
+          currentAddress.receiverAddress.trim() &&
+          currentAddress.wardNumber?.trim(),
+        )
+      : Boolean(
+          currentAddress.senderName.trim() &&
+          currentAddress.senderCity.trim() &&
+          currentAddress.senderAddress.trim() &&
+          currentAddress.receiverName.trim() &&
+          currentAddress.receiverPhone.trim() &&
+          currentAddress.receiverCity.trim() &&
+          currentAddress.receiverAddress.trim(),
+        );
+
+    if (!canProceed) return;
+
     if (session?.user) {
       setIsSaving(true);
       try {
@@ -176,11 +221,11 @@ export default function Home() {
       <InfoStep />
 
       {/* FINAL ACTION BUTTON */}
-      <div className="flex justify-center mt-4 mb-12">
+      <div className="flex flex-col items-center mt-4 mb-12 gap-3">
         <button
           onClick={handleProceed}
-          disabled={isSaving}
-          className="bg-seal hover:bg-seal-hover text-paper w-full max-w-md py-4 rounded-xl font-bold text-lg shadow-lg transition-all hover:shadow-xl hover:-translate-y-1 flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-70"
+          disabled={isSaving || !isAddressComplete}
+          className="bg-seal hover:bg-seal-hover text-paper w-full max-w-md py-4 rounded-xl font-bold text-lg shadow-lg transition-all hover:shadow-xl hover:-translate-y-1 flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg"
         >
           {isSaving ? "Kaydediliyor..." : "Postaya Ver"}
           {isSaving ? (
@@ -189,6 +234,12 @@ export default function Home() {
             <ArrowRight size={24} />
           )}
         </button>
+        {!isAddressComplete && (
+          <p className="text-xl text-black font-semibold text-center">
+            Postaya vermeden önce gönderici ve alıcı bilgilerini eksiksiz
+            doldurun.
+          </p>
+        )}
       </div>
 
       <AutoSave />

@@ -125,12 +125,15 @@ async function calculateLetterTotals(userId: string, letter: any, extras: any) {
   const discountAmount = Math.round(
     subtotalAmount * (discountPercentage / 100),
   );
-  const totalAmount = subtotalAmount - discountAmount;
+  const taxableAmount = Math.max(0, subtotalAmount - discountAmount);
+  const vatAmount = Math.round(taxableAmount * 0.2);
+  const totalAmount = Math.max(1, taxableAmount + vatAmount);
 
   return {
     totalAmount,
     subtotalAmount,
     discountAmount,
+    vatAmount,
     discountPercentage,
     appliedDiscount: bestDiscount?.type || null,
   };
@@ -239,6 +242,7 @@ export async function createPendingLetter(
           appliedDiscount: pricing.appliedDiscount,
           discountPercentage: pricing.discountPercentage,
           discountAmount: pricing.discountAmount,
+          vatAmount: pricing.vatAmount,
           subtotalAmount: pricing.subtotalAmount,
         },
         status: "PENDING_PAYMENT",

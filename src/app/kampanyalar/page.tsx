@@ -80,8 +80,8 @@ export default function CampaignsPage() {
             <p className="flex-1 mb-6 text-xs leading-snug text-ink-light md:leading-relaxed md:mb-8 md:text-base">
               Sevdiklerinize yazacağınız ilk mektubunuzdan sonraki{" "}
               <strong>2. mektup gönderiminizde</strong> sistemimiz anında
-              <strong>%{secondLetterReward || 20} indirim tanımlar</strong> tanımlar! Daha çok yazın, daha
-              kârlı çıkın.
+              <strong>%{secondLetterReward || 20} indirim tanımlar</strong>{" "}
+              tanımlar! Daha çok yazın, daha kârlı çıkın.
             </p>
 
             <div className="flex flex-col items-start justify-between gap-3 mt-auto xl:flex-row xl:items-center">
@@ -162,8 +162,7 @@ export default function CampaignsPage() {
               gönder. Arkadaşın senin linkinle <strong>Mektuplaş</strong>{" "}
               ailesine katıldığında, hem ona hoş geldin hediyesi olarak hem de
               sana teşekkür olarak sonraki ilk mektubunuzda{" "}
-              <strong>%{referralReward || 15} indirim</strong> anında
-              eklensin!
+              <strong>%{referralReward || 15} indirim</strong> anında eklensin!
             </p>
 
             <div className="flex flex-col items-start justify-between w-full gap-3 mt-auto xl:flex-row xl:items-center">
@@ -238,7 +237,7 @@ export default function CampaignsPage() {
           <h3 className="mb-4 text-2xl font-bold md:text-3xl font-playfair text-wood-dark">
             Yeni Sürprizlerden Haberdar Olun
           </h3>
-          <p className="max-w-2xl mx-auto mb-8 text-wood-dark/80">
+          <p className="max-w-2xl mx-auto mb-8 text-black">
             Mektuplaş ailesi olarak size her zaman en iyi fiyatları sunmayı
             amaçlıyoruz. Zaman zaman yaptığımız{" "}
             <strong>%50 ödeme bonusları</strong> ve özel gün indirimlerini

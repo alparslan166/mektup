@@ -2,7 +2,10 @@
 
 import React from "react";
 import Stepper from "@/components/Stepper";
-import { getActiveDiscounts, type ActiveDiscount } from "@/app/actions/discountActions";
+import {
+  getActiveDiscounts,
+  type ActiveDiscount,
+} from "@/app/actions/discountActions";
 import {
   ArrowLeft,
   ArrowRight,
@@ -43,7 +46,8 @@ export default function ReviewStep({
     paperColorPrice: 10,
   });
   const [sentLetterCount, setSentLetterCount] = React.useState(0);
-  const [activeDiscount, setActiveDiscount] = React.useState<ActiveDiscount | null>(null);
+  const [activeDiscount, setActiveDiscount] =
+    React.useState<ActiveDiscount | null>(null);
 
   React.useEffect(() => {
     const fetchPrices = async () => {
@@ -160,7 +164,11 @@ export default function ReviewStep({
   // Kampanya indirimi uygula
   const discountPercentage = activeDiscount ? activeDiscount.percentage : 0;
   const discountAmount = Math.round(subtotalPrice * (discountPercentage / 100));
-  const totalPrice = subtotalPrice - discountAmount;
+  const originalVatAmount = Math.round(subtotalPrice * 0.2);
+  const originalTotalPrice = Math.max(1, subtotalPrice + originalVatAmount);
+  const taxablePrice = Math.max(0, subtotalPrice - discountAmount);
+  const vatAmount = Math.round(taxablePrice * 0.2);
+  const totalPrice = Math.max(1, taxablePrice + vatAmount);
 
   const orderDetails = {
     letter,
@@ -195,6 +203,8 @@ export default function ReviewStep({
       subtotal: subtotalPrice,
       discountPercentage,
       discountAmount,
+      originalTotal: originalTotalPrice,
+      vat: vatAmount,
       discountLabel: activeDiscount?.label || null,
       total: totalPrice,
     },
@@ -477,11 +487,15 @@ export default function ReviewStep({
                     {pricingKeys.calendarCreditPrice} ₺
                   </span>
                 </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-ink-light">KDV (%20)</span>
+                  <span className="font-medium text-ink">
+                    +{orderDetails.pricing.vat} ₺
+                  </span>
+                </div>
                 <div className="flex justify-between items-center border-t border-paper-dark/50 pt-3 mt-3">
                   <span className="text-ink-light">Kargo Ücreti</span>
-                  <span className="font-medium text-ink">
-                    Ücretsiz
-                  </span>
+                  <span className="font-medium text-ink">Ücretsiz</span>
                 </div>
 
                 {/* Kampanya İndirimi */}
@@ -506,18 +520,14 @@ export default function ReviewStep({
                   <div className="flex flex-col items-end">
                     {orderDetails.pricing.discountAmount > 0 && (
                       <span className="text-sm text-ink-light line-through opacity-60">
-                        {orderDetails.pricing.subtotal} ₺
+                        {orderDetails.pricing.originalTotal} ₺
                       </span>
                     )}
                     <span className="text-3xl font-playfair font-bold text-seal">
-                      {orderDetails.pricing.total}{" "}
-                      ₺
+                      {orderDetails.pricing.total} ₺
                     </span>
                   </div>
                 </div>
-                <p className="text-[11px] text-ink-light/70 text-right mt-1">
-                  KDV Dahildir
-                </p>
               </div>
 
               <button
@@ -553,7 +563,10 @@ export default function ReviewStep({
             />
           </div>
           <div className="text-sm leading-6">
-            <label htmlFor="terms" className="font-medium text-ink-light cursor-pointer select-none">
+            <label
+              htmlFor="terms"
+              className="font-medium text-ink-light cursor-pointer select-none"
+            >
               <a
                 href="/sozlesmeler"
                 target="_blank"

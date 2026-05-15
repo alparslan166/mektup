@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
-// import { sendVerificationEmail } from "@/app/actions/emailActions";
+import { sendVerificationEmail } from "@/app/actions/emailActions";
 
 export async function POST(req: Request) {
   try {
@@ -33,30 +33,43 @@ export async function POST(req: Request) {
         email,
         password: hashedPassword,
         referralCode: newReferralCode,
-        emailVerified: new Date(), // Set to current date to bypass verification
+        emailVerified: null,
       },
     });
 
-    /* 
-        // Create verification token
-        const token = crypto.randomUUID();
-        const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    const token = crypto.randomUUID();
+    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-        await prisma.verificationToken.create({
-            data: {
-                identifier: email,
-                token: token,
-                expires: expires,
-            },
-        });
+    await prisma.verificationToken.create({
+      data: {
+        identifier: email,
+        token,
+        expires,
+      },
+    });
 
-        // Send verification email
-        await sendVerificationEmail(email, token);
-        */
+    const emailResult = await sendVerificationEmail(email, token);
+
+    if (!emailResult.success) {
+      await prisma.verificationToken.deleteMany({
+        where: { identifier: email, token },
+      });
+      await prisma.user.delete({
+        where: { id: user.id },
+      });
+
+      return NextResponse.json(
+        {
+          message: "Doğrulama e-postası gönderilemedi. Lütfen tekrar deneyin.",
+        },
+        { status: 500 },
+      );
+    }
 
     return NextResponse.json(
       {
-        message: "Kayıt başarılı. Şimdi giriş yapabilirsiniz.",
+        message:
+          "Kayıt başarılı. Lütfen e-posta adresinize gelen doğrulama bağlantısına tıklayın.",
         userId: user.id,
       },
       { status: 201 },

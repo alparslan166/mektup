@@ -19,6 +19,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLetterStore } from "@/store/letterStore";
 import { getSentLetterCount } from "@/app/actions/letterActions";
 import { getPricingSettings } from "@/app/actions/settingsActions";
+import {
+  getActiveDiscounts,
+  type ActiveDiscount,
+} from "@/app/actions/discountActions";
 
 export default function PaymentStep({
   goBack,
@@ -38,6 +42,9 @@ export default function PaymentStep({
   const extras = useLetterStore((state) => state.extras);
   const isSubmitting = useRef(false);
   const [sentLetterCount, setSentLetterCount] = useState(0);
+  const [activeDiscount, setActiveDiscount] = useState<ActiveDiscount | null>(
+    null,
+  );
   const [pricingKeys, setPricingKeys] = useState({
     letterSendPrice: 100,
     photoCreditPrice: 10,
@@ -101,6 +108,11 @@ export default function PaymentStep({
       }
     });
     getSentLetterCount().then((count) => setSentLetterCount(count));
+    getActiveDiscounts().then((res) => {
+      if (res.success && res.bestDiscount) {
+        setActiveDiscount(res.bestDiscount);
+      }
+    });
   }, []);
 
   React.useEffect(() => {
@@ -160,13 +172,20 @@ export default function PaymentStep({
       : pricingKeys.calendarCreditPrice
     : 0;
 
-  const totalAmount =
+  const subtotalAmount =
     baseLetterPrice +
     scentPrice +
     photoPrice +
     docPrice +
     postcardPrice +
     calendarPrice;
+  const discountPercentage = activeDiscount ? activeDiscount.percentage : 0;
+  const discountAmount = Math.round(
+    subtotalAmount * (discountPercentage / 100),
+  );
+  const taxableAmount = Math.max(0, subtotalAmount - discountAmount);
+  const vatAmount = Math.round(taxableAmount * 0.2);
+  const totalAmount = Math.max(1, taxableAmount + vatAmount);
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -418,10 +437,7 @@ export default function PaymentStep({
                           Tutar:
                         </span>
                         <span className="text-xl font-bold text-seal">
-                          {totalAmount},00 ₺{" "}
-                          <span className="text-sm font-medium text-ink-light">
-                            (KDV Dahil)
-                          </span>
+                          {totalAmount},00 ₺
                         </span>
                       </div>
                     </div>
@@ -586,6 +602,20 @@ export default function PaymentStep({
                     ? "Ödeme havale / EFT ile tamamlanır"
                     : "Ödeme kartınızdan tahsil edilir"}
                 </p>
+                <div className="mt-4 pt-3 border-t border-paper-dark/50 space-y-2 text-sm">
+                  {discountAmount > 0 && (
+                    <div className="flex justify-between items-center text-emerald-700">
+                      <span className="font-medium">
+                        %{discountPercentage} {activeDiscount?.label}
+                      </span>
+                      <span className="font-bold">−{discountAmount} ₺</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between items-center text-ink">
+                    <span className="font-medium">KDV (%20)</span>
+                    <span className="font-bold">+{vatAmount} ₺</span>
+                  </div>
+                </div>
               </div>
 
               {isHavalePrimary ? (
@@ -788,10 +818,7 @@ export default function PaymentStep({
                         Tutar:
                       </span>
                       <span className="text-xl font-bold text-seal">
-                        {totalAmount},00 ₺{" "}
-                        <span className="text-sm font-medium text-ink-light">
-                          (KDV Dahil)
-                        </span>
+                        {totalAmount},00 ₺
                       </span>
                     </div>
                   </div>
