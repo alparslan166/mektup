@@ -18,15 +18,16 @@ type AuthResult =
   | { user: { id: string; email: string | null } }
   | { error: string };
 
-async function getAuthenticatedUser(): Promise<AuthResult> {
+async function getAuthenticatedUser(senderEmail?: string): Promise<AuthResult> {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.email) {
+    const emailToUse = senderEmail?.trim() || "misafir@mektup.com";
     const guestUser = await prisma.user.upsert({
-      where: { email: "misafir@mektup.com" },
+      where: { email: emailToUse },
       update: {},
       create: {
-        email: "misafir@mektup.com",
+        email: emailToUse,
         name: "Misafir Kullanıcı",
         role: "USER",
         termsAccepted: true,
@@ -61,7 +62,7 @@ async function calculateLetterTotals(user: any, letter: any, extras: any) {
     envelopePriceDelta +
     paperPriceDelta;
 
-  const isGuest = user.email === "misafir@mektup.com";
+  const isGuest = user.email === "misafir@mektup.com" || !user.password;
 
   const letterCount = isGuest
     ? 0
@@ -235,11 +236,11 @@ export async function createPendingLetter(
   letterData: any,
 ): Promise<LetterActionResult> {
   try {
-    const auth = await getAuthenticatedUser();
+    const { letter, extras, address } = letterData;
+    const senderEmail = address?.senderEmail;
+    const auth = await getAuthenticatedUser(senderEmail);
     if ("error" in auth) return { error: auth.error };
     const { user } = auth;
-
-    const { letter, extras, address } = letterData;
     const orderNumber =
       typeof letterData.orderNumber === "string" &&
       letterData.orderNumber.trim().length > 0

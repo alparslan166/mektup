@@ -30,7 +30,14 @@ export default function Home() {
   const [isSaving, setIsSaving] = useState(false);
   const [envelopePrice, setEnvelopePrice] = useState(10);
   const [paperPrice, setPaperPrice] = useState(10);
-  const isAddressComplete = address.isPrison
+
+  const isGuest = status === "unauthenticated";
+  const isEmailValid = !isGuest || (
+    Boolean(address.senderEmail?.trim()) &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address.senderEmail!.trim())
+  );
+
+  const isAddressComplete = (address.isPrison
     ? Boolean(
         address.senderName.trim() &&
         address.senderCity.trim() &&
@@ -49,7 +56,7 @@ export default function Home() {
         address.receiverPhone.trim() &&
         address.receiverCity.trim() &&
         address.receiverAddress.trim(),
-      );
+      )) && isEmailValid;
 
   React.useEffect(() => {
     getPricingSettings().then((res) => {
@@ -63,7 +70,13 @@ export default function Home() {
   const handleProceed = async () => {
     const state = useLetterStore.getState();
     const currentAddress = state.address;
-    const canProceed = currentAddress.isPrison
+    const isGuest = status === "unauthenticated";
+    const isEmailValid = !isGuest || (
+      Boolean(currentAddress.senderEmail?.trim()) &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(currentAddress.senderEmail!.trim())
+    );
+
+    const canProceed = (currentAddress.isPrison
       ? Boolean(
           currentAddress.senderName.trim() &&
           currentAddress.senderCity.trim() &&
@@ -82,7 +95,7 @@ export default function Home() {
           currentAddress.receiverPhone.trim() &&
           currentAddress.receiverCity.trim() &&
           currentAddress.receiverAddress.trim(),
-        );
+        )) && isEmailValid;
 
     if (!canProceed) return;
 

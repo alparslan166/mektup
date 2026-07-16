@@ -17,9 +17,66 @@ export async function POST(req: Request) {
     });
 
     if (existingUser) {
+      if (existingUser.password) {
+        return NextResponse.json(
+          { message: "Bu e-posta zaten kullanımda." },
+          { status: 400 },
+        );
+      }
+
+      // Convert guest account to a fully registered account
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newReferralCode = existingUser.referralCode || nanoid(8);
+
+      const user = await prisma.user.update({
+        where: { id: existingUser.id },
+        data: {
+          name,
+          password: hashedPassword,
+          referralCode: newReferralCode,
+          emailVerified: null,
+        },
+      });
+
+      const token = crypto.randomUUID();
+      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+      await prisma.verificationToken.create({
+        data: {
+          identifier: email,
+          token,
+          expires,
+        },
+      });
+
+      const emailResult = await sendVerificationEmail(email, token);
+
+      if (!emailResult.success) {
+        await prisma.verificationToken.deleteMany({
+          where: { identifier: email, token },
+        });
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            password: null,
+          },
+        });
+
+        return NextResponse.json(
+          {
+            message: "Doğrulama e-postası gönderilemedi. Lütfen tekrar deneyin.",
+          },
+          { status: 500 },
+        );
+      }
+
       return NextResponse.json(
-        { message: "Bu e-posta zaten kullanımda." },
-        { status: 400 },
+        {
+          message:
+            "Kayıt başarılı. Lütfen e-posta adresinize gelen doğrulama bağlantısına tıklayın.",
+          userId: user.id,
+        },
+        { status: 201 },
       );
     }
 

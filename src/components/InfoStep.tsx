@@ -9,6 +9,7 @@ import citiesData from "../../sehirler.json";
 import { useShallow } from 'zustand/react/shallow';
 import { getCompanyAddress } from "@/app/actions/settingsActions";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 interface Address {
     id: string;
@@ -32,6 +33,8 @@ export default function InfoStep() {
         address: state.address,
         updateAddress: state.updateAddress
     })));
+    const { status } = useSession();
+    const isGuest = status === "unauthenticated";
 
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [isLoadingAddresses, setIsLoadingAddresses] = useState(false);
@@ -237,6 +240,27 @@ export default function InfoStep() {
                             </div>
                             <p className="text-[10px] text-ink-light/60 mt-1 ml-1 font-medium">Lütfen tam adınızı ve soyadınızı giriniz.</p>
                         </div>
+
+                        {/* Sender Email (Guest Only) */}
+                        {isGuest && (
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-ink-light block">E-Posta Adresi</label>
+                                <div className="relative">
+                                    <input
+                                        type="email"
+                                        placeholder="E-Posta Adresiniz"
+                                        value={address.senderEmail || ""}
+                                        onChange={(e) => updateAddress({ senderEmail: e.target.value })}
+                                        className="w-full bg-paper text-ink text-sm px-4 py-3 pl-10 border border-paper-dark rounded-md outline-none focus:border-wood focus:ring-1 focus:ring-wood transition-all shadow-sm"
+                                        required
+                                    />
+                                    <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-light/50" />
+                                </div>
+                                <p className="text-[10px] text-ink-light/60 mt-1 ml-1 font-medium">
+                                    Sipariş takibi ve bilgilendirme mailleri için geçerli bir e-posta adresi giriniz.
+                                </p>
+                            </div>
+                        )}
 
                         {/* Sender City */}
                         <div className="space-y-1">

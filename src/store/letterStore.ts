@@ -42,6 +42,7 @@ export interface AddressData {
   senderName: string;
   senderCity: string;
   senderAddress: string;
+  senderEmail?: string;
 
   receiverName: string;
   receiverCity: string;
@@ -112,6 +113,7 @@ const initialState = {
     senderName: "",
     senderCity: "",
     senderAddress: "",
+    senderEmail: "",
     receiverName: "",
     receiverCity: "",
     receiverAddress: "",
