@@ -244,18 +244,19 @@ export default function PaymentStep({
           extras,
           address,
           orderNumber: effectiveOrderNumber,
+          provider: "HAVALE",
         }),
       });
 
       const data = await res.json();
 
-      if (!res.ok || !data?.hostedPaymentUrl) {
+      if (!res.ok || !data?.success) {
         alert(data?.error || "Ödeme başlatılamadı.");
         return;
       }
 
       setShowHavaleModal(false);
-      window.location.href = data.hostedPaymentUrl;
+      setIsSuccess(true);
     } catch (error) {
       console.error("PAYMENT_INITIATE_HAVALE_CLIENT_ERROR", error);
       alert("Ödeme başlatılırken bir hata oluştu.");

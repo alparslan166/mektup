@@ -137,10 +137,47 @@ export async function POST(req: Request) {
     }
 
     const orderNumber = getOrderNumberFromLetterData(letter.data, letter.id);
+    const provider = payload.provider || "MORPARA";
 
     const existingAttempt = await (prisma as any).paymentAttempt.findUnique({
       where: { orderNumber },
     });
+
+    if (provider === "HAVALE") {
+      const createdAttempt = existingAttempt
+        ? existingAttempt
+        : await (prisma as any).paymentAttempt.create({
+            data: {
+              userId: letter.userId,
+              letterId: letter.id,
+              orderNumber,
+              provider: "HAVALE",
+              amount: letter.totalAmount || 0,
+              currency: "TRY",
+              status: "PENDING",
+            },
+          });
+
+      if (existingAttempt && (existingAttempt.provider !== "HAVALE" || existingAttempt.status !== "PENDING")) {
+        await (prisma as any).paymentAttempt.update({
+          where: { id: existingAttempt.id },
+          data: {
+            provider: "HAVALE",
+            status: "PENDING",
+          },
+        });
+      }
+
+      return NextResponse.json({
+        success: true,
+        paymentAttemptId: createdAttempt.id,
+        orderNumber,
+        amount: createdAttempt.amount,
+        currency: createdAttempt.currency,
+        status: "PENDING",
+        provider: "HAVALE",
+      }, { status: 201 });
+    }
 
     if (existingAttempt) {
       const existingHostedUrl =
