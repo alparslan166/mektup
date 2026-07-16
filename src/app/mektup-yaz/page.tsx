@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Bird, Hourglass, Plane, Heart, Mail } from "lucide-react";
+import { Bird, Hourglass, Plane, Heart, Mail, AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -64,16 +64,35 @@ export default function CategorySelection() {
   ];
 
   const handleCategorySelect = (id: string, href: string) => {
-    if (status === "unauthenticated") {
-      router.push("/auth/login?callbackUrl=/mektup-yaz");
-      return;
-    }
     updateAddress({ isPrison: id === "cezaevi" });
     router.push(href);
   };
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-5xl flex-1 flex flex-col justify-center animate-in fade-in duration-500">
+      {status === "unauthenticated" && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8 p-4 rounded-2xl bg-amber-500/10 backdrop-blur-md border border-amber-500/30 shadow-lg flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left max-w-3xl mx-auto w-full"
+        >
+          <div className="p-3 bg-amber-500/20 text-amber-300 rounded-xl">
+            <AlertTriangle size={24} />
+          </div>
+          <div className="flex-1 col-span-1">
+            <h4 className="font-bold text-amber-200 text-base">Misafir Olarak Mektup Yazıyorsunuz</h4>
+            <p className="text-paper/85 text-sm mt-1 font-medium">
+              Giriş yapmadığınız için üyelik kampanyalarından, indirimlerden (örneğin 5 mektup sonrası hediye mektup) faydalanamazsınız ve taslağınız kaydedilmez.
+            </p>
+          </div>
+          <Link
+            href="/auth/login?callbackUrl=/mektup-yaz"
+            className="bg-amber-600 hover:bg-amber-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all shadow-md active:scale-95 whitespace-nowrap"
+          >
+            Giriş Yap / Üye Ol
+          </Link>
+        </motion.div>
+      )}
       <h1 className="font-playfair italic text-4xl md:text-5xl font-bold text-center text-paper mb-4 drop-shadow-lg">
         Mektup yaz, iz bırak...
       </h1>

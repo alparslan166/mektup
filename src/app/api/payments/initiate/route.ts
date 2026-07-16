@@ -112,14 +112,6 @@ function getBaseUrl(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: "Oturum açmanız gerekiyor." },
-        { status: 401 },
-      );
-    }
-
     const payload = await req.json();
     const pendingResult = await createPendingLetter(payload);
 

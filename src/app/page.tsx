@@ -303,9 +303,7 @@ export default function LandingPage() {
               Nasıl Çalışır?
             </button>
             <Link
-              href={
-                session ? "/mektup-yaz" : "/auth/login?callbackUrl=/mektup-yaz"
-              }
+              href="/mektup-yaz"
               className="bg-seal hover:bg-seal-hover text-paper px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center gap-3 group border border-seal-hover"
             >
               <PenTool

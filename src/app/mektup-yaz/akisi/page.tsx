@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, FileText, ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { Mail, FileText, ArrowLeft, ArrowRight, Loader2, AlertTriangle } from "lucide-react";
+import { motion } from "framer-motion";
 import Stepper from "@/components/Stepper";
 import Editor from "@/components/Editor";
 import ExtrasStep from "@/components/ExtrasStep";
@@ -24,7 +26,7 @@ export default function Home() {
   const address = useLetterStore((state) => state.address);
   const updateLetter = useLetterStore((state) => state.updateLetter);
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [isSaving, setIsSaving] = useState(false);
   const [envelopePrice, setEnvelopePrice] = useState(10);
   const [paperPrice, setPaperPrice] = useState(10);
@@ -151,6 +153,29 @@ export default function Home() {
   // Merged Step 1, 2, 3 into a single scrolling view layout
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl flex-1 flex flex-col gap-8 animate-in fade-in duration-300">
+      {status === "unauthenticated" && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-4 rounded-2xl bg-amber-500/10 backdrop-blur-md border border-amber-500/30 shadow-lg flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left w-full"
+        >
+          <div className="p-3 bg-amber-500/20 text-amber-300 rounded-xl">
+            <AlertTriangle size={24} />
+          </div>
+          <div className="flex-1">
+            <h4 className="font-bold text-amber-200 text-base">Misafir Olarak Mektup Yazıyorsunuz</h4>
+            <p className="text-paper/85 text-sm mt-1 font-medium">
+              Giriş yapmadığınız için üyelik kampanyalarından, indirimlerden (örneğin 5 mektup sonrası hediye mektup) faydalanamazsınız ve taslağınız kaydedilmez.
+            </p>
+          </div>
+          <Link
+            href="/auth/login?callbackUrl=/mektup-yaz/akisi"
+            className="bg-amber-600 hover:bg-amber-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all shadow-md active:scale-95 whitespace-nowrap animate-pulse hover:animate-none"
+          >
+            Giriş Yap / Üye Ol
+          </Link>
+        </motion.div>
+      )}
       {/* 1. EDITOR SECTION */}
       <div className="bg-paper shadow-sm border border-paper-dark rounded-xl p-6 sm:p-10 flex-col flex relative overflow-hidden">
         {/* Subtle decorative background piece */}

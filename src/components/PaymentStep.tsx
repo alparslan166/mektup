@@ -19,6 +19,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLetterStore } from "@/store/letterStore";
 import { getSentLetterCount } from "@/app/actions/letterActions";
 import { getPricingSettings } from "@/app/actions/settingsActions";
+import { useSession } from "next-auth/react";
 import {
   getActiveDiscounts,
   type ActiveDiscount,
@@ -31,6 +32,7 @@ export default function PaymentStep({
   goBack: () => void;
   onComplete: () => void;
 }) {
+  const { status } = useSession();
   const isHavalePrimary = true;
 
   const [isProcessing, setIsProcessing] = useState(false);
@@ -107,13 +109,15 @@ export default function PaymentStep({
         });
       }
     });
-    getSentLetterCount().then((count) => setSentLetterCount(count));
-    getActiveDiscounts().then((res) => {
-      if (res.success && res.bestDiscount) {
-        setActiveDiscount(res.bestDiscount);
-      }
-    });
-  }, []);
+    if (status !== "unauthenticated") {
+      getSentLetterCount().then((count) => setSentLetterCount(count));
+      getActiveDiscounts().then((res) => {
+        if (res.success && res.bestDiscount) {
+          setActiveDiscount(res.bestDiscount);
+        }
+      });
+    }
+  }, [status]);
 
   React.useEffect(() => {
     if (orderNumber) return;
@@ -133,7 +137,7 @@ export default function PaymentStep({
     letter.paperColor !== "Beyaz" ? pricingKeys.paperColorPrice : 0;
 
   // Calculate dynamic pricing based on selections
-  const isFreeLetter = sentLetterCount % 6 === 5;
+  const isFreeLetter = status === "unauthenticated" ? false : sentLetterCount % 6 === 5;
   const baseLetterPrice = isFreeLetter
     ? 0
     : pricingKeys.letterSendPrice + envelopePriceDelta + paperPriceDelta;

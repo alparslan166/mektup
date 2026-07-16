@@ -22,7 +22,17 @@ async function getAuthenticatedUser(): Promise<AuthResult> {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.email) {
-    return { error: "Oturum açmanız gerekiyor." };
+    const guestUser = await prisma.user.upsert({
+      where: { email: "misafir@mektup.com" },
+      update: {},
+      create: {
+        email: "misafir@mektup.com",
+        name: "Misafir Kullanıcı",
+        role: "USER",
+        termsAccepted: true,
+      },
+    });
+    return { user: guestUser };
   }
 
   const user = await prisma.user.findUnique({
@@ -36,7 +46,7 @@ async function getAuthenticatedUser(): Promise<AuthResult> {
   return { user };
 }
 
-async function calculateLetterTotals(userId: string, letter: any, extras: any) {
+async function calculateLetterTotals(user: any, letter: any, extras: any) {
   const pricingRes = await getPricingSettings();
 
   const envelopePriceDelta =
@@ -51,16 +61,20 @@ async function calculateLetterTotals(userId: string, letter: any, extras: any) {
     envelopePriceDelta +
     paperPriceDelta;
 
-  const letterCount = await prisma.letter.count({
-    where: { userId },
-  });
+  const isGuest = user.email === "misafir@mektup.com";
 
-  const isFreeLetter = letterCount % 6 === 5;
+  const letterCount = isGuest
+    ? 0
+    : await prisma.letter.count({
+        where: { userId: user.id },
+      });
+
+  const isFreeLetter = isGuest ? false : letterCount % 6 === 5;
 
   if (isFreeLetter) {
     baseLetterPrice = 0;
     console.log(
-      `Hediye Mektup Uygulandı! Kullanıcı ID: ${userId}, Mevcut Sayı: ${letterCount}`,
+      `Hediye Mektup Uygulandı! Kullanıcı ID: ${user.id}, Mevcut Sayı: ${letterCount}`,
     );
   }
 
@@ -119,7 +133,9 @@ async function calculateLetterTotals(userId: string, letter: any, extras: any) {
     postcardPrice +
     calendarPrice;
 
-  const discountRes = await getActiveDiscounts();
+  const discountRes = isGuest
+    ? { bestDiscount: null }
+    : await getActiveDiscounts();
   const bestDiscount = discountRes.bestDiscount;
   const discountPercentage = bestDiscount ? bestDiscount.percentage : 0;
   const discountAmount = Math.round(
@@ -230,7 +246,7 @@ export async function createPendingLetter(
         ? letterData.orderNumber.trim()
         : null;
 
-    const pricing = await calculateLetterTotals(user.id, letter, extras);
+    const pricing = await calculateLetterTotals(user, letter, extras);
 
     const createdLetter = await prisma.letter.create({
       data: {
