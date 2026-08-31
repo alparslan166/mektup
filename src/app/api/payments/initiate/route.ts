@@ -37,12 +37,8 @@ function getHostedPaymentUrl(
   return `/odeme/sonuc?status=${status}&order=${encodeURIComponent(orderNumber)}&conversationId=${encodeURIComponent(conversationId)}`;
 }
 
-function getUiStatusFromAttemptStatus(
-  status: string,
-): "processing" | "failed" | "success" {
-  if (status === "FAILED" || status === "CANCELLED") return "failed";
-  if (status === "APPROVED") return "success";
-  return "processing";
+function isLiveHostedPaymentUrl(url: unknown): url is string {
+  return typeof url === "string" && /^https?:\/\//i.test(url.trim());
 }
 
 async function markInitiateFailed(
@@ -188,16 +184,36 @@ export async function POST(req: Request) {
               .hostedPaymentUrl
           : null;
 
-      const hasLiveHostedUrl = typeof existingHostedUrl === "string";
-      const isTerminalStatus =
-        existingAttempt.status === "APPROVED" ||
-        existingAttempt.status === "CANCELLED";
+      const hasReusableHostedUrl =
+        isLiveHostedPaymentUrl(existingHostedUrl) &&
+        (existingAttempt.status === "PENDING" ||
+          existingAttempt.status === "INITIATED");
 
-      // Terminal (APPROVED/CANCELLED) ya da hâlâ kullanılabilir bir hosted
-      // URL varsa mevcut attempt'i aynen döndür. Aksi halde (INITIATED /
-      // PENDING / FAILED ve URL yok) aşağıdaki Morpara fetch akışıyla
-      // yeniden dene.
-      if (isTerminalStatus || hasLiveHostedUrl) {
+      // Sadece henüz açık bir Morpara oturumu varsa mevcut URL'i tekrar kullan.
+      // CANCELLED / FAILED denemelerinde sahte /odeme/sonuc adresine dönmek
+      // kullanıcıyı ödeme ekranına hiç götürmüyordu.
+      if (existingAttempt.status === "APPROVED") {
+        return NextResponse.json({
+          success: true,
+          alreadyPaid: true,
+          paymentAttemptId: existingAttempt.id,
+          orderNumber: existingAttempt.orderNumber,
+          conversationId: existingAttempt.conversationId || undefined,
+          amount: existingAttempt.amount,
+          currency: existingAttempt.currency,
+          status: existingAttempt.status,
+          hostedPaymentUrl: getHostedPaymentUrl(
+            existingAttempt.orderNumber,
+            existingAttempt.conversationId ||
+              buildConversationId(existingAttempt.orderNumber),
+            "success",
+          ),
+          provider: existingAttempt.provider,
+          mode: "live",
+        });
+      }
+
+      if (hasReusableHostedUrl) {
         return NextResponse.json({
           success: true,
           paymentAttemptId: existingAttempt.id,
@@ -206,17 +222,9 @@ export async function POST(req: Request) {
           amount: existingAttempt.amount,
           currency: existingAttempt.currency,
           status: existingAttempt.status,
-          hostedPaymentUrl:
-            typeof existingHostedUrl === "string"
-              ? existingHostedUrl
-              : getHostedPaymentUrl(
-                  existingAttempt.orderNumber,
-                  existingAttempt.conversationId ||
-                    buildConversationId(existingAttempt.orderNumber),
-                  getUiStatusFromAttemptStatus(existingAttempt.status),
-                ),
+          hostedPaymentUrl: existingHostedUrl,
           provider: existingAttempt.provider,
-          mode: typeof existingHostedUrl === "string" ? "live" : "mock",
+          mode: "live",
         });
       }
     }
@@ -240,8 +248,8 @@ export async function POST(req: Request) {
     // tarafında reddedilmiş (örn. eski 403/400 alan) bir id'nin tekrar
     // gönderilmesini engeller.
     const conversationId = buildConversationId(orderNumber);
-    let hostedPaymentUrl = getHostedPaymentUrl(orderNumber, conversationId);
-    let mode: "live" | "mock" = "mock";
+    let hostedPaymentUrl: string | null = null;
+    let initiateError: string | null = null;
 
     await (prisma as any).paymentAttempt.update({
       where: { id: createdAttempt.id },
@@ -357,17 +365,13 @@ export async function POST(req: Request) {
           technicalErrorMessage,
         );
 
-        hostedPaymentUrl = getHostedPaymentUrl(
-          orderNumber,
-          conversationId,
-          "failed",
-        );
+        initiateError =
+          "Ödeme sayfası açılamadı. Lütfen birkaç saniye sonra tekrar deneyin.";
       } else if (
         typeof responseData?.returnUrl === "string" &&
         responseData.returnUrl
       ) {
         hostedPaymentUrl = responseData.returnUrl;
-        mode = "live";
 
         await (prisma as any).paymentAttempt.update({
           where: { id: createdAttempt.id },
@@ -397,11 +401,8 @@ export async function POST(req: Request) {
           "HostedPaymentRedirect returnUrl alanı boş döndü",
         );
 
-        hostedPaymentUrl = getHostedPaymentUrl(
-          orderNumber,
-          conversationId,
-          "failed",
-        );
+        initiateError =
+          "Ödeme sayfası açılamadı. Lütfen birkaç saniye sonra tekrar deneyin.";
       }
     } catch (error) {
       const technicalErrorCode =
@@ -421,12 +422,20 @@ export async function POST(req: Request) {
         technicalErrorMessage,
       );
 
-      hostedPaymentUrl = getHostedPaymentUrl(
-        orderNumber,
-        conversationId,
-        "failed",
-      );
+      initiateError =
+        "Ödeme sağlayıcısına bağlanılamadı. Lütfen tekrar deneyin.";
       console.warn("MORPARA_HOSTED_REDIRECT_FALLBACK", error);
+    }
+
+    if (!isLiveHostedPaymentUrl(hostedPaymentUrl) || initiateError) {
+      return NextResponse.json(
+        {
+          error:
+            initiateError ||
+            "Ödeme sayfası açılamadı. Lütfen tekrar deneyin.",
+        },
+        { status: 502 },
+      );
     }
 
     return NextResponse.json(
@@ -437,10 +446,10 @@ export async function POST(req: Request) {
         conversationId,
         amount: createdAttempt.amount,
         currency: createdAttempt.currency,
-        status: mode === "live" ? "PENDING" : "FAILED",
+        status: "PENDING",
         hostedPaymentUrl,
         provider: createdAttempt.provider,
-        mode,
+        mode: "live",
       },
       { status: 201 },
     );

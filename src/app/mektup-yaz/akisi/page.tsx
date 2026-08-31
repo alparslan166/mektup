@@ -21,7 +21,6 @@ import { getPricingSettings } from "@/app/actions/settingsActions";
 export default function Home() {
   const currentStep = useLetterStore((state) => state.currentStep);
   const nextStep = useLetterStore((state) => state.nextStep);
-  const prevStep = useLetterStore((state) => state.prevStep);
   const letter = useLetterStore((state) => state.letter);
   const address = useLetterStore((state) => state.address);
   const updateLetter = useLetterStore((state) => state.updateLetter);
@@ -157,7 +156,7 @@ export default function Home() {
     return (
       <ReviewStep
         goBack={() => useLetterStore.getState().setCurrentStep(1)}
-        goNext={nextStep}
+        goNext={() => useLetterStore.getState().setCurrentStep(5)}
       />
     );
   }

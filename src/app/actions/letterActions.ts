@@ -237,6 +237,9 @@ export async function createPendingLetter(
 ): Promise<LetterActionResult> {
   try {
     const { letter, extras, address } = letterData;
+    if (!letter || !extras || !address) {
+      return { error: "Mektup bilgileri eksik." };
+    }
     const senderEmail = address?.senderEmail;
     const auth = await getAuthenticatedUser(senderEmail);
     if ("error" in auth) return { error: auth.error };
@@ -248,6 +251,51 @@ export async function createPendingLetter(
         : null;
 
     const pricing = await calculateLetterTotals(user, letter, extras);
+
+    if (orderNumber) {
+      const existingPending = await prisma.letter.findFirst({
+        where: {
+          userId: user.id,
+          status: "PENDING_PAYMENT",
+        },
+        orderBy: { createdAt: "desc" },
+      });
+
+      const existingOrderNumber =
+        existingPending?.data &&
+        typeof existingPending.data === "object" &&
+        "orderNumber" in existingPending.data
+          ? (existingPending.data as Record<string, unknown>).orderNumber
+          : null;
+
+      if (existingPending && existingOrderNumber === orderNumber) {
+        const updatedLetter = await prisma.letter.update({
+          where: { id: existingPending.id },
+          data: {
+            receiverId: address.receiverId || null,
+            data: {
+              ...letterData,
+              orderNumber,
+              appliedDiscount: pricing.appliedDiscount,
+              discountPercentage: pricing.discountPercentage,
+              discountAmount: pricing.discountAmount,
+              vatAmount: pricing.vatAmount,
+              subtotalAmount: pricing.subtotalAmount,
+            },
+            senderName: address.senderName,
+            receiverName: address.receiverName,
+            receiverCity: address.receiverCity,
+            totalAmount: pricing.totalAmount,
+            inboxConsent: extras.wantReplyInInbox || false,
+            inboxConsentDate: extras.inboxConsentDate
+              ? new Date(extras.inboxConsentDate)
+              : null,
+          },
+        });
+
+        return { success: true, letterId: updatedLetter.id };
+      }
+    }
 
     const createdLetter = await prisma.letter.create({
       data: {

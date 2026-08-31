@@ -39,6 +39,7 @@ export default function PaymentStep({
   const [isSuccess, setIsSuccess] = useState(false);
   const [showHavaleModal, setShowHavaleModal] = useState(false);
   const [isHavaleProcessing, setIsHavaleProcessing] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
   const orderNumber = useLetterStore((state) => state.orderNumber);
   const setOrderNumber = useLetterStore((state) => state.setOrderNumber);
   const extras = useLetterStore((state) => state.extras);
@@ -146,32 +147,35 @@ export default function PaymentStep({
 
   // Fotoğraf Fiyat Algoritması
   const photoCreditPrice = pricingKeys.photoCreditPrice;
-  let actualPhotoCount = extras.photos.length;
+  const photos = extras.photos || [];
+  const documents = extras.documents || [];
+  const postcards = extras.postcards || [];
+  let actualPhotoCount = photos.length;
   if (actualPhotoCount >= 10) actualPhotoCount -= 2;
   else if (actualPhotoCount >= 5) actualPhotoCount -= 1;
 
   let photoPrice = actualPhotoCount * photoCreditPrice;
-  if (extras.photos.length === 3 || extras.photos.length === 4) {
-    photoPrice = (extras.photos.length - 1) * photoCreditPrice + 8;
+  if (photos.length === 3 || photos.length === 4) {
+    photoPrice = (photos.length - 1) * photoCreditPrice + 8;
   }
 
-  const docPrice = extras.documents.length * pricingKeys.docCreditPrice;
+  const docPrice = documents.length * pricingKeys.docCreditPrice;
 
   // Kartpostal Fiyat Algoritması
   const postcardCreditPrice = pricingKeys.postcardCreditPrice;
-  let actualPostcardCount = extras.postcards.length;
+  let actualPostcardCount = postcards.length;
   if (actualPostcardCount >= 10) actualPostcardCount -= 2;
   else if (actualPostcardCount >= 5) actualPostcardCount -= 1;
 
   let postcardPrice = actualPostcardCount * postcardCreditPrice;
-  if (extras.postcards.length === 3 || extras.postcards.length === 4) {
+  if (postcards.length === 3 || postcards.length === 4) {
     postcardPrice =
-      (extras.postcards.length - 1) * postcardCreditPrice +
+      (postcards.length - 1) * postcardCreditPrice +
       Math.round(postcardCreditPrice * 0.8);
   }
 
   const calendarPrice = extras.includeCalendar
-    ? extras.photos.length >= 3
+    ? photos.length >= 3
       ? 0
       : pricingKeys.calendarCreditPrice
     : 0;
@@ -191,6 +195,9 @@ export default function PaymentStep({
   const vatAmount = Math.round(taxableAmount * 0.2);
   const totalAmount = Math.max(1, taxableAmount + vatAmount);
 
+  const isLiveHostedPaymentUrl = (url: unknown): url is string =>
+    typeof url === "string" && /^https?:\/\//i.test(url.trim());
+
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -198,6 +205,7 @@ export default function PaymentStep({
     isSubmitting.current = true;
 
     setIsProcessing(true);
+    setPaymentError(null);
 
     const { letter, extras, address } = useLetterStore.getState();
     try {
@@ -214,15 +222,23 @@ export default function PaymentStep({
 
       const data = await res.json();
 
-      if (!res.ok || !data?.hostedPaymentUrl) {
-        alert(data?.error || "Ödeme başlatılamadı.");
+      if (data?.alreadyPaid && data?.hostedPaymentUrl) {
+        window.location.href = data.hostedPaymentUrl;
+        return;
+      }
+
+      if (!res.ok || !isLiveHostedPaymentUrl(data?.hostedPaymentUrl)) {
+        setPaymentError(
+          data?.error ||
+            "Ödeme sayfası açılamadı. Lütfen tekrar deneyin.",
+        );
         return;
       }
 
       window.location.href = data.hostedPaymentUrl;
     } catch (error) {
       console.error("PAYMENT_INITIATE_CLIENT_ERROR", error);
-      alert("Ödeme başlatılırken bir hata oluştu.");
+      setPaymentError("Ödeme başlatılırken bir hata oluştu.");
     } finally {
       setIsProcessing(false);
       isSubmitting.current = false;
@@ -623,6 +639,12 @@ export default function PaymentStep({
                 </div>
               </div>
 
+              {paymentError && (
+                <p className="mb-3 text-sm font-medium text-red-600 text-center bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                  {paymentError}
+                </p>
+              )}
+
               {isHavalePrimary ? (
                 <button
                   onClick={() => setShowHavaleModal(true)}
@@ -667,18 +689,27 @@ export default function PaymentStep({
               <div className="mt-4 pt-4 border-t border-paper-dark/30">
                 {isHavalePrimary ? (
                   <button
-                    type="submit"
+                    type="button"
                     onClick={handlePayment}
                     disabled={isProcessing}
                     className="w-full bg-white hover:bg-paper-light border-2 border-wood/30 hover:border-wood text-wood-dark py-3.5 rounded-xl font-bold shadow-sm transition-all flex items-center justify-center gap-2.5 text-sm active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <CheckCircle2 size={18} />
-                    <span className="flex flex-col items-start leading-tight">
-                      <span>Kredi Kartı ile Ödeme</span>
-                      <span className="text-[10px] font-medium opacity-80">
-                        Morpara güvenli sayfasında devam et
+                    {isProcessing ? (
+                      <span className="flex items-center gap-2">
+                        <Loader2 size={18} className="animate-spin" />
+                        Ödeme sayfasına yönlendiriliyor...
                       </span>
-                    </span>
+                    ) : (
+                      <>
+                        <CheckCircle2 size={18} />
+                        <span className="flex flex-col items-start leading-tight">
+                          <span>Kredi Kartı ile Ödeme</span>
+                          <span className="text-[10px] font-medium opacity-80">
+                            Morpara güvenli sayfasında devam et
+                          </span>
+                        </span>
+                      </>
+                    )}
                   </button>
                 ) : (
                   <button

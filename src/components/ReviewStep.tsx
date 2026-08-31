@@ -542,6 +542,11 @@ export default function ReviewStep({
                 Ödeme Yap
                 <ArrowRight size={20} />
               </button>
+              {!agreedToTerms && (
+                <p className="text-xs text-center text-seal mt-3 font-medium">
+                  Devam etmek için aşağıdaki sözleşmeleri onaylayın.
+                </p>
+              )}
               <p className="text-xs text-center text-ink-light mt-4 flex items-center justify-center gap-1">
                 <CheckCircle2 size={12} className="text-wood" /> Güvenli Ödeme
                 Altyapısı
