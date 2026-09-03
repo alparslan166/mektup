@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" fill="none">
+  <rect width="600" height="600" fill="#F4D6DE"/>
+  <path d="M220 280 C160 210 130 150 190 130 C230 118 250 150 250 150 C250 150 270 118 310 130 C370 150 340 210 250 280 Z" fill="#D9486F"/>
+  <path d="M380 320 C320 250 290 190 350 170 C390 158 410 190 410 190 C410 190 430 158 470 170 C530 190 500 250 410 320 Z" fill="#E07A93"/>
+  <text x="300" y="500" text-anchor="middle" fill="#8B1E3F" font-family="Georgia, serif" font-size="36" font-weight="700">Seni Seviyorum</text>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" fill="none">
+  <rect width="600" height="600" fill="#7EC8E3"/>
+  <rect y="0" width="600" height="180" fill="#5BB3D4"/>
+  <path d="M0 220 H600 V600 H0 Z" fill="#EAF6F8"/>
+  <path d="M40 320 H200 V360 H40 Z" fill="#FFFFFF"/>
+  <path d="M70 360 H230 V400 H70 Z" fill="#F7FBFC"/>
+  <path d="M100 400 H260 V440 H100 Z" fill="#FFFFFF"/>
+  <path d="M280 300 H460 V340 H280 Z" fill="#FFFFFF"/>
+  <path d="M310 340 H490 V380 H310 Z" fill="#F7FBFC"/>
+  <path d="M340 380 H520 V420 H340 Z" fill="#FFFFFF"/>
+  <path d="M160 440 H380 V480 H160 Z" fill="#D8F0F5"/>
+  <circle cx="500" cy="90" r="36" fill="#FFF6C8"/>
+  <text x="300" y="540" text-anchor="middle" fill="#2A6F82" font-family="Georgia, serif" font-size="42" font-weight="700">Pamukkale</text>
+</svg>

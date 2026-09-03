@@ -8,28 +8,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { getPricingSettings } from "@/app/actions/settingsActions";
 import { Info } from "lucide-react";
+import { postcardCategories } from "@/lib/data/postcards";
 
-// Mock Data for Postcards
-export const postcardCategories = [
-  {
-    id: "tr",
-    name: "Türkiye Kartpostalları",
-    items: Array.from({ length: 8 }).map((_, i) => ({
-      id: "tr-" + i,
-      title: "Türkiye Manzarası " + (i + 1),
-      image: "https://picsum.photos/seed/tr_image_" + i + "/600/400",
-    })),
-  },
-  {
-    id: "love",
-    name: "Seni Seviyorum Kartpostalları",
-    items: Array.from({ length: 8 }).map((_, i) => ({
-      id: "love-" + i,
-      title: "Seni Seviyorum " + (i + 1),
-      image: "https://picsum.photos/seed/love_image_" + i + "/600/600",
-    })),
-  },
-];
+export { postcardCategories };
 
 export default function PostcardSection() {
   const { postcards, includeCalendar, updateExtras } = useLetterStore(
@@ -166,6 +147,7 @@ export default function PostcardSection() {
                             src={card.image}
                             alt={card.title}
                             fill
+                            unoptimized
                             sizes="(max-width: 768px) 100vw, 33vw"
                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                           />
@@ -272,6 +254,7 @@ export default function PostcardSection() {
                   src={previewCard.image}
                   alt={previewCard.title}
                   fill
+                  unoptimized
                   sizes="100vw"
                   className="object-cover"
                 />

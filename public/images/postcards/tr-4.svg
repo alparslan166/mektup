@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" fill="none">
+  <rect width="600" height="600" fill="#E8D5B5"/>
+  <rect y="0" width="600" height="200" fill="#C4A574"/>
+  <rect x="80" y="220" width="36" height="180" fill="#B08B5B"/>
+  <rect x="150" y="200" width="36" height="200" fill="#C4A574"/>
+  <rect x="220" y="230" width="36" height="170" fill="#B08B5B"/>
+  <rect x="340" y="210" width="36" height="190" fill="#C4A574"/>
+  <rect x="410" y="190" width="36" height="210" fill="#B08B5B"/>
+  <rect x="480" y="230" width="36" height="170" fill="#C4A574"/>
+  <rect x="60" y="400" width="480" height="24" fill="#8C6A3D"/>
+  <text x="300" y="540" text-anchor="middle" fill="#5A3E22" font-family="Georgia, serif" font-size="42" font-weight="700">Efes</text>
+</svg>

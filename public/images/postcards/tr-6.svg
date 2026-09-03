@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" fill="none">
+  <rect width="600" height="600" fill="#16324F"/>
+  <rect y="0" width="600" height="240" fill="#1F4E79"/>
+  <circle cx="80" cy="80" r="28" fill="#F4E4BC"/>
+  <path d="M0 300 C140 270 220 320 320 290 C420 260 500 310 600 280 V600 H0 Z" fill="#0B1E33"/>
+  <path d="M40 340 H560" stroke="#C4A574" stroke-width="10"/>
+  <path d="M80 250 V430" stroke="#C4A574" stroke-width="8"/>
+  <path d="M520 250 V430" stroke="#C4A574" stroke-width="8"/>
+  <path d="M80 250 C200 180 400 180 520 250" stroke="#E8D5B5" stroke-width="8" fill="none"/>
+  <text x="300" y="540" text-anchor="middle" fill="#E8D5B5" font-family="Georgia, serif" font-size="42" font-weight="700">Boaz</text>
+</svg>

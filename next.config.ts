@@ -15,11 +15,6 @@ const nextConfig: NextConfig = {
         hostname: "*.public.blob.vercel-storage.com",
         port: "",
       },
-      {
-        protocol: "https",
-        hostname: "picsum.photos",
-        port: "",
-      },
     ],
   },
   // Temporarily disabled due to dev-time instability with Turbopack.

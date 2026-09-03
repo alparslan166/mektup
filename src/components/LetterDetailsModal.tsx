@@ -26,6 +26,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { findPostcardById } from "@/lib/data/postcards";
 
 interface LetterDetailsModalProps {
     letter: any;
@@ -357,17 +358,7 @@ export default function LetterDetailsModal({ letter, isOpen, onClose, onReply }:
 
                                 {/* Postcards */}
                                 {letter.data?.extras?.postcards?.map((id: string, i: number) => {
-                                    // Local resolution of postcards
-                                    const trItems = Array.from({ length: 8 }).map((_, idx) => ({
-                                        id: "tr-" + idx,
-                                        image: "https://picsum.photos/seed/tr_image_" + idx + "/600/400",
-                                    }));
-                                    const loveItems = Array.from({ length: 8 }).map((_, idx) => ({
-                                        id: "love-" + idx,
-                                        image: "https://picsum.photos/seed/love_image_" + idx + "/600/600",
-                                    }));
-                                    const allPostcards = [...trItems, ...loveItems];
-                                    const card = allPostcards.find(c => c.id === id);
+                                    const card = findPostcardById(id);
 
                                     if (!card) return null;
 
@@ -377,6 +368,7 @@ export default function LetterDetailsModal({ letter, isOpen, onClose, onReply }:
                                                 src={card.image}
                                                 alt={`Kartpostal ${i + 1}`}
                                                 fill
+                                                unoptimized
                                                 sizes="(max-width: 768px) 50vw, 25vw"
                                                 className="object-cover group-hover:scale-110 transition-transform duration-500"
                                             />

@@ -25,7 +25,7 @@ import {
   updateTrackingCode,
 } from "@/app/actions/adminActions";
 import { toast } from "react-hot-toast";
-import { postcardCategories } from "@/components/extras/PostcardSection";
+import { postcardCategories } from "@/lib/data/postcards";
 import { getCompanyAddress } from "@/app/actions/settingsActions";
 
 interface Letter {

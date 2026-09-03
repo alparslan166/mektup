@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" fill="none">
+  <rect width="600" height="600" fill="#1B3A4B"/>
+  <rect y="280" width="600" height="320" fill="#0E2433"/>
+  <circle cx="460" cy="110" r="46" fill="#F4E4BC"/>
+  <path d="M0 320 C80 280 140 300 220 270 C300 240 340 290 420 260 C500 230 540 270 600 250 V600 H0 Z" fill="#2C5F6E"/>
+  <rect x="90" y="210" width="180" height="160" fill="#D4C4A8"/>
+  <rect x="150" y="250" width="28" height="50" fill="#1B3A4B"/>
+  <rect x="196" y="250" width="28" height="50" fill="#1B3A4B"/>
+  <path d="M70 210 H290 L180 140 Z" fill="#C4A574"/>
+  <rect x="330" y="230" width="160" height="140" fill="#C9B896"/>
+  <path d="M310 230 H510 L420 165 Z" fill="#B08B5B"/>
+  <rect x="390" y="280" width="36" height="90" fill="#1B3A4B"/>
+  <text x="300" y="540" text-anchor="middle" fill="#F4E4BC" font-family="Georgia, serif" font-size="42" font-weight="700">0stanbul</text>
+</svg>

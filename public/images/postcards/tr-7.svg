@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" fill="none">
+  <rect width="600" height="600" fill="#C45C26"/>
+  <rect y="0" width="600" height="230" fill="#E07A3D"/>
+  <circle cx="520" cy="90" r="50" fill="#F6C26B"/>
+  <path d="M0 360 L160 220 L300 340 L430 200 L600 360 V600 H0 Z" fill="#8C3E16"/>
+  <circle cx="160" cy="210" r="22" fill="#D9B48F"/>
+  <circle cx="430" cy="190" r="22" fill="#D9B48F"/>
+  <text x="300" y="540" text-anchor="middle" fill="#FFF3D6" font-family="Georgia, serif" font-size="42" font-weight="700">Nemrut</text>
+</svg>

@@ -24,6 +24,7 @@ import {
   BarChart3,
   Tag,
   Layers,
+  Users,
 } from "lucide-react";
 import { useLetterStore } from "@/store/letterStore";
 import Image from "next/image";
@@ -120,6 +121,13 @@ const Navbar = () => {
               >
                 <PenLine size={18} />
                 <span>Mektuplar</span>
+              </Link>
+              <Link
+                href="/admin/kullanicilar"
+                className="flex items-center gap-1.5 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all"
+              >
+                <Users size={18} />
+                <span>Kullanıcılar</span>
               </Link>
               <Link
                 href="/admin/gelen-mektuplar"
@@ -298,6 +306,14 @@ const Navbar = () => {
                 >
                   <PenLine size={22} />
                   <span>Mektuplar</span>
+                </Link>
+                <Link
+                  href="/admin/kullanicilar"
+                  onClick={closeMenu}
+                  className="flex items-center gap-4 py-2 border-b border-paper/10 hover:text-white"
+                >
+                  <Users size={22} />
+                  <span>Kullanıcılar</span>
                 </Link>
                 <Link
                   href="/admin/gelen-mektuplar"

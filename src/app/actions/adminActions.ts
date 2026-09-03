@@ -32,6 +32,42 @@ export async function getAllLetters() {
   }
 }
 
+export async function getAdminUsers() {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session || (session.user as any).role !== "ADMIN") {
+      return { error: "Yetkiniz yok." };
+    }
+
+    const users = await prisma.user.findMany({
+      where: {
+        OR: [
+          { email: { not: "misafir@mektup.com" } },
+          { email: null },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        _count: {
+          select: {
+            letters: true,
+            drafts: true,
+          },
+        },
+      },
+      orderBy: { name: "asc" },
+    });
+
+    return { success: true, users };
+  } catch (error) {
+    console.error("GET_ADMIN_USERS_ERROR", error);
+    return { error: "Kullanıcılar getirilemedi." };
+  }
+}
+
 export async function updateLetterStatus(letterId: string, status: string) {
   try {
     const session = await getServerSession(authOptions);
