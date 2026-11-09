@@ -21,6 +21,7 @@ export default async function AdminLayout({
                 <div className="max-w-7xl mx-auto flex justify-between items-center">
                     <h1 className="text-xl font-bold text-slate-900">Admin Paneli</h1>
                     <div className="flex items-center gap-4">
+                        <Link href="/admin/izara/belgeler" className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900">İZARA Belgeleri</Link>
                         <span className="text-sm text-slate-500">{session.user?.email}</span>
                     </div>
                 </div>

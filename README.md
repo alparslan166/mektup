@@ -35,3 +35,15 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 # mektup
+
+## İZARA belge yönetimi
+
+- Admin ekranı: `/admin/izara/belgeler` (mevcut ADMIN oturumu).
+- Yönetim API: `/api/admin/izara/documents`, `/:id`, `/order`.
+- Genel okuma API: `/api/izara/documents`; sadece herkese açık belge adı, görsel adresi, kimliği ve sırası döner.
+- `DATABASE_URL`, `NEXTAUTH_SECRET`, `BLOB_READ_WRITE_TOKEN` ortam değişkenleri kullanılır. `NEXTAUTH_URL` canlı admin alan adını göstermelidir.
+- Yeni tabloyu kurmak için `npm run setup:izara`. Script yalnızca `IzaraDocument` tablosunu ve indeksini oluşturur; mevcut tablolara dokunmaz ve yeniden çalıştırılabilir. Projede migration geçmişi olmadığından `prisma migrate reset` / genel `db push` kullanılmaz.
+- Test: `npm run test:izara`.
+- Yalnızca JPG/PNG/WebP, fotoğraf başına en fazla 4 MB. Sunucu fotoğrafı doğrular, metadatasını kaldırır ve WebP olarak Blob `izara/documents/` dizinine yazar. Belgeler kaydedildiğinde herkese açık yayımlanır.
+- Silinen/değiştirilen fotoğrafın Blob temizliği denenir. Temizlik hatası `IZARA_DOCUMENT_BLOB_CLEANUP_FAILED` olarak kaydedilir; kayıt silinmişse belge API listesinden kaldırılır. Önceden alınan herkese açık görsel bağlantıları Blob önbelleği nedeniyle anında geçersizleşmeyebilir.
+- İZARA uygulamasında `MEKTUP_API_URL` Mektuplaş origin adresine ayarlanır (geliştirmede `http://localhost:3001`). İZARA kendi sunucu endpoint'i üzerinden listeyi çeker; admin çerezi veya Blob anahtarı İZARA tarayıcısına aktarılmaz.

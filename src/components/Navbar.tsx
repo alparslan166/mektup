@@ -157,6 +157,7 @@ const Navbar = () => {
                 <Gift size={18} />
                 <span>Hediyeler</span>
               </Link>
+              <Link href="/admin/izara/belgeler" className="flex items-center gap-1.5 text-amber-200 hover:text-white transition-all"><ShieldCheck size={18}/><span>İZARA Belgeleri</span></Link>
             </>
           ) : (
             <>
@@ -347,6 +348,7 @@ const Navbar = () => {
                   <Gift size={22} />
                   <span>Hediyeler</span>
                 </Link>
+                <Link href="/admin/izara/belgeler" onClick={closeMenu} className="flex items-center gap-4 py-2 border-b border-paper/10 text-amber-200"><ShieldCheck size={22}/><span>İZARA Belgeleri</span></Link>
               </>
             ) : (
               <>

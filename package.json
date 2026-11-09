@@ -10,7 +10,9 @@
     "lint": "eslint",
     "export": "next build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -t -d out"
+    "deploy": "gh-pages -t -d out",
+    "setup:izara": "prisma generate && node scripts/setup-izara-documents.cjs",
+    "test:izara": "node --experimental-strip-types --test tests/izara-validation.test.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.997.0",
@@ -43,6 +45,7 @@
     "react-dom": "19.2.3",
     "react-hot-toast": "^2.6.0",
     "resend": "^6.9.2",
+    "sharp": "0.34.5",
     "uuid": "^13.0.0",
     "zustand": "^5.0.11"
   },
