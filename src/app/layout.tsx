@@ -173,6 +173,22 @@ gtag('config', '${gaMeasurementId}');`}
                   İletişim
                 </Link>
               </div>
+              <div className="flex flex-wrap items-center justify-center gap-4 rounded-md bg-paper px-4 py-3 md:justify-end">
+                <Image
+                  src="/iyzico_ile_ode_colored.png"
+                  alt="iyzico ile öde"
+                  width={110}
+                  height={30}
+                  className="h-[30px] w-auto object-contain"
+                />
+                <Image
+                  src="/logo_band_colored.svg"
+                  alt="iyzico, Visa ve Mastercard"
+                  width={160}
+                  height={32}
+                  className="h-[30px] w-auto max-w-full object-contain"
+                />
+              </div>
               <div className="flex flex-wrap items-center justify-center gap-4 mt-2 md:justify-end">
                 <Image
                   src="/bankalar.png"
