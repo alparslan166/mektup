@@ -272,3 +272,11 @@ model IzaraDocument {
 
   @@index([order, createdAt])
 }
+
+// Single-row "Hakkımızda" content for the IZARA site (id is always "main").
+model IzaraAbout {
+  id         String   @id
+  title      String
+  paragraphs String[]
+  updatedAt  DateTime @updatedAt
+}

@@ -11,7 +11,7 @@
     "export": "next build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -t -d out",
-    "setup:izara": "prisma generate && node scripts/setup-izara-documents.cjs",
+    "setup:izara": "prisma generate && node scripts/setup-izara-documents.cjs && node scripts/setup-izara-about.cjs",
     "test:izara": "node --experimental-strip-types --test tests/izara-validation.test.mjs"
   },
   "dependencies": {
